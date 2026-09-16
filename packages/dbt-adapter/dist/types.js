@@ -1,0 +1,4 @@
+/**
+ * dbt manifest types
+ */
+export {};
