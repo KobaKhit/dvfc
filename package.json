@@ -1,0 +1,30 @@
+{
+  "name": "mosaic-dbt-spike",
+  "version": "0.1.0",
+  "description": "Architecture spike: Mosaic + DuckDB-WASM + dbt for in-browser analytics dashboards",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "demo:resolver": "node src/dbt-cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://origin.cursor.com/git/kobakhit/tmp-7a5579056a50c222.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "Apache-2.0",
+  "type": "module",
+  "dependencies": {
+    "@duckdb/duckdb-wasm": "^1.33.1-dev57.0",
+    "@uwdata/vgplot": "^0.31.0",
+    "apache-arrow": "^21.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.7",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0"
+  }
+}

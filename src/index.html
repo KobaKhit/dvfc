@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mosaic + dbt Architecture Spike</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+      font-size: 2rem;
+    }
+
+    .subtitle {
+      color: #718096;
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+    }
+
+    #status {
+      padding: 1rem;
+      background: #edf2f7;
+      border-left: 4px solid #4299e1;
+      margin-bottom: 2rem;
+      border-radius: 4px;
+      color: #2d3748;
+      font-weight: 500;
+    }
+
+    .dashboard-section {
+      margin-bottom: 3rem;
+      padding: 1.5rem;
+      background: #f7fafc;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .dashboard-section h2 {
+      color: #2d3748;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #cbd5e0;
+    }
+
+    .dashboard-section > div {
+      margin-bottom: 2rem;
+    }
+
+    .info-box {
+      background: #fff5f5;
+      border: 1px solid #feb2b2;
+      border-radius: 6px;
+      padding: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .info-box h3 {
+      color: #c53030;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .info-box p {
+      color: #742a2a;
+      line-height: 1.6;
+    }
+
+    .info-box code {
+      background: #fed7d7;
+      padding: 0.2rem 0.4rem;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+
+    footer {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 2px solid #e2e8f0;
+      color: #718096;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: #4299e1;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+
+      .container {
+        padding: 1rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎯 Mosaic + dbt Architecture Spike</h1>
+    <p class="subtitle">
+      Interactive crossfilter dashboard powered by UW Mosaic, DuckDB-WASM, and dbt-style data models
+    </p>
+
+    <div id="status">Initializing...</div>
+
+    <div class="info-box">
+      <h3>📊 How to Use Crossfiltering</h3>
+      <p>
+        Click and drag horizontally on the <strong>line charts</strong> (time series) to create a date range selection.
+        The bar charts below will automatically filter to show only data from the selected date range.
+        Click outside the selection to reset. This demonstrates Mosaic's native coordination engine.
+      </p>
+    </div>
+
+    <div id="sales-dashboard" class="dashboard-section">
+      <h2>Loading sales data...</h2>
+    </div>
+
+    <div id="flights-dashboard" class="dashboard-section">
+      <h2>Loading flights data...</h2>
+    </div>
+
+    <footer>
+      <p>
+        Built with <a href="https://idl.uw.edu/mosaic/" target="_blank">UW Mosaic</a> • 
+        Data from dbt-style models (<code>ref('sales_daily')</code> and <code>ref('flights_summary')</code>) • 
+        Runs entirely in-browser with DuckDB-WASM
+      </p>
+    </footer>
+  </div>
+
+  <script type="module" src="/main.ts"></script>
+</body>
+</html>

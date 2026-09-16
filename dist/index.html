@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mosaic + dbt Architecture Spike</title>
+  <style>*{box-sizing:border-box;margin:0;padding:0}body{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:2rem;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,sans-serif}.container{background:#fff;border-radius:12px;max-width:1400px;margin:0 auto;padding:2rem;box-shadow:0 20px 60px #0000004d}h1{color:#2d3748;margin-bottom:.5rem;font-size:2rem}.subtitle{color:#718096;margin-bottom:1.5rem;font-size:1rem}#status{color:#2d3748;background:#edf2f7;border-left:4px solid #4299e1;border-radius:4px;margin-bottom:2rem;padding:1rem;font-weight:500}.dashboard-section{background:#f7fafc;border:1px solid #e2e8f0;border-radius:8px;margin-bottom:3rem;padding:1.5rem}.dashboard-section h2{color:#2d3748;border-bottom:2px solid #cbd5e0;margin-bottom:1.5rem;padding-bottom:.5rem;font-size:1.5rem}.dashboard-section>div{margin-bottom:2rem}.info-box{background:#fff5f5;border:1px solid #feb2b2;border-radius:6px;margin-bottom:2rem;padding:1rem}.info-box h3{color:#c53030;margin-bottom:.5rem;font-size:1.1rem}.info-box p{color:#742a2a;line-height:1.6}.info-box code{background:#fed7d7;border-radius:3px;padding:.2rem .4rem;font-family:Courier New,monospace;font-size:.9em}footer{color:#718096;text-align:center;border-top:2px solid #e2e8f0;margin-top:3rem;padding-top:2rem;font-size:.9rem}footer a{color:#4299e1;text-decoration:none}footer a:hover{text-decoration:underline}@media (width<=768px){body,.container{padding:1rem}h1{font-size:1.5rem}}</style>
+  <script type="module" crossorigin src="/assets/index-CUu5xCpM.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>🎯 Mosaic + dbt Architecture Spike</h1>
+    <p class="subtitle">
+      Interactive crossfilter dashboard powered by UW Mosaic, DuckDB-WASM, and dbt-style data models
+    </p>
+
+    <div id="status">Initializing...</div>
+
+    <div class="info-box">
+      <h3>📊 How to Use Crossfiltering</h3>
+      <p>
+        Click and drag horizontally on the <strong>line charts</strong> (time series) to create a date range selection.
+        The bar charts below will automatically filter to show only data from the selected date range.
+        Click outside the selection to reset. This demonstrates Mosaic's native coordination engine.
+      </p>
+    </div>
+
+    <div id="sales-dashboard" class="dashboard-section">
+      <h2>Loading sales data...</h2>
+    </div>
+
+    <div id="flights-dashboard" class="dashboard-section">
+      <h2>Loading flights data...</h2>
+    </div>
+
+    <footer>
+      <p>
+        Built with <a href="https://idl.uw.edu/mosaic/" target="_blank">UW Mosaic</a> • 
+        Data from dbt-style models (<code>ref('sales_daily')</code> and <code>ref('flights_summary')</code>) • 
+        Runs entirely in-browser with DuckDB-WASM
+      </p>
+    </footer>
+  </div>
+
+</body>
+</html>
