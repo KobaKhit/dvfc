@@ -5,6 +5,8 @@ node_modules/
 # Build outputs
 dist/
 *.tsbuildinfo
+.coordboard-build/
+test-dist/
 
 # Environment
 .env
