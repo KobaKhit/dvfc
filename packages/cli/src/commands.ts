@@ -4,7 +4,7 @@
 
 import { readFile, writeFile, mkdir, cp } from 'fs/promises';
 import { join, dirname, resolve as resolvePath } from 'path';
-import { parse as parseYAML } from 'yaml';
+import { parse as parseYAML, stringify as stringifyYAML } from 'yaml';
 import { watch } from 'chokidar';
 import type { DashboardSpec } from '@coordboard/core';
 import type { DbtManifest } from '@coordboard/dbt-adapter';
@@ -12,6 +12,227 @@ import { createDbtResolver } from '@coordboard/dbt-adapter';
 import { generateMainScript, generateHTML, type GeneratorContext } from './generator.js';
 import { build as viteBuild, createServer as createViteServer } from 'vite';
 import { validateWithReport, validateSemantics, type ValidationResult } from './validator.js';
+
+export interface InitOptions {
+  fromDbt?: boolean;
+  manifestPath?: string;
+  outFile?: string;
+}
+
+/**
+ * Init command - scaffold a new dashboard from dbt manifest
+ */
+export async function init(options: InitOptions = {}): Promise<void> {
+  const outFile = options.outFile || 'board.yaml';
+  
+  if (options.fromDbt) {
+    console.log(`📋 Scaffolding dashboard from dbt manifest\n`);
+    
+    // Find manifest.json
+    const manifestPath = options.manifestPath || 'dbt-stub/manifest.json';
+    
+    try {
+      const manifestData = JSON.parse(await readFile(manifestPath, 'utf-8')) as DbtManifest;
+      const projectName = manifestData.metadata.project_name;
+      
+      console.log(`✓ Found dbt project: ${projectName}`);
+      
+      // Find mart models (models in marts schema or tagged with 'mart')
+      const models = Object.values(manifestData.nodes)
+        .filter(node => {
+          if (node.resource_type !== 'model') return false;
+          const isMart = node.schema?.includes('mart') || 
+                        node.path?.includes('mart') ||
+                        node.config?.tags?.includes('mart') ||
+                        node.tags?.includes('mart');
+          return isMart;
+        });
+      
+      if (models.length === 0) {
+        // Fall back to any models
+        models.push(...Object.values(manifestData.nodes)
+          .filter(node => node.resource_type === 'model')
+          .slice(0, 3));
+      }
+      
+      console.log(`✓ Found ${models.length} model(s) to visualize`);
+      
+      // Pick first 1-3 models
+      const selectedModels = models.slice(0, Math.min(3, models.length));
+      
+      // Create spec
+      const spec: DashboardSpec = {
+        meta: {
+          title: `${projectName} Dashboard`,
+          description: `Analytics dashboard generated from dbt project ${projectName}`,
+          version: '0.1.0'
+        },
+        data: selectedModels.map((model, i) => ({
+          id: model.name,
+          type: 'dbt' as const,
+          model: model.name
+        })),
+        charts: []
+      };
+      
+      // Create charts for each model
+      selectedModels.forEach((model, modelIndex) => {
+        const columns = model.columns ? Object.keys(model.columns) : [];
+        
+        // Try to find date/time column
+        const dateCol = columns.find(c => 
+          c.includes('date') || c.includes('time') || c.includes('_at')
+        );
+        
+        // Try to find numeric column
+        const numericCol = columns.find(c => 
+          c.includes('amount') || c.includes('revenue') || c.includes('count') || c.includes('total')
+        ) || columns.find(c => !c.includes('id') && !c.includes('name'));
+        
+        // Try to find categorical column
+        const categoryCol = columns.find(c => 
+          c.includes('status') || c.includes('type') || c.includes('category') || c.includes('method')
+        );
+        
+        const selectionName = `${model.name}Brush`;
+        
+        if (dateCol && numericCol) {
+          // Time series chart
+          spec.charts.push({
+            id: `${model.name}_trend`,
+            type: 'line',
+            dataSource: model.name,
+            title: `${model.name} Trend`,
+            encoding: {
+              x: {
+                field: dateCol,
+                type: 'temporal',
+                label: dateCol.replace(/_/g, ' ')
+              },
+              y: {
+                field: numericCol,
+                type: 'quantitative',
+                aggregate: 'sum',
+                label: numericCol.replace(/_/g, ' ')
+              }
+            },
+            interaction: {
+              brush: true,
+              brushAxis: 'x',
+              selection: selectionName
+            },
+            width: 700,
+            height: 250
+          });
+        }
+        
+        if (categoryCol && numericCol) {
+          // Bar chart
+          spec.charts.push({
+            id: `${model.name}_by_${categoryCol}`,
+            type: 'bar',
+            dataSource: model.name,
+            title: `${model.name} by ${categoryCol.replace(/_/g, ' ')}`,
+            encoding: {
+              x: {
+                field: categoryCol,
+                type: 'nominal',
+                label: categoryCol.replace(/_/g, ' ')
+              },
+              y: {
+                field: numericCol,
+                type: 'quantitative',
+                aggregate: 'sum',
+                label: numericCol.replace(/_/g, ' ')
+              },
+              color: 'steelblue'
+            },
+            interaction: dateCol ? {
+              filterBy: selectionName
+            } : undefined,
+            width: 700,
+            height: 300
+          });
+        }
+      });
+      
+      // Write spec
+      await writeFile(outFile, stringifyYAML(spec));
+      
+      console.log(`\n✅ Created ${outFile}`);
+      console.log(`\nNext steps:`);
+      console.log(`  1. coordboard validate ${outFile}`);
+      console.log(`  2. coordboard preview ${outFile}`);
+      console.log(`  3. Edit ${outFile} to customize\n`);
+      
+    } catch (error) {
+      throw new Error(
+        `Failed to read dbt manifest at ${manifestPath}\n` +
+        `  Error: ${error instanceof Error ? error.message : String(error)}\n` +
+        `  Tip: Run this command from your dbt project directory or specify --manifest-path`
+      );
+    }
+  } else {
+    // Basic init without dbt
+    console.log(`📋 Creating basic dashboard template\n`);
+    
+    const spec: DashboardSpec = {
+      meta: {
+        title: 'My Dashboard',
+        description: 'A new analytics dashboard',
+        version: '0.1.0'
+      },
+      data: [
+        {
+          id: 'my_data',
+          type: 'dbt',
+          model: 'my_model'
+        }
+      ],
+      charts: [
+        {
+          id: 'trend',
+          type: 'line',
+          dataSource: 'my_data',
+          title: 'Trend Over Time',
+          encoding: {
+            x: { field: 'date', type: 'temporal' },
+            y: { field: 'value', aggregate: 'sum' }
+          },
+          interaction: {
+            brush: true,
+            selection: 'myBrush'
+          },
+          width: 700,
+          height: 250
+        },
+        {
+          id: 'breakdown',
+          type: 'bar',
+          dataSource: 'my_data',
+          title: 'Breakdown by Category',
+          encoding: {
+            x: { field: 'category', type: 'nominal' },
+            y: { field: 'value', aggregate: 'sum' }
+          },
+          interaction: {
+            filterBy: 'myBrush'
+          },
+          width: 700,
+          height: 300
+        }
+      ]
+    };
+    
+    await writeFile(outFile, stringifyYAML(spec));
+    
+    console.log(`✅ Created ${outFile}`);
+    console.log(`\nNext steps:`);
+    console.log(`  1. Edit ${outFile} with your data sources and charts`);
+    console.log(`  2. coordboard validate ${outFile}`);
+    console.log(`  3. coordboard preview ${outFile}\n`);
+  }
+}
 
 export interface PreviewOptions {
   port?: number;

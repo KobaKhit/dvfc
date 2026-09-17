@@ -34,9 +34,21 @@ export interface DbtNode {
   config?: {
     enabled: boolean;
     materialized: string;
+    tags?: string[];
     [key: string]: unknown;
   };
   relation_name?: string;
+  tags?: string[];
+  description?: string;
+  columns?: Record<string, {
+    name: string;
+    description?: string;
+    [key: string]: unknown;
+  }>;
+  depends_on?: {
+    nodes: string[];
+    [key: string]: unknown;
+  };
 }
 
 export interface DbtResolverOptions {

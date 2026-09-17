@@ -1,0 +1,158 @@
+{
+  "metadata": {
+    "dbt_schema_version": "https://schemas.getdbt.com/dbt/manifest/v11.json",
+    "dbt_version": "1.7.4",
+    "generated_at": "2024-01-27T10:15:23.123456Z",
+    "invocation_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "project_name": "jaffle_shop",
+    "project_id": "12345abcdef67890",
+    "user_id": "user@example.com",
+    "send_anonymous_usage_stats": false,
+    "adapter_type": "duckdb"
+  },
+  "nodes": {
+    "seed.jaffle_shop.customers": {
+      "database": "main",
+      "schema": "jaffle_shop",
+      "name": "customers",
+      "resource_type": "seed",
+      "package_name": "jaffle_shop",
+      "path": "customers.csv",
+      "original_file_path": "seeds/customers.csv",
+      "unique_id": "seed.jaffle_shop.customers",
+      "fqn": ["jaffle_shop", "customers"],
+      "alias": "customers",
+      "checksum": {
+        "name": "sha256",
+        "checksum": "abc123def456"
+      },
+      "config": {
+        "enabled": true,
+        "materialized": "seed"
+      },
+      "tags": [],
+      "description": "Raw customer data",
+      "columns": {
+        "id": {"name": "id", "description": "Customer ID"},
+        "first_name": {"name": "first_name", "description": "First name"},
+        "last_name": {"name": "last_name", "description": "Last name"},
+        "email": {"name": "email", "description": "Email address"}
+      },
+      "relation_name": "\"main\".\"jaffle_shop\".\"customers\""
+    },
+    "seed.jaffle_shop.orders": {
+      "database": "main",
+      "schema": "jaffle_shop",
+      "name": "orders",
+      "resource_type": "seed",
+      "package_name": "jaffle_shop",
+      "path": "orders.csv",
+      "original_file_path": "seeds/orders.csv",
+      "unique_id": "seed.jaffle_shop.orders",
+      "fqn": ["jaffle_shop", "orders"],
+      "alias": "orders",
+      "checksum": {
+        "name": "sha256",
+        "checksum": "def456ghi789"
+      },
+      "config": {
+        "enabled": true,
+        "materialized": "seed"
+      },
+      "tags": [],
+      "description": "Raw order data",
+      "columns": {
+        "id": {"name": "id", "description": "Order ID"},
+        "user_id": {"name": "user_id", "description": "Customer ID"},
+        "order_date": {"name": "order_date", "description": "Order date"},
+        "status": {"name": "status", "description": "Order status"}
+      },
+      "relation_name": "\"main\".\"jaffle_shop\".\"orders\""
+    },
+    "seed.jaffle_shop.payments": {
+      "database": "main",
+      "schema": "jaffle_shop",
+      "name": "payments",
+      "resource_type": "seed",
+      "package_name": "jaffle_shop",
+      "path": "payments.csv",
+      "original_file_path": "seeds/payments.csv",
+      "unique_id": "seed.jaffle_shop.payments",
+      "fqn": ["jaffle_shop", "payments"],
+      "alias": "payments",
+      "checksum": {
+        "name": "sha256",
+        "checksum": "ghi789jkl012"
+      },
+      "config": {
+        "enabled": true,
+        "materialized": "seed"
+      },
+      "tags": [],
+      "description": "Raw payment data",
+      "columns": {
+        "id": {"name": "id", "description": "Payment ID"},
+        "order_id": {"name": "order_id", "description": "Order ID"},
+        "payment_method": {"name": "payment_method", "description": "Payment method"},
+        "amount": {"name": "amount", "description": "Payment amount"}
+      },
+      "relation_name": "\"main\".\"jaffle_shop\".\"payments\""
+    },
+    "model.jaffle_shop.customer_orders": {
+      "database": "main",
+      "schema": "marts",
+      "name": "customer_orders",
+      "resource_type": "model",
+      "package_name": "jaffle_shop",
+      "path": "marts/customer_orders.sql",
+      "original_file_path": "models/marts/customer_orders.sql",
+      "unique_id": "model.jaffle_shop.customer_orders",
+      "fqn": ["jaffle_shop", "marts", "customer_orders"],
+      "alias": "customer_orders",
+      "checksum": {
+        "name": "sha256",
+        "checksum": "jkl012mno345"
+      },
+      "config": {
+        "enabled": true,
+        "materialized": "table",
+        "tags": ["mart"]
+      },
+      "tags": ["mart"],
+      "description": "Customer orders with payment details - mart layer",
+      "columns": {
+        "customer_id": {"name": "customer_id", "description": "Customer ID"},
+        "customer_name": {"name": "customer_name", "description": "Full customer name"},
+        "order_date": {"name": "order_date", "description": "Order date"},
+        "order_status": {"name": "order_status", "description": "Order status"},
+        "payment_method": {"name": "payment_method", "description": "Payment method used"},
+        "amount": {"name": "amount", "description": "Payment amount"}
+      },
+      "relation_name": "\"main\".\"marts\".\"customer_orders\"",
+      "depends_on": {
+        "nodes": [
+          "seed.jaffle_shop.customers",
+          "seed.jaffle_shop.orders",
+          "seed.jaffle_shop.payments"
+        ]
+      }
+    }
+  },
+  "child_map": {
+    "seed.jaffle_shop.customers": ["model.jaffle_shop.customer_orders"],
+    "seed.jaffle_shop.orders": ["model.jaffle_shop.customer_orders"],
+    "seed.jaffle_shop.payments": ["model.jaffle_shop.customer_orders"],
+    "model.jaffle_shop.customer_orders": []
+  },
+  "parent_map": {
+    "seed.jaffle_shop.customers": [],
+    "seed.jaffle_shop.orders": [],
+    "seed.jaffle_shop.payments": [],
+    "model.jaffle_shop.customer_orders": [
+      "seed.jaffle_shop.customers",
+      "seed.jaffle_shop.orders",
+      "seed.jaffle_shop.payments"
+    ]
+  },
+  "docs": {}
+}

@@ -2,6 +2,15 @@
  * CLI commands for coordboard
  */
 import type { DashboardSpec } from '@coordboard/core';
+export interface InitOptions {
+    fromDbt?: boolean;
+    manifestPath?: string;
+    outFile?: string;
+}
+/**
+ * Init command - scaffold a new dashboard from dbt manifest
+ */
+export declare function init(options?: InitOptions): Promise<void>;
 export interface PreviewOptions {
     port?: number;
     open?: boolean;

@@ -4,7 +4,7 @@
  * Main entry point for command-line interface
  */
 import { Command } from 'commander';
-import { preview, build, validate } from './commands.js';
+import { preview, build, validate, init } from './commands.js';
 const program = new Command();
 program
     .name('coordboard')
@@ -63,13 +63,20 @@ program
 program
     .command('init')
     .description('Initialize a new dashboard project')
-    .argument('[name]', 'Project name', 'my-dashboard')
-    .action((name) => {
-    console.log(`🎯 Initializing new dashboard: ${name}`);
-    console.log('\n⚠️  Init command is a stub. Real implementation will:');
-    console.log('   1. Create project directory structure');
-    console.log('   2. Generate sample dashboard spec');
-    console.log('   3. Create example data files');
-    console.log('   4. Initialize package.json\n');
+    .option('--from-dbt', 'Scaffold from dbt manifest.json')
+    .option('--manifest-path <path>', 'Path to dbt manifest.json', 'dbt-stub/manifest.json')
+    .option('-o, --out-file <file>', 'Output file', 'board.yaml')
+    .action(async (options) => {
+    try {
+        await init({
+            fromDbt: options.fromDbt,
+            manifestPath: options.manifestPath,
+            outFile: options.outFile
+        });
+    }
+    catch (error) {
+        console.error('Error:', error instanceof Error ? error.message : String(error));
+        process.exit(1);
+    }
 });
 program.parse();
