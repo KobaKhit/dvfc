@@ -6,7 +6,7 @@
  */
 
 import { Command } from 'commander';
-import { preview, build } from './commands.js';
+import { preview, build, validate } from './commands.js';
 
 const program = new Command();
 
@@ -14,6 +14,20 @@ program
   .name('coordboard')
   .description('CLI tool for building analytics dashboards with Mosaic + dbt')
   .version('0.1.0');
+
+program
+  .command('validate')
+  .description('Validate dashboard spec')
+  .argument('<spec>', 'Path to dashboard spec (YAML or JSON)')
+  .action(async (spec: string) => {
+    try {
+      const isValid = await validate(spec);
+      process.exit(isValid ? 0 : 1);
+    } catch (error) {
+      console.error('Error:', error instanceof Error ? error.message : String(error));
+      process.exit(1);
+    }
+  });
 
 program
   .command('preview')

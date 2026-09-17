@@ -11,6 +11,10 @@ export interface BuildOptions {
     minify?: boolean;
 }
 /**
+ * Validate command - validate dashboard spec
+ */
+export declare function validate(specPath: string): Promise<boolean>;
+/**
  * Preview command - start dev server with live reload
  */
 export declare function preview(specPath: string, options?: PreviewOptions): Promise<void>;

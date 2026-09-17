@@ -4,19 +4,195 @@
 import { readFile, writeFile, mkdir, cp } from 'fs/promises';
 import { join, dirname, resolve as resolvePath } from 'path';
 import { parse as parseYAML } from 'yaml';
-import { validateDashboardSpec } from '@coordboard/core';
+import { watch } from 'chokidar';
 import { createDbtResolver } from '@coordboard/dbt-adapter';
 import { generateMainScript, generateHTML } from './generator.js';
-import { build as viteBuild } from 'vite';
+import { build as viteBuild, createServer as createViteServer } from 'vite';
+import { validateWithReport, validateSemantics } from './validator.js';
+/**
+ * Validate command - validate dashboard spec
+ */
+export async function validate(specPath) {
+    console.log(`🔍 Validating: ${specPath}\n`);
+    try {
+        // Load spec
+        const spec = await loadSpec(specPath);
+        // Schema validation
+        const schemaResult = validateWithReport(spec);
+        console.log(schemaResult.report);
+        if (!schemaResult.valid) {
+            return false;
+        }
+        // Semantic validation
+        const semanticResult = validateSemantics(spec);
+        if (!semanticResult.valid) {
+            console.log('\n⚠️  Semantic validation warnings:\n');
+            semanticResult.errors.forEach((err, i) => {
+                console.log(`${i + 1}. Path: ${err.path}`);
+                console.log(`   ${err.message}\n`);
+            });
+            return false;
+        }
+        // Check dbt models if any
+        const specDir = dirname(resolvePath(specPath));
+        const hasDbtModels = spec.data.some(ds => ds.type === 'dbt');
+        if (hasDbtModels) {
+            const dbtManifestPath = join(specDir, 'dbt-stub', 'manifest.json');
+            const dbtDataDir = join(specDir, 'dbt-stub');
+            try {
+                const manifestData = JSON.parse(await readFile(dbtManifestPath, 'utf-8'));
+                const resolver = await createDbtResolver(manifestData, { dataDir: dbtDataDir });
+                console.log('✓ dbt manifest found');
+                // Verify all dbt models exist
+                for (const dataSource of spec.data) {
+                    if (dataSource.type === 'dbt' && dataSource.model) {
+                        try {
+                            const path = resolver.ref(dataSource.model);
+                            console.log(`✓ dbt model '${dataSource.model}' → ${path}`);
+                        }
+                        catch (err) {
+                            console.log(`❌ dbt model '${dataSource.model}' not found in manifest`);
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch (err) {
+                console.log(`❌ dbt manifest not found at ${dbtManifestPath}`);
+                return false;
+            }
+        }
+        console.log('\n✅ All validation checks passed!\n');
+        return true;
+    }
+    catch (error) {
+        console.error('\n❌ Validation failed:', error instanceof Error ? error.message : String(error));
+        return false;
+    }
+}
 /**
  * Preview command - start dev server with live reload
  */
 export async function preview(specPath, options = {}) {
+    const port = options.port || 3000;
     console.log(`🚀 Starting preview server for: ${specPath}`);
-    console.log(`   Port: ${options.port || 3000}`);
-    console.log('\n⚠️  Preview command not yet implemented.');
-    console.log('   Use "coordboard build" to generate static HTML, then serve with:');
-    console.log('   npx serve dist\n');
+    console.log(`   Port: ${port}\n`);
+    try {
+        // Validate first
+        const isValid = await validate(specPath);
+        if (!isValid) {
+            throw new Error('Spec validation failed');
+        }
+        // Load spec
+        const spec = await loadSpec(specPath);
+        const specDir = dirname(resolvePath(specPath));
+        // Create temporary preview directory
+        const tempDir = join(process.cwd(), '.coordboard-preview');
+        await mkdir(tempDir, { recursive: true });
+        await mkdir(join(tempDir, 'data'), { recursive: true });
+        // Generate initial files
+        await generatePreviewFiles(specPath, tempDir);
+        // Create Vite server
+        const server = await createViteServer({
+            root: tempDir,
+            server: {
+                port,
+                open: options.open,
+                headers: {
+                    'Cross-Origin-Opener-Policy': 'same-origin',
+                    'Cross-Origin-Embedder-Policy': 'require-corp'
+                }
+            },
+            optimizeDeps: {
+                exclude: ['@duckdb/duckdb-wasm']
+            }
+        });
+        await server.listen();
+        console.log(`\n✅ Preview server running!`);
+        console.log(`   URL: http://localhost:${port}`);
+        console.log(`   Watching: ${specPath}\n`);
+        console.log('Press Ctrl+C to stop\n');
+        // Watch spec file for changes
+        const watcher = watch(specPath, {
+            persistent: true,
+            ignoreInitial: true
+        });
+        watcher.on('change', async () => {
+            console.log('📝 Spec changed, regenerating...');
+            try {
+                const isValid = await validate(specPath);
+                if (isValid) {
+                    await generatePreviewFiles(specPath, tempDir);
+                    console.log('✅ Files regenerated\n');
+                    // Trigger HMR
+                    server.ws.send({
+                        type: 'full-reload'
+                    });
+                }
+            }
+            catch (err) {
+                console.error('❌ Regeneration failed:', err);
+            }
+        });
+        // Handle shutdown
+        process.on('SIGINT', async () => {
+            console.log('\n\nShutting down preview server...');
+            watcher.close();
+            await server.close();
+            process.exit(0);
+        });
+    }
+    catch (error) {
+        console.error('\n❌ Preview failed:', error instanceof Error ? error.message : String(error));
+        process.exit(1);
+    }
+}
+/**
+ * Generate files for preview
+ */
+async function generatePreviewFiles(specPath, tempDir) {
+    const spec = await loadSpec(specPath);
+    const specDir = dirname(resolvePath(specPath));
+    // Create package.json if it doesn't exist
+    const tempPackageJson = {
+        name: 'coordboard-preview',
+        type: 'module',
+        dependencies: {
+            '@uwdata/vgplot': '^0.31.0',
+            '@duckdb/duckdb-wasm': '^1.32.0',
+            'apache-arrow': '^17.0.0'
+        }
+    };
+    const packageJsonPath = join(tempDir, 'package.json');
+    try {
+        await readFile(packageJsonPath);
+    }
+    catch {
+        await writeFile(packageJsonPath, JSON.stringify(tempPackageJson, null, 2));
+        // Install dependencies
+        const { exec } = await import('child_process');
+        const { promisify } = await import('util');
+        const execPromise = promisify(exec);
+        await execPromise('npm install --silent', { cwd: tempDir });
+    }
+    const ctx = {
+        spec,
+        dataDir: join(specDir, 'dbt-stub'),
+        outputDir: tempDir
+    };
+    // Generate source files
+    const mainScript = generateMainScript(ctx);
+    const html = generateHTML(ctx);
+    await writeFile(join(tempDir, 'main.ts'), mainScript);
+    await writeFile(join(tempDir, 'index.html'), html);
+    // Copy data files
+    for (const dataSource of spec.data) {
+        if (dataSource.type === 'dbt' && dataSource.model) {
+            const srcPath = join(ctx.dataDir, `${dataSource.model}.csv`);
+            const destPath = join(tempDir, 'data', `${dataSource.id}.csv`);
+            await cp(srcPath, destPath);
+        }
+    }
 }
 /**
  * Build command - generate static HTML from dashboard spec
@@ -26,15 +202,15 @@ export async function build(specPath, options = {}) {
     console.log(`📦 Building dashboard from: ${specPath}`);
     console.log(`   Output: ${outDir}`);
     try {
+        // Validate spec first
+        console.log(`🔍 Validating spec...`);
+        const isValid = await validate(specPath);
+        if (!isValid) {
+            throw new Error('Spec validation failed');
+        }
         // Load and parse dashboard spec
         const spec = await loadSpec(specPath);
         console.log(`✓ Loaded spec: ${spec.meta.title}`);
-        // Validate spec
-        const validation = validateDashboardSpec(spec);
-        if (!validation.valid) {
-            throw new Error(`Invalid spec: ${validation.errors?.join(', ')}`);
-        }
-        console.log(`✓ Spec validated`);
         // Resolve dbt models if any
         const specDir = dirname(resolvePath(specPath));
         const dbtManifestPath = join(specDir, 'dbt-stub', 'manifest.json');
