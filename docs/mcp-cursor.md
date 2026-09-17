@@ -161,6 +161,49 @@ Use coordboard MCP to update the title of chart "daily_sales" to "Sales Trend (2
 
 Expected: Chart title updated in YAML.
 
+### ✅ 9. Search Charts
+
+```
+Use coordboard MCP to search for charts matching "revenue" across the project
+```
+
+Expected: Returns multiple hits from different boards (dbt-jaffle, web-analytics) with scores.
+
+### ✅ 10. Get Chart
+
+```
+Use coordboard MCP to get chart metadata for "daily_revenue" from examples/dbt-jaffle/board.yaml
+```
+
+Expected: Returns full chart spec with board context (data sources, theme, layout).
+
+### ✅ 11. List Charts
+
+```
+Use coordboard MCP to list all charts in examples/sales-board/board.yaml
+```
+
+Expected: Returns all charts in the board with display keys.
+
+### ✅ 12. Compose Board
+
+```
+Use coordboard MCP to compose a board from these charts:
+- dbt-jaffle__daily_revenue
+- web-analytics__daily_revenue
+Title: "Revenue Comparison"
+```
+
+Expected: Returns composed board YAML with both charts and merged data sources.
+
+### ✅ 13. Render Chart
+
+```
+Use coordboard MCP to render only the "daily_revenue" chart from examples/dbt-jaffle/board.yaml
+```
+
+Expected: Builds HTML with single chart while preserving board context.
+
 ## Troubleshooting
 
 ### Server doesn't start

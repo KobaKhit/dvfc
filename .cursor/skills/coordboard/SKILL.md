@@ -277,8 +277,144 @@ See working examples:
 - `examples/sales-board/board.yaml` - Business analytics
 - `examples/web-analytics/board.yaml` - Web traffic
 
+## Chart Discovery (NEW)
+
+coordboard now supports cross-project chart discovery and composition!
+
+### Key Concepts
+
+- **Board-scoped**: Charts live in boards, not standalone files
+- **Display keys**: `boardName__chartId` for unambiguous reference
+- **Board context**: Get/render operations preserve queries, variables, styles
+- **Disambiguation**: Ambiguous IDs return candidate list
+
+### New MCP Tools
+
+#### search_charts
+
+Find charts across the project with scoring:
+
+```json
+{
+  "query": "revenue",
+  "projectRoot": "/workspace",
+  "boardPath": "examples/sales-board/board.yaml",  // optional
+  "all": false  // default: top 10 results
+}
+```
+
+Returns `ChartHit[]` with scores based on ID, title, type, field matches.
+
+#### get_chart
+
+Get chart with full board context:
+
+```json
+{
+  "boardPath": "examples/dbt-jaffle/board.yaml",
+  "chartId": "daily_revenue"
+}
+```
+
+Returns:
+- Chart spec
+- Board context (data sources, theme, layout)
+- Display key
+
+#### list_charts
+
+List all charts in project or board:
+
+```json
+{
+  "projectRoot": "/workspace",
+  "boardPath": "examples/sales-board/board.yaml"  // optional
+}
+```
+
+#### compose_board
+
+Compose ephemeral board from chart IDs:
+
+```json
+{
+  "projectRoot": "/workspace",
+  "chartIds": ["daily_revenue", "sales-board__top_products"],
+  "title": "Custom Dashboard",
+  "metric": "Revenue"  // stub for now
+}
+```
+
+Resolves chart IDs to refs, merges data sources, returns composed spec.
+
+**Ambiguity handling**: If a chart ID exists on multiple boards, returns error with candidates:
+```
+Error: Ambiguous chart reference 'daily_revenue'.
+Multiple matches found: dbt-jaffle__daily_revenue, web-analytics__daily_revenue
+Use display key format (boardName__chartId) to disambiguate.
+```
+
+#### render_chart
+
+Build single chart with board context:
+
+```json
+{
+  "boardPath": "examples/sales-board/board.yaml",
+  "chartId": "daily_sales",
+  "outDir": "dist"
+}
+```
+
+Builds HTML with only the specified chart, preserving board queries/styles.
+
+### Agent Workflow Pattern
+
+```
+1. Search: "Find revenue charts"
+   → search_charts({ query: "revenue" })
+   → Returns hits from multiple boards
+
+2. Inspect: "What fields does the top one use?"
+   → get_chart({ boardPath: "...", chartId: "..." })
+   → Returns full spec + context
+
+3. Compose: "Combine top 2 into one dashboard"
+   → compose_board({ chartIds: ["board1__chart1", "board2__chart2"] })
+   → Returns YAML spec
+
+4. Build: "Generate the HTML"
+   → build_dashboard({ specPath: "composed.yaml" })
+   → Outputs dist/index.html
+```
+
+### Use Cases
+
+**Multi-board analysis:**
+```
+User: "Compare revenue across all boards"
+1. search_charts({ query: "revenue" })
+2. compose_board({ chartIds: [all revenue chart display keys] })
+3. build_dashboard({ specPath: composed spec })
+```
+
+**Extract single chart:**
+```
+User: "Show me just the daily sales chart"
+1. search_charts({ query: "daily sales" })
+2. render_chart({ boardPath: ..., chartId: ... })
+```
+
+**Cross-board filtering:**
+```
+User: "Add dbt revenue chart to the web analytics board"
+1. get_chart({ boardPath: "dbt-jaffle/...", chartId: "daily_revenue" })
+2. create_chart({ specPath: "web-analytics/...", chart: ... })
+```
+
 ## Resources
 
 - [Mosaic Docs](https://idl.uw.edu/mosaic/)
+- [Chart Discovery Guide](../docs/chart-discovery.md)
 - [coordboard README](../README.md)
 - [Examples Gallery](../examples/README.md)
