@@ -37,6 +37,39 @@ export function generateMainScript(ctx: GeneratorContext): string {
 // Initialize Mosaic coordinator with DuckDB-WASM
 vg.coordinator().databaseConnector(vg.wasmConnector());
 
+// URL state management for shareable filters
+function saveStateToURL() {
+  const selections = {};
+  ${Array.from(selections.keys()).map(sel => 
+    `if (${sel}.value) selections['${sel}'] = ${sel}.value;`
+  ).join('\n  ')}
+  
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(selections)) {
+    if (value) params.set(key, JSON.stringify(value));
+  }
+  
+  const newURL = params.toString() 
+    ? \`\${window.location.pathname}?\${params}\`
+    : window.location.pathname;
+  window.history.replaceState({}, '', newURL);
+}
+
+function restoreStateFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const selections = {};
+  
+  for (const [key, value] of params.entries()) {
+    try {
+      selections[key] = JSON.parse(value);
+    } catch (e) {
+      console.warn(\`Failed to parse selection '\${key}' from URL\`, e);
+    }
+  }
+  
+  return selections;
+}
+
 async function loadData() {
   const origin = window.location.origin;
   
@@ -56,12 +89,23 @@ async function createDashboard() {
 
     // Create selections
     ${selectionDeclarations}
+    
+    // Restore selections from URL
+    const savedSelections = restoreStateFromURL();
+    ${Array.from(selections.keys()).map(sel => 
+      `if (savedSelections['${sel}']) ${sel}.update(savedSelections['${sel}']);`
+    ).join('\n    ')}
+    
+    // Save state on selection change
+    ${Array.from(selections.keys()).map(sel => 
+      `${sel}.addEventListener('value', () => setTimeout(saveStateToURL, 100));`
+    ).join('\n    ')}
 
     // Create charts
     ${chartCode}
 
     if (statusEl) {
-      statusEl.textContent = '✅ Dashboard ready! Brush line charts to filter other charts.';
+      statusEl.textContent = '✅ Dashboard ready! Brush line charts to filter other charts. Share URL to preserve filters.';
       statusEl.style.color = 'green';
     }
   } catch (error) {
