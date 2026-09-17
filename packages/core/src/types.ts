@@ -61,7 +61,8 @@ export type ChartType =
   | 'pie'
   | 'donut'
   | 'number'
-  | 'table';
+  | 'table'
+  | 'text';
 
 export type AggregateFunction = 
   | 'sum'
@@ -78,21 +79,50 @@ export interface ChartSpec {
   /** Chart type */
   type: ChartType;
   
-  /** Data source reference */
-  dataSource: string;
+  /** Data source reference (not required for text charts) */
+  dataSource?: string;
   
   /** Chart title */
   title?: string;
   
-  /** Encoding specifications */
-  encoding: EncodingSpec;
+  /** Encoding specifications (not required for text charts) */
+  encoding?: EncodingSpec;
+  
+  /** Content for text charts (Markdown) */
+  content?: string;
   
   /** Optional interaction config */
   interaction?: InteractionConfig;
   
+  /** Optional analysis overlays */
+  overlays?: AnalysisOverlay[];
+  
   /** Optional dimensions */
   width?: number;
   height?: number;
+}
+
+export type AnalysisOverlayType = 
+  | 'mean'
+  | 'median'
+  | 'trend'
+  | 'moving_average';
+
+export interface AnalysisOverlay {
+  /** Type of overlay */
+  type: AnalysisOverlayType;
+  
+  /** Field to analyze (defaults to y field) */
+  field?: string;
+  
+  /** Color for the overlay line */
+  color?: string;
+  
+  /** Label for legend */
+  label?: string;
+  
+  /** Window size for moving average */
+  window?: number;
 }
 
 export interface EncodingSpec {
