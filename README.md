@@ -1,300 +1,207 @@
 # coordboard
 
-**Analytics dashboards powered by Mosaic + dbt**
+**Build interactive analytics dashboards from declarative YAML** → Powered by [Mosaic](https://idl.uw.edu/mosaic/) + dbt
 
-Build interactive, self-contained analytics dashboards from declarative YAML/JSON specs. Features native crossfiltering via [UW Mosaic](https://idl.uw.edu/mosaic/), in-browser SQL with DuckDB-WASM, and seamless dbt integration.
-
-**Status:** Week-1 architecture spike + v0.1 skeleton (in development)
+Define dashboards in YAML, get native crossfiltering and in-browser SQL. No backend required.
 
 ---
 
-## ✨ Features
-
-- 🎯 **Declarative dashboards** - Define charts and interactions in YAML/JSON
-- 🔗 **Native crossfiltering** - Mosaic coordination engine (no custom filter code)
-- 🗄️ **In-browser SQL** - DuckDB-WASM for client-side analytics
-- 📊 **dbt integration** - Resolve `ref('model_name')` from manifest.json
-- 📦 **Static export** - Self-contained HTML that works offline
-- ⚡ **Fast development** - Vite dev server with hot reload
-
----
-
-## 🚀 5-Minute Quickstart
+## ⚡ 5-Minute Quickstart
 
 ```bash
-# Clone and install
+# 1. Clone and install (1 min)
+git clone <repo-url>
+cd coordboard
 pnpm install
 
-# Run working example
-pnpm example:sales
+# 2. Build packages (30 sec)
+pnpm build
 
-# Opens at http://localhost:5174
-# Try brushing the line charts to see crossfiltering!
+# 3. Preview example with hot reload (30 sec)
+pnpm exec coordboard preview examples/sales-board/board.yaml
+# Opens at http://localhost:3000
 
-# Build static HTML
-pnpm example:build
-
-# Preview production build
-pnpm example:preview
+# 4. Try crossfiltering! (2 min)
+# → Click and drag on the line charts
+# → Watch bar charts filter instantly
+# → Click outside to reset
 ```
 
-### Try the Demo
-
-1. **Open the dashboard** at http://localhost:5174
-2. **Click and drag** horizontally on the "Daily Sales Trend" line chart
-3. **Watch** the bar charts filter instantly to show only the selected date range
-4. **Click outside** the selection to reset
+**That's it!** You now have a working dashboard with native Mosaic crossfiltering.
 
 ---
 
-## 📂 Repository Structure
+## 🎯 What You Get
 
-```
-coordboard/
-├── packages/
-│   ├── core/              # Dashboard spec types + JSON Schema
-│   ├── dbt-adapter/       # dbt manifest resolver
-│   └── cli/               # CLI tool (preview, build commands)
-├── examples/
-│   └── sales-board/       # Working demo with crossfiltering
-├── VERDICT.md             # Architecture spike results (GO decision)
-└── README.md              # This file
-```
-
-### Package Overview
-
-| Package | Description | Status |
-|---------|-------------|--------|
-| `@coordboard/core` | TypeScript types for dashboard specs | ✅ API defined |
-| `@coordboard/dbt-adapter` | dbt manifest `ref()` resolver | ✅ API defined |
-| `@coordboard/cli` | CLI tool (`preview`, `build`) | ⚠️ Stub (commands exist) |
-| `@coordboard/example-sales-board` | Working 6-chart dashboard | ✅ Fully functional |
+✅ **Declarative dashboards** - Write YAML, not code  
+✅ **Native crossfiltering** - Mosaic coordination engine  
+✅ **In-browser SQL** - DuckDB-WASM, no backend  
+✅ **dbt integration** - Resolve `ref('model_name')`  
+✅ **Static export** - Self-contained offline HTML  
+✅ **Hot reload** - File watch + instant updates
 
 ---
 
-## 🎨 Dashboard Spec Example
+## 📊 Quick Examples
 
-Define dashboards declaratively in YAML:
+### Example 1: Sales & Flights
+6-chart dashboard with time-based crossfiltering
+```bash
+pnpm exec coordboard preview examples/sales-board/board.yaml
+```
+
+### Example 2: Web Analytics
+Traffic sources, conversions, and revenue
+```bash
+pnpm exec coordboard preview examples/web-analytics/board.yaml
+```
+
+See [examples/README.md](./examples/README.md) for full gallery.
+
+---
+
+## 🛠️ CLI Commands
+
+### Validate a board spec
+```bash
+coordboard validate board.yaml
+```
+- JSON Schema validation
+- Semantic checks (data refs, selections)
+- dbt manifest verification
+
+### Preview with hot reload
+```bash
+coordboard preview board.yaml --port 3000
+```
+- Vite dev server
+- File watching
+- Auto-reload on changes
+
+### Build static HTML
+```bash
+coordboard build board.yaml --out-dir dist
+```
+- Generates self-contained HTML
+- ~333KB gzipped
+- Works offline with DuckDB-WASM
+
+---
+
+## 📝 Dashboard Spec Format
 
 ```yaml
 meta:
-  title: "Sales Analytics"
+  title: "My Dashboard"
   version: "0.1.0"
 
 data:
-  - id: sales_daily
+  - id: sales
     type: dbt
     model: sales_daily
 
 charts:
-  - id: sales_trend
+  - id: trend
     type: line
-    dataSource: sales_daily
-    title: "Daily Sales Trend"
+    dataSource: sales
     encoding:
-      x:
-        field: date
-        type: temporal
-      y:
-        field: sales
-        aggregate: sum
+      x: { field: date, type: temporal }
+      y: { field: amount, aggregate: sum }
     interaction:
       brush: true
-      brushAxis: x
       selection: dateBrush
-    
-  - id: sales_by_region
+  
+  - id: breakdown
     type: bar
-    dataSource: sales_daily
-    title: "Sales by Region"
+    dataSource: sales
     encoding:
       x: { field: region, type: nominal }
-      y: { field: sales, aggregate: sum }
+      y: { field: amount, aggregate: sum }
     interaction:
-      filterBy: dateBrush
+      filterBy: dateBrush  # Linked to trend!
 ```
 
-**Future:** `coordboard build board.yaml` → static HTML with working crossfiltering
-
-**Current:** See `examples/sales-board/` for manual Mosaic implementation
+**That's all it takes!** The CLI generates Mosaic code and bundles everything.
 
 ---
 
-## 🛠️ Development
+## 🎨 Supported Chart Types
 
-### Setup
+| Type | Status | Description |
+|------|--------|-------------|
+| `line` | ✅ | Time series, brushable |
+| `bar` | ✅ | Categorical aggregates |
+| `area` | ✅ | Stacked or single |
+| `scatter` | ✅ | Point clouds |
+| `heatmap` | ✅ | 2D density |
+| `number` | ✅ | KPI / single metric |
+| `table` | ✅ | Data grid (100 rows) |
+| `pie`/`donut` | ⚠️ | Recognized (needs Observable Plot integration) |
+
+---
+
+## 📂 Project Structure
+
+```
+coordboard/
+├── packages/
+│   ├── core/              # Types + JSON Schema
+│   ├── dbt-adapter/       # dbt manifest resolver
+│   └── cli/               # CLI commands (validate, preview, build)
+├── examples/
+│   ├── sales-board/       # Business analytics
+│   └── web-analytics/     # Traffic + conversions
+└── README.md              # You are here
+```
+
+---
+
+## 🚀 Development
 
 ```bash
-# Install pnpm if needed
-npm install -g pnpm
-
-# Install dependencies
+# Install
 pnpm install
 
 # Build all packages
 pnpm build
-```
 
-### Working with Packages
-
-```bash
-# Build all packages (except examples)
-pnpm build
-
-# Watch mode for development
+# Watch mode
 pnpm dev
 
-# Clean all build outputs
-pnpm clean
-```
-
-### Working with Examples
-
-```bash
-# Run sales-board example
+# Run example
 pnpm example:sales
-
-# Build sales-board example
-pnpm example:build
-
-# Preview built example
-pnpm example:preview
-```
-
-### Package Development
-
-Each package can be developed independently:
-
-```bash
-# Work on core types
-cd packages/core
-pnpm build
-pnpm dev  # watch mode
-
-# Work on dbt-adapter
-cd packages/dbt-adapter
-pnpm build
-
-# Work on CLI
-cd packages/cli
-pnpm build
 ```
 
 ---
 
-## 📋 Current State (Week-1 Spike)
+## 📖 Key Documentation
 
-### ✅ What Works
-
-- **Working demo** with 6 charts and crossfiltering (examples/sales-board/)
-- **Static HTML export** via Vite (~696KB bundle, 213KB gzipped)
-- **dbt integration pattern** (manifest resolver + CSV loading)
-- **In-browser DuckDB-WASM** for SQL analytics
-- **Time-based crossfiltering** using Mosaic selections
-
-### 🚧 What's Next (v0.1)
-
-- [ ] **CLI commands** - Implement `preview` and `build` (currently stubs)
-- [ ] **YAML → Mosaic compiler** - Read `board.yaml` and generate dashboard code
-- [ ] **dbt resolver integration** - Use `@coordboard/dbt-adapter` in builds
-- [ ] **Template system** - Generate HTML/JS from dashboard specs
-- [ ] **Data source handling** - Support CSV, Parquet, remote URLs
-- [ ] **Error boundaries** - Better error handling and validation
-- [ ] **Bundle optimization** - Code splitting for smaller initial load
-
----
-
-## 📖 Documentation
-
-### Architecture
-
-See **[VERDICT.md](./VERDICT.md)** for:
-- ✅ Week-1 spike results (GO decision)
-- Architecture validation and rationale
-- Bundle size analysis (~696KB minified)
-- Friction points and solutions
-- Production readiness checklist
-- Recommended next steps
-
-### Examples
-
-See **[examples/sales-board/README.md](./examples/sales-board/README.md)** for:
-- Complete working demo walkthrough
-- How crossfiltering works
-- Data sources and dbt integration
-- Build and deployment instructions
-
-### API Reference
-
-Each package has inline TypeScript documentation:
-
-```bash
-# Core types
-packages/core/src/types.ts
-
-# dbt adapter
-packages/dbt-adapter/src/resolver.ts
-
-# CLI commands
-packages/cli/src/commands.ts
-```
+- **[examples/README.md](./examples/README.md)** - Gallery of working dashboards
+- **[VERDICT.md](./VERDICT.md)** - Architecture spike results (Mosaic GO decision)
+- **[Mosaic Docs](https://idl.uw.edu/mosaic/)** - Visualization library reference
 
 ---
 
 ## 🎯 Design Decisions
 
 ### Why Mosaic?
+✅ Lightweight (~200KB vs 2-3MB Perspective)  
+✅ SQL-first (natural fit with dbt)  
+✅ Flexible (Observable Plot + vgplot)  
+✅ Production-ready (UW IDL active maintenance)
 
-- ✅ **Lightweight** - ~200KB (vs 2-3MB for Perspective)
-- ✅ **Flexible** - Observable Plot + vgplot composability
-- ✅ **SQL-first** - Natural fit with dbt paradigm
-- ✅ **Production-ready** - Active UW IDL maintenance
-
-### Why Not Build Custom FilterEngine?
-
-Mosaic's coordination engine is mature, performant, and feature-rich. Building custom would be:
-- Higher maintenance burden
-- Slower development
-- Fewer features
-- More bugs
-
-See VERDICT.md for complete analysis.
-
-### Why pnpm Workspace?
-
-- Fast installs with symlinked dependencies
-- Strict dependency resolution
-- Better monorepo support than npm/yarn
-- Industry standard for modern tooling
-
----
-
-## 🚦 Roadmap
-
-### v0.1 (Next)
-- [ ] Implement CLI `preview` and `build` commands
-- [ ] YAML → Mosaic code generator
-- [ ] Basic template system
-- [ ] Integration tests for end-to-end flow
-
-### v0.2 (Future)
-- [ ] Parquet support (better for large datasets)
-- [ ] Remote data sources (S3, GCS, HTTP)
-- [ ] Advanced interactions (click, hover, tooltips)
-- [ ] Custom themes and styling
-- [ ] More chart types (heatmap, histogram, scatter)
-
-### v0.3 (Future)
-- [ ] Multi-page dashboards
-- [ ] Embedding API
-- [ ] Collaborative features
-- [ ] Plugin system
+### What coordboard adds
+✅ Declarative YAML specs  
+✅ CLI tooling (validate, preview, build)  
+✅ dbt integration (ref() resolution)  
+✅ Static HTML generation  
+✅ Developer experience (hot reload, validation)
 
 ---
 
 ## 🤝 Contributing
 
-This is currently a proof-of-concept / architecture spike. Not yet ready for external contributions.
+Currently proof-of-concept. See [VERDICT.md](./VERDICT.md) for v0.1 status.
 
 ---
 
@@ -302,24 +209,18 @@ This is currently a proof-of-concept / architecture spike. Not yet ready for ext
 
 Apache-2.0
 
-See [LICENSE](./LICENSE) for full text.
-
 ---
 
-## 🙏 Credits
+## 🔗 Links
 
-Built with:
-- [UW Mosaic](https://idl.uw.edu/mosaic/) - Coordination engine
-- [DuckDB-WASM](https://duckdb.org/docs/api/wasm/overview) - In-browser SQL
-- [Vite](https://vitejs.dev/) - Build tool
+- [UW Mosaic](https://idl.uw.edu/mosaic/) - Visualization engine
+- [DuckDB-WASM](https://duckdb.org/docs/api/wasm) - In-browser database
 - [dbt](https://www.getdbt.com/) - Data transformation framework
 
-Inspired by Observable Framework, Streamlit, and Tableau.
-
 ---
 
-## 📞 Support
+**Ready to build?** Start with [examples/README.md](./examples/README.md) or run:
 
-For questions about the architecture spike, see VERDICT.md.
-
-For issues with the demo, check examples/sales-board/README.md.
+```bash
+pnpm exec coordboard preview examples/sales-board/board.yaml
+```

@@ -1,0 +1,56 @@
+{
+  "metadata": {
+    "dbt_schema_version": "https://schemas.getdbt.com/dbt/manifest/v11.json",
+    "dbt_version": "1.7.0",
+    "generated_at": "2026-09-16T04:21:00.000000Z",
+    "invocation_id": "00000000-0000-0000-0000-000000000000",
+    "project_name": "web_analytics"
+  },
+  "nodes": {
+    "model.web_analytics.page_views": {
+      "database": "analytics",
+      "schema": "web",
+      "name": "page_views",
+      "resource_type": "model",
+      "package_name": "web_analytics",
+      "path": "web/page_views.sql",
+      "original_file_path": "models/web/page_views.sql",
+      "unique_id": "model.web_analytics.page_views",
+      "fqn": ["web_analytics", "web", "page_views"],
+      "alias": "page_views",
+      "checksum": {
+        "name": "sha256",
+        "checksum": "fake_checksum"
+      },
+      "config": {
+        "enabled": true,
+        "materialized": "table"
+      },
+      "relation_name": "\"analytics\".\"web\".\"page_views\""
+    },
+    "model.web_analytics.conversions": {
+      "database": "analytics",
+      "schema": "web",
+      "name": "conversions",
+      "resource_type": "model",
+      "package_name": "web_analytics",
+      "path": "web/conversions.sql",
+      "original_file_path": "models/web/conversions.sql",
+      "unique_id": "model.web_analytics.conversions",
+      "fqn": ["web_analytics", "web", "conversions"],
+      "alias": "conversions",
+      "checksum": {
+        "name": "sha256",
+        "checksum": "fake_checksum_2"
+      },
+      "config": {
+        "enabled": true,
+        "materialized": "table"
+      },
+      "relation_name": "\"analytics\".\"web\".\"conversions\""
+    }
+  },
+  "child_map": {},
+  "parent_map": {},
+  "docs": {}
+}
