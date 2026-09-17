@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "coordboard"
+version = "0.1.0"
+description = "Python SDK for coordboard - Analytics dashboards with Mosaic + dbt"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "Apache-2.0"}
+authors = [
+    {name = "coordboard contributors"}
+]
+keywords = ["dashboard", "analytics", "mosaic", "dbt", "visualization", "crossfilter"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "pyyaml>=6.0",
+    "pydantic>=2.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "black>=23.0",
+    "mypy>=1.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/coordboard/coordboard"
+Documentation = "https://github.com/coordboard/coordboard#readme"
+Repository = "https://github.com/coordboard/coordboard"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["coordboard*"]
+
+[tool.black]
+line-length = 100
+target-version = ['py38']
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
