@@ -38,7 +38,10 @@ pnpm exec coordboard preview examples/sales-board/board.yaml
 ✅ **In-browser SQL** - DuckDB-WASM, no backend  
 ✅ **dbt integration** - Resolve `ref('model_name')`  
 ✅ **Static export** - Self-contained offline HTML  
-✅ **Hot reload** - File watch + instant updates
+✅ **Hot reload** - File watch + instant updates  
+✅ **Analysis overlays** - Mean, median, trend, moving averages  
+✅ **Text charts** - Narrative Markdown blocks  
+✅ **Shareable filters** - URL encodes brush selections
 
 ---
 
@@ -54,6 +57,12 @@ pnpm exec coordboard preview examples/sales-board/board.yaml
 Traffic sources, conversions, and revenue
 ```bash
 pnpm exec coordboard preview examples/web-analytics/board.yaml
+```
+
+### Example 3: Revenue Analysis with Overlays
+Analysis overlays (trend, mean, MA) + narrative text blocks
+```bash
+pnpm exec coordboard preview examples/revenue-analysis/board.yaml
 ```
 
 See [examples/README.md](./examples/README.md) for full gallery.

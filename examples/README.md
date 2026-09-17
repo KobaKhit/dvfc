@@ -40,6 +40,49 @@ pnpm exec coordboard preview examples/web-analytics/board.yaml
 
 ---
 
+### 3. dbt Jaffle Shop
+**Path:** `examples/dbt-jaffle/`  
+**Domain:** E-commerce order analytics  
+**Charts:** 4 (revenue trends, payment methods, customers, status)
+
+**Features:**
+- Real dbt project structure with manifest
+- Customer order analytics
+- Revenue and payment method breakdown
+- Order status distribution
+
+**Quick start:**
+```bash
+pnpm exec coordboard preview examples/dbt-jaffle/board.yaml
+```
+
+---
+
+### 4. Revenue Analysis with Insights
+**Path:** `examples/revenue-analysis/`  
+**Domain:** Financial performance with analysis overlays  
+**Charts:** 7 (3 narrative text blocks, 4 analytical charts)
+
+**Features:**
+- **Analysis overlays**: Mean, median, linear trend, moving averages (5-day, 7-day)
+- **Narrative text blocks**: Executive summary, insights, methodology
+- Revenue, profit, and cost trend analysis
+- Regional performance breakdown
+- Grid layout with mixed content types
+
+**Demonstrates:**
+- `overlays` field: multiple analysis layers per chart
+- `type: text` charts: Markdown → HTML rendering
+- Shareable filter state: URL encodes brush selections
+- Complex dashboard with narrative + data
+
+**Quick start:**
+```bash
+pnpm exec coordboard preview examples/revenue-analysis/board.yaml
+```
+
+---
+
 ## Common Commands
 
 ### Validate a board

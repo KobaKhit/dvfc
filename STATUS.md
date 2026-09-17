@@ -1,8 +1,8 @@
 # coordboard Status Report
 
 **Last Updated:** September 17, 2026  
-**Version:** 0.3.1  
-**Status:** ✅ Production Ready - Chart discovery + quality improvements shipped
+**Version:** 0.4.0  
+**Status:** ✅ Production Ready - Analysis overlays, text charts, shareable filters shipped
 
 ---
 
@@ -61,8 +61,9 @@
 - ✅ **Unit tests** - 11 passing tests for chart discovery
 - ✅ **CI/CD** - GitHub Actions workflow (build, test, validate)
 - ✅ **Dogfood script** - Comprehensive testing of all commands
-- 🚧 **Analysis overlays** - Types defined (mean, trend, moving average)
-- 🚧 **Narrative text** - Text chart type for Markdown prose
+- ✅ **Analysis overlays** - Mean, median, trend (linear regression), moving average
+- ✅ **Text charts** - Narrative Markdown blocks in board layout
+- ✅ **Shareable filters** - URL state encodes brush selections
 
 ---
 
@@ -843,11 +844,13 @@ All v0.2 goals achieved:
 
 **B.3 Feature Foundations 🚧**
 - ✅ Analysis overlay types (mean, median, trend, moving_average)
+- ✅ Analysis overlay implementation (DuckDB SQL, multi-overlay support)
 - ✅ Text chart type for narrative Markdown blocks
+- ✅ Text chart rendering (Markdown → HTML)
+- ✅ Shareable filter URL state (encode/decode in query string)
 - ✅ Type definitions complete and built
-- ⚠️ Generator implementations in progress
-- ⚠️ URL state for shareable filters (future)
-- ⚠️ Data-driven images (future)
+- ✅ Example board: revenue-analysis with overlays + text
+- ⚠️ Data-driven images (deferred - see API sketch below)
 
 ### Earlier Milestones ✅
 - ✅ Validate command with clear errors
@@ -884,7 +887,86 @@ All v0.2 goals achieved:
 
 ---
 
-## 🎯 Next Steps (v0.3)
+## 🎯 Deferred Features
+
+### Data-Driven Images
+
+**Status:** Deferred (non-trivial, not blocking for v0.3)
+
+**Use Case:** Embed dynamic images in dashboards where image properties (src, dimensions, filters) are driven by data values or selections.
+
+**API Sketch:**
+
+```yaml
+# Image chart type
+charts:
+  - id: product_image
+    type: image
+    dataSource: products
+    title: "Featured Product"
+    encoding:
+      src: { field: image_url }
+      alt: { field: product_name }
+    width: 400
+    height: 300
+    interaction:
+      filterBy: productSelection  # Show image for selected product
+      
+  # Image with data-driven properties
+  - id: status_icon
+    type: image
+    dataSource: status_metrics
+    encoding:
+      src: 
+        field: status
+        scale:
+          type: ordinal
+          domain: ["success", "warning", "error"]
+          range: 
+            - "/assets/check.svg"
+            - "/assets/warning.svg"
+            - "/assets/error.svg"
+```
+
+**Implementation Considerations:**
+
+1. **Image Source Resolution**
+   - Support `file:`, `http://`, `https://`, `data:` schemes
+   - Handle relative paths (resolve against dashboard base)
+   - Error handling for missing/broken images
+
+2. **Dynamic Updates**
+   - Re-render images when filterBy selections change
+   - Preload images to avoid flicker
+   - Fallback images for errors
+
+3. **Data Binding**
+   - Map field values to image URLs via scale
+   - Support template strings: `"/products/${product_id}.jpg"`
+   - Conditional image properties (opacity, size)
+
+4. **Security**
+   - Content Security Policy compliance
+   - Sanitize URLs to prevent XSS
+   - Restrict to safe schemes
+
+**Alternative Approach:** Use text charts with embedded `<img>` tags in Markdown for MVP:
+
+```yaml
+- id: product_showcase
+  type: text
+  content: |
+    ![Product Image](/assets/product-default.jpg)
+    
+    **Product:** ${product_name}
+    **Status:** ${status}
+```
+
+This requires template variable substitution in text chart generator.
+
+---
+
+## 🎯 Next Steps (v0.4)
 
 ### Data & Sources
 - [ ] Parquet file support
