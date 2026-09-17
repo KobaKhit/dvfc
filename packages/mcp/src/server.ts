@@ -273,8 +273,35 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           chart: ChartSpec;
         };
         
+        // Validate chart spec
+        if (!chart.id || !chart.type || !chart.dataSource || !chart.encoding) {
+          throw new Error('Chart must have id, type, dataSource, and encoding');
+        }
+        
         const content = await readFile(specPath, 'utf-8');
         const spec = parseYAML(content) as DashboardSpec;
+        
+        // Check for duplicate ID
+        if (spec.charts.some(c => c.id === chart.id)) {
+          throw new Error(`Chart with id '${chart.id}' already exists`);
+        }
+        
+        // Validate dataSource exists
+        const dataSourceIds = new Set(spec.data.map(d => d.id));
+        if (!dataSourceIds.has(chart.dataSource)) {
+          throw new Error(`Data source '${chart.dataSource}' not found`);
+        }
+        
+        // Validate encoding based on chart type
+        if (['line', 'bar', 'scatter', 'area'].includes(chart.type)) {
+          if (!chart.encoding.x || !chart.encoding.y) {
+            throw new Error(`Chart type '${chart.type}' requires both x and y encoding`);
+          }
+        } else if (['pie', 'donut'].includes(chart.type)) {
+          if (!chart.encoding.x || !chart.encoding.y) {
+            throw new Error(`Chart type '${chart.type}' requires x (category) and y (value) encoding`);
+          }
+        }
         
         spec.charts.push(chart);
         
@@ -303,7 +330,24 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           throw new Error(`Chart '${chartId}' not found`);
         }
         
-        spec.charts[chartIndex] = { ...spec.charts[chartIndex], ...updates };
+        const existingChart = spec.charts[chartIndex];
+        
+        // Validate updates
+        if (updates.id && updates.id !== chartId) {
+          // Check for duplicate ID
+          if (spec.charts.some(c => c.id === updates.id)) {
+            throw new Error(`Chart with id '${updates.id}' already exists`);
+          }
+        }
+        
+        if (updates.dataSource) {
+          const dataSourceIds = new Set(spec.data.map(d => d.id));
+          if (!dataSourceIds.has(updates.dataSource)) {
+            throw new Error(`Data source '${updates.dataSource}' not found`);
+          }
+        }
+        
+        spec.charts[chartIndex] = { ...existingChart, ...updates };
         
         await writeFile(specPath, stringifyYAML(spec));
         

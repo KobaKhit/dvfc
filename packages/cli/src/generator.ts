@@ -259,20 +259,110 @@ function generateTableChart(chart: ChartSpec, ctx: GeneratorContext): string {
  */
 function generatePieChart(chart: ChartSpec, ctx: GeneratorContext): string {
   const containerId = `chart-${chart.id}`;
-  const { encoding, dataSource } = chart;
+  const { encoding, dataSource, interaction } = chart;
   
-  // For now, we'll note that full pie chart support needs Observable Plot directly
-  // This is a placeholder that shows it's recognized but needs enhancement
+  if (!encoding.x || !encoding.y) {
+    return `console.error('Pie chart ${chart.id} requires x (category) and y (value) encodings');`;
+  }
+  
+  const categoryField = encoding.x.field;
+  const valueField = encoding.y.field;
+  const aggregate = encoding.y.aggregate || 'sum';
+  const isDoughnut = chart.type === 'donut';
+  const innerRadius = isDoughnut ? 0.5 : 0;
+  
+  const filterClause = interaction?.filterBy ? `, { filterBy: ${interaction.filterBy} }` : '';
+  
   return `const container${chart.id} = document.getElementById('${containerId}');
   if (container${chart.id}) {
-    container${chart.id}.innerHTML = \`
-      <div style="padding: 2rem; text-align: center; color: #718096;">
-        <p>📊 Pie/Donut charts coming soon!</p>
-        <p style="font-size: 0.875rem; margin-top: 0.5rem;">
-          Chart type "${chart.type}" is recognized but requires additional Observable Plot integration.
-        </p>
-      </div>
-    \`;
+    // Query aggregated data
+    const result = await vg.coordinator().query(\`
+      SELECT ${categoryField}, ${aggregate.toUpperCase()}(${valueField}) as value
+      FROM ${dataSource}
+      \${${interaction?.filterBy ? interaction.filterBy + '.sql ? "WHERE " + ' + interaction.filterBy + '.sql : ""' : '""'}}
+      GROUP BY ${categoryField}
+      ORDER BY value DESC
+    \`);
+    
+    if (result.length === 0) {
+      container${chart.id}.innerHTML = '<p style="text-align: center; color: #999;">No data</p>';
+    } else {
+      // Calculate pie slices
+      const total = result.reduce((sum, d) => sum + d.value, 0);
+      let currentAngle = -Math.PI / 2; // Start at top
+      
+      const slices = result.map((d, i) => {
+        const value = d.value;
+        const angle = (value / total) * 2 * Math.PI;
+        const startAngle = currentAngle;
+        const endAngle = currentAngle + angle;
+        currentAngle = endAngle;
+        
+        const color = \`hsl(\${(i * 360 / result.length)}, 70%, 60%)\`;
+        
+        return { ...d, startAngle, endAngle, color };
+      });
+      
+      // SVG dimensions
+      const width = ${chart.width || 400};
+      const height = ${chart.height || 400};
+      const radius = Math.min(width, height) / 2 - 40;
+      const innerR = radius * ${innerRadius};
+      
+      // Generate SVG paths
+      const paths = slices.map(slice => {
+        const outerX1 = Math.cos(slice.startAngle) * radius;
+        const outerY1 = Math.sin(slice.startAngle) * radius;
+        const outerX2 = Math.cos(slice.endAngle) * radius;
+        const outerY2 = Math.sin(slice.endAngle) * radius;
+        
+        const innerX1 = Math.cos(slice.startAngle) * innerR;
+        const innerY1 = Math.sin(slice.startAngle) * innerR;
+        const innerX2 = Math.cos(slice.endAngle) * innerR;
+        const innerY2 = Math.sin(slice.endAngle) * innerR;
+        
+        const largeArc = (slice.endAngle - slice.startAngle) > Math.PI ? 1 : 0;
+        
+        const path = ${isDoughnut} ?
+          \`M \${innerX1} \${innerY1} L \${outerX1} \${outerY1} A \${radius} \${radius} 0 \${largeArc} 1 \${outerX2} \${outerY2} L \${innerX2} \${innerY2} A \${innerR} \${innerR} 0 \${largeArc} 0 \${innerX1} \${innerY1} Z\` :
+          \`M 0 0 L \${outerX1} \${outerY1} A \${radius} \${radius} 0 \${largeArc} 1 \${outerX2} \${outerY2} Z\`;
+        
+        // Label position
+        const midAngle = (slice.startAngle + slice.endAngle) / 2;
+        const labelR = radius * 0.75;
+        const labelX = Math.cos(midAngle) * labelR;
+        const labelY = Math.sin(midAngle) * labelR;
+        const pct = ((slice.value / total) * 100).toFixed(1);
+        
+        return \`
+          <path d="\${path}" fill="\${slice.color}" stroke="white" stroke-width="2" opacity="0.9">
+            <title>\${slice.${categoryField}}: \${slice.value.toFixed(2)} (\${pct}%)</title>
+          </path>
+          \${pct > 5 ? \`<text x="\${labelX}" y="\${labelY}" text-anchor="middle" font-size="12" fill="white" font-weight="bold">\${pct}%</text>\` : ''}
+        \`;
+      }).join('');
+      
+      // Legend
+      const legend = slices.map((slice, i) => \`
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin: 0.25rem 0;">
+          <div style="width: 12px; height: 12px; background: \${slice.color}; border-radius: 2px;"></div>
+          <span style="font-size: 0.875rem;">\${slice.${categoryField}} (\${((slice.value / total) * 100).toFixed(1)}%)</span>
+        </div>
+      \`).join('');
+      
+      container${chart.id}.innerHTML = \`
+        <div style="display: flex; gap: 2rem; align-items: center; justify-content: center;">
+          <svg width="\${width}" height="\${height}" style="flex-shrink: 0;">
+            <g transform="translate(\${width/2}, \${height/2})">
+              \${paths}
+            </g>
+          </svg>
+          <div style="max-width: 200px;">
+            \${legend}
+          </div>
+        </div>
+      \`;
+    }
   }`;
 }
 
