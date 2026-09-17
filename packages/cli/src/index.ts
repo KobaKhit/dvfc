@@ -4,3 +4,6 @@
  */
 
 export * from './commands.js';
+export * from './validator.js';
+export * from './generator.js';
+
