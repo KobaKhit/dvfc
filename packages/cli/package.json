@@ -39,6 +39,14 @@
     "@types/node": "^22.10.5",
     "typescript": "^5.7.3"
   },
+  "peerDependencies": {
+    "playwright": "^1.40.0"
+  },
+  "peerDependenciesMeta": {
+    "playwright": {
+      "optional": true
+    }
+  },
   "license": "Apache-2.0",
   "keywords": [
     "dashboard",

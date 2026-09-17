@@ -19,6 +19,18 @@ export interface BuildOptions {
     outDir?: string;
     minify?: boolean;
 }
+export interface ExportPdfOptions {
+    outFile?: string;
+    useBrowser?: boolean;
+}
+/**
+ * Export dashboard to PDF
+ */
+export declare function exportPdf(specPath: string, options?: ExportPdfOptions): Promise<void>;
+export interface BuildOptions {
+    outDir?: string;
+    minify?: boolean;
+}
 /**
  * Validate command - validate dashboard spec
  */

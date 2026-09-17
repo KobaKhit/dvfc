@@ -197,6 +197,67 @@ export async function init(options = {}) {
     }
 }
 /**
+ * Export dashboard to PDF
+ */
+export async function exportPdf(specPath, options = {}) {
+    const outFile = options.outFile || 'dashboard.pdf';
+    console.log(`📄 Exporting dashboard to PDF: ${outFile}\n`);
+    // First, build to HTML
+    const tmpDir = '.coordboard-pdf-build';
+    await build(specPath, { outDir: tmpDir, minify: false });
+    const htmlPath = join(tmpDir, 'index.html');
+    // Try to use playwright if available
+    if (options.useBrowser !== false) {
+        try {
+            // Dynamic import to avoid hard dependency - use eval to bypass TypeScript
+            const playwrightModule = await eval('import("playwright")');
+            const { chromium } = playwrightModule;
+            console.log('📦 Using Playwright for PDF generation...');
+            const browser = await chromium.launch();
+            const page = await browser.newPage();
+            await page.goto(`file://${resolvePath(htmlPath)}`, { waitUntil: 'networkidle' });
+            // Add print styles
+            await page.addStyleTag({
+                content: `
+          @media print {
+            body { margin: 0; }
+            .no-print { display: none; }
+          }
+        `
+            });
+            await page.pdf({
+                path: outFile,
+                format: 'A4',
+                printBackground: true,
+                margin: { top: '20px', right: '20px', bottom: '20px', left: '20px' }
+            });
+            await browser.close();
+            console.log(`\n✅ PDF exported: ${outFile}\n`);
+        }
+        catch (error) {
+            if (error.code === 'MODULE_NOT_FOUND' || error.code === 'ERR_MODULE_NOT_FOUND') {
+                console.log('\n⚠️  Playwright not found. Install it for automated PDF generation:');
+                console.log('   npm install -D playwright');
+                console.log('\n📖 Alternative: Use browser print-to-PDF');
+                console.log(`   1. Open ${htmlPath} in your browser`);
+                console.log('   2. Press Ctrl+P (Cmd+P on Mac)');
+                console.log('   3. Select "Save as PDF"');
+                console.log('   4. Click Save\n');
+            }
+            else {
+                throw error;
+            }
+        }
+    }
+    else {
+        console.log('\n📖 Manual print-to-PDF required:');
+        console.log(`   1. Open ${htmlPath} in your browser`);
+        console.log('   2. Press Ctrl+P (Cmd+P on Mac)');
+        console.log('   3. Select "Save as PDF"');
+        console.log('   4. Click Save\n');
+    }
+}
+/**
  * Validate command - validate dashboard spec
  */
 export async function validate(specPath) {

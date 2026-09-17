@@ -6,7 +6,7 @@
  */
 
 import { Command } from 'commander';
-import { preview, build, validate, init } from './commands.js';
+import { preview, build, validate, init, exportPdf } from './commands.js';
 
 const program = new Command();
 
@@ -77,6 +77,24 @@ program
         fromDbt: options.fromDbt,
         manifestPath: options.manifestPath,
         outFile: options.outFile
+      });
+    } catch (error) {
+      console.error('Error:', error instanceof Error ? error.message : String(error));
+      process.exit(1);
+    }
+  });
+
+program
+  .command('export-pdf')
+  .description('Export dashboard to PDF (requires playwright or manual print)')
+  .argument('<spec>', 'Path to dashboard spec (YAML or JSON)')
+  .option('-o, --out-file <file>', 'Output PDF file', 'dashboard.pdf')
+  .option('--no-browser', 'Skip automated PDF generation, print instructions only')
+  .action(async (spec: string, options) => {
+    try {
+      await exportPdf(spec, {
+        outFile: options.outFile,
+        useBrowser: options.browser
       });
     } catch (error) {
       console.error('Error:', error instanceof Error ? error.message : String(error));
