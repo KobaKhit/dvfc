@@ -1,8 +1,8 @@
 # coordboard Status Report
 
 **Last Updated:** September 17, 2026  
-**Version:** 0.3.0  
-**Status:** ✅ Production Ready - Chart discovery + all v0.2 features shipped
+**Version:** 0.3.1  
+**Status:** ✅ Production Ready - Chart discovery + quality improvements shipped
 
 ---
 
@@ -44,6 +44,7 @@
 - ✅ **JSON Schema validation** - Path-aware error messages
 - ✅ **Semantic validation** - Data refs, selection wiring, duplicates
 - ✅ **dbt integration** - Manifest resolution, ref() lookups, init from manifest
+- ✅ **Real dbt projects** - Comprehensive guide for target/manifest.json
 - ✅ **Hot reload** - File watching + auto-rebuild
 - ✅ **Crossfiltering** - Mosaic native coordination
 - ✅ **Layout systems** - Grid and flex layouts
@@ -57,6 +58,11 @@
 - ✅ **Chart discovery** - Search, get, list, compose across boards
 - ✅ **Chart addressability** - Board-scoped keys, display format
 - ✅ **Single chart builds** - Extract individual charts with context
+- ✅ **Unit tests** - 11 passing tests for chart discovery
+- ✅ **CI/CD** - GitHub Actions workflow (build, test, validate)
+- ✅ **Dogfood script** - Comprehensive testing of all commands
+- 🚧 **Analysis overlays** - Types defined (mean, trend, moving average)
+- 🚧 **Narrative text** - Text chart type for Markdown prose
 
 ---
 
@@ -649,6 +655,42 @@ pnpm exec coordboard build examples/dbt-jaffle/board.yaml \
   --chart daily_revenue -o test-single
 ```
 
+### Run Full Dogfood Suite
+
+```bash
+# Comprehensive test of all features
+pnpm dogfood
+
+# Tests:
+# - Chart discovery (search, get, list)
+# - Compose boards from multiple sources
+# - Validate all examples
+# - Build examples (full + single chart)
+# - dbt init workflow
+# - MCP server startup
+```
+
+### Run Unit Tests
+
+```bash
+# Chart discovery tests (11 tests)
+cd packages/charts
+pnpm test
+
+# All passing:
+# ✓ searchCharts finds revenue charts
+# ✓ searchCharts returns top 10 by default
+# ✓ searchCharts scores exact ID matches highest
+# ✓ getChart returns chart with context
+# ✓ getChart throws on missing chart
+# ✓ resolveChartRef handles display keys
+# ✓ resolveChartRef handles unambiguous plain IDs
+# ✓ resolveChartRef throws on ambiguous IDs
+# ✓ makeDisplayKey formats correctly
+# ✓ parseDisplayKey extracts components
+# ✓ parseDisplayKey returns null for invalid format
+```
+
 ---
 
 ## 🔍 Troubleshooting
@@ -686,11 +728,13 @@ pnpm exec coordboard build examples/dbt-jaffle/board.yaml \
 - **[STATUS.md](./STATUS.md)** - This file (comprehensive status report)
 - **[examples/README.md](./examples/README.md)** - Gallery of examples
 - **[docs/chart-discovery.md](./docs/chart-discovery.md)** - Chart discovery & addressability guide
-- **[docs/mcp-cursor.md](./docs/mcp-cursor.md)** - MCP setup guide
+- **[docs/dbt-integration.md](./docs/dbt-integration.md)** - Real dbt project integration guide
+- **[docs/mcp-cursor.md](./docs/mcp-cursor.md)** - MCP setup guide (13 tools)
 - **[docs/pdf-export.md](./docs/pdf-export.md)** - PDF export documentation
 - **[packages/mcp/README.md](./packages/mcp/README.md)** - MCP tools reference
 - **[python/README.md](./python/README.md)** - Python SDK guide
 - **[.cursor/skills/coordboard/SKILL.md](./.cursor/skills/coordboard/SKILL.md)** - Agent skill
+- **[scripts/dogfood.sh](./scripts/dogfood.sh)** - Comprehensive test suite
 
 ---
 
@@ -781,6 +825,30 @@ All v0.2 goals achieved:
 - ✅ Get/render/build preserve board context
 - ✅ Ambiguous lookups fail with candidate list
 
+### Task 6: Quality, Hardening & Feature Foundations (Section B) ✅
+
+**B.1 Quality/Hardening ✅**
+- ✅ 11 unit tests for chart discovery (all passing)
+- ✅ GitHub Actions CI workflow (build, test, validate)
+- ✅ Automated node_modules check in CI
+- ✅ Duplicate chart ID handling in compose
+- ✅ Pie/donut chart edge cases tested
+
+**B.2 Dogfood Paths ✅**
+- ✅ `pnpm dogfood` comprehensive test script
+- ✅ docs/dbt-integration.md for real target/manifest.json
+- ✅ CSV export patterns from warehouses documented
+- ✅ Real dbt project directory structure guide
+- ✅ MCP checklist verified accurate (13 tools)
+
+**B.3 Feature Foundations 🚧**
+- ✅ Analysis overlay types (mean, median, trend, moving_average)
+- ✅ Text chart type for narrative Markdown blocks
+- ✅ Type definitions complete and built
+- ⚠️ Generator implementations in progress
+- ⚠️ URL state for shareable filters (future)
+- ⚠️ Data-driven images (future)
+
 ### Earlier Milestones ✅
 - ✅ Validate command with clear errors
 - ✅ Preview with hot reload
@@ -856,6 +924,6 @@ All v0.2 goals achieved:
 
 ---
 
-**Status:** ✅ Production ready with chart discovery + all v0.2 features  
+**Status:** ✅ Production ready with chart discovery, quality/hardening, and comprehensive testing  
 **License:** Apache-2.0  
-**Completed:** Chart discovery (issue #20), real dbt integration, pie/donut charts, hardened MCP (13 tools), Python SDK, PDF export, SQLMesh + Bruin adapters
+**Completed:** Chart discovery (issue #20), quality improvements (tests, CI, dogfood), real dbt integration guide, analysis overlay foundations
