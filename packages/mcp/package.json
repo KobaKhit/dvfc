@@ -27,6 +27,7 @@
     "@coordboard/core": "workspace:*",
     "@coordboard/dbt-adapter": "workspace:*",
     "@coordboard/cli": "workspace:*",
+    "@coordboard/charts": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.0.4",
     "yaml": "^2.7.0"
   },

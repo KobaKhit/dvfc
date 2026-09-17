@@ -16,6 +16,7 @@ import { parse as parseYAML, stringify as stringifyYAML } from 'yaml';
 import type { DashboardSpec, ChartSpec } from '@coordboard/core';
 import { validateWithReport, validateSemantics, validate, build } from '@coordboard/cli';
 import { createDbtResolver, type DbtManifest } from '@coordboard/dbt-adapter';
+import { searchCharts, getChart, listCharts, composeBoard, resolveChartRef } from '@coordboard/charts';
 import { dirname, join } from 'path';
 
 // Create MCP server
@@ -202,6 +203,120 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             }
           },
           required: ['specPath', 'plan']
+        }
+      },
+      {
+        name: 'search_charts',
+        description: 'Search for charts across the project. Returns chart hits with board path, chart ID, type, title, and display key. Supports --all for all matches or top 10 by default.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            query: {
+              type: 'string',
+              description: 'Search query (matches chart ID, title, type, field names)'
+            },
+            projectRoot: {
+              type: 'string',
+              description: 'Project root directory (default: current directory)'
+            },
+            boardPath: {
+              type: 'string',
+              description: 'Filter by specific board path'
+            },
+            all: {
+              type: 'boolean',
+              description: 'Return all matches (default: false, returns top 10)'
+            }
+          },
+          required: ['query']
+        }
+      },
+      {
+        name: 'get_chart',
+        description: 'Get chart metadata with full board context. Returns chart spec, board path, display key, and context (data sources, theme, layout).',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            boardPath: {
+              type: 'string',
+              description: 'Path to board file'
+            },
+            chartId: {
+              type: 'string',
+              description: 'Chart ID within the board'
+            }
+          },
+          required: ['boardPath', 'chartId']
+        }
+      },
+      {
+        name: 'list_charts',
+        description: 'List all charts in project or specific board. Returns all charts with display keys and metadata.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            projectRoot: {
+              type: 'string',
+              description: 'Project root directory (default: current directory)'
+            },
+            boardPath: {
+              type: 'string',
+              description: 'Filter by specific board path'
+            }
+          }
+        }
+      },
+      {
+        name: 'compose_board',
+        description: 'Compose an ephemeral board from chart IDs. Supports display keys (boardName__chartId) or plain chart IDs. Resolves ambiguous IDs or returns error with candidates. Returns composed board spec.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            projectRoot: {
+              type: 'string',
+              description: 'Project root directory (default: current directory)'
+            },
+            chartIds: {
+              type: 'array',
+              items: { type: 'string' },
+              description: 'Chart IDs or display keys (e.g., ["daily_revenue", "sales-board__top_products"])'
+            },
+            metric: {
+              type: 'string',
+              description: 'Optional metric name (stub for now)'
+            },
+            title: {
+              type: 'string',
+              description: 'Title for composed board'
+            },
+            description: {
+              type: 'string',
+              description: 'Description for composed board'
+            }
+          },
+          required: ['chartIds']
+        }
+      },
+      {
+        name: 'render_chart',
+        description: 'Render/build a single chart with board context. Builds HTML with only the specified chart while preserving board queries, variables, and styles.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            boardPath: {
+              type: 'string',
+              description: 'Path to board file'
+            },
+            chartId: {
+              type: 'string',
+              description: 'Chart ID to render'
+            },
+            outDir: {
+              type: 'string',
+              description: 'Output directory (default: dist)'
+            }
+          },
+          required: ['boardPath', 'chartId']
         }
       }
     ]
@@ -484,6 +599,116 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             text: `✅ Applied filter plan:\n` +
                   `  Brush: ${plan.brushChart} → ${plan.selectionName}\n` +
                   `  Filters: ${plan.filteredCharts.join(', ')}`
+          }]
+        };
+      }
+
+      case 'search_charts': {
+        const { query, projectRoot, boardPath, all } = args as {
+          query: string;
+          projectRoot?: string;
+          boardPath?: string;
+          all?: boolean;
+        };
+        
+        const hits = await searchCharts({
+          projectRoot: projectRoot || process.cwd(),
+          query,
+          boardPath,
+          all: all || false
+        });
+        
+        return {
+          content: [{
+            type: 'text' as const,
+            text: `Found ${hits.length} chart(s):\n\n${JSON.stringify(hits, null, 2)}`
+          }]
+        };
+      }
+
+      case 'get_chart': {
+        const { boardPath, chartId } = args as {
+          boardPath: string;
+          chartId: string;
+        };
+        
+        const resource = await getChart(boardPath, chartId);
+        
+        return {
+          content: [{
+            type: 'text' as const,
+            text: JSON.stringify(resource, null, 2)
+          }]
+        };
+      }
+
+      case 'list_charts': {
+        const { projectRoot, boardPath } = args as {
+          projectRoot?: string;
+          boardPath?: string;
+        };
+        
+        const charts = await listCharts(projectRoot || process.cwd(), boardPath);
+        
+        return {
+          content: [{
+            type: 'text' as const,
+            text: `Found ${charts.length} chart(s):\n\n${JSON.stringify(charts, null, 2)}`
+          }]
+        };
+      }
+
+      case 'compose_board': {
+        const { projectRoot, chartIds, metric, title, description } = args as {
+          projectRoot?: string;
+          chartIds: string[];
+          metric?: string;
+          title?: string;
+          description?: string;
+        };
+        
+        const root = projectRoot || process.cwd();
+        
+        // Resolve chart references
+        const chartRefs = [];
+        for (const id of chartIds) {
+          const ref = await resolveChartRef(root, id);
+          chartRefs.push(ref);
+        }
+        
+        // Compose board
+        const spec = await composeBoard(root, {
+          charts: chartRefs,
+          metric,
+          title,
+          description
+        });
+        
+        return {
+          content: [{
+            type: 'text' as const,
+            text: `✅ Composed board from ${chartIds.length} charts:\n\n${stringifyYAML(spec)}`
+          }]
+        };
+      }
+
+      case 'render_chart': {
+        const { boardPath, chartId, outDir } = args as {
+          boardPath: string;
+          chartId: string;
+          outDir?: string;
+        };
+        
+        // Build single chart
+        await build(boardPath, {
+          outDir: outDir || 'dist',
+          chartId
+        });
+        
+        return {
+          content: [{
+            type: 'text' as const,
+            text: `✅ Built chart '${chartId}' to ${outDir || 'dist'}/index.html`
           }]
         };
       }

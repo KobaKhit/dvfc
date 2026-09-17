@@ -142,6 +142,9 @@ importers:
 
   packages/mcp:
     dependencies:
+      '@coordboard/charts':
+        specifier: workspace:*
+        version: link:../charts
       '@coordboard/cli':
         specifier: workspace:*
         version: link:../cli
