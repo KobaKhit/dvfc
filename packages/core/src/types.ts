@@ -57,7 +57,11 @@ export type ChartType =
   | 'area'
   | 'scatter'
   | 'histogram'
-  | 'heatmap';
+  | 'heatmap'
+  | 'pie'
+  | 'donut'
+  | 'number'
+  | 'table';
 
 export type AggregateFunction = 
   | 'sum'

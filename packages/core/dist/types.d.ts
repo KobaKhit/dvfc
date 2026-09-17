@@ -36,7 +36,7 @@ export interface DataSource {
     /** Optional inline SQL transformation */
     sql?: string;
 }
-export type ChartType = 'bar' | 'line' | 'area' | 'scatter' | 'histogram' | 'heatmap';
+export type ChartType = 'bar' | 'line' | 'area' | 'scatter' | 'histogram' | 'heatmap' | 'pie' | 'donut' | 'number' | 'table';
 export type AggregateFunction = 'sum' | 'avg' | 'count' | 'min' | 'max' | 'median';
 export interface ChartSpec {
     /** Unique identifier for this chart */

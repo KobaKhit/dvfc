@@ -88,11 +88,26 @@ function generateChart(chart: ChartSpec, ctx: GeneratorContext): string {
   const containerId = `chart-${chart.id}`;
   const { encoding, interaction } = chart;
   
-  // Determine mark type
+  // Handle special chart types
+  if (chart.type === 'number') {
+    return generateNumberChart(chart, ctx);
+  }
+  
+  if (chart.type === 'table') {
+    return generateTableChart(chart, ctx);
+  }
+  
+  if (chart.type === 'pie' || chart.type === 'donut') {
+    return generatePieChart(chart, ctx);
+  }
+  
+  // Determine mark type for standard charts
   const mark = chart.type === 'line' ? 'lineY' : 
                chart.type === 'bar' ? 'barY' : 
                chart.type === 'area' ? 'areaY' :
-               chart.type === 'scatter' ? 'dot' : 'barY';
+               chart.type === 'scatter' ? 'dot' :
+               chart.type === 'heatmap' ? 'cell' :
+               'barY';
 
   // Build encoding
   const xEncoding = encoding.x ? 
@@ -116,8 +131,12 @@ function generateChart(chart: ChartSpec, ctx: GeneratorContext): string {
   if (xEncoding) markOptions.push(`x: ${xEncoding}`);
   if (yEncoding) markOptions.push(`y: ${yEncoding}`);
   if (colorEncoding) markOptions.push(`fill: ${colorEncoding}`);
+  
+  // Chart-type specific styling
   if (chart.type === 'line') markOptions.push('stroke: fill', 'strokeWidth: 2');
   if (chart.type === 'bar') markOptions.push('fillOpacity: 0.8');
+  if (chart.type === 'area') markOptions.push('fillOpacity: 0.6');
+  if (chart.type === 'heatmap') markOptions.push('fillOpacity: 1');
 
   // Build from clause with optional filterBy
   const fromClause = interaction?.filterBy ?
@@ -152,6 +171,108 @@ function generateChart(chart: ChartSpec, ctx: GeneratorContext): string {
       )${plotOptionsStr}
     );
     container${chart.id}.appendChild(chart${chart.id});
+  }`;
+}
+
+/**
+ * Generate a number/KPI chart (single metric display)
+ */
+function generateNumberChart(chart: ChartSpec, ctx: GeneratorContext): string {
+  const containerId = `chart-${chart.id}`;
+  const { encoding, dataSource, interaction } = chart;
+  
+  // Number charts typically show a single aggregated value
+  const field = encoding.y?.field || encoding.x?.field || 'value';
+  const aggregate = encoding.y?.aggregate || encoding.x?.aggregate || 'sum';
+  
+  const filterClause = interaction?.filterBy ? `, { filterBy: ${interaction.filterBy} }` : '';
+  
+  return `const container${chart.id} = document.getElementById('${containerId}');
+  if (container${chart.id}) {
+    // Query the aggregated value
+    const result = await vg.coordinator().query(\`
+      SELECT ${aggregate.toUpperCase()}(${field}) as value
+      FROM ${dataSource}
+      \${${interaction?.filterBy ? interaction.filterBy + '.sql ? "WHERE " + ' + interaction.filterBy + '.sql : ""' : '""'}}
+    \`);
+    
+    const value = result[0]?.value || 0;
+    const formatted = typeof value === 'number' ? 
+      value.toLocaleString(undefined, { maximumFractionDigits: 2 }) : 
+      value;
+    
+    container${chart.id}.innerHTML = \`
+      <div style="text-align: center; padding: 2rem;">
+        <div style="font-size: 3rem; font-weight: bold; color: #2d3748;">\${formatted}</div>
+        <div style="font-size: 1rem; color: #718096; margin-top: 0.5rem;">${chart.title || field}</div>
+      </div>
+    \`;
+  }`;
+}
+
+/**
+ * Generate a table chart (data grid)
+ */
+function generateTableChart(chart: ChartSpec, ctx: GeneratorContext): string {
+  const containerId = `chart-${chart.id}`;
+  const { dataSource, interaction } = chart;
+  
+  const filterClause = interaction?.filterBy ? `, { filterBy: ${interaction.filterBy} }` : '';
+  
+  return `const container${chart.id} = document.getElementById('${containerId}');
+  if (container${chart.id}) {
+    // Query the data
+    const result = await vg.coordinator().query(\`
+      SELECT * FROM ${dataSource}
+      \${${interaction?.filterBy ? interaction.filterBy + '.sql ? "WHERE " + ' + interaction.filterBy + '.sql : ""' : '""'}}
+      LIMIT 100
+    \`);
+    
+    if (result.length > 0) {
+      const columns = Object.keys(result[0]);
+      const tableHTML = \`
+        <div style="overflow-x: auto; max-height: 400px;">
+          <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
+            <thead style="background: #f7fafc; position: sticky; top: 0;">
+              <tr>
+                \${columns.map(col => \`<th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">\${col}</th>\`).join('')}
+              </tr>
+            </thead>
+            <tbody>
+              \${result.map(row => \`
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                  \${columns.map(col => \`<td style="padding: 0.75rem;">\${row[col]}</td>\`).join('')}
+                </tr>
+              \`).join('')}
+            </tbody>
+          </table>
+        </div>
+      \`;
+      container${chart.id}.innerHTML = tableHTML;
+    }
+  }`;
+}
+
+/**
+ * Generate a pie/donut chart
+ * Note: Pie charts in Mosaic are limited; this is a basic implementation
+ */
+function generatePieChart(chart: ChartSpec, ctx: GeneratorContext): string {
+  const containerId = `chart-${chart.id}`;
+  const { encoding, dataSource } = chart;
+  
+  // For now, we'll note that full pie chart support needs Observable Plot directly
+  // This is a placeholder that shows it's recognized but needs enhancement
+  return `const container${chart.id} = document.getElementById('${containerId}');
+  if (container${chart.id}) {
+    container${chart.id}.innerHTML = \`
+      <div style="padding: 2rem; text-align: center; color: #718096;">
+        <p>📊 Pie/Donut charts coming soon!</p>
+        <p style="font-size: 0.875rem; margin-top: 0.5rem;">
+          Chart type "${chart.type}" is recognized but requires additional Observable Plot integration.
+        </p>
+      </div>
+    \`;
   }`;
 }
 
@@ -216,6 +337,31 @@ export function generateHTML(ctx: GeneratorContext): string {
       margin-bottom: 2rem;
     }
 
+    ${spec.layout?.type === 'grid' ? `
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(${spec.layout.columns || 2}, 1fr);
+      gap: ${spec.layout.gap || 24}px;
+    }
+    
+    @media (max-width: 768px) {
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    ` : spec.layout?.type === 'flex' ? `
+    .charts-flex {
+      display: flex;
+      flex-wrap: wrap;
+      gap: ${spec.layout.gap || 24}px;
+    }
+    
+    .charts-flex > * {
+      flex: 1 1 calc(50% - ${(spec.layout.gap || 24) / 2}px);
+      min-width: 300px;
+    }
+    ` : ''}
+
     .info-box {
       background: #f7fafc;
       border: 1px solid #e2e8f0;
@@ -271,7 +417,9 @@ export function generateHTML(ctx: GeneratorContext): string {
       </p>
     </div>
 
-${spec.charts.map(chart => `    <div id="chart-${chart.id}" class="chart-container"></div>`).join('\n')}
+    <div class="${spec.layout?.type === 'grid' ? 'charts-grid' : spec.layout?.type === 'flex' ? 'charts-flex' : ''}">
+${spec.charts.map(chart => `      <div id="chart-${chart.id}" class="chart-container">${chart.title ? `<h3 style="margin-bottom: 1rem; color: #2d3748;">${chart.title}</h3>` : ''}</div>`).join('\n')}
+    </div>
 
     <footer>
       <p>Built with <a href="https://idl.uw.edu/mosaic/" target="_blank">UW Mosaic</a> + coordboard</p>

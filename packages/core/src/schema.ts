@@ -51,7 +51,7 @@ export const DashboardSpecSchema = {
           id: { type: 'string' },
           type: {
             type: 'string',
-            enum: ['bar', 'line', 'area', 'scatter', 'histogram', 'heatmap']
+            enum: ['bar', 'line', 'area', 'scatter', 'histogram', 'heatmap', 'pie', 'donut', 'number', 'table']
           },
           dataSource: { type: 'string' },
           title: { type: 'string' },

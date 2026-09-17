@@ -221,14 +221,30 @@ export async function build(specPath, options = {}) {
             // Verify all dbt models exist
             for (const dataSource of spec.data) {
                 if (dataSource.type === 'dbt' && dataSource.model) {
-                    const path = resolver.ref(dataSource.model);
-                    console.log(`✓ Resolved dbt model: ${dataSource.model} → ${path}`);
+                    try {
+                        const path = resolver.ref(dataSource.model);
+                        // Verify the file actually exists
+                        await readFile(path, 'utf-8');
+                        console.log(`✓ Resolved dbt model: ${dataSource.model} → ${path}`);
+                    }
+                    catch (fileErr) {
+                        throw new Error(`dbt model '${dataSource.model}' resolved to ${resolver.ref(dataSource.model)} but file not found.\n` +
+                            `  Data source ID: ${dataSource.id}\n` +
+                            `  Expected path: ${resolver.ref(dataSource.model)}\n` +
+                            `  Tip: Check that the CSV file exists in ${dbtDataDir}/`);
+                    }
                 }
             }
         }
         catch (err) {
             if (spec.data.some(ds => ds.type === 'dbt')) {
-                console.warn(`⚠️  dbt manifest not found at ${dbtManifestPath}`);
+                if (err instanceof Error && err.message.includes('dbt model')) {
+                    throw err; // Re-throw detailed error
+                }
+                throw new Error(`dbt manifest not found at ${dbtManifestPath}\n` +
+                    `  Your spec references dbt models but no manifest.json was found.\n` +
+                    `  Expected location: ${dbtManifestPath}\n` +
+                    `  Tip: Place your dbt manifest.json and CSV files in a 'dbt-stub' directory next to your board.yaml`);
             }
         }
         // Create temporary build directory

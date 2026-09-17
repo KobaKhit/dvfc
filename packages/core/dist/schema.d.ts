@@ -68,7 +68,7 @@ export declare const DashboardSpecSchema: {
                     };
                     readonly type: {
                         readonly type: "string";
-                        readonly enum: readonly ["bar", "line", "area", "scatter", "histogram", "heatmap"];
+                        readonly enum: readonly ["bar", "line", "area", "scatter", "histogram", "heatmap", "pie", "donut", "number", "table"];
                     };
                     readonly dataSource: {
                         readonly type: "string";
