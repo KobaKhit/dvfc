@@ -18,6 +18,7 @@ export interface PreviewOptions {
 export interface BuildOptions {
     outDir?: string;
     minify?: boolean;
+    chartId?: string;
 }
 export interface ExportPdfOptions {
     outFile?: string;
@@ -27,10 +28,6 @@ export interface ExportPdfOptions {
  * Export dashboard to PDF
  */
 export declare function exportPdf(specPath: string, options?: ExportPdfOptions): Promise<void>;
-export interface BuildOptions {
-    outDir?: string;
-    minify?: boolean;
-}
 /**
  * Validate command - validate dashboard spec
  */

@@ -1,0 +1,38 @@
+{
+  "name": "@coordboard/charts",
+  "version": "0.2.0",
+  "description": "Chart discovery and addressability for coordboard",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@coordboard/core": "workspace:*",
+    "yaml": "^2.7.0",
+    "glob": "^10.3.10"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.3"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "coordboard",
+    "charts",
+    "discovery",
+    "analytics"
+  ]
+}

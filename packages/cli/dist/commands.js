@@ -459,6 +459,20 @@ export async function build(specPath, options = {}) {
         // Load and parse dashboard spec
         const spec = await loadSpec(specPath);
         console.log(`✓ Loaded spec: ${spec.meta.title}`);
+        // If chartId specified, filter to single chart
+        if (options.chartId) {
+            const chart = spec.charts.find(c => c.id === options.chartId);
+            if (!chart) {
+                throw new Error(`Chart '${options.chartId}' not found in spec`);
+            }
+            // Filter data sources to only those used by this chart
+            const usedDataSources = new Set([chart.dataSource]);
+            spec.data = spec.data.filter(ds => usedDataSources.has(ds.id));
+            spec.charts = [chart];
+            console.log(`✓ Building single chart: ${chart.id} (${chart.type})`);
+            if (chart.title)
+                console.log(`  Title: ${chart.title}`);
+        }
         // Resolve dbt models if any
         const specDir = dirname(resolvePath(specPath));
         const dbtManifestPath = join(specDir, 'dbt-stub', 'manifest.json');
