@@ -97,8 +97,17 @@ function generateChart(chart: ChartSpec, ctx: GeneratorContext): string {
     return generateTableChart(chart, ctx);
   }
   
+  if (chart.type === 'text') {
+    return generateTextChart(chart, ctx);
+  }
+  
   if (chart.type === 'pie' || chart.type === 'donut') {
     return generatePieChart(chart, ctx);
+  }
+  
+  // Encoding is required for standard charts
+  if (!encoding) {
+    throw new Error(`Chart ${chart.id}: encoding is required for ${chart.type} charts`);
   }
   
   // Determine mark type for standard charts
@@ -139,14 +148,31 @@ function generateChart(chart: ChartSpec, ctx: GeneratorContext): string {
   if (chart.type === 'heatmap') markOptions.push('fillOpacity: 1');
 
   // Build from clause with optional filterBy
+  const dataSource = chart.dataSource || '';
   const fromClause = interaction?.filterBy ?
-    `vg.from('${chart.dataSource}', { filterBy: ${interaction.filterBy} })` :
-    `vg.from('${chart.dataSource}')`;
+    `vg.from('${dataSource}', { filterBy: ${interaction.filterBy} })` :
+    `vg.from('${dataSource}')`;
 
   // Build interaction
   const interactionCode = interaction?.brush ?
     `vg.interval${interaction.brushAxis?.toUpperCase() === 'Y' ? 'Y' : 'X'}({ as: ${interaction.selection} })` :
     '';
+
+  // Build plot marks array (main mark + overlays)
+  const marks: string[] = [
+    `vg.${mark}(
+        ${fromClause},
+        {
+          ${markOptions.join(',\n          ')}
+        }
+      )`
+  ];
+  
+  // Add overlay marks if specified
+  if (chart.overlays && chart.overlays.length > 0) {
+    const overlayMarks = generateOverlayMarks(chart, ctx);
+    marks.push(...overlayMarks);
+  }
 
   // Build plot options
   const plotOptions: string[] = [];
@@ -163,12 +189,7 @@ function generateChart(chart: ChartSpec, ctx: GeneratorContext): string {
   return `const container${chart.id} = document.getElementById('${containerId}');
   if (container${chart.id}) {
     const chart${chart.id} = vg.plot(
-      vg.${mark}(
-        ${fromClause},
-        {
-          ${markOptions.join(',\n          ')}
-        }
-      )${plotOptionsStr}
+      ${marks.join(',\n      ')}${plotOptionsStr}
     );
     container${chart.id}.appendChild(chart${chart.id});
   }`;
@@ -180,6 +201,10 @@ function generateChart(chart: ChartSpec, ctx: GeneratorContext): string {
 function generateNumberChart(chart: ChartSpec, ctx: GeneratorContext): string {
   const containerId = `chart-${chart.id}`;
   const { encoding, dataSource, interaction } = chart;
+  
+  if (!dataSource || !encoding) {
+    throw new Error(`Chart ${chart.id}: number charts require dataSource and encoding`);
+  }
   
   // Number charts typically show a single aggregated value
   const field = encoding.y?.field || encoding.x?.field || 'value';
@@ -216,6 +241,10 @@ function generateNumberChart(chart: ChartSpec, ctx: GeneratorContext): string {
 function generateTableChart(chart: ChartSpec, ctx: GeneratorContext): string {
   const containerId = `chart-${chart.id}`;
   const { dataSource, interaction } = chart;
+  
+  if (!dataSource) {
+    throw new Error(`Chart ${chart.id}: table charts require dataSource`);
+  }
   
   const filterClause = interaction?.filterBy ? `, { filterBy: ${interaction.filterBy} }` : '';
   
@@ -260,6 +289,10 @@ function generateTableChart(chart: ChartSpec, ctx: GeneratorContext): string {
 function generatePieChart(chart: ChartSpec, ctx: GeneratorContext): string {
   const containerId = `chart-${chart.id}`;
   const { encoding, dataSource, interaction } = chart;
+  
+  if (!dataSource || !encoding) {
+    throw new Error(`Chart ${chart.id}: pie/donut charts require dataSource and encoding`);
+  }
   
   if (!encoding.x || !encoding.y) {
     return `console.error('Pie chart ${chart.id} requires x (category) and y (value) encodings');`;
@@ -363,6 +396,128 @@ function generatePieChart(chart: ChartSpec, ctx: GeneratorContext): string {
         </div>
       \`;
     }
+  }`;
+}
+
+/**
+ * Generate overlay marks for analysis (mean, median, trend, moving average)
+ */
+function generateOverlayMarks(chart: ChartSpec, ctx: GeneratorContext): string[] {
+  if (!chart.overlays || !chart.encoding) return [];
+  
+  const marks: string[] = [];
+  const yField = chart.encoding.y?.field;
+  const xField = chart.encoding.x?.field;
+  
+  if (!yField) return marks;
+  
+  for (const overlay of chart.overlays) {
+    const field = overlay.field || yField;
+    const color = overlay.color || '#e53e3e';
+    const label = overlay.label || overlay.type;
+    
+    switch (overlay.type) {
+      case 'mean':
+        marks.push(`vg.ruleY(
+        vg.from('${chart.dataSource}'),
+        {
+          y: vg.avg('${field}'),
+          stroke: '${color}',
+          strokeWidth: 2,
+          strokeDasharray: '4 4'
+        }
+      )`);
+        break;
+        
+      case 'median':
+        marks.push(`vg.ruleY(
+        vg.from('${chart.dataSource}'),
+        {
+          y: vg.median('${field}'),
+          stroke: '${color}',
+          strokeWidth: 2,
+          strokeDasharray: '4 4'
+        }
+      )`);
+        break;
+        
+      case 'trend':
+        // Linear regression line using SQL window functions
+        marks.push(`vg.lineY(
+        vg.from(\`(
+          SELECT 
+            ${xField},
+            regr_intercept(${field}, row_number() over (order by ${xField})) over () + 
+            regr_slope(${field}, row_number() over (order by ${xField})) over () * 
+            row_number() over (order by ${xField}) as trend_value
+          FROM ${chart.dataSource}
+          ORDER BY ${xField}
+        )\`),
+        {
+          x: '${xField}',
+          y: 'trend_value',
+          stroke: '${color}',
+          strokeWidth: 2,
+          strokeDasharray: '2 2'
+        }
+      )`);
+        break;
+        
+      case 'moving_average':
+        const window = overlay.window || 7;
+        marks.push(`vg.lineY(
+        vg.from(\`(
+          SELECT 
+            ${xField},
+            AVG(${field}) OVER (
+              ORDER BY ${xField} 
+              ROWS BETWEEN ${window - 1} PRECEDING AND CURRENT ROW
+            ) as ma_value
+          FROM ${chart.dataSource}
+          ORDER BY ${xField}
+        )\`),
+        {
+          x: '${xField}',
+          y: 'ma_value',
+          stroke: '${color}',
+          strokeWidth: 2
+        }
+      )`);
+        break;
+    }
+  }
+  
+  return marks;
+}
+
+/**
+ * Generate a text chart (narrative Markdown blocks)
+ */
+function generateTextChart(chart: ChartSpec, ctx: GeneratorContext): string {
+  const containerId = `chart-${chart.id}`;
+  const content = chart.content || '';
+  
+  // Simple Markdown to HTML conversion (basic subset)
+  const htmlContent = content
+    // Headers
+    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+    // Bold
+    .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+    // Italic
+    .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+    // Line breaks
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/\n/g, '<br>');
+  
+  return `const container${chart.id} = document.getElementById('${containerId}');
+  if (container${chart.id}) {
+    container${chart.id}.innerHTML = \`
+      <div style="padding: 1.5rem; background: #f7fafc; border-radius: 0.5rem; line-height: 1.6;">
+        <p>${htmlContent}</p>
+      </div>
+    \`;
   }`;
 }
 

@@ -61,19 +61,22 @@ export declare const DashboardSpecSchema: {
             readonly type: "array";
             readonly items: {
                 readonly type: "object";
-                readonly required: readonly ["id", "type", "dataSource", "encoding"];
+                readonly required: readonly ["id", "type"];
                 readonly properties: {
                     readonly id: {
                         readonly type: "string";
                     };
                     readonly type: {
                         readonly type: "string";
-                        readonly enum: readonly ["bar", "line", "area", "scatter", "histogram", "heatmap", "pie", "donut", "number", "table"];
+                        readonly enum: readonly ["bar", "line", "area", "scatter", "histogram", "heatmap", "pie", "donut", "number", "table", "text"];
                     };
                     readonly dataSource: {
                         readonly type: "string";
                     };
                     readonly title: {
+                        readonly type: "string";
+                    };
+                    readonly content: {
                         readonly type: "string";
                     };
                     readonly encoding: {
@@ -99,6 +102,12 @@ export declare const DashboardSpecSchema: {
                                     readonly type: "number";
                                 }];
                             };
+                        };
+                    };
+                    readonly overlays: {
+                        readonly type: "array";
+                        readonly items: {
+                            readonly $ref: "#/definitions/analysisOverlay";
                         };
                     };
                     readonly interaction: {
@@ -127,6 +136,19 @@ export declare const DashboardSpecSchema: {
                         readonly type: "number";
                         readonly minimum: 0;
                     };
+                };
+                readonly if: {
+                    readonly properties: {
+                        readonly type: {
+                            readonly const: "text";
+                        };
+                    };
+                };
+                readonly then: {
+                    readonly required: readonly ["id", "type", "content"];
+                };
+                readonly else: {
+                    readonly required: readonly ["id", "type", "dataSource", "encoding"];
                 };
             };
         };
@@ -186,6 +208,29 @@ export declare const DashboardSpecSchema: {
                 };
                 readonly sql: {
                     readonly type: "string";
+                };
+            };
+        };
+        readonly analysisOverlay: {
+            readonly type: "object";
+            readonly required: readonly ["type"];
+            readonly properties: {
+                readonly type: {
+                    readonly type: "string";
+                    readonly enum: readonly ["mean", "median", "trend", "moving_average"];
+                };
+                readonly field: {
+                    readonly type: "string";
+                };
+                readonly color: {
+                    readonly type: "string";
+                };
+                readonly label: {
+                    readonly type: "string";
+                };
+                readonly window: {
+                    readonly type: "number";
+                    readonly minimum: 2;
                 };
             };
         };

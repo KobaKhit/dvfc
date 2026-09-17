@@ -46,15 +46,16 @@ export const DashboardSpecSchema = {
       type: 'array',
       items: {
         type: 'object',
-        required: ['id', 'type', 'dataSource', 'encoding'],
+        required: ['id', 'type'],
         properties: {
           id: { type: 'string' },
           type: {
             type: 'string',
-            enum: ['bar', 'line', 'area', 'scatter', 'histogram', 'heatmap', 'pie', 'donut', 'number', 'table']
+            enum: ['bar', 'line', 'area', 'scatter', 'histogram', 'heatmap', 'pie', 'donut', 'number', 'table', 'text']
           },
           dataSource: { type: 'string' },
           title: { type: 'string' },
+          content: { type: 'string' },
           encoding: {
             type: 'object',
             properties: {
@@ -74,6 +75,10 @@ export const DashboardSpecSchema = {
               }
             }
           },
+          overlays: {
+            type: 'array',
+            items: { $ref: '#/definitions/analysisOverlay' }
+          },
           interaction: {
             type: 'object',
             properties: {
@@ -88,6 +93,15 @@ export const DashboardSpecSchema = {
           },
           width: { type: 'number', minimum: 0 },
           height: { type: 'number', minimum: 0 }
+        },
+        if: {
+          properties: { type: { const: 'text' } }
+        },
+        then: {
+          required: ['id', 'type', 'content']
+        },
+        else: {
+          required: ['id', 'type', 'dataSource', 'encoding']
         }
       }
     },
@@ -130,6 +144,20 @@ export const DashboardSpecSchema = {
         },
         label: { type: 'string' },
         sql: { type: 'string' }
+      }
+    },
+    analysisOverlay: {
+      type: 'object',
+      required: ['type'],
+      properties: {
+        type: {
+          type: 'string',
+          enum: ['mean', 'median', 'trend', 'moving_average']
+        },
+        field: { type: 'string' },
+        color: { type: 'string' },
+        label: { type: 'string' },
+        window: { type: 'number', minimum: 2 }
       }
     }
   }

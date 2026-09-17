@@ -92,7 +92,10 @@ export function validateSemantics(spec: DashboardSpec): ValidationResult {
   // Check that all chart data sources exist
   const dataSourceIds = new Set(spec.data.map(ds => ds.id));
   spec.charts.forEach(chart => {
-    if (!dataSourceIds.has(chart.dataSource)) {
+    // Skip validation for text charts (no dataSource required)
+    if (chart.type === 'text') return;
+    
+    if (chart.dataSource && !dataSourceIds.has(chart.dataSource)) {
       errors.push({
         path: `/charts/${chart.id}/dataSource`,
         message: `Data source '${chart.dataSource}' not found in spec.data`

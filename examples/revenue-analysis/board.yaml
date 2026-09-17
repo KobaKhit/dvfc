@@ -1,0 +1,136 @@
+meta:
+  title: "Revenue Analysis with Insights"
+  description: "Demonstrating analysis overlays (trend, mean, moving average) and narrative text blocks"
+  version: "0.3.1"
+
+data:
+  - id: daily_metrics
+    type: dbt
+    model: daily_metrics
+
+charts:
+  - id: intro_text
+    type: text
+    title: "📊 Revenue Analysis Q1 2024"
+    content: |
+      ## Executive Summary
+      
+      This dashboard analyzes **Q1 2024 revenue performance** with advanced overlays showing trends and moving averages.
+      
+      **Key Features:**
+      - Red dashed line = Average revenue
+      - Blue dotted line = Linear trend
+      - Purple line = 7-day moving average
+      
+      *Click and drag on charts to filter by date range.*
+
+  - id: revenue_trend
+    type: line
+    dataSource: daily_metrics
+    title: "Daily Revenue with Analysis Overlays"
+    encoding:
+      x: { field: date, type: temporal }
+      y: { field: revenue, type: quantitative }
+    overlays:
+      - type: mean
+        color: "#e53e3e"
+        label: "Average Revenue"
+      - type: trend
+        color: "#3182ce"
+        label: "Linear Trend"
+      - type: moving_average
+        window: 7
+        color: "#805ad5"
+        label: "7-Day MA"
+    interaction:
+      brush: true
+      selection: dateBrush
+    width: 800
+    height: 300
+
+  - id: insight_text
+    type: text
+    content: |
+      ### Key Insights
+      
+      Revenue shows a **strong upward trend** throughout Q1, with the 7-day moving average smoothing daily volatility.
+      The linear trend line indicates consistent growth of approximately **$150-200 per day**.
+      
+      February performance exceeded the Q1 average, with peak revenue of **$21,200** on Feb 29.
+
+  - id: profit_analysis
+    type: line
+    dataSource: daily_metrics
+    title: "Profit Trend (with Mean & 5-Day MA)"
+    encoding:
+      x: { field: date, type: temporal }
+      y: { field: profit, type: quantitative }
+    overlays:
+      - type: mean
+        color: "#48bb78"
+        label: "Avg Profit"
+      - type: moving_average
+        window: 5
+        color: "#ed8936"
+        label: "5-Day MA"
+    interaction:
+      brush: true
+      selection: dateBrush
+      filterBy: dateBrush
+    width: 800
+    height: 250
+
+  - id: regional_breakdown
+    type: bar
+    dataSource: daily_metrics
+    title: "Revenue by Region"
+    encoding:
+      x: { field: region, type: nominal }
+      y: { field: revenue, aggregate: sum }
+      color: { field: region }
+    interaction:
+      filterBy: dateBrush
+    width: 400
+    height: 250
+
+  - id: cost_analysis
+    type: line
+    dataSource: daily_metrics
+    title: "Cost Trend (with Median Reference)"
+    encoding:
+      x: { field: date, type: temporal }
+      y: { field: cost, type: quantitative }
+    overlays:
+      - type: median
+        color: "#ed64a6"
+        label: "Median Cost"
+    interaction:
+      filterBy: dateBrush
+    width: 400
+    height: 250
+
+  - id: summary_text
+    type: text
+    content: |
+      ### Methodology
+      
+      **Overlays explained:**
+      - *Mean* (horizontal line) = average value across all data points
+      - *Median* (horizontal line) = middle value when sorted
+      - *Trend* (diagonal line) = linear regression best fit
+      - *Moving Average* (smooth line) = rolling average over N days
+      
+      Overlays update dynamically when you filter the data by brushing charts.
+
+layout:
+  type: grid
+  columns: 2
+  gap: 24
+
+theme:
+  colors:
+    - "#4299e1"
+    - "#48bb78"
+    - "#ed8936"
+    - "#805ad5"
+  fontFamily: "system-ui, -apple-system, sans-serif"

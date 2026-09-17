@@ -1,0 +1,32 @@
+{
+  "metadata": {
+    "dbt_schema_version": "https://schemas.getdbt.com/dbt/manifest/v11.json",
+    "dbt_version": "1.7.0",
+    "generated_at": "2024-01-15T10:00:00.000000Z",
+    "project_name": "revenue_analytics"
+  },
+  "nodes": {
+    "model.revenue_analytics.daily_metrics": {
+      "database": "analytics",
+      "schema": "marts",
+      "name": "daily_metrics",
+      "resource_type": "model",
+      "package_name": "revenue_analytics",
+      "path": "marts/daily_metrics.sql",
+      "original_file_path": "models/marts/daily_metrics.sql",
+      "unique_id": "model.revenue_analytics.daily_metrics",
+      "fqn": ["revenue_analytics", "marts", "daily_metrics"],
+      "alias": "daily_metrics",
+      "checksum": {"name": "sha256", "checksum": "abc123"},
+      "config": {"materialized": "table", "tags": ["mart"]},
+      "tags": ["mart"],
+      "columns": {
+        "date": {"name": "date", "data_type": "date"},
+        "revenue": {"name": "revenue", "data_type": "numeric"},
+        "cost": {"name": "cost", "data_type": "numeric"},
+        "profit": {"name": "profit", "data_type": "numeric"},
+        "region": {"name": "region", "data_type": "varchar"}
+      }
+    }
+  }
+}
