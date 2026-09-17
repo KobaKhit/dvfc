@@ -178,10 +178,30 @@ export async function composeBoard(
   // Resolve all chart references
   const resolvedCharts: ChartResource[] = [];
   const allDataSources = new Map<string, any>();
+  const seenChartIds = new Set<string>();
   
   for (const ref of chartRefs) {
     const fullPath = `${projectRoot}/${ref.boardPath}`;
     const resource = await getChart(fullPath, ref.chartId);
+    
+    // Rename chart if ID conflicts
+    const originalId = resource.chart.id;
+    let chartId = originalId;
+    let suffix = 1;
+    while (seenChartIds.has(chartId)) {
+      chartId = `${originalId}_${suffix}`;
+      suffix++;
+    }
+    
+    if (chartId !== originalId) {
+      resource.chart.id = chartId;
+      // Update any interactions that reference this chart
+      if (resource.chart.interaction?.selection) {
+        resource.chart.interaction.selection = chartId + '_brush';
+      }
+    }
+    
+    seenChartIds.add(chartId);
     resolvedCharts.push(resource);
     
     // Collect unique data sources

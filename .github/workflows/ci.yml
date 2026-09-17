@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 10
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - name: Setup pnpm cache
+      uses: actions/cache@v3
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
+    - name: Install dependencies
+      run: pnpm install
+
+    - name: Build packages
+      run: pnpm run build
+
+    - name: Run tests
+      run: |
+        cd packages/charts
+        pnpm test
+
+    - name: Validate examples
+      run: |
+        node packages/cli/dist/cli.js validate examples/sales-board/board.yaml
+        node packages/cli/dist/cli.js validate examples/web-analytics/board.yaml
+        node packages/cli/dist/cli.js validate examples/dbt-jaffle/board.yaml
+
+    - name: Test chart discovery
+      run: |
+        node packages/cli/dist/cli.js charts search revenue
+        node packages/cli/dist/cli.js charts list
+        node packages/cli/dist/cli.js charts get examples/dbt-jaffle/board.yaml daily_revenue --format json
+
+    - name: Test build
+      run: |
+        node packages/cli/dist/cli.js build examples/dbt-jaffle/board.yaml -o dist-test
+        test -f dist-test/index.html
+
+    - name: Check for node_modules in git
+      run: |
+        if git ls-files | grep -q 'node_modules/'; then
+          echo "Error: node_modules found in git"
+          exit 1
+        fi
+        echo "✓ No node_modules in git"
+
+    - name: Python SDK tests
+      run: |
+        cd python
+        pip install -e .
+        python3 -c "from coordboard import DashboardBuilder; print('✓ Python SDK imports')"

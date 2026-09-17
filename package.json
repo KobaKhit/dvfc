@@ -9,6 +9,8 @@
     "dev": "pnpm -r --parallel --filter='!@coordboard/example-*' dev",
     "clean": "pnpm -r --parallel clean && rm -rf dist node_modules",
     "mcp": "node packages/mcp/dist/server.js",
+    "dogfood": "./scripts/dogfood.sh",
+    "test": "pnpm -r --filter='@coordboard/charts' test",
     "example:sales": "pnpm --filter @coordboard/example-sales-board dev",
     "example:build": "pnpm --filter @coordboard/example-sales-board build",
     "example:preview": "pnpm --filter @coordboard/example-sales-board preview"
