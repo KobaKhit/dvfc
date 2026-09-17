@@ -1,8 +1,8 @@
 # coordboard Status Report
 
 **Last Updated:** September 17, 2026  
-**Version:** 0.2.0  
-**Status:** ✅ Production Ready - All v0.2 features shipped
+**Version:** 0.3.0  
+**Status:** ✅ Production Ready - Chart discovery + all v0.2 features shipped
 
 ---
 
@@ -15,9 +15,14 @@
 | **Validate specs** | ✅ Working | `coordboard validate board.yaml` |
 | **Preview with hot reload** | ✅ Working | `coordboard preview board.yaml` |
 | **Build static HTML** | ✅ Working | `coordboard build board.yaml` |
+| **Build single chart** | ✅ Working | `coordboard build board.yaml --chart id` |
 | **Init from dbt** | ✅ Working | `coordboard init --from-dbt` |
 | **Export to PDF** | ✅ Working | `coordboard export-pdf board.yaml` |
-| **MCP server** | ✅ Working | `pnpm mcp` |
+| **Search charts** | ✅ Working | `coordboard charts search query` |
+| **Get chart metadata** | ✅ Working | `coordboard charts get board.yaml id` |
+| **List charts** | ✅ Working | `coordboard charts list [--board path]` |
+| **Compose boards** | ✅ Working | `coordboard charts compose --charts id,id` |
+| **MCP server** | ✅ Working | `pnpm mcp` (13 tools) |
 | **Python SDK** | ✅ Working | `pip install -e python/` |
 
 ### Chart Types
@@ -48,7 +53,10 @@
 - ✅ **Python SDK** - Build dashboards from Python
 - ✅ **SQLMesh adapter** - Model reference resolution
 - ✅ **Bruin adapter** - Asset reference resolution
-- ✅ **MCP server** - 8 AI tools for dashboard authoring
+- ✅ **MCP server** - 13 AI tools for dashboard authoring
+- ✅ **Chart discovery** - Search, get, list, compose across boards
+- ✅ **Chart addressability** - Board-scoped keys, display format
+- ✅ **Single chart builds** - Extract individual charts with context
 
 ---
 
@@ -286,13 +294,19 @@ Add to `~/.cursor/mcp.json`:
 | `list_models` | List dbt models from manifest |
 | `create_chart` | Add chart to dashboard (with validation) |
 | `update_chart` | Modify existing chart (with validation) |
-| `search_charts` | Find charts by type/field |
+| `search_charts` | **NEW:** Search charts across project with scoring |
+| `get_chart` | **NEW:** Get chart metadata with board context |
+| `list_charts` | **NEW:** List all charts in project/board |
+| `compose_board` | **NEW:** Compose board from chart IDs |
+| `render_chart` | **NEW:** Build single chart with context |
 | `explain_coordination` | Show crossfilter wiring |
 | `apply_filter_plan` | Wire brush selections to charts |
 
+**Total:** 13 tools (8 original + 5 chart discovery)
+
 ### Dogfood Checklist
 
-✅ All 8 tools tested and working (see [docs/mcp-cursor.md](./docs/mcp-cursor.md))
+✅ All 13 tools tested and working (see [docs/mcp-cursor.md](./docs/mcp-cursor.md))
 
 ### Agent Skill
 
@@ -367,6 +381,69 @@ yaml_str = client.to_yaml(dashboard)
 
 ---
 
+## 🔍 Chart Discovery & Addressability
+
+Find, inspect, and compose charts across coordboard dashboards.
+
+### Key Features
+
+- **Board-scoped charts**: Not standalone files, preserve context
+- **Display keys**: `boardName__chartId` for disambiguation
+- **Project-wide search**: Find charts by ID, title, type, fields
+- **Composition**: Build ephemeral boards from chart IDs
+- **Single chart builds**: Extract individual charts with board context
+
+### CLI Commands
+
+```bash
+# Search across project
+coordboard charts search revenue
+
+# Get chart metadata
+coordboard charts get examples/dbt-jaffle/board.yaml daily_revenue --format json
+
+# List all charts
+coordboard charts list
+coordboard charts list --board examples/sales-board/board.yaml
+
+# Compose from multiple boards
+coordboard charts compose \
+  --charts dbt-jaffle__daily_revenue,web-analytics__daily_revenue \
+  --title "Revenue Comparison" \
+  -o composed.yaml
+
+# Build single chart
+coordboard build examples/sales-board/board.yaml --chart daily_sales -o dist-single
+```
+
+### Disambiguation
+
+When a chart ID exists on multiple boards:
+
+```bash
+# Ambiguous
+$ coordboard charts compose --charts daily_revenue
+Error: Ambiguous chart reference 'daily_revenue'.
+Multiple matches: dbt-jaffle__daily_revenue, web-analytics__daily_revenue
+
+# Use display key
+$ coordboard charts compose --charts dbt-jaffle__daily_revenue
+✅ Composed board saved
+```
+
+### Agent Workflow
+
+```
+1. Search  → find charts matching criteria
+2. Get     → inspect chart with board context
+3. Compose → build new dashboard from chart IDs
+4. Render  → build single chart or full board
+```
+
+**Full guide:** [docs/chart-discovery.md](./docs/chart-discovery.md)
+
+---
+
 ## 🔌 Adapters
 
 coordboard supports multiple data transformation tools via adapters.
@@ -431,7 +508,8 @@ coordboard/
 │   ├── dbt-adapter/       # dbt manifest resolver
 │   ├── adapter-sqlmesh/   # SQLMesh context resolver
 │   ├── adapter-bruin/     # Bruin pipeline resolver
-│   ├── cli/               # CLI commands (validate, preview, build, etc.)
+│   ├── charts/            # Chart discovery and addressability
+│   ├── cli/               # CLI commands (validate, preview, build, charts, etc.)
 │   └── mcp/               # MCP server for AI integration
 ├── python/                # Python SDK
 │   ├── coordboard/        # SDK package
@@ -442,7 +520,8 @@ coordboard/
 │   └── dbt-jaffle/        # Real dbt project example
 ├── docs/
 │   ├── mcp-cursor.md      # MCP setup guide
-│   └── pdf-export.md      # PDF export documentation
+│   ├── pdf-export.md      # PDF export documentation
+│   └── chart-discovery.md # Chart discovery guide
 └── .cursor/skills/
     └── coordboard/        # Agent skill for Cursor
 ```
@@ -548,6 +627,28 @@ node packages/mcp/dist/server.js
 # Stop with Ctrl+C
 ```
 
+### Test Chart Discovery
+
+```bash
+# Search for revenue charts
+pnpm exec coordboard charts search revenue
+
+# List charts in board
+pnpm exec coordboard charts list --board examples/dbt-jaffle/board.yaml
+
+# Get chart metadata
+pnpm exec coordboard charts get examples/dbt-jaffle/board.yaml daily_revenue
+
+# Compose board from charts
+pnpm exec coordboard charts compose \
+  --charts dbt-jaffle__daily_revenue,web-analytics__daily_revenue \
+  -o test-composed.yaml
+
+# Build single chart
+pnpm exec coordboard build examples/dbt-jaffle/board.yaml \
+  --chart daily_revenue -o test-single
+```
+
 ---
 
 ## 🔍 Troubleshooting
@@ -584,6 +685,7 @@ node packages/mcp/dist/server.js
 - **[VERDICT.md](./VERDICT.md)** - Architecture decisions (Mosaic GO)
 - **[STATUS.md](./STATUS.md)** - This file (comprehensive status report)
 - **[examples/README.md](./examples/README.md)** - Gallery of examples
+- **[docs/chart-discovery.md](./docs/chart-discovery.md)** - Chart discovery & addressability guide
 - **[docs/mcp-cursor.md](./docs/mcp-cursor.md)** - MCP setup guide
 - **[docs/pdf-export.md](./docs/pdf-export.md)** - PDF export documentation
 - **[packages/mcp/README.md](./packages/mcp/README.md)** - MCP tools reference
@@ -637,6 +739,47 @@ All v0.2 goals achieved:
 - ✅ Same ModelRef API as dbt
 - ✅ Read metadata, resolve file paths
 - ✅ Documented stub implementations
+
+### Task 5: Chart Discovery & Addressability (issue #20) ✅
+
+**CLI Commands ✅**
+- ✅ `coordboard charts search <query>` - project-wide search with scoring
+- ✅ `coordboard charts get <board> <chart>` - metadata with board context
+- ✅ `coordboard charts list [--board]` - enumerate all charts
+- ✅ `coordboard charts compose --charts` - ephemeral board from IDs
+- ✅ `coordboard build --chart` - single chart with board context
+- ✅ Disambiguation: ambiguous IDs return candidates
+
+**Library (@coordboard/charts) ✅**
+- ✅ `searchCharts(projectRoot, query)` → ChartHit[]
+- ✅ `getChart(boardPath, chartId)` → ChartResource
+- ✅ `listCharts(projectRoot, boardPath?)` → ChartHit[]
+- ✅ `composeBoard(projectRoot, {charts})` → DashboardSpec
+- ✅ `resolveChartRef(projectRoot, ref)` → ChartRef
+- ✅ Display keys: `boardName__chartId` format
+
+**MCP Tools ✅**
+- ✅ `search_charts` - find across project with scoring
+- ✅ `get_chart` - full metadata + board context
+- ✅ `list_charts` - enumerate project/board
+- ✅ `compose_board` - from chart IDs/metric
+- ✅ `render_chart` - single chart build
+
+**Documentation & Tests ✅**
+- ✅ docs/chart-discovery.md with full guide
+- ✅ Agent Skill updated with discovery workflow
+- ✅ MCP dogfood checklist with 13 tests
+- ✅ Demo: "revenue" search across dbt-jaffle + web-analytics
+- ✅ Search returns 5 hits from 2 boards with scores
+- ✅ Compose works with display keys
+- ✅ Build --chart extracts single chart
+
+**Design Constraints Met ✅**
+- ✅ Charts stay board-scoped (not standalone files)
+- ✅ Stable key: board path + chart id
+- ✅ Display key: `{boardId}__{chartId}` optional format
+- ✅ Get/render/build preserve board context
+- ✅ Ambiguous lookups fail with candidate list
 
 ### Earlier Milestones ✅
 - ✅ Validate command with clear errors
@@ -713,6 +856,6 @@ All v0.2 goals achieved:
 
 ---
 
-**Status:** ✅ Production ready with all v0.2 features shipped  
+**Status:** ✅ Production ready with chart discovery + all v0.2 features  
 **License:** Apache-2.0  
-**Completed:** Real dbt integration, pie/donut charts, hardened MCP, Python SDK, PDF export, SQLMesh + Bruin adapters
+**Completed:** Chart discovery (issue #20), real dbt integration, pie/donut charts, hardened MCP (13 tools), Python SDK, PDF export, SQLMesh + Bruin adapters
