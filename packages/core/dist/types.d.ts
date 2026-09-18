@@ -36,7 +36,7 @@ export interface DataSource {
     /** Optional inline SQL transformation */
     sql?: string;
 }
-export type ChartType = 'bar' | 'line' | 'area' | 'scatter' | 'histogram' | 'heatmap' | 'pie' | 'donut' | 'number' | 'table' | 'text';
+export type ChartType = 'bar' | 'line' | 'area' | 'scatter' | 'histogram' | 'boxplot' | 'density' | 'heatmap' | 'pie' | 'donut' | 'number' | 'table' | 'text';
 export type AggregateFunction = 'sum' | 'avg' | 'count' | 'min' | 'max' | 'median';
 export interface ChartSpec {
     /** Unique identifier for this chart */
@@ -93,6 +93,8 @@ export interface ChannelEncoding {
     aggregate?: AggregateFunction;
     /** Axis label */
     label?: string;
+    /** Number of bins for histogram */
+    bins?: number;
     /** Optional SQL expression (overrides field) */
     sql?: string;
 }

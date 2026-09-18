@@ -57,6 +57,8 @@ export type ChartType =
   | 'area'
   | 'scatter'
   | 'histogram'
+  | 'boxplot'
+  | 'density'
   | 'heatmap'
   | 'pie'
   | 'donut'
@@ -154,6 +156,9 @@ export interface ChannelEncoding {
   
   /** Axis label */
   label?: string;
+  
+  /** Number of bins for histogram */
+  bins?: number;
   
   /** Optional SQL expression (overrides field) */
   sql?: string;
