@@ -2,9 +2,9 @@
 
 **Product:** Data Viz Factory — Cross-filtered boards for humans and agents  
 **CLI:** `dvfc` (Data Viz Factory)  
-**Last Updated:** September 17, 2026  
-**Version:** 0.4.0  
-**Status:** ✅ Production Ready - Analysis overlays, text charts, shareable filters shipped
+**Last Updated:** September 18, 2026  
+**Version:** 0.5.0  
+**Status:** ✅ Production Ready - All post-rebrand tasks complete
 
 ---
 
@@ -1106,6 +1106,11 @@ dateBrush.addEventListener('value', (value) => {
 
 ---
 
-**Status:** ✅ Production ready with chart discovery, quality/hardening, and comprehensive testing  
+**Status:** ✅ Production ready - Post-rebrand tasks complete, ready for publication  
 **License:** Apache-2.0  
-**Completed:** Chart discovery (issue #20), quality improvements (tests, CI, dogfood), real dbt integration guide, analysis overlay foundations
+**Completed:** 
+- **Rebrand:** coordboard → Data Viz Factory (dvfc) complete
+- **Real dbt dogfood:** End-to-end workflow with chart discovery
+- **MCP in Cursor:** 13 tools, agent loops, workspace config
+- **Publishing prep:** PUBLISHING.md, CONTRIBUTING.md, CHANGELOG.md, badges
+- **Deferred gaps:** a11y docs, PDF export paths, data-driven images API
