@@ -1,9 +1,7 @@
 # Data Viz Factory
 
-[![npm](https://img.shields.io/npm/v/@dvfc/cli?label=npm%20%40dvfc%2Fcli)](https://www.npmjs.com/package/@dvfc/cli)
-[![PyPI](https://img.shields.io/pypi/v/dvfc?label=PyPI%20dvfc)](https://pypi.org/project/dvfc/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![CI](https://img.shields.io/github/actions/workflow/status/dvfc/dvfc/ci.yml?branch=main&label=CI)](https://github.com/dvfc/dvfc/actions)
+[![CI](https://img.shields.io/github/actions/workflow/status/KobaKhit/dvfc/ci.yml?branch=main&label=CI)](https://github.com/KobaKhit/dvfc/actions)
 
 **dvfc = Data Viz Factory — Cross-filtered boards for humans and agents**
 
@@ -17,7 +15,7 @@ Define dashboards in YAML, get native crossfiltering and in-browser SQL. No back
 
 ```bash
 # 1. Clone and install (1 min)
-git clone <repo-url>
+git clone https://github.com/KobaKhit/dvfc.git
 cd dvfc
 pnpm install
 
@@ -152,7 +150,8 @@ charts:
 | `heatmap` | ✅ | 2D density |
 | `number` | ✅ | KPI / single metric |
 | `table` | ✅ | Data grid (100 rows) |
-| `pie`/`donut` | ⚠️ | Recognized (needs Observable Plot integration) |
+| `pie` | ✅ | SVG-based with percentages |
+| `donut` | ✅ | Hollow pie with legend |
 
 ---
 
@@ -162,12 +161,25 @@ charts:
 dvfc/
 ├── packages/
 │   ├── core/              # Types + JSON Schema
+│   ├── cli/               # CLI commands (validate, preview, build)
 │   ├── dbt-adapter/       # dbt manifest resolver
-│   └── cli/               # CLI commands (validate, preview, build)
+│   ├── charts/            # Chart discovery and addressability
+│   ├── mcp/               # MCP server for AI integration
+│   ├── adapter-sqlmesh/   # SQLMesh context resolver
+│   └── adapter-bruin/     # Bruin pipeline resolver
+├── python/                # Python SDK
 ├── examples/
 │   ├── sales-board/       # Business analytics
-│   └── web-analytics/     # Traffic + conversions
-└── README.md              # You are here
+│   ├── web-analytics/     # Traffic + conversions
+│   ├── revenue-analysis/  # Analysis overlays + text charts
+│   └── dbt-jaffle/        # Real dbt project example
+├── docs/                  # Documentation
+│   ├── mcp-cursor.md      # MCP setup guide
+│   ├── chart-discovery.md # Chart discovery guide
+│   ├── dbt-integration.md # dbt integration guide
+│   ├── pdf-export.md      # PDF export documentation
+│   └── PUBLISHING.md      # Publishing guide
+└── .cursor/skills/dvfc/   # Agent skill for Cursor
 ```
 
 ---
@@ -193,7 +205,15 @@ pnpm example:sales
 ## 📖 Key Documentation
 
 - **[examples/README.md](./examples/README.md)** - Gallery of working dashboards
+- **[STATUS.md](./STATUS.md)** - Feature status and capabilities (v0.5)
+- **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Development guide and workflow
+- **[CHANGELOG.md](./CHANGELOG.md)** - Version history and changes
 - **[VERDICT.md](./VERDICT.md)** - Architecture spike results (Mosaic GO decision)
+- **[docs/mcp-cursor.md](./docs/mcp-cursor.md)** - MCP server setup for AI agents
+- **[docs/chart-discovery.md](./docs/chart-discovery.md)** - Chart search and composition
+- **[docs/dbt-integration.md](./docs/dbt-integration.md)** - Real dbt project integration
+- **[docs/pdf-export.md](./docs/pdf-export.md)** - PDF export guide
+- **[docs/PUBLISHING.md](./docs/PUBLISHING.md)** - Package publishing guide
 - **[Mosaic Docs](https://idl.uw.edu/mosaic/)** - Visualization library reference
 
 ---
@@ -217,7 +237,18 @@ pnpm example:sales
 
 ## 🤝 Contributing
 
-Currently proof-of-concept. See [VERDICT.md](./VERDICT.md) for v0.1 status.
+Data Viz Factory is production-ready (v0.5) and actively maintained. Contributions welcome!
+
+See **[CONTRIBUTING.md](./CONTRIBUTING.md)** for:
+- Development setup
+- Code standards
+- Testing guidelines
+- Pull request process
+
+Key documentation:
+- **[STATUS.md](./STATUS.md)** - Current features and roadmap
+- **[CHANGELOG.md](./CHANGELOG.md)** - Version history
+- **[docs/PUBLISHING.md](./docs/PUBLISHING.md)** - Package publishing guide
 
 ---
 

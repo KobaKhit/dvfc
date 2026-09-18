@@ -14,7 +14,7 @@ Thank you for your interest in contributing to Data Viz Factory! This document p
 
 ```bash
 # Clone the repository
-git clone https://github.com/dvfc/dvfc.git
+git clone https://github.com/KobaKhit/dvfc.git
 cd dvfc
 
 # Install dependencies

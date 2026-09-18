@@ -75,7 +75,7 @@
 
 ```bash
 # Clone repo (if not already)
-git clone <repo-url>
+git clone https://github.com/KobaKhit/dvfc.git
 cd dvfc
 
 # Install dependencies
