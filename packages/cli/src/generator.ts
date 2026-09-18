@@ -239,13 +239,18 @@ function generateChart(chart: ChartSpec, ctx: GeneratorContext): string {
   const markOptions: string[] = [];
   if (xEncoding) markOptions.push(`x: ${xEncoding}`);
   if (yEncoding) markOptions.push(`y: ${yEncoding}`);
-  if (colorEncoding) markOptions.push(`fill: ${colorEncoding}`);
   
   // Chart-type specific styling
-  if (chart.type === 'line') markOptions.push('stroke: fill', 'strokeWidth: 2');
-  if (chart.type === 'bar') markOptions.push('fillOpacity: 0.8');
-  if (chart.type === 'area') markOptions.push('fillOpacity: 0.6');
-  if (chart.type === 'heatmap') markOptions.push('fillOpacity: 1');
+  if (chart.type === 'line') {
+    const strokeColor = colorEncoding || "'steelblue'";
+    markOptions.push(`stroke: ${strokeColor}`);
+    markOptions.push('strokeWidth: 2');
+  } else {
+    if (colorEncoding) markOptions.push(`fill: ${colorEncoding}`);
+    if (chart.type === 'bar') markOptions.push('fillOpacity: 0.8');
+    if (chart.type === 'area') markOptions.push('fillOpacity: 0.6');
+    if (chart.type === 'heatmap') markOptions.push('fillOpacity: 1');
+  }
 
   // Build from clause with optional filterBy
   const dataSource = chart.dataSource || '';
@@ -559,21 +564,10 @@ function generateOverlayMarks(chart: ChartSpec, ctx: GeneratorContext): string[]
         break;
         
       case 'trend':
-        // Use Mosaic's built-in regressionY mark (reliable)
-        const trendFromClause = chart.interaction?.filterBy ?
-          `vg.from('${chart.dataSource}', { filterBy: ${chart.interaction.filterBy} })` :
-          `vg.from('${chart.dataSource}')`;
-        
-        marks.push(`vg.regressionY(
-        ${trendFromClause},
-        {
-          x: '${xField}',
-          y: '${field}',
-          stroke: '${color}',
-          strokeWidth: 2,
-          strokeDasharray: '2 2'
-        }
-      )`);
+        // NOTE: vg.regressionY is disabled due to rendering issues
+        // Trend overlays should be precomputed in SQL if needed
+        // Skip trend overlay for now to prevent chart from blanking
+        console.warn(`Trend overlay skipped for chart - precompute trend in SQL instead`);
         break;
         
       case 'moving_average':
