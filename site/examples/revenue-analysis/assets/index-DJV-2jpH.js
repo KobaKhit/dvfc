@@ -44445,7 +44445,6 @@ async function createDashboard() {
 			const chartrevenue_trend = plot(lineY(from("daily_metrics"), {
 				x: "date",
 				y: "revenue",
-				stroke: fill,
 				strokeWidth: 2
 			}), ruleY(from("daily_metrics"), {
 				y: avg("revenue"),
@@ -44494,7 +44493,6 @@ async function createDashboard() {
 			const chartprofit_analysis = plot(lineY(from("daily_metrics", { filterBy: dateBrush }), {
 				x: "date",
 				y: "profit",
-				stroke: fill,
 				strokeWidth: 2
 			}), ruleY(from("daily_metrics"), {
 				y: avg("profit"),
@@ -44533,7 +44531,6 @@ async function createDashboard() {
 			const chartcost_analysis = plot(lineY(from("daily_metrics", { filterBy: dateBrush }), {
 				x: "date",
 				y: "cost",
-				stroke: fill,
 				strokeWidth: 2
 			}), ruleY(from("daily_metrics"), {
 				y: median$1("cost"),

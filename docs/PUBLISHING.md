@@ -201,9 +201,9 @@ python -c "from dvfc import DataVizFactoryClient; print('OK')"
 ### Suggested Repository Names
 
 **Option A: Short (recommended)**
-- Org: `dvfc`
+- Org: `KobaKhit`
 - Repo: `dvfc`
-- Full: `github.com/dvfc/dvfc`
+- Full: `github.com/KobaKhit/dvfc`
 
 **Option B: Descriptive**
 - Org: `dvfc` or `data-viz-factory`
@@ -218,11 +218,11 @@ After creating the GitHub repository, update all `package.json` files:
 {
   "repository": {
     "type": "git",
-    "url": "https://github.com/dvfc/dvfc.git"
+    "url": "https://github.com/KobaKhit/dvfc.git"
   },
-  "homepage": "https://github.com/dvfc/dvfc#readme",
+  "homepage": "https://github.com/KobaKhit/dvfc#readme",
   "bugs": {
-    "url": "https://github.com/dvfc/dvfc/issues"
+    "url": "https://github.com/KobaKhit/dvfc/issues"
   }
 }
 ```
@@ -231,10 +231,10 @@ Update Python `pyproject.toml`:
 
 ```toml
 [project.urls]
-Homepage = "https://github.com/dvfc/dvfc"
-Documentation = "https://github.com/dvfc/dvfc#readme"
-Repository = "https://github.com/dvfc/dvfc"
-Issues = "https://github.com/dvfc/dvfc/issues"
+Homepage = "https://github.com/KobaKhit/dvfc"
+Documentation = "https://github.com/KobaKhit/dvfc#readme"
+Repository = "https://github.com/KobaKhit/dvfc"
+Issues = "https://github.com/KobaKhit/dvfc/issues"
 ```
 
 ### Origin Slug Rename (Manual User Step)

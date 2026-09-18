@@ -37,9 +37,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/dvfc/dvfc"
-Documentation = "https://github.com/dvfc/dvfc#readme"
-Repository = "https://github.com/dvfc/dvfc"
+Homepage = "https://github.com/KobaKhit/dvfc"
+Documentation = "https://github.com/KobaKhit/dvfc#readme"
+Repository = "https://github.com/KobaKhit/dvfc"
 
 [tool.setuptools.packages.find]
 where = ["."]
