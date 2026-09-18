@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chart Types – dvfc</title>
+  <meta name="description" content="Interactive chart types supported by dvfc: line, bar, area, scatter, pie, heatmap, and more.">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0a0a0a;
+      --text: #e4e4e7;
+      --text-dim: #a1a1aa;
+      --accent: #a855f7;
+      --accent-dim: #9333ea;
+      --card-bg: #18181b;
+      --border: #27272a;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Navigation */
+    nav {
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .logo span {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dim) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    /* Header */
+    .page-header {
+      padding: 4rem 0 3rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .page-header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .page-header p {
+      font-size: 1.1rem;
+      color: var(--text-dim);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Chart Grid */
+    .chart-section {
+      padding: 3rem 0;
+    }
+
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .chart-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.2s;
+      cursor: default;
+    }
+
+    .chart-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .chart-preview {
+      width: 100%;
+      height: 120px;
+      background: rgba(168, 85, 247, 0.05);
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+
+    .chart-card h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .chart-card p {
+      font-size: 0.875rem;
+      color: var(--text-dim);
+    }
+
+    .chart-tag {
+      display: inline-block;
+      margin-top: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      background: rgba(168, 85, 247, 0.1);
+      color: var(--accent);
+      border-radius: 0.375rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 0;
+      margin-top: 2rem;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .page-header h1 {
+        font-size: 2rem;
+      }
+
+      .chart-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <div class="nav-content">
+        <a href="/dvfc/" class="logo"><span>dvfc</span></a>
+        <div class="nav-links">
+          <a href="/dvfc/">Home</a>
+          <a href="https://github.com/dvfc/dvfc" target="_blank">GitHub</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <div class="container">
+      <h1>Chart Types</h1>
+      <p>Interactive visualizations powered by Mosaic and DuckDB-WASM</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="chart-section">
+      <div class="container">
+        <div class="chart-grid">
+          <div class="chart-card">
+            <div class="chart-preview">📈</div>
+            <h3>Line Chart</h3>
+            <p>Time series trends with brush selection</p>
+            <span class="chart-tag">Crossfilter</span>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-preview">📊</div>
+            <h3>Bar Chart</h3>
+            <p>Categorical comparisons, vertical or horizontal</p>
+            <span class="chart-tag">Aggregated</span>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-preview">📉</div>
+            <h3>Area Chart</h3>
+            <p>Stacked or overlapping time series</p>
+            <span class="chart-tag">Temporal</span>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-preview">⚫</div>
+            <h3>Scatter Plot</h3>
+            <p>Two-dimensional distribution analysis</p>
+            <span class="chart-tag">Correlation</span>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-preview">🎯</div>
+            <h3>Pie Chart</h3>
+            <p>Proportional segments with percentages</p>
+            <span class="chart-tag">Composition</span>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-preview">🍩</div>
+            <h3>Donut Chart</h3>
+            <p>Pie chart variant with center hole</p>
+            <span class="chart-tag">Composition</span>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-preview">🔥</div>
+            <h3>Heatmap</h3>
+            <p>Matrix of values with color encoding</p>
+            <span class="chart-tag">Density</span>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-preview">📋</div>
+            <h3>Table</h3>
+            <p>Sortable data grid with filtering</p>
+            <span class="chart-tag">Detail</span>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-preview">🔢</div>
+            <h3>Number (KPI)</h3>
+            <p>Single metric display with formatting</p>
+            <span class="chart-tag">Summary</span>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-preview">📝</div>
+            <h3>Text</h3>
+            <p>Markdown narrative blocks</p>
+            <span class="chart-tag">Content</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="chart-section">
+      <div class="container">
+        <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 0.75rem; padding: 2rem; text-align: center;">
+          <h2 style="margin-bottom: 1rem;">See Charts in Action</h2>
+          <p style="color: var(--text-dim); margin-bottom: 1.5rem;">
+            Check out the live examples to see these chart types with real data and interactive crossfiltering.
+          </p>
+          <a href="/dvfc/#examples" style="display: inline-block; padding: 0.875rem 2rem; background: var(--accent); color: white; text-decoration: none; border-radius: 0.5rem; font-weight: 600; transition: all 0.2s;">
+            View Live Examples
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>
+        Built with <a href="https://idl.uw.edu/mosaic/" target="_blank">UW Mosaic</a> • 
+        <a href="https://github.com/dvfc/dvfc" target="_blank">GitHub</a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
