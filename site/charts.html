@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chart Types - dvfc</title>
+  <meta name="description" content="Supported chart types in Data Viz Factory: line, bar, area, scatter, heatmap, histogram, and more.">
+  <link rel="stylesheet" href="/dvfc/assets/styles.css">
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="/dvfc/" class="logo">dvfc</a>
+      <div class="nav-links">
+        <a href="/dvfc/">Home</a>
+        <a href="/dvfc/charts/" class="active">Charts</a>
+        <a href="/dvfc/#examples">Examples</a>
+        <a href="https://github.com/KobaKhit/dvfc" target="_blank">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="chart-types-hero">
+    <div class="container">
+      <h1>Chart Types</h1>
+      <p>dvfc supports a wide range of chart types powered by Mosaic and Observable Plot</p>
+    </div>
+  </div>
+
+  <section class="chart-types-section">
+    <div class="container">
+      <div class="chart-types-grid">
+        
+        <!-- Line Chart -->
+        <div class="chart-type-card">
+          <div class="chart-type-preview line-chart">
+            <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+              <polyline points="10,80 40,60 70,70 100,40 130,50 160,20 190,30" 
+                        fill="none" stroke="#4299e1" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="chart-type-content">
+            <h3>Line</h3>
+            <p>Time series and trend visualization. Brushable for range selection.</p>
+            <span class="chart-badge stable">Stable</span>
+          </div>
+        </div>
+
+        <!-- Bar Chart -->
+        <div class="chart-type-card">
+          <div class="chart-type-preview bar-chart">
+            <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+              <rect x="20" y="40" width="20" height="50" fill="#48bb78"/>
+              <rect x="60" y="25" width="20" height="65" fill="#48bb78"/>
+              <rect x="100" y="50" width="20" height="40" fill="#48bb78"/>
+              <rect x="140" y="30" width="20" height="60" fill="#48bb78"/>
+            </svg>
+          </div>
+          <div class="chart-type-content">
+            <h3>Bar</h3>
+            <p>Categorical aggregates. Horizontal or vertical orientation.</p>
+            <span class="chart-badge stable">Stable</span>
+          </div>
+        </div>
+
+        <!-- Area Chart -->
+        <div class="chart-type-card">
+          <div class="chart-type-preview area-chart">
+            <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+              <polygon points="10,90 10,60 50,50 90,55 130,35 170,40 190,30 190,90" 
+                       fill="rgba(66, 153, 225, 0.3)" stroke="#4299e1" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="chart-type-content">
+            <h3>Area</h3>
+            <p>Stacked or single area plots for cumulative visualization.</p>
+            <span class="chart-badge stable">Stable</span>
+          </div>
+        </div>
+
+        <!-- Scatter Chart -->
+        <div class="chart-type-card">
+          <div class="chart-type-preview scatter-chart">
+            <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="30" cy="70" r="4" fill="#9f7aea"/>
+              <circle cx="55" cy="45" r="4" fill="#9f7aea"/>
+              <circle cx="75" cy="60" r="4" fill="#9f7aea"/>
+              <circle cx="95" cy="35" r="4" fill="#9f7aea"/>
+              <circle cx="120" cy="55" r="4" fill="#9f7aea"/>
+              <circle cx="145" cy="40" r="4" fill="#9f7aea"/>
+              <circle cx="165" cy="50" r="4" fill="#9f7aea"/>
+            </svg>
+          </div>
+          <div class="chart-type-content">
+            <h3>Scatter</h3>
+            <p>Point clouds for correlation and distribution analysis.</p>
+            <span class="chart-badge stable">Stable</span>
+          </div>
+        </div>
+
+        <!-- Heatmap -->
+        <div class="chart-type-card">
+          <div class="chart-type-preview heatmap-chart">
+            <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+              <rect x="20" y="20" width="25" height="25" fill="#fbd38d"/>
+              <rect x="50" y="20" width="25" height="25" fill="#fc8181"/>
+              <rect x="80" y="20" width="25" height="25" fill="#f56565"/>
+              <rect x="110" y="20" width="25" height="25" fill="#fbd38d"/>
+              <rect x="20" y="50" width="25" height="25" fill="#f6e05e"/>
+              <rect x="50" y="50" width="25" height="25" fill="#fc8181"/>
+              <rect x="80" y="50" width="25" height="25" fill="#fbd38d"/>
+              <rect x="110" y="50" width="25" height="25" fill="#fc8181"/>
+            </svg>
+          </div>
+          <div class="chart-type-content">
+            <h3>Heatmap</h3>
+            <p>2D density visualization for matrix data.</p>
+            <span class="chart-badge stable">Stable</span>
+          </div>
+        </div>
+
+        <!-- Histogram -->
+        <div class="chart-type-card">
+          <div class="chart-type-preview histogram-chart">
+            <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+              <rect x="20" y="70" width="18" height="20" fill="#667eea"/>
+              <rect x="40" y="50" width="18" height="40" fill="#667eea"/>
+              <rect x="60" y="30" width="18" height="60" fill="#667eea"/>
+              <rect x="80" y="20" width="18" height="70" fill="#667eea"/>
+              <rect x="100" y="35" width="18" height="55" fill="#667eea"/>
+              <rect x="120" y="55" width="18" height="35" fill="#667eea"/>
+              <rect x="140" y="75" width="18" height="15" fill="#667eea"/>
+            </svg>
+          </div>
+          <div class="chart-type-content">
+            <h3>Histogram</h3>
+            <p>Frequency distribution for continuous variables.</p>
+            <span class="chart-badge new">New</span>
+          </div>
+        </div>
+
+        <!-- Boxplot -->
+        <div class="chart-type-card">
+          <div class="chart-type-preview boxplot-chart">
+            <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+              <line x1="40" y1="65" x2="40" y2="25" stroke="#38b2ac" stroke-width="1.5"/>
+              <rect x="30" y="45" width="20" height="30" fill="none" stroke="#38b2ac" stroke-width="2"/>
+              <line x1="28" y1="60" x2="52" y2="60" stroke="#38b2ac" stroke-width="2"/>
+              
+              <line x1="90" y1="70" x2="90" y2="30" stroke="#38b2ac" stroke-width="1.5"/>
+              <rect x="80" y="50" width="20" height="25" fill="none" stroke="#38b2ac" stroke-width="2"/>
+              <line x1="78" y1="62" x2="102" y2="62" stroke="#38b2ac" stroke-width="2"/>
+              
+              <line x1="140" y1="75" x2="140" y2="35" stroke="#38b2ac" stroke-width="1.5"/>
+              <rect x="130" y="55" width="20" height="22" fill="none" stroke="#38b2ac" stroke-width="2"/>
+              <line x1="128" y1="66" x2="152" y2="66" stroke="#38b2ac" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="chart-type-content">
+            <h3>Boxplot</h3>
+            <p>Statistical distribution summary with quartiles.</p>
+            <span class="chart-badge new">New</span>
+          </div>
+        </div>
+
+        <!-- Density -->
+        <div class="chart-type-card">
+          <div class="chart-type-preview density-chart">
+            <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 10,90 Q 50,80 70,60 T 130,40 Q 160,30 190,35" 
+                    fill="rgba(237, 100, 166, 0.2)" stroke="#ed64a6" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="chart-type-content">
+            <h3>Density</h3>
+            <p>Kernel density estimation for smooth distributions.</p>
+            <span class="chart-badge new">New</span>
+          </div>
+        </div>
+
+        <!-- Number (KPI) -->
+        <div class="chart-type-card">
+          <div class="chart-type-preview number-chart">
+            <div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 2.5rem; font-weight: 700; color: #2d3748;">
+              42K
+            </div>
+          </div>
+          <div class="chart-type-content">
+            <h3>Number</h3>
+            <p>Single metric display for KPIs and summary statistics.</p>
+            <span class="chart-badge stable">Stable</span>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="chart-type-card">
+          <div class="chart-type-preview table-chart">
+            <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+              <rect x="20" y="20" width="160" height="15" fill="#edf2f7"/>
+              <rect x="20" y="40" width="160" height="15" fill="white" stroke="#e2e8f0"/>
+              <rect x="20" y="60" width="160" height="15" fill="white" stroke="#e2e8f0"/>
+              <line x1="70" y1="20" x2="70" y2="75" stroke="#cbd5e0" stroke-width="1"/>
+              <line x1="130" y1="20" x2="130" y2="75" stroke="#cbd5e0" stroke-width="1"/>
+            </svg>
+          </div>
+          <div class="chart-type-content">
+            <h3>Table</h3>
+            <p>Data grid for tabular display. Limited to 100 rows.</p>
+            <span class="chart-badge stable">Stable</span>
+          </div>
+        </div>
+
+        <!-- Pie/Donut -->
+        <div class="chart-type-card">
+          <div class="chart-type-preview pie-chart">
+            <svg viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="100" cy="50" r="35" fill="#f6ad55"/>
+              <path d="M 100,50 L 100,15 A 35,35 0 0,1 125,25 Z" fill="#fc8181"/>
+              <path d="M 100,50 L 125,25 A 35,35 0 0,1 130,50 Z" fill="#68d391"/>
+              <path d="M 100,50 L 130,50 A 35,35 0 0,1 100,85 Z" fill="#63b3ed"/>
+              <circle cx="100" cy="50" r="18" fill="white"/>
+            </svg>
+          </div>
+          <div class="chart-type-content">
+            <h3>Pie / Donut</h3>
+            <p>Part-to-whole relationships with percentage labels.</p>
+            <span class="chart-badge stable">Stable</span>
+          </div>
+        </div>
+
+        <!-- Text -->
+        <div class="chart-type-card">
+          <div class="chart-type-preview text-chart">
+            <div style="padding: 1rem; font-size: 0.8rem; line-height: 1.4; color: #4a5568;">
+              <strong>Narrative</strong><br/>
+              Markdown content<br/>
+              for context & insights
+            </div>
+          </div>
+          <div class="chart-type-content">
+            <h3>Text</h3>
+            <p>Narrative Markdown blocks for annotations and insights.</p>
+            <span class="chart-badge stable">Stable</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="chart-overlay-section">
+    <div class="container">
+      <h2>Analysis Overlays</h2>
+      <p class="section-subtitle">Add statistical analysis layers to line and area charts</p>
+      
+      <div class="overlay-grid">
+        <div class="overlay-card">
+          <h3>📈 Trend</h3>
+          <p>Linear regression line</p>
+        </div>
+        <div class="overlay-card">
+          <h3>━ Mean</h3>
+          <p>Horizontal mean line</p>
+        </div>
+        <div class="overlay-card">
+          <h3>━ Median</h3>
+          <p>Horizontal median line</p>
+        </div>
+        <div class="overlay-card">
+          <h3>〰 Moving Avg</h3>
+          <p>Smoothed rolling average</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Built with <a href="https://idl.uw.edu/mosaic/" target="_blank">Mosaic</a> by UW Interactive Data Lab</p>
+      <p>
+        <a href="https://github.com/KobaKhit/dvfc" target="_blank">GitHub</a> •
+        <a href="https://github.com/KobaKhit/dvfc/blob/main/LICENSE" target="_blank">Apache-2.0</a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -36,10 +36,14 @@
 | `area` | ✅ | Stacked/single |
 | `scatter` | ✅ | Point clouds |
 | `heatmap` | ✅ | 2D cell plots |
+| `histogram` | ✅ | Frequency distribution with bins |
+| `boxplot` | ✅ | Statistical distribution summary |
+| `density` | ✅ | Kernel density estimation |
 | `number` | ✅ | KPI/metric display |
 | `table` | ✅ | Data grid (100 rows) |
 | `pie` | ✅ | SVG-based with percentages |
 | `donut` | ✅ | Hollow pie with legend |
+| `text` | ✅ | Narrative Markdown blocks |
 
 ### Features
 
@@ -858,13 +862,14 @@ All v0.2 goals achieved:
 - ✅ Validate command with clear errors
 - ✅ Preview with hot reload
 - ✅ Build to static HTML
-- ✅ More chart types (number, table, heatmap, pie, donut)
+- ✅ More chart types (number, table, heatmap, pie, donut, histogram, boxplot, density)
 - ✅ Grid/flex layouts
 - ✅ Examples gallery (3 dashboards)
 - ✅ 5-minute quickstart README
 - ✅ MCP server with 8 tools
 - ✅ Agent skill for Cursor
 - ✅ Clean git (no node_modules)
+- ✅ GitHub Pages site with landing page and chart types gallery
 
 ---
 
@@ -872,7 +877,7 @@ All v0.2 goals achieved:
 
 ### Chart Types
 - ✅ All core types implemented and working
-- ⚠️ **Histogram** - Type defined but generator needs implementation
+- ✅ Histogram, boxplot, and density chart types now fully functional
 
 ### Coordination
 - ⚠️ **Categorical brushing** - Works but time-based is preferred (band scale limitations)

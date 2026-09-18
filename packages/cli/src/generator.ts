@@ -149,6 +149,21 @@ function generateChart(chart: ChartSpec, ctx: GeneratorContext): string {
     return generatePieChart(chart, ctx);
   }
   
+  // Handle histogram
+  if (chart.type === 'histogram') {
+    return generateHistogramChart(chart, ctx);
+  }
+  
+  // Handle boxplot
+  if (chart.type === 'boxplot') {
+    return generateBoxplotChart(chart, ctx);
+  }
+  
+  // Handle density
+  if (chart.type === 'density') {
+    return generateDensityChart(chart, ctx);
+  }
+  
   // Encoding is required for standard charts
   if (!encoding) {
     throw new Error(`Chart ${chart.id}: encoding is required for ${chart.type} charts`);
@@ -562,6 +577,147 @@ function generateTextChart(chart: ChartSpec, ctx: GeneratorContext): string {
         <p>${htmlContent}</p>
       </div>
     \`;
+  }`;
+}
+
+/**
+ * Generate a histogram chart (frequency distribution)
+ */
+function generateHistogramChart(chart: ChartSpec, ctx: GeneratorContext): string {
+  const containerId = `chart-${chart.id}`;
+  const { encoding, dataSource, interaction } = chart;
+  
+  if (!dataSource || !encoding || !encoding.x) {
+    throw new Error(`Chart ${chart.id}: histogram charts require dataSource and x encoding`);
+  }
+  
+  const field = encoding.x.field;
+  const bins = encoding.x.bins || 20;
+  
+  // Build from clause with optional filterBy
+  const fromClause = interaction?.filterBy ?
+    `vg.from('${dataSource}', { filterBy: ${interaction.filterBy} })` :
+    `vg.from('${dataSource}')`;
+  
+  // Build interaction
+  const interactionCode = interaction?.brush ?
+    `vg.intervalX({ as: ${interaction.selection} })` :
+    '';
+  
+  // Build plot options
+  const plotOptions: string[] = [];
+  if (interactionCode) plotOptions.push(interactionCode);
+  if (encoding.x?.label) plotOptions.push(`vg.xLabel('${encoding.x.label}')`);
+  plotOptions.push(`vg.yLabel('Frequency')`);
+  if (chart.width) plotOptions.push(`vg.width(${chart.width})`);
+  if (chart.height) plotOptions.push(`vg.height(${chart.height})`);
+  
+  const plotOptionsStr = plotOptions.length > 0 ? 
+    `,\n      ${plotOptions.join(',\n      ')}` : '';
+  
+  return `const container${chart.id} = document.getElementById('${containerId}');
+  if (container${chart.id}) {
+    const chart${chart.id} = vg.plot(
+      vg.rectY(
+        ${fromClause},
+        vg.bin('${field}', { thresholds: ${bins} }),
+        { y: vg.count(), fill: 'steelblue', fillOpacity: 0.8 }
+      )${plotOptionsStr}
+    );
+    container${chart.id}.appendChild(chart${chart.id});
+  }`;
+}
+
+/**
+ * Generate a boxplot chart (statistical distribution)
+ */
+function generateBoxplotChart(chart: ChartSpec, ctx: GeneratorContext): string {
+  const containerId = `chart-${chart.id}`;
+  const { encoding, dataSource, interaction } = chart;
+  
+  if (!dataSource || !encoding || !encoding.y) {
+    throw new Error(`Chart ${chart.id}: boxplot charts require dataSource and y encoding`);
+  }
+  
+  const valueField = encoding.y.field;
+  const categoryField = encoding.x?.field;
+  
+  // Build from clause with optional filterBy
+  const fromClause = interaction?.filterBy ?
+    `vg.from('${dataSource}', { filterBy: ${interaction.filterBy} })` :
+    `vg.from('${dataSource}')`;
+  
+  // Build plot options
+  const plotOptions: string[] = [];
+  if (encoding.x?.label) plotOptions.push(`vg.xLabel('${encoding.x.label}')`);
+  if (encoding.y?.label) plotOptions.push(`vg.yLabel('${encoding.y.label}')`);
+  if (chart.width) plotOptions.push(`vg.width(${chart.width})`);
+  if (chart.height) plotOptions.push(`vg.height(${chart.height})`);
+  
+  const plotOptionsStr = plotOptions.length > 0 ? 
+    `,\n      ${plotOptions.join(',\n      ')}` : '';
+  
+  // boxY mark requires category and value
+  const boxOptions = categoryField ? 
+    `{ x: '${categoryField}', y: '${valueField}', fill: 'steelblue' }` :
+    `{ y: '${valueField}', fill: 'steelblue' }`;
+  
+  return `const container${chart.id} = document.getElementById('${containerId}');
+  if (container${chart.id}) {
+    const chart${chart.id} = vg.plot(
+      vg.boxY(
+        ${fromClause},
+        ${boxOptions}
+      )${plotOptionsStr}
+    );
+    container${chart.id}.appendChild(chart${chart.id});
+  }`;
+}
+
+/**
+ * Generate a density chart (kernel density estimation)
+ */
+function generateDensityChart(chart: ChartSpec, ctx: GeneratorContext): string {
+  const containerId = `chart-${chart.id}`;
+  const { encoding, dataSource, interaction } = chart;
+  
+  if (!dataSource || !encoding || !encoding.x) {
+    throw new Error(`Chart ${chart.id}: density charts require dataSource and x encoding`);
+  }
+  
+  const field = encoding.x.field;
+  
+  // Build from clause with optional filterBy
+  const fromClause = interaction?.filterBy ?
+    `vg.from('${dataSource}', { filterBy: ${interaction.filterBy} })` :
+    `vg.from('${dataSource}')`;
+  
+  // Build interaction
+  const interactionCode = interaction?.brush ?
+    `vg.intervalX({ as: ${interaction.selection} })` :
+    '';
+  
+  // Build plot options
+  const plotOptions: string[] = [];
+  if (interactionCode) plotOptions.push(interactionCode);
+  if (encoding.x?.label) plotOptions.push(`vg.xLabel('${encoding.x.label}')`);
+  plotOptions.push(`vg.yLabel('Density')`);
+  if (chart.width) plotOptions.push(`vg.width(${chart.width})`);
+  if (chart.height) plotOptions.push(`vg.height(${chart.height})`);
+  
+  const plotOptionsStr = plotOptions.length > 0 ? 
+    `,\n      ${plotOptions.join(',\n      ')}` : '';
+  
+  return `const container${chart.id} = document.getElementById('${containerId}');
+  if (container${chart.id}) {
+    const chart${chart.id} = vg.plot(
+      vg.areaY(
+        ${fromClause},
+        vg.densityX('${field}'),
+        { y: 'density', fill: 'steelblue', fillOpacity: 0.6 }
+      )${plotOptionsStr}
+    );
+    container${chart.id}.appendChild(chart${chart.id});
   }`;
 }
 

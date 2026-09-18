@@ -160,10 +160,13 @@ charts:
 | `area` | ✅ | Stacked or single |
 | `scatter` | ✅ | Point clouds |
 | `heatmap` | ✅ | 2D density |
+| `histogram` | ✅ | Frequency distribution |
+| `boxplot` | ✅ | Statistical distribution |
+| `density` | ✅ | Kernel density estimation |
 | `number` | ✅ | KPI / single metric |
 | `table` | ✅ | Data grid (100 rows) |
-| `pie` | ✅ | SVG-based with percentages |
-| `donut` | ✅ | Hollow pie with legend |
+| `pie`/`donut` | ✅ | Part-to-whole with percentages |
+| `text` | ✅ | Narrative Markdown blocks |
 
 ---
 
