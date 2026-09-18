@@ -5,6 +5,7 @@ node_modules/
 # Build outputs
 dist/
 *.tsbuildinfo
+.dvfc-build/
 .coordboard-build/
 test-dist/
 
