@@ -44440,7 +44440,6 @@ async function createDashboard() {
 			const chartsales_trend = plot(lineY(from("sales_daily"), {
 				x: "date",
 				y: sum$2("sales"),
-				stroke: fill,
 				strokeWidth: 2
 			}), intervalX({ as: salesBrush }), xLabel("Date (brush here to filter)"), yLabel("Daily Sales ($)"), width(600), height(250));
 			containersales_trend.appendChild(chartsales_trend);
@@ -44470,7 +44469,6 @@ async function createDashboard() {
 			const chartpassenger_trend = plot(lineY(from("flights_summary"), {
 				x: "date",
 				y: sum$2("passengers"),
-				stroke: fill,
 				strokeWidth: 2
 			}), intervalX({ as: flightsBrush }), xLabel("Date (brush here to filter)"), yLabel("Daily Passengers"), width(600), height(250));
 			containerpassenger_trend.appendChild(chartpassenger_trend);

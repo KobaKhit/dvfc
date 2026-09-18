@@ -40,6 +40,9 @@ for example in "${examples[@]}"; do
   out_dir="$SITE_DIR/examples/$example"
   base_path="$BASE_URL/examples/$example/"
   
+  # Clean .dvfc-build to prevent CSV contamination
+  rm -rf .dvfc-build
+  
   echo "  Building $example → $out_dir"
   $CLI build "$board_file" -o "$out_dir" --base "$base_path"
   
