@@ -98,20 +98,13 @@ EOF
     cp -r "$example_dir/dist" "$SITE_DIR/examples/$example_name"
     
   elif [ -f "$example_dir/board.yaml" ]; then
-    # Use dvfc CLI to build
+    # Use dvfc CLI to build with correct base path
     echo "     → Using dvfc CLI"
     
-    # Build with dvfc
-    node packages/cli/dist/cli.js build "$example_dir/board.yaml" -o "$SITE_DIR/examples/$example_name"
-    
-    # Fix asset paths in generated HTML
-    HTML_FILE="$SITE_DIR/examples/$example_name/index.html"
-    if [ -f "$HTML_FILE" ]; then
-      # Update asset paths to include example name
-      sed -i.bak "s|/assets/|${BASE_PATH}/examples/${example_name}/assets/|g" "$HTML_FILE"
-      sed -i.bak "s|/data/|${BASE_PATH}/examples/${example_name}/data/|g" "$HTML_FILE"
-      rm "${HTML_FILE}.bak"
-    fi
+    # Build with dvfc using --base flag
+    node packages/cli/dist/cli.js build "$example_dir/board.yaml" \
+      -o "$SITE_DIR/examples/$example_name" \
+      --base "${BASE_PATH}/examples/${example_name}/"
     
   else
     echo "     ⊘ Skipping (no build method found)"

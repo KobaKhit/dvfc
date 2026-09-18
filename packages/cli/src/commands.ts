@@ -513,7 +513,8 @@ async function generatePreviewFiles(specPath: string, tempDir: string): Promise<
   const ctx: GeneratorContext = {
     spec,
     dataDir: join(specDir, 'dbt-stub'),
-    outputDir: tempDir
+    outputDir: tempDir,
+    base: '/'
   };
   
   // Generate source files
@@ -644,7 +645,8 @@ export async function build(specPath: string, options: BuildOptions = {}): Promi
     const ctx: GeneratorContext = {
       spec,
       dataDir: join(specDir, 'dbt-stub'),
-      outputDir: outDir
+      outputDir: outDir,
+      base: options.base || '/'
     };
     
     // Generate source files

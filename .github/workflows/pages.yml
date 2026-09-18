@@ -56,25 +56,9 @@ jobs:
 
       - name: Build site
         run: |
-          mkdir -p site/examples
-          
-          # Prevent GitHub Pages Jekyll processing
-          touch site/.nojekyll
-          
-          echo "Building sales-board example..."
-          node packages/cli/dist/cli.js build examples/sales-board/board.yaml -o site/examples/sales-board --base /dvfc/
-          
-          echo "Building web-analytics example..."
-          node packages/cli/dist/cli.js build examples/web-analytics/board.yaml -o site/examples/web-analytics --base /dvfc/
-          
-          echo "Building dbt-jaffle example..."
-          node packages/cli/dist/cli.js build examples/dbt-jaffle/board.yaml -o site/examples/dbt-jaffle --base /dvfc/
-          
-          echo "Building revenue-analysis example..."
-          node packages/cli/dist/cli.js build examples/revenue-analysis/board.yaml -o site/examples/revenue-analysis --base /dvfc/
-          
-          echo "✅ All examples built successfully"
-          ls -lh site/examples/*/index.html
+          # Use build-site.sh which sets correct per-example base paths
+          chmod +x scripts/build-site.sh
+          ./scripts/build-site.sh
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
