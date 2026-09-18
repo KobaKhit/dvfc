@@ -50,22 +50,14 @@ program
     .option('-o, --out-dir <dir>', 'Output directory', 'dist')
     .option('-m, --minify', 'Minify output', false)
     .option('--chart <id>', 'Build single chart with board context')
-<<<<<<< HEAD
     .option('--base <path>', 'Base public path (e.g. /dvfc/ for GitHub Pages)')
-=======
-    .option('--base <path>', 'Base path for data URLs (e.g., /dvfc/examples/sales-board)')
->>>>>>> 8432e6c (Fix GitHub Pages data loading and redesign site)
     .action(async (spec, options) => {
     try {
         await build(spec, {
             outDir: options.outDir,
             minify: options.minify,
             chartId: options.chart,
-<<<<<<< HEAD
             base: options.base
-=======
-            basePath: options.base
->>>>>>> 8432e6c (Fix GitHub Pages data loading and redesign site)
         });
     }
     catch (error) {

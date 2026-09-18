@@ -1,159 +1,80 @@
 #!/usr/bin/env bash
 #
-# build-site.sh - Build dvfc examples for GitHub Pages deployment
-# Fixes base path issue: each example gets /dvfc/examples/<name>/ as base
+# Build GitHub Pages site at /dvfc/ base path
+# Uses dvfc CLI exclusively for all examples (no Vite special-case)
 #
 
 set -e
 
-echo "🏗️  Building dvfc site for GitHub Pages"
-echo "========================================"
+echo "🌐 Building GitHub Pages Site"
+echo "=============================="
 echo
 
-# Colors
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-YELLOW='\033[1;33m'
-NC='\033[0m'
-
-# Configuration
-BASE_PATH="/dvfc"
+BASE_URL="/dvfc"
 SITE_DIR="site"
-EXAMPLES_DIR="examples"
+CLI="node packages/cli/dist/cli.js"
 
-# Clean previous builds
-echo -e "${BLUE}1. Cleaning previous builds${NC}"
-rm -rf "$SITE_DIR/examples"
-mkdir -p "$SITE_DIR/examples"
-echo "   ✓ Cleaned"
+# Clean previous build
+rm -rf "$SITE_DIR"
+mkdir -p "$SITE_DIR"
+
+echo "📦 Building Examples..."
 echo
 
-# Build each example with correct base path
-echo -e "${BLUE}2. Building examples${NC}"
+# Build each example via CLI with correct base path
+examples=(
+  "sales-board"
+  "web-analytics"
+  "dbt-jaffle"
+  "revenue-analysis"
+)
 
-for example_dir in "$EXAMPLES_DIR"/*/; do
-  example_name=$(basename "$example_dir")
+for example in "${examples[@]}"; do
+  board_file="examples/$example/board.yaml"
   
-  # Skip if not a directory or if it's just README
-  if [ ! -d "$example_dir/src" ] && [ ! -f "$example_dir/board.yaml" ]; then
-    echo "   ⊘ Skipping $example_name (not a buildable example)"
+  if [ ! -f "$board_file" ]; then
+    echo "⚠️  Skipping $example (no board.yaml)"
     continue
   fi
   
-  echo "   Building $example_name..."
+  out_dir="$SITE_DIR/examples/$example"
+  base_path="$BASE_URL/examples/$example/"
   
-  # Determine build method
-  if [ -f "$example_dir/package.json" ] && [ -f "$example_dir/vite.config.ts" ]; then
-    # Example has its own Vite setup (like sales-board)
-    echo "     → Using example's Vite config"
-    
-    # Update vite.config.ts to use correct base
-    VITE_CONFIG="$example_dir/vite.config.ts"
-    TEMP_CONFIG="${VITE_CONFIG}.backup"
-    
-    # Backup original
-    cp "$VITE_CONFIG" "$TEMP_CONFIG"
-    
-    # Inject base path into config
-    cat > "$VITE_CONFIG" <<EOF
-import { defineConfig } from 'vite';
-
-export default defineConfig({
-  base: '${BASE_PATH}/examples/${example_name}/',
-  root: './src',
-  build: {
-    outDir: '../dist',
-    emptyOutDir: true,
-    rollupOptions: {
-      input: './src/index.html'
-    }
-  },
-  optimizeDeps: {
-    exclude: ['@duckdb/duckdb-wasm']
-  },
-  server: {
-    port: 5174,
-    headers: {
-      'Cross-Origin-Opener-Policy': 'same-origin',
-      'Cross-Origin-Embedder-Policy': 'require-corp'
-    }
-  },
-  preview: {
-    port: 5174,
-    headers: {
-      'Cross-Origin-Opener-Policy': 'same-origin',
-      'Cross-Origin-Embedder-Policy': 'require-corp'
-    }
-  }
-});
-EOF
-    
-    # Build using pnpm
-    (cd "$example_dir" && pnpm install --silent && pnpm build)
-    
-    # Restore original config
-    mv "$TEMP_CONFIG" "$VITE_CONFIG"
-    
-    # Copy built files
-    cp -r "$example_dir/dist" "$SITE_DIR/examples/$example_name"
-    
-  elif [ -f "$example_dir/board.yaml" ]; then
-    # Use dvfc CLI to build with correct base path
-    echo "     → Using dvfc CLI"
-    
-    # Build with dvfc using --base flag
-    node packages/cli/dist/cli.js build "$example_dir/board.yaml" \
-      -o "$SITE_DIR/examples/$example_name" \
-      --base "${BASE_PATH}/examples/${example_name}/"
-    
-  else
-    echo "     ⊘ Skipping (no build method found)"
-    continue
+  echo "  Building $example → $out_dir"
+  $CLI build "$board_file" -o "$out_dir" --base "$base_path"
+  
+  # Verify data directory exists
+  if [ ! -d "$out_dir/data" ]; then
+    echo "  ❌ ERROR: $out_dir/data not created"
+    exit 1
   fi
   
-  echo "     ✓ Built $example_name"
+  echo "  ✓ $example built with data/"
 done
 
 echo
-echo -e "${GREEN}✓ All examples built${NC}"
+echo "📄 Creating Site Pages..."
 echo
 
-# Verify builds
-echo -e "${BLUE}3. Verifying builds${NC}"
-for example_dir in "$SITE_DIR/examples"/*/; do
-  example_name=$(basename "$example_dir")
-  HTML="$example_dir/index.html"
-  
-  if [ -f "$HTML" ]; then
-    # Check for correct asset paths
-    if grep -q "${BASE_PATH}/examples/${example_name}/assets/" "$HTML"; then
-      echo "   ✓ $example_name: Asset paths correct"
-    else
-      echo -e "   ${YELLOW}⚠ $example_name: Asset paths may need fixing${NC}"
-      echo "     Expected: ${BASE_PATH}/examples/${example_name}/assets/"
-      echo "     Found:"
-      grep -o '/[^"]*assets/[^"]*' "$HTML" | head -1 || echo "     (no assets found)"
-    fi
-  else
-    echo "   ✗ $example_name: No index.html found"
-  fi
+# Copy static assets
+cp -r site-src/index.html "$SITE_DIR/"
+cp -r site-src/charts.html "$SITE_DIR/"
+cp -r site-src/style.css "$SITE_DIR/" 2>/dev/null || echo "  (no style.css)"
+cp -r site-src/assets "$SITE_DIR/" 2>/dev/null || echo "  (no assets/)"
+
+# Create .nojekyll to disable Jekyll processing
+touch "$SITE_DIR/.nojekyll"
+
+echo
+echo "✅ Site built successfully!"
+echo "   Output: $SITE_DIR/"
+echo "   Base path: $BASE_URL"
+echo
+echo "Verification:"
+grep -r "/dbt-stub/" "$SITE_DIR" && echo "❌ ERROR: Found /dbt-stub/ paths!" && exit 1 || echo "✓ No /dbt-stub/ paths found"
+echo "✓ Data directories:"
+find "$SITE_DIR" -type d -name "data" | while read dir; do
+  csv_count=$(find "$dir" -name "*.csv" | wc -l)
+  echo "  $dir ($csv_count CSV files)"
 done
-
-echo
-echo -e "${GREEN}✅ Site build complete!${NC}"
-echo
-echo "Output structure:"
-echo "  ${SITE_DIR}/"
-echo "  ├── index.html          (landing page)"
-echo "  ├── charts.html         (chart types gallery)"
-echo "  ├── assets/styles.css   (site styles)"
-echo "  └── examples/"
-echo "      ├── sales-board/"
-echo "      ├── web-analytics/"
-echo "      ├── dbt-jaffle/"
-echo "      └── revenue-analysis/"
-echo
-echo "Deploy to GitHub Pages:"
-echo "  - Set Pages source to '/site' directory"
-echo "  - Or copy site/* to root of gh-pages branch"
 echo

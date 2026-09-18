@@ -544,11 +544,7 @@ export async function build(specPath, options = {}) {
             spec,
             dataDir: join(specDir, 'dbt-stub'),
             outputDir: outDir,
-<<<<<<< HEAD
             base: options.base || '/'
-=======
-            basePath: options.basePath
->>>>>>> 8432e6c (Fix GitHub Pages data loading and redesign site)
         };
         // Generate source files
         const mainScript = generateMainScript(ctx);

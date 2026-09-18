@@ -19,11 +19,7 @@ export interface BuildOptions {
     outDir?: string;
     minify?: boolean;
     chartId?: string;
-<<<<<<< HEAD
     base?: string;
-=======
-    basePath?: string;
->>>>>>> 8432e6c (Fix GitHub Pages data loading and redesign site)
 }
 export interface ExportPdfOptions {
     outFile?: string;

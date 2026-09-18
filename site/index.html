@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<<<<<<< HEAD
-  <title>Data Viz Factory - Interactive Dashboards from YAML</title>
-  <meta name="description" content="Build interactive analytics dashboards from declarative YAML. Powered by Mosaic + dbt. Live interactive examples.">
+  <title>dvfc – Cross-filtered dashboards for humans and agents</title>
+  <meta name="description" content="Build interactive analytics dashboards with Mosaic crossfiltering and dbt integration. Powered by DuckDB-WASM.">
   <style>
     * {
       margin: 0;
@@ -13,46 +12,99 @@
       box-sizing: border-box;
     }
 
+    :root {
+      --bg: #0a0a0a;
+      --text: #e4e4e7;
+      --text-dim: #a1a1aa;
+      --accent: #a855f7;
+      --accent-dim: #9333ea;
+      --card-bg: #18181b;
+      --border: #27272a;
+    }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+      background: var(--bg);
+      color: var(--text);
       line-height: 1.6;
-      color: #2d3748;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
 
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 2rem;
+      padding: 0 2rem;
     }
 
-    header {
-      background: white;
-      border-radius: 12px;
-      padding: 3rem 2rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    /* Navigation */
+    nav {
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .logo span {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dim) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-links a.github {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 6rem 0 4rem;
       text-align: center;
     }
 
     h1 {
-      font-size: 2.5rem;
-      color: #2d3748;
-      margin-bottom: 1rem;
-      font-weight: 700;
-    }
-
-    .tagline {
-      font-size: 1.25rem;
-      color: #4a5568;
+      font-size: 3.5rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
       margin-bottom: 1.5rem;
     }
 
     .subtitle {
-      font-size: 1rem;
-      color: #718096;
-      margin-bottom: 1.5rem;
+      font-size: 1.25rem;
+      color: var(--text-dim);
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
     }
 
     .cta-buttons {
@@ -60,451 +112,306 @@
       gap: 1rem;
       justify-content: center;
       flex-wrap: wrap;
-      margin-top: 2rem;
     }
 
     .btn {
-      display: inline-block;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      text-decoration: none;
+      padding: 0.875rem 2rem;
+      font-size: 1rem;
       font-weight: 600;
+      border-radius: 0.5rem;
+      text-decoration: none;
       transition: all 0.2s;
+      border: none;
+      cursor: pointer;
     }
 
     .btn-primary {
-      background: #667eea;
+      background: var(--accent);
       color: white;
     }
 
     .btn-primary:hover {
-      background: #5a67d8;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      background: var(--accent-dim);
+      transform: translateY(-1px);
     }
 
     .btn-secondary {
-      background: white;
-      color: #667eea;
-      border: 2px solid #667eea;
+      background: var(--card-bg);
+      color: var(--text);
+      border: 1px solid var(--border);
     }
 
     .btn-secondary:hover {
-      background: #f7fafc;
-      transform: translateY(-2px);
+      border-color: var(--accent);
     }
 
-    .features {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1rem;
-      margin-bottom: 2rem;
+    /* Examples Section */
+    .section {
+      padding: 4rem 0;
     }
 
-    .feature {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    }
-
-    .feature h3 {
-      font-size: 1rem;
-      margin-bottom: 0.5rem;
-      color: #667eea;
-    }
-
-    .feature p {
-      font-size: 0.9rem;
-      color: #718096;
-    }
-
-    .examples {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-
-    .example-card {
-      background: white;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .example-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-    }
-
-    .example-header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      padding: 2rem;
-      color: white;
-    }
-
-    .example-header h3 {
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .example-header .domain {
-      font-size: 0.9rem;
-      opacity: 0.9;
-    }
-
-    .example-body {
-      padding: 1.5rem;
-    }
-
-    .example-body h4 {
-      font-size: 0.9rem;
-      color: #667eea;
-      margin-bottom: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .example-body ul {
-      list-style: none;
-      margin-bottom: 1rem;
-    }
-
-    .example-body li {
-      padding: 0.25rem 0;
-      color: #4a5568;
-      font-size: 0.9rem;
-    }
-
-    .example-body li:before {
-      content: "✓ ";
-      color: #667eea;
-      font-weight: bold;
-      margin-right: 0.5rem;
-    }
-
-    .example-footer {
-      padding: 0 1.5rem 1.5rem;
-    }
-
-    .demo-button {
-      display: block;
-      width: 100%;
-      padding: 0.75rem;
-      background: #667eea;
-      color: white;
+    .section-header {
       text-align: center;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 600;
-      transition: all 0.2s;
+      margin-bottom: 3rem;
     }
 
-    .demo-button:hover {
-      background: #5a67d8;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-    }
-
-    .section-title {
+    .section-header h2 {
       font-size: 2rem;
-      color: white;
-      margin-bottom: 1rem;
-      text-align: center;
       font-weight: 700;
+      margin-bottom: 0.75rem;
     }
 
-    .section-subtitle {
-      text-align: center;
-      color: rgba(255,255,255,0.9);
-      margin-bottom: 2rem;
+    .section-header p {
+      color: var(--text-dim);
       font-size: 1.1rem;
     }
 
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .example-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.75rem;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.2s;
+    }
+
+    .example-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .example-card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .example-card p {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    .example-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.875rem;
+      color: var(--text-dim);
+    }
+
+    .chart-count {
+      background: rgba(168, 85, 247, 0.1);
+      color: var(--accent);
+      padding: 0.25rem 0.75rem;
+      border-radius: 0.375rem;
+      font-weight: 500;
+    }
+
+    /* Features */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      padding: 1.5rem;
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(168, 85, 247, 0.1);
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-card p {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+    }
+
+    /* Footer */
     footer {
-      text-align: center;
-      color: rgba(255,255,255,0.9);
-      padding: 2rem;
+      border-top: 1px solid var(--border);
+      padding: 3rem 0;
       margin-top: 4rem;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.9rem;
     }
 
     footer a {
-      color: white;
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    footer a:hover {
       text-decoration: underline;
     }
 
     @media (max-width: 768px) {
       h1 {
-        font-size: 2rem;
+        font-size: 2.5rem;
       }
-      
-      .tagline {
-        font-size: 1rem;
+
+      .subtitle {
+        font-size: 1.1rem;
       }
-      
-      .examples {
-        grid-template-columns: 1fr;
+
+      .hero {
+        padding: 4rem 0 3rem;
+      }
+
+      .nav-links {
+        gap: 1rem;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>📊 Data Viz Factory</h1>
-      <div class="tagline">Cross-filtered dashboards for humans and agents</div>
-      <div class="subtitle">Build interactive analytics dashboards from declarative YAML → Powered by <strong>Mosaic</strong> + <strong>dbt</strong></div>
-      
-      <div class="cta-buttons">
-        <a href="https://github.com/KobaKhit/dvfc" class="btn btn-primary">View on GitHub</a>
-        <a href="https://github.com/KobaKhit/dvfc#readme" class="btn btn-secondary">Documentation</a>
-      </div>
-    </header>
-
-    <div class="features">
-      <div class="feature">
-        <h3>🎯 Declarative</h3>
-        <p>Write YAML, not code. Define charts, data sources, and interactions declaratively.</p>
-      </div>
-      <div class="feature">
-        <h3>⚡ Native Crossfiltering</h3>
-        <p>Mosaic coordination engine provides instant brush-and-link interactions.</p>
-      </div>
-      <div class="feature">
-        <h3>🗄️ In-Browser SQL</h3>
-        <p>DuckDB-WASM runs SQL queries entirely in the browser. No backend required.</p>
-      </div>
-      <div class="feature">
-        <h3>🔗 dbt Integration</h3>
-        <p>Resolve <code>ref('model_name')</code> directly from your dbt manifest.</p>
-      </div>
-    </div>
-
-    <h2 class="section-title">✨ Live Interactive Examples</h2>
-    <p class="section-subtitle">Real dashboards built with dvfc. Click and drag on charts to see crossfiltering in action!</p>
-
-    <div class="examples">
-      <div class="example-card">
-        <div class="example-header">
-          <h3>Sales & Flights Dashboard</h3>
-          <div class="domain">Business analytics</div>
+  <nav>
+    <div class="container">
+      <div class="nav-content">
+        <a href="/dvfc/" class="logo"><span>dvfc</span></a>
+        <div class="nav-links">
+          <a href="/dvfc/charts.html">Charts</a>
+          <a href="https://github.com/dvfc/dvfc" class="github" target="_blank">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            GitHub
+          </a>
         </div>
-        <div class="example-body">
-          <h4>Features</h4>
-          <ul>
-            <li>Multi-section coordinated dashboard</li>
-            <li>6 charts (3 sales, 3 flights)</li>
-            <li>Time-based brushing and filtering</li>
-            <li>Regional breakdown analysis</li>
-          </ul>
-        </div>
-        <div class="example-footer">
-          <a href="/dvfc/examples/sales-board/" class="demo-button">Open Live Demo →</a>
-        </div>
-      </div>
-
-      <div class="example-card">
-        <div class="example-header">
-          <h3>Web Analytics Dashboard</h3>
-          <div class="domain">Web traffic & conversions</div>
-        </div>
-        <div class="example-body">
-          <h4>Features</h4>
-          <ul>
-            <li>6 charts (traffic + conversions)</li>
-            <li>Page view tracking & bounce rates</li>
-            <li>Revenue and conversion metrics</li>
-            <li>Dual filtering sections</li>
-          </ul>
-        </div>
-        <div class="example-footer">
-          <a href="/dvfc/examples/web-analytics/" class="demo-button">Open Live Demo →</a>
-        </div>
-      </div>
-
-      <div class="example-card">
-        <div class="example-header">
-          <h3>dbt Jaffle Shop</h3>
-          <div class="domain">E-commerce order analytics</div>
-        </div>
-        <div class="example-body">
-          <h4>Features</h4>
-          <ul>
-            <li>Real dbt project structure</li>
-            <li>4 charts (revenue, payments, customers)</li>
-            <li>Customer order analytics</li>
-            <li>Payment method breakdown</li>
-          </ul>
-        </div>
-        <div class="example-footer">
-          <a href="/dvfc/examples/dbt-jaffle/" class="demo-button">Open Live Demo →</a>
-        </div>
-      </div>
-
-      <div class="example-card">
-        <div class="example-header">
-          <h3>Revenue Analysis with Insights</h3>
-          <div class="domain">Financial performance with overlays</div>
-        </div>
-        <div class="example-body">
-          <h4>Features</h4>
-          <ul>
-            <li>7 charts with analysis overlays</li>
-            <li>Mean, median, trend, moving averages</li>
-            <li>Narrative text blocks (Markdown)</li>
-            <li>Shareable filter state via URL</li>
-          </ul>
-        </div>
-        <div class="example-footer">
-          <a href="/dvfc/examples/revenue-analysis/" class="demo-button">Open Live Demo →</a>
-        </div>
-      </div>
-    </div>
-
-    <footer>
-      <p>Built with ❤️ using <a href="https://idl.uw.edu/mosaic/" target="_blank">Mosaic</a> and <a href="https://www.getdbt.com/" target="_blank">dbt</a></p>
-      <p style="margin-top: 1rem; font-size: 0.9rem;">
-        <a href="https://github.com/KobaKhit/dvfc">GitHub</a> • 
-        <a href="https://github.com/KobaKhit/dvfc/blob/main/LICENSE">Apache 2.0 License</a>
-      </p>
-    </footer>
-  </div>
-=======
-  <title>Data Viz Factory (dvfc) - Cross-filtered boards powered by Mosaic</title>
-  <meta name="description" content="Build interactive analytics dashboards from declarative YAML. Native crossfiltering with Mosaic + DuckDB-WASM.">
-  <link rel="stylesheet" href="/dvfc/assets/styles.css">
-</head>
-<body>
-  <nav class="nav">
-    <div class="nav-container">
-      <a href="/dvfc/" class="logo">dvfc</a>
-      <div class="nav-links">
-        <a href="/dvfc/">Home</a>
-        <a href="/dvfc/charts/">Charts</a>
-        <a href="#examples">Examples</a>
-        <a href="https://github.com/KobaKhit/dvfc" target="_blank">
-          <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-          </svg>
-          GitHub
-        </a>
       </div>
     </div>
   </nav>
 
-  <header class="hero">
-    <div class="container">
-      <div class="hero-content">
-        <h1 class="hero-title">Data Viz Factory</h1>
-        <p class="hero-subtitle">Cross-filtered boards for humans and agents</p>
-        <p class="hero-description">
-          Build interactive analytics dashboards from declarative YAML. 
-          Powered by <a href="https://idl.uw.edu/mosaic/" target="_blank">Mosaic</a> + DuckDB-WASM.
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>Cross-filtered dashboards<br>for humans and agents</h1>
+        <p class="subtitle">
+          Build interactive analytics dashboards with Mosaic crossfiltering and dbt integration. 
+          Powered by DuckDB-WASM.
         </p>
-        <div class="hero-cta">
-          <a href="#examples" class="btn btn-primary">View Examples</a>
-          <a href="/dvfc/charts/" class="btn btn-secondary">Chart Types</a>
-          <a href="https://github.com/KobaKhit/dvfc" class="btn btn-outline" target="_blank">GitHub</a>
+        <div class="cta-buttons">
+          <a href="#examples" class="btn btn-primary">Live Examples</a>
+          <a href="/dvfc/charts.html" class="btn btn-secondary">Chart Types</a>
         </div>
       </div>
-    </div>
-  </header>
+    </section>
 
-  <section class="features">
-    <div class="container">
-      <div class="feature-grid">
-        <div class="feature-card">
-          <div class="feature-icon">🎯</div>
-          <h3>Native Crossfiltering</h3>
-          <p>Mosaic coordination engine for instant, interactive filtering across all charts</p>
+    <section class="section" id="examples">
+      <div class="container">
+        <div class="section-header">
+          <h2>Live Examples</h2>
+          <p>Interactive dashboards with real crossfiltering</p>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">📊</div>
-          <h3>dbt Integration</h3>
-          <p>Resolve model references, auto-generate dashboards from dbt manifests</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">🦆</div>
-          <h3>DuckDB-WASM</h3>
-          <p>In-browser SQL queries, no backend required, works completely offline</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📝</div>
-          <h3>Declarative YAML</h3>
-          <p>Define dashboards in simple YAML specs, get production-ready HTML</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <section id="examples" class="examples">
-    <div class="container">
-      <h2 class="section-title">Live Examples</h2>
-      <p class="section-subtitle">Interactive dashboards with native Mosaic crossfiltering</p>
-      
-      <div class="example-grid">
-        <a href="/dvfc/examples/sales-board/" class="example-card">
-          <div class="example-preview">
-            <div class="chart-mini line"></div>
-            <div class="chart-mini bar"></div>
-          </div>
-          <div class="example-content">
+        <div class="examples-grid">
+          <a href="/dvfc/examples/sales-board/" class="example-card">
             <h3>Sales & Flights</h3>
-            <p>6-chart dashboard with time-based crossfiltering. Business analytics example.</p>
-            <span class="example-badge">6 charts</span>
-          </div>
-        </a>
+            <p>Multi-chart dashboard demonstrating Mosaic crossfiltering with dbt models</p>
+            <div class="example-meta">
+              <span>→ Open dashboard</span>
+              <span class="chart-count">6 charts</span>
+            </div>
+          </a>
 
-        <a href="/dvfc/examples/web-analytics/" class="example-card">
-          <div class="example-preview">
-            <div class="chart-mini area"></div>
-            <div class="chart-mini bar"></div>
-          </div>
-          <div class="example-content">
+          <a href="/dvfc/examples/web-analytics/" class="example-card">
             <h3>Web Analytics</h3>
-            <p>Traffic sources, conversions, and revenue tracking with dual filtering.</p>
-            <span class="example-badge">6 charts</span>
-          </div>
-        </a>
+            <p>Page views, conversions, and user behavior analysis</p>
+            <div class="example-meta">
+              <span>→ Open dashboard</span>
+              <span class="chart-count">4 charts</span>
+            </div>
+          </a>
 
-        <a href="/dvfc/examples/dbt-jaffle/" class="example-card">
-          <div class="example-preview">
-            <div class="chart-mini line"></div>
-            <div class="chart-mini scatter"></div>
-          </div>
-          <div class="example-content">
+          <a href="/dvfc/examples/dbt-jaffle/" class="example-card">
             <h3>dbt Jaffle Shop</h3>
-            <p>Real dbt project integration with manifest resolution and model refs.</p>
-            <span class="example-badge">4 charts</span>
-          </div>
-        </a>
+            <p>Revenue analysis from the classic dbt tutorial project</p>
+            <div class="example-meta">
+              <span>→ Open dashboard</span>
+              <span class="chart-count">5 charts</span>
+            </div>
+          </a>
 
-        <a href="/dvfc/examples/revenue-analysis/" class="example-card">
-          <div class="example-preview">
-            <div class="chart-mini line"></div>
-            <div class="chart-mini overlay"></div>
-          </div>
-          <div class="example-content">
+          <a href="/dvfc/examples/revenue-analysis/" class="example-card">
             <h3>Revenue Analysis</h3>
-            <p>Analysis overlays (trend, mean, MA) + narrative text blocks.</p>
-            <span class="example-badge">overlays + text</span>
-          </div>
-        </a>
+            <p>Daily metrics with trend overlays and KPI cards</p>
+            <div class="example-meta">
+              <span>→ Open dashboard</span>
+              <span class="chart-count">3 charts</span>
+            </div>
+          </a>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <footer class="footer">
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Features</h2>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Mosaic Crossfiltering</h3>
+            <p>Interactive selections that update all connected charts in real-time using UW Mosaic.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🔧</div>
+            <h3>dbt Integration</h3>
+            <p>Generate dashboards directly from your dbt models with automatic schema discovery.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>DuckDB-WASM</h3>
+            <p>Client-side analytics with DuckDB running entirely in the browser via WebAssembly.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🤖</div>
+            <h3>Agent-Friendly</h3>
+            <p>Compose dashboards from YAML specs—perfect for LLM-driven analytics workflows.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
     <div class="container">
-      <p>Built with <a href="https://idl.uw.edu/mosaic/" target="_blank">Mosaic</a> by UW Interactive Data Lab</p>
       <p>
-        <a href="https://github.com/KobaKhit/dvfc" target="_blank">GitHub</a> •
-        <a href="https://github.com/KobaKhit/dvfc/blob/main/LICENSE" target="_blank">Apache-2.0</a>
+        Built with <a href="https://idl.uw.edu/mosaic/" target="_blank">UW Mosaic</a> • 
+        <a href="https://github.com/dvfc/dvfc" target="_blank">GitHub</a> • 
+        <a href="https://github.com/dvfc/dvfc/blob/main/LICENSE" target="_blank">Apache 2.0</a>
       </p>
     </div>
   </footer>
->>>>>>> 5d3e8d9 (feat: Fix Pages base paths, redesign site, and add new chart types)
 </body>
 </html>
