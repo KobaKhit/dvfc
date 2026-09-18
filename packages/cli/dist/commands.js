@@ -426,7 +426,8 @@ async function generatePreviewFiles(specPath, tempDir) {
     const ctx = {
         spec,
         dataDir: join(specDir, 'dbt-stub'),
-        outputDir: tempDir
+        outputDir: tempDir,
+        base: '/'
     };
     // Generate source files
     const mainScript = generateMainScript(ctx);
@@ -535,7 +536,8 @@ export async function build(specPath, options = {}) {
         const ctx = {
             spec,
             dataDir: join(specDir, 'dbt-stub'),
-            outputDir: outDir
+            outputDir: outDir,
+            base: options.base || '/'
         };
         // Generate source files
         const mainScript = generateMainScript(ctx);

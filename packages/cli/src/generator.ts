@@ -9,6 +9,7 @@ export interface GeneratorContext {
   spec: DashboardSpec;
   dataDir: string;
   outputDir: string;
+  base?: string;
 }
 
 /**
@@ -71,11 +72,12 @@ function restoreStateFromURL() {
 }
 
 async function loadData() {
-  const origin = window.location.origin;
+  const base = '${ctx.base || '/'}';
+  const dataPath = base.endsWith('/') ? base + 'data/' : base + '/data/';
   
 ${spec.data.map(ds => `  await vg.coordinator().exec(\`
     CREATE TABLE IF NOT EXISTS ${ds.id} AS 
-    SELECT * FROM read_csv_auto('\${origin}/data/${ds.id}.csv')
+    SELECT * FROM read_csv_auto('\${window.location.origin}\${dataPath}${ds.id}.csv')
   \`);`).join('\n')}
 }
 
