@@ -44420,20 +44420,17 @@ async function createDashboard() {
 		if (savedSelections["dateBrush"]) dateBrush.update(savedSelections["dateBrush"]);
 		dateBrush.addEventListener("value", () => setTimeout(saveStateToURL, 100));
 		const containerdaily_revenue = document.getElementById("chart-daily_revenue");
-		if (containerdaily_revenue) try {
+		if (containerdaily_revenue) {
 			const chartdaily_revenue = plot(lineY(from("customer_orders"), {
 				x: "order_date",
 				y: sum$2("amount"),
-				stroke: fill,
+				stroke: "steelblue",
 				strokeWidth: 2
 			}), intervalX({ as: dateBrush }), xLabel("Order Date (brush to filter)"), yLabel("Total Revenue ($)"), width(700), height(250));
 			containerdaily_revenue.appendChild(chartdaily_revenue);
-		} catch (error) {
-			console.error("Error rendering chart daily_revenue:", error);
-			containerdaily_revenue.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
 		}
 		const containerrevenue_by_method = document.getElementById("chart-revenue_by_method");
-		if (containerrevenue_by_method) try {
+		if (containerrevenue_by_method) {
 			const chartrevenue_by_method = plot(barY(from("customer_orders", { filterBy: dateBrush }), {
 				x: "payment_method",
 				y: sum$2("amount"),
@@ -44441,12 +44438,9 @@ async function createDashboard() {
 				fillOpacity: .8
 			}), xLabel("Payment Method"), yLabel("Total Revenue ($)"), width(700), height(300));
 			containerrevenue_by_method.appendChild(chartrevenue_by_method);
-		} catch (error) {
-			console.error("Error rendering chart revenue_by_method:", error);
-			containerrevenue_by_method.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
 		}
 		const containertop_customers = document.getElementById("chart-top_customers");
-		if (containertop_customers) try {
+		if (containertop_customers) {
 			const charttop_customers = plot(barY(from("customer_orders", { filterBy: dateBrush }), {
 				x: "customer_name",
 				y: sum$2("amount"),
@@ -44454,12 +44448,9 @@ async function createDashboard() {
 				fillOpacity: .8
 			}), xLabel("Customer"), yLabel("Total Spent ($)"), width(700), height(300));
 			containertop_customers.appendChild(charttop_customers);
-		} catch (error) {
-			console.error("Error rendering chart top_customers:", error);
-			containertop_customers.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
 		}
 		const containerstatus_breakdown = document.getElementById("chart-status_breakdown");
-		if (containerstatus_breakdown) try {
+		if (containerstatus_breakdown) {
 			const chartstatus_breakdown = plot(barY(from("customer_orders", { filterBy: dateBrush }), {
 				x: "order_status",
 				y: count$2("order_status"),
@@ -44467,9 +44458,6 @@ async function createDashboard() {
 				fillOpacity: .8
 			}), xLabel("Status"), yLabel("Order Count"), width(700), height(300));
 			containerstatus_breakdown.appendChild(chartstatus_breakdown);
-		} catch (error) {
-			console.error("Error rendering chart status_breakdown:", error);
-			containerstatus_breakdown.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
 		}
 		if (statusEl) {
 			statusEl.textContent = "✅ Dashboard ready! Brush line charts to filter other charts. Share URL to preserve filters.";
