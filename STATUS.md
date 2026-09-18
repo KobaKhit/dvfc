@@ -966,6 +966,104 @@ charts:
 
 This requires template variable substitution in text chart generator.
 
+**Current Status:** Deferred to v0.5+. Text charts with static images work today.
+
+---
+
+## ♿ Accessibility (a11y)
+
+### Current State
+
+**Basic Support:**
+- ✅ Semantic HTML structure (nav, main, footer)
+- ✅ Alt text on example images
+- ✅ Color contrast meets WCAG AA
+- ✅ Responsive layouts (mobile-friendly)
+
+**Crossfilter-Specific Gaps:**
+- ⚠️ Keyboard navigation for brush interactions
+- ⚠️ ARIA labels for interactive charts
+- ⚠️ Screen reader announcements on filter changes
+- ⚠️ Focus management across coordinated views
+
+### Recommended Improvements
+
+**1. Keyboard Crossfilter Controls**
+
+Add to generated dashboards:
+
+```javascript
+// Clear all filters on Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    // Clear all selections
+    Object.values(selections).forEach(sel => sel.update(undefined));
+    announceToScreenReader('All filters cleared');
+  }
+});
+
+// Focus outline for brushable charts
+document.querySelectorAll('[role="img"]').forEach(chart => {
+  chart.tabIndex = 0;
+  chart.setAttribute('aria-label', chart.dataset.title || 'Chart');
+});
+```
+
+**2. ARIA Attributes**
+
+```html
+<div id="chart-daily_revenue" 
+     role="img" 
+     aria-label="Daily Revenue trend chart. Click and drag to filter by date range."
+     tabindex="0">
+  <!-- Mosaic chart -->
+</div>
+
+<div id="status" 
+     role="status" 
+     aria-live="polite" 
+     aria-atomic="true">
+  Dashboard ready. 3 of 6 charts filtered.
+</div>
+```
+
+**3. Screen Reader Announcements**
+
+```javascript
+function announceToScreenReader(message) {
+  const announcer = document.getElementById('sr-announcer');
+  if (announcer) {
+    announcer.textContent = message;
+  }
+}
+
+// On selection change
+dateBrush.addEventListener('value', (value) => {
+  if (value) {
+    const start = value[0], end = value[1];
+    announceToScreenReader(`Filtered to ${start} through ${end}. 3 charts updated.`);
+  } else {
+    announceToScreenReader('Date filter cleared');
+  }
+});
+```
+
+**4. Focus Management**
+
+- Set focus to first filtered chart after brush
+- Visible focus indicators (outline or ring)
+- Skip links for keyboard users
+
+### Implementation Path
+
+1. Update `packages/cli/src/generator.ts` to emit a11y-enhanced HTML
+2. Add keyboard event handlers in generated main.ts
+3. Include ARIA attributes in chart containers
+4. Add screen reader live region to status div
+5. Test with screen readers (NVDA, JAWS, VoiceOver)
+
+**Note:** Mosaic itself doesn't provide a11y primitives, so these must be added in the generator layer.
+
 ---
 
 ## 🎯 Next Steps (v0.4)

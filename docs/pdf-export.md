@@ -2,39 +2,94 @@
 
 dvfc supports exporting dashboards to PDF for reports and documentation.
 
-## Quick Start
+## Export Paths
 
-### Automated PDF Generation (with Playwright)
+dvfc provides **three ways** to generate PDFs, in order of recommendation:
+
+### 1. Browser Print (Recommended - No Dependencies)
+
+**Best for:** Production use, no extra dependencies
+
+```bash
+# Build optimized HTML
+dvfc build board.yaml -o dist
+
+# Open in browser and print
+open dist/index.html
+# → File > Print > Save as PDF
+```
+
+**Advantages:**
+- ✅ No dependencies (Playwright not needed)
+- ✅ Native browser PDF engine (high quality)
+- ✅ Print CSS optimizations included
+- ✅ Works with any browser
+
+### 2. Automated with Playwright (Optional)
+
+**Best for:** CI/CD, batch generation, automation
 
 ```bash
 # Install playwright (optional peer dependency)
 npm install -D playwright
 npx playwright install chromium
 
-# Export to PDF
+# Automated export
 dvfc export-pdf board.yaml -o dashboard.pdf
 ```
 
-### Manual Print-to-PDF
+**Advantages:**
+- ✅ Fully automated (no manual steps)
+- ✅ Headless rendering
+- ✅ Good for CI/CD pipelines
+
+**Disadvantages:**
+- ⚠️ Large dependency (~200MB)
+- ⚠️ Requires Playwright installation
+
+### 3. Typst Integration (Non-Chromium Alternative)
+
+**Best for:** Programmable documents, custom layouts
+
+Typst is a modern typesetting system (alternative to LaTeX):
 
 ```bash
-# Build HTML first
+# Build dashboard HTML
 dvfc build board.yaml -o dist
 
-# Then:
-# 1. Open dist/index.html in your browser
-# 2. Press Ctrl+P (Cmd+P on Mac)
-# 3. Select "Save as PDF" as destination
-# 4. Click Save
+# Create Typst document
+cat > report.typ << 'EOF'
+#set page(margin: 1in)
+#set text(font: "Arial", size: 11pt)
+
+= Revenue Analysis Report
+
+Generated: #datetime.today().display()
+
+#image("screenshot.png", width: 100%)
+
+== Key Metrics
+// Embed data or static exports
+EOF
+
+# Take screenshot of dashboard for inclusion
+# (requires playwright or manual screenshot)
+
+# Compile with Typst
+typst compile report.typ report.pdf
 ```
 
-Or let the CLI guide you:
+**Advantages:**
+- ✅ No Chromium dependency
+- ✅ Scriptable document layout
+- ✅ Smaller footprint than Playwright
+- ✅ High-quality typography
 
-```bash
-dvfc export-pdf board.yaml --no-browser
-```
+See: https://typst.app/
 
-## CLI Options
+---
+
+## CLI Command
 
 ```bash
 dvfc export-pdf <spec> [options]
@@ -44,8 +99,23 @@ Arguments:
 
 Options:
   -o, --out-file <file> Output PDF file (default: "dashboard.pdf")
-  --no-browser          Skip automated generation, print instructions only
+  --no-browser          Skip Playwright, print instructions for manual export
   -h, --help           Display help
+```
+
+**Examples:**
+
+```bash
+# Automated (requires Playwright)
+dvfc export-pdf board.yaml -o report.pdf
+
+# Manual flow (no Playwright needed)
+dvfc export-pdf board.yaml --no-browser
+# → Prints instructions for browser print
+
+# Just build HTML, print yourself
+dvfc build board.yaml -o dist
+open dist/index.html
 ```
 
 ## How It Works
@@ -56,11 +126,48 @@ Options:
 
 ### Print Styles
 
-The exported PDF includes:
-- A4 format by default
+The generated HTML includes print-optimized CSS:
+
+```css
+@media print {
+  /* Remove interactive UI */
+  #status { display: none; }
+  .info-box { display: none; }
+  
+  /* Optimize layout */
+  body { margin: 0; padding: 20px; }
+  .chart-container { page-break-inside: avoid; }
+  
+  /* Ensure colors print */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+```
+
+**Default PDF settings:**
+- A4 paper size (210mm × 297mm)
 - 20px margins
-- Print background graphics enabled
-- Hidden interactive elements (if any)
+- Background graphics enabled
+- Charts optimized for print
+- Grid/flex layouts preserved
+
+**Browser-specific settings:**
+
+Chrome/Edge:
+- File > Print
+- Destination: Save as PDF
+- ☑ Background graphics
+
+Firefox:
+- File > Print
+- Destination: Save to PDF
+- ☑ Print backgrounds
+
+Safari:
+- File > Export as PDF (better than Print)
+- Or: File > Print > Save as PDF
 
 ## Peer Dependency: Playwright
 
@@ -87,19 +194,25 @@ pnpm exec playwright install chromium
 
 ## Python SDK Support
 
-The Python SDK also supports PDF export:
+The Python SDK also supports PDF export via the CLI:
 
 ```python
-from dvfc import Data Viz FactoryClient
+from dvfc import DataVizFactoryClient
 
-client = Data Viz FactoryClient()
+client = DataVizFactoryClient()
 spec = client.load("board.yaml")
 
-# Build HTML first
+# Build HTML
 html_path = client.build(spec, out_dir="dist")
 
-# Then use dvfc CLI or manual browser print
+# Then use dvfc CLI for PDF
+# dvfc export-pdf board.yaml -o report.pdf
+
+# Or open dist/index.html in browser and print manually
+print(f"Open {html_path} and use File > Print > Save as PDF")
 ```
+
+**Note:** Python SDK calls the dvfc CLI under the hood, so Playwright is still optional.
 
 ## Troubleshooting
 
