@@ -613,10 +613,17 @@ export async function build(specPath: string, options: BuildOptions = {}): Promi
       }
     }
     
-    // Create temporary build directory
+    // Create temporary build directory (unique per build to avoid CSV contamination)
     const tempDir = join(process.cwd(), '.dvfc-build');
     await mkdir(tempDir, { recursive: true });
-    await mkdir(join(tempDir, 'data'), { recursive: true });
+    
+    // Clean data directory to prevent CSV contamination from previous builds
+    const dataDir = join(tempDir, 'data');
+    try {
+      const { rm } = await import('fs/promises');
+      await rm(dataDir, { recursive: true, force: true });
+    } catch {}
+    await mkdir(dataDir, { recursive: true });
     
     // Create package.json with dependencies
     const tempPackageJson = {
