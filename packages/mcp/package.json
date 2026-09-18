@@ -46,10 +46,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/dvfc/dvfc.git"
+    "url": "https://github.com/KobaKhit/dvfc.git"
   },
-  "homepage": "https://github.com/dvfc/dvfc#readme",
+  "homepage": "https://github.com/KobaKhit/dvfc#readme",
   "bugs": {
-    "url": "https://github.com/dvfc/dvfc/issues"
+    "url": "https://github.com/KobaKhit/dvfc/issues"
   }
 }
