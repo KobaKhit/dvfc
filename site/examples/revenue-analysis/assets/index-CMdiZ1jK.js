@@ -5673,6 +5673,14 @@ function max$2(expr) {
 	return aggFn("max", expr);
 }
 /**
+* Compute a median aggregate.
+* @param expr The expression to aggregate.
+* @returns A SQL aggregate function call.
+*/
+function median$1(expr) {
+	return aggFn("median", expr);
+}
+/**
 * Compute a minimum aggregate.
 * @param expr The expression to aggregate.
 * @returns A SQL aggregate function call.
@@ -5707,6 +5715,42 @@ function regrAvgY(x, y) {
 */
 function regrCount(x, y) {
 	return aggFn("regr_count", x, y);
+}
+/**
+* Compute a linear regression intercept aggregate.
+* @param x The x expression to aggregate.
+* @param y The y expression to aggregate.
+* @returns A SQL aggregate function call.
+*/
+function regrIntercept(x, y) {
+	return aggFn("regr_intercept", x, y);
+}
+/**
+* Compute a linear regression regr_sxx aggregate.
+* @param x The x expression to aggregate.
+* @param y The y expression to aggregate.
+* @returns A SQL aggregate function call.
+*/
+function regrSXX(x, y) {
+	return aggFn("regr_sxx", x, y);
+}
+/**
+* Compute a linear regression regr_syy aggregate.
+* @param x The x expression to aggregate.
+* @param y The y expression to aggregate.
+* @returns A SQL aggregate function call.
+*/
+function regrSYY(x, y) {
+	return aggFn("regr_syy", x, y);
+}
+/**
+* Compute a linear regression slope aggregate.
+* @param x The x expression to aggregate.
+* @param y The y expression to aggregate.
+* @returns A SQL aggregate function call.
+*/
+function regrSlope(x, y) {
+	return aggFn("regr_slope", x, y);
 }
 /**
 * Compute a sum aggregate.
@@ -35675,7 +35719,7 @@ function ruleX(data, options) {
 		y2
 	});
 }
-function ruleY(data, options) {
+function ruleY$1(data, options) {
 	let { y = identity$1, x, x1, x2, ...rest } = maybeIntervalX(options);
 	[x1, x2] = maybeOptionalZero(x, x1, x2);
 	return new RuleY(data, {
@@ -36508,7 +36552,7 @@ function gridFx() {
 	return gridKx("fx", anchorFx(options), data, options);
 }
 function gridKy(k, anchor, data, { y = k === "y" ? void 0 : null, x = null, x1 = anchor === "left" ? x : null, x2 = anchor === "right" ? x : null, ariaLabel = `${k}-grid`, ariaHidden = true, ...options }) {
-	return axisMark(ruleY, k, data, {
+	return axisMark(ruleY$1, k, data, {
 		ariaLabel,
 		ariaHidden
 	}, {
@@ -39281,7 +39325,7 @@ function autoSpec(data, options) {
 			if (isHighCardinality(C)) Z = null;
 			break;
 		case "rule":
-			markImpl = X ? ruleX : ruleY;
+			markImpl = X ? ruleX : ruleY$1;
 			colorMode = "stroke";
 			break;
 		case "bar":
@@ -39325,7 +39369,7 @@ function autoSpec(data, options) {
 		value: Y,
 		...yOptions
 	};
-	if (xZero === void 0) xZero = X && !(transformImpl === bin || transformImpl === binX) && (markImpl === barX || markImpl === areaX || markImpl === rectX || markImpl === ruleY);
+	if (xZero === void 0) xZero = X && !(transformImpl === bin || transformImpl === binX) && (markImpl === barX || markImpl === areaX || markImpl === rectX || markImpl === ruleY$1);
 	if (yZero === void 0) yZero = Y && !(transformImpl === bin || transformImpl === binY) && (markImpl === barY$1 || markImpl === areaY || markImpl === rectY || markImpl === ruleX);
 	return {
 		fx: fx ?? null,
@@ -39365,7 +39409,7 @@ function auto(data, options) {
 	const markImpl = impls[spec.markImpl];
 	const transformImpl = impls[spec.transformImpl];
 	const frames = fx != null || fy != null ? frame({ strokeOpacity: .1 }) : null;
-	const rules = [xZero ? ruleX([0]) : null, yZero ? ruleY([0]) : null];
+	const rules = [xZero ? ruleX([0]) : null, yZero ? ruleY$1([0]) : null];
 	const mark = markImpl(data, transformImpl ? transformImpl(transformOptions, markOptions) : markOptions);
 	return colorMode === "stroke" ? marks(frames, rules, mark) : marks(frames, mark, rules);
 }
@@ -39454,7 +39498,7 @@ var impls = {
 	areaX,
 	areaY,
 	ruleX,
-	ruleY,
+	ruleY: ruleY$1,
 	barX,
 	barY: barY$1,
 	rect,
@@ -39928,7 +39972,7 @@ function tickY(data, { y = identity$1, ...options } = {}) {
 //#region .dvfc-build/node_modules/@observablehq/plot/src/marks/box.js
 function boxX(data, { x = identity$1, y = null, r, fill = "#ccc", fillOpacity, stroke = "currentColor", strokeOpacity, strokeWidth = 2, sort, ...options } = {}) {
 	const group = y != null ? groupY : groupZ$1;
-	return marks(ruleY(data, group({
+	return marks(ruleY$1(data, group({
 		x1: loqr1,
 		x2: hiqr2
 	}, {
@@ -40592,7 +40636,7 @@ function crosshairK(pointer, data, options = {}) {
 		...p,
 		inset: -6
 	}, options)));
-	if (y != null) M.push(ruleY(data, ruleOptions("y", {
+	if (y != null) M.push(ruleY$1(data, ruleOptions("y", {
 		...p,
 		inset: -6
 	}, options)));
@@ -41544,7 +41588,7 @@ function image(data, { x, y, ...options } = {}) {
 }
 //#endregion
 //#region .dvfc-build/node_modules/@observablehq/plot/src/stats.js
-function ibetainv(p, a, b) {
+function ibetainv$1(p, a, b) {
 	var EPS = 1e-8;
 	var a1 = a - 1;
 	var b1 = b - 1;
@@ -41570,10 +41614,10 @@ function ibetainv(p, a, b) {
 		if (p < t / w) x = Math.pow(a * w * p, 1 / a);
 		else x = 1 - Math.pow(b * w * (1 - p), 1 / b);
 	}
-	afac = -gammaln(a) - gammaln(b) + gammaln(a + b);
+	afac = -gammaln$1(a) - gammaln$1(b) + gammaln$1(a + b);
 	for (; j < 10; j++) {
 		if (x === 0 || x === 1) return x;
-		err = ibeta(x, a, b) - p;
+		err = ibeta$1(x, a, b) - p;
 		t = Math.exp(a1 * Math.log(x) + b1 * Math.log(1 - x) + afac);
 		u = err / t;
 		x -= t = u / (1 - .5 * Math.min(1, u * (a1 / x - b1 / (1 - x))));
@@ -41583,13 +41627,13 @@ function ibetainv(p, a, b) {
 	}
 	return x;
 }
-function ibeta(x, a, b) {
-	var bt = x === 0 || x === 1 ? 0 : Math.exp(gammaln(a + b) - gammaln(a) - gammaln(b) + a * Math.log(x) + b * Math.log(1 - x));
+function ibeta$1(x, a, b) {
+	var bt = x === 0 || x === 1 ? 0 : Math.exp(gammaln$1(a + b) - gammaln$1(a) - gammaln$1(b) + a * Math.log(x) + b * Math.log(1 - x));
 	if (x < 0 || x > 1) return false;
-	if (x < (a + 1) / (a + b + 2)) return bt * betacf(x, a, b) / a;
-	return 1 - bt * betacf(1 - x, b, a) / b;
+	if (x < (a + 1) / (a + b + 2)) return bt * betacf$1(x, a, b) / a;
+	return 1 - bt * betacf$1(1 - x, b, a) / b;
 }
-function betacf(x, a, b) {
+function betacf$1(x, a, b) {
 	var fpmin = 1e-30;
 	var m = 1;
 	var qab = a + b;
@@ -41622,7 +41666,7 @@ function betacf(x, a, b) {
 	}
 	return h;
 }
-function gammaln(x) {
+function gammaln$1(x) {
 	var j = 0;
 	var cof = [
 		76.18009172947146,
@@ -41638,8 +41682,8 @@ function gammaln(x) {
 	for (; j < 6; j++) ser += cof[j] / ++y;
 	return Math.log(2.506628274631 * ser / xx) - tmp;
 }
-function qt(p, dof) {
-	var x = ibetainv(2 * Math.min(p, 1 - p), .5 * dof, .5);
+function qt$1(p, dof) {
+	var x = ibetainv$1(2 * Math.min(p, 1 - p), .5 * dof, .5);
 	x = Math.sqrt(dof * (1 - x) / x);
 	return p > .5 ? x : -x;
 }
@@ -41771,7 +41815,7 @@ function confidenceIntervalF(I, X, Y, p, f) {
 		b += (Y[i] - f(X[i])) ** 2;
 	}
 	const sy = Math.sqrt(b / (I.length - 2));
-	const t = qt(p, I.length - 2);
+	const t = qt$1(p, I.length - 2);
 	return (x, k) => {
 		const Y = f(x);
 		const se = sy * Math.sqrt(1 / I.length + (x - mean) ** 2 / a);
@@ -43087,7 +43131,7 @@ var src_exports = /* @__PURE__ */ __exportAll({
 	rectY: () => rectY,
 	reverse: () => reverse,
 	ruleX: () => ruleX,
-	ruleY: () => ruleY,
+	ruleY: () => ruleY$1,
 	scale: () => scale,
 	select: () => select,
 	selectFirst: () => selectFirst,
@@ -44062,6 +44106,292 @@ var ConnectedMark = class extends Mark {
 	}
 };
 //#endregion
+//#region .dvfc-build/node_modules/@uwdata/mosaic-plot/src/marks/util/handle-param.js
+/**
+* Utility to check if a value is a Param, and if so, bind a listener.
+* @param {*} value A potentially Param-typed value.
+* @param {(value: *) => Promise|void} update Update callback
+* @returns the input value or (if a Param) the current Param value.
+*/
+function handleParam(value, update) {
+	return isParam(value) ? (value.addEventListener("value", update), value.value) : value;
+}
+//#endregion
+//#region .dvfc-build/node_modules/@uwdata/mosaic-plot/src/marks/util/stats.js
+/**
+* ibetainv function
+* @param {number} p
+* @param {number} a
+* @param {number} b
+* @returns {number}
+*/
+function ibetainv(p, a, b) {
+	var EPS = 1e-8;
+	var a1 = a - 1;
+	var b1 = b - 1;
+	var j = 0;
+	var lna, lnb, pp, t, u, err, x, al, h, w, afac;
+	if (p <= 0) return 0;
+	if (p >= 1) return 1;
+	if (a >= 1 && b >= 1) {
+		pp = p < .5 ? p : 1 - p;
+		t = Math.sqrt(-2 * Math.log(pp));
+		x = (2.30753 + t * .27061) / (1 + t * (.99229 + t * .04481)) - t;
+		if (p < .5) x = -x;
+		al = (x * x - 3) / 6;
+		h = 2 / (1 / (2 * a - 1) + 1 / (2 * b - 1));
+		w = x * Math.sqrt(al + h) / h - (1 / (2 * b - 1) - 1 / (2 * a - 1)) * (al + 5 / 6 - 2 / (3 * h));
+		x = a / (a + b * Math.exp(2 * w));
+	} else {
+		lna = Math.log(a / (a + b));
+		lnb = Math.log(b / (a + b));
+		t = Math.exp(a * lna) / a;
+		u = Math.exp(b * lnb) / b;
+		w = t + u;
+		if (p < t / w) x = Math.pow(a * w * p, 1 / a);
+		else x = 1 - Math.pow(b * w * (1 - p), 1 / b);
+	}
+	afac = -gammaln(a) - gammaln(b) + gammaln(a + b);
+	for (; j < 10; j++) {
+		if (x === 0 || x === 1) return x;
+		err = ibeta(x, a, b) - p;
+		t = Math.exp(a1 * Math.log(x) + b1 * Math.log(1 - x) + afac);
+		u = err / t;
+		x -= t = u / (1 - .5 * Math.min(1, u * (a1 / x - b1 / (1 - x))));
+		if (x <= 0) x = .5 * (x + t);
+		if (x >= 1) x = .5 * (x + t + 1);
+		if (Math.abs(t) < EPS * x && j > 0) break;
+	}
+	return x;
+}
+/**
+* ibeta function
+* @param {number} x
+* @param {number} a
+* @param {number} b
+* @returns {number}
+*/
+function ibeta(x, a, b) {
+	var bt = x === 0 || x === 1 ? 0 : Math.exp(gammaln(a + b) - gammaln(a) - gammaln(b) + a * Math.log(x) + b * Math.log(1 - x));
+	if (x < 0 || x > 1) return 0;
+	if (x < (a + 1) / (a + b + 2)) return bt * betacf(x, a, b) / a;
+	return 1 - bt * betacf(1 - x, b, a) / b;
+}
+/**
+* betacf function
+* @param {number} x
+* @param {number} a
+* @param {number} b
+* @returns {number}
+*/
+function betacf(x, a, b) {
+	var fpmin = 1e-30;
+	var m = 1;
+	var qab = a + b;
+	var qap = a + 1;
+	var qam = a - 1;
+	var c = 1;
+	var d = 1 - qab * x / qap;
+	var m2, aa, del, h;
+	if (Math.abs(d) < fpmin) d = fpmin;
+	d = 1 / d;
+	h = d;
+	for (; m <= 100; m++) {
+		m2 = 2 * m;
+		aa = m * (b - m) * x / ((qam + m2) * (a + m2));
+		d = 1 + aa * d;
+		if (Math.abs(d) < fpmin) d = fpmin;
+		c = 1 + aa / c;
+		if (Math.abs(c) < fpmin) c = fpmin;
+		d = 1 / d;
+		h *= d * c;
+		aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
+		d = 1 + aa * d;
+		if (Math.abs(d) < fpmin) d = fpmin;
+		c = 1 + aa / c;
+		if (Math.abs(c) < fpmin) c = fpmin;
+		d = 1 / d;
+		del = d * c;
+		h *= del;
+		if (Math.abs(del - 1) < 3e-7) break;
+	}
+	return h;
+}
+/**
+* gammaln function
+* @param {number} x
+* @returns {number}
+*/
+function gammaln(x) {
+	var j = 0;
+	var cof = [
+		76.18009172947146,
+		-86.5053203294167,
+		24.01409824083091,
+		-1.231739572450155,
+		.001208650973866179,
+		-5395239384953e-18
+	];
+	var ser = 1.000000000190015;
+	var xx, y, tmp = (y = xx = x) + 5.5;
+	tmp -= (xx + .5) * Math.log(tmp);
+	for (; j < 6; j++) ser += cof[j] / ++y;
+	return Math.log(2.506628274631 * ser / xx) - tmp;
+}
+/**
+* qt function
+* @param {number} p
+* @param {number} dof
+* @returns {number}
+*/
+function qt(p, dof) {
+	var x = ibetainv(2 * Math.min(p, 1 - p), .5 * dof, .5);
+	x = Math.sqrt(dof * (1 - x) / x);
+	return p > .5 ? x : -x;
+}
+//#endregion
+//#region .dvfc-build/node_modules/@uwdata/mosaic-plot/src/marks/RegressionMark.js
+var RegressionMark = class extends Mark {
+	constructor(source, options) {
+		const { ci = .95, precision = 4, ...channels } = options;
+		super("line", source, channels);
+		const update = () => this.modelFit ? this.confidenceBand().update() : null;
+		/** @type {number} */
+		this.ci = handleParam(ci, (value) => {
+			return this.ci = value, update();
+		});
+		/** @type {number} */
+		this.precision = handleParam(precision, (value) => {
+			return this.precision = value, update();
+		});
+	}
+	query(filter = []) {
+		const x = this.channelField("x").as;
+		const y = this.channelField("y").as;
+		const groupby = Array.from(new Set([
+			"stroke",
+			"z",
+			"fx",
+			"fy"
+		].flatMap((c) => this.channelField(c)?.as || [])));
+		return Query.from(super.query(filter)).select({
+			intercept: regrIntercept(y, x),
+			slope: regrSlope(y, x),
+			n: regrCount(y, x),
+			ssy: regrSYY(y, x),
+			ssx: regrSXX(y, x),
+			xm: regrAvgX(y, x),
+			x0: float64$1(min$3(x).where(isNotNull(y))),
+			x1: float64$1(max$2(x).where(isNotNull(y)))
+		}).select(groupby).groupby(groupby);
+	}
+	queryResult(data) {
+		this.modelFit = toDataColumns(data);
+		this.lineData = linePoints(this.modelFit);
+		return this.confidenceBand();
+	}
+	confidenceBand() {
+		const { ci, modelFit, precision, plot } = this;
+		const width = plot.innerWidth();
+		this.areaData = ci ? areaPoints(modelFit, ci, precision, width) : null;
+		return this;
+	}
+	plotSpecs() {
+		const { lineData, areaData, channels, ci } = this;
+		const lcols = lineData.columns;
+		const acols = ci ? areaData.columns : {};
+		const lopt = {
+			x: lcols.x,
+			y: lcols.y
+		};
+		const aopt = {
+			x: acols.x,
+			y1: acols.y1,
+			y2: acols.y2,
+			fillOpacity: .1
+		};
+		for (const c of channels) switch (c.channel) {
+			case "x":
+			case "y":
+			case "fill": break;
+			case "tip":
+				aopt.tip = channelOption(c, acols);
+				break;
+			case "stroke":
+				lopt.stroke = channelOption(c, lcols);
+				aopt.fill = channelOption(c, acols);
+				break;
+			case "strokeOpacity":
+				lopt.strokeOpacity = channelOption(c, lcols);
+				break;
+			case "fillOpacity":
+				aopt.fillOpacity = channelOption(c, acols);
+				break;
+			default:
+				lopt[c.channel] = channelOption(c, lcols);
+				aopt[c.channel] = channelOption(c, acols);
+		}
+		return [...ci ? [{
+			type: "areaY",
+			data: { length: areaData.numRows },
+			options: aopt
+		}] : [], {
+			type: "line",
+			data: { length: lineData.numRows },
+			options: lopt
+		}];
+	}
+};
+function concat(a, b) {
+	if (a.concat) return a.concat(b);
+	const array = new a.constructor(a.length + b.length);
+	array.set(a, 0);
+	array.set(b, a.length);
+	return array;
+}
+function linePoints(fit) {
+	const { x0 = [], x1 = [], xm, intercept, slope, n, ssx, ssy, ...rest } = fit.columns;
+	const predict = (x, i) => intercept[i] + x * slope[i];
+	const x = concat(x0, x1);
+	const y = concat(x0.map(predict), x1.map(predict));
+	for (const name in rest) rest[name] = concat(rest[name], rest[name]);
+	return {
+		numRows: x.length,
+		columns: {
+			x,
+			y,
+			...rest
+		}
+	};
+}
+function areaPoints(fit, ci, precision, width) {
+	const len = fit.numRows;
+	const { x0, x1, xm, intercept, slope, n, ssx, ssy, ...rest } = fit.columns;
+	const other = Object.keys(rest);
+	const columns = {
+		x: [],
+		y1: [],
+		y2: []
+	};
+	other.forEach((name) => columns[name] = []);
+	for (let i = 0; i < len; ++i) {
+		const pp = precision * (x1[i] - x0[i]) / width;
+		const t_sy = qt((1 - ci) / 2, n[i] - 2) * Math.sqrt(ssy[i] / (n[i] - 2));
+		range$1(x0[i], x1[i] - pp / 2, pp).concat(x1[i]).forEach((x) => {
+			const y = intercept[i] + x * slope[i];
+			const ye = t_sy * Math.sqrt(1 / n[i] + (x - xm[i]) ** 2 / ssx[i]);
+			columns.x.push(x);
+			columns.y1.push(y - ye);
+			columns.y2.push(y + ye);
+			other.forEach((name) => columns[name].push(rest[name][i]));
+		});
+	}
+	return {
+		numRows: columns.x.length,
+		columns
+	};
+}
+//#endregion
 //#region .dvfc-build/node_modules/@uwdata/mosaic-plot/src/interactors/util/to-kebab-case.js
 function toKebabCase(cc) {
 	const lc = cc.toLowerCase();
@@ -44324,8 +44654,6 @@ function attribute(name, value) {
 var attrf = (name) => (value) => attribute(name, value);
 var width = attrf("width");
 var height = attrf("height");
-var xLabel = attrf("xLabel");
-var yLabel = attrf("yLabel");
 //#endregion
 //#region .dvfc-build/node_modules/@uwdata/vgplot/src/plot/data.js
 function from(table, options = void 0) {
@@ -44362,8 +44690,15 @@ function explicitType(MarkClass, type, data, channels) {
 		plot.addMark(new MarkClass(type, data, channels));
 	};
 }
+function implicitType(MarkClass, data, channels) {
+	return (plot) => {
+		plot.addMark(new MarkClass(data, channels));
+	};
+}
 var lineY = (...args) => mark("lineY", ...args);
 var barY = (...args) => mark("barY", ...args);
+var ruleY = (...args) => mark("ruleY", ...args);
+var regressionY = (...args) => implicitType(RegressionMark, ...args);
 //#endregion
 //#region .dvfc-build/node_modules/@uwdata/vgplot/src/plot/interactors.js
 function interactor(InteractorClass, options) {
@@ -44393,8 +44728,7 @@ function plot(...directives) {
 coordinator().databaseConnector(wasmConnector());
 function saveStateToURL() {
 	const selections = {};
-	if (salesBrush.value) selections["salesBrush"] = salesBrush.value;
-	if (flightsBrush.value) selections["flightsBrush"] = flightsBrush.value;
+	if (dateBrush.value) selections["dateBrush"] = dateBrush.value;
 	const params = new URLSearchParams();
 	for (const [key, value] of Object.entries(selections)) if (value) params.set(key, JSON.stringify(value));
 	const newURL = params.toString() ? `${window.location.pathname}?${params}` : window.location.pathname;
@@ -44411,14 +44745,18 @@ function restoreStateFromURL() {
 	return selections;
 }
 async function loadData() {
-	const dataPath = "/".endsWith("/") ? "/data/" : "//data/";
+	const base = "/dvfc/examples/revenue-analysis/";
+	const dataPath = base.endsWith("/") ? base + "data/" : base + "/data/";
 	await coordinator().exec(`
-    CREATE TABLE IF NOT EXISTS sales_daily AS 
-    SELECT * FROM read_csv_auto('${window.location.origin}${dataPath}sales_daily.csv')
+    CREATE TABLE IF NOT EXISTS daily_metrics AS 
+    SELECT * FROM read_csv_auto('${window.location.origin}${dataPath}daily_metrics.csv')
   `);
 	await coordinator().exec(`
-    CREATE TABLE IF NOT EXISTS flights_summary AS 
-    SELECT * FROM read_csv_auto('${window.location.origin}${dataPath}flights_summary.csv')
+    CREATE OR REPLACE TABLE daily_metrics AS
+    SELECT *,
+      AVG(revenue) OVER (ORDER BY date ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) AS revenue_ma7,
+      AVG(profit) OVER (ORDER BY date ROWS BETWEEN 4 PRECEDING AND CURRENT ROW) AS profit_ma5
+    FROM daily_metrics
   `);
 }
 async function createDashboard() {
@@ -44427,71 +44765,113 @@ async function createDashboard() {
 	try {
 		await loadData();
 		if (statusEl) statusEl.textContent = "Creating visualizations...";
-		const salesBrush = Selection$2.intersect();
-		const flightsBrush = Selection$2.intersect();
+		const dateBrush = Selection$2.intersect();
 		const savedSelections = restoreStateFromURL();
-		if (savedSelections["salesBrush"]) salesBrush.update(savedSelections["salesBrush"]);
-		if (savedSelections["flightsBrush"]) flightsBrush.update(savedSelections["flightsBrush"]);
-		salesBrush.addEventListener("value", () => setTimeout(saveStateToURL, 100));
-		flightsBrush.addEventListener("value", () => setTimeout(saveStateToURL, 100));
-		const containersales_trend = document.getElementById("chart-sales_trend");
-		if (containersales_trend) {
-			const chartsales_trend = plot(lineY(from("sales_daily"), {
+		if (savedSelections["dateBrush"]) dateBrush.update(savedSelections["dateBrush"]);
+		dateBrush.addEventListener("value", () => setTimeout(saveStateToURL, 100));
+		const containerintro_text = document.getElementById("chart-intro_text");
+		if (containerintro_text) containerintro_text.innerHTML = `
+      <div style="padding: 1.5rem; background: #f7fafc; border-radius: 0.5rem; line-height: 1.6;">
+        <p><h2>Executive Summary</h2></p><p>This dashboard analyzes <strong>Q1 2024 revenue performance</strong> with advanced overlays showing trends and moving averages.</p><p><strong>Key Features:</strong><br>- Red dashed line = Average revenue<br>- Blue dotted line = Linear trend<br>- Purple line = 7-day moving average</p><p><em>Click and drag on charts to filter by date range.</em><br></p>
+      </div>
+    `;
+		const containerrevenue_trend = document.getElementById("chart-revenue_trend");
+		if (containerrevenue_trend) try {
+			const chartrevenue_trend = plot(lineY(from("daily_metrics"), {
 				x: "date",
-				y: sum$2("sales"),
+				y: "revenue",
+				stroke: fill,
 				strokeWidth: 2
-			}), intervalX({ as: salesBrush }), xLabel("Date (brush here to filter)"), yLabel("Daily Sales ($)"), width(600), height(250));
-			containersales_trend.appendChild(chartsales_trend);
+			}), ruleY(from("daily_metrics"), {
+				y: avg("revenue"),
+				stroke: "#e53e3e",
+				strokeWidth: 2,
+				strokeDasharray: "4 4"
+			}), regressionY(from("daily_metrics"), {
+				x: "date",
+				y: "revenue",
+				stroke: "#3182ce",
+				strokeWidth: 2,
+				strokeDasharray: "2 2"
+			}), lineY(from("daily_metrics"), {
+				x: "date",
+				y: "revenue_ma7",
+				stroke: "#805ad5",
+				strokeWidth: 2,
+				curve: "monotone-x"
+			}), intervalX({ as: dateBrush }), width(800), height(300));
+			containerrevenue_trend.appendChild(chartrevenue_trend);
+		} catch (error) {
+			console.error("Error rendering chart revenue_trend:", error);
+			containerrevenue_trend.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
 		}
-		const containersales_by_region = document.getElementById("chart-sales_by_region");
-		if (containersales_by_region) {
-			const chartsales_by_region = plot(barY(from("sales_daily", { filterBy: salesBrush }), {
+		const containerinsight_text = document.getElementById("chart-insight_text");
+		if (containerinsight_text) containerinsight_text.innerHTML = `
+      <div style="padding: 1.5rem; background: #f7fafc; border-radius: 0.5rem; line-height: 1.6;">
+        <p><h3>Key Insights</h3></p><p>Revenue shows a <strong>strong upward trend</strong> throughout Q1, with the 7-day moving average smoothing daily volatility.<br>The linear trend line indicates consistent growth of approximately <strong>$150-200 per day</strong>.</p><p>February performance exceeded the Q1 average, with peak revenue of <strong>$21,200</strong> on Feb 29.<br></p>
+      </div>
+    `;
+		const containerprofit_analysis = document.getElementById("chart-profit_analysis");
+		if (containerprofit_analysis) try {
+			const chartprofit_analysis = plot(lineY(from("daily_metrics", { filterBy: dateBrush }), {
+				x: "date",
+				y: "profit",
+				stroke: fill,
+				strokeWidth: 2
+			}), ruleY(from("daily_metrics", { filterBy: dateBrush }), {
+				y: avg("profit"),
+				stroke: "#48bb78",
+				strokeWidth: 2,
+				strokeDasharray: "4 4"
+			}), lineY(from("daily_metrics", { filterBy: dateBrush }), {
+				x: "date",
+				y: "profit_ma5",
+				stroke: "#ed8936",
+				strokeWidth: 2,
+				curve: "monotone-x"
+			}), intervalX({ as: dateBrush }), width(800), height(250));
+			containerprofit_analysis.appendChild(chartprofit_analysis);
+		} catch (error) {
+			console.error("Error rendering chart profit_analysis:", error);
+			containerprofit_analysis.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
+		}
+		const containerregional_breakdown = document.getElementById("chart-regional_breakdown");
+		if (containerregional_breakdown) try {
+			const chartregional_breakdown = plot(barY(from("daily_metrics", { filterBy: dateBrush }), {
 				x: "region",
-				y: sum$2("sales"),
-				fill: "steelblue",
+				y: sum$2("revenue"),
+				fill: "region",
 				fillOpacity: .8
-			}), xLabel("Region"), yLabel("Total Sales ($)"), width(600), height(300));
-			containersales_by_region.appendChild(chartsales_by_region);
+			}), width(400), height(250));
+			containerregional_breakdown.appendChild(chartregional_breakdown);
+		} catch (error) {
+			console.error("Error rendering chart regional_breakdown:", error);
+			containerregional_breakdown.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
 		}
-		const containersales_by_product = document.getElementById("chart-sales_by_product");
-		if (containersales_by_product) {
-			const chartsales_by_product = plot(barY(from("sales_daily", { filterBy: salesBrush }), {
-				x: "product",
-				y: sum$2("sales"),
-				fill: "darkorange",
-				fillOpacity: .8
-			}), xLabel("Product"), yLabel("Total Sales ($)"), width(600), height(300));
-			containersales_by_product.appendChild(chartsales_by_product);
-		}
-		const containerpassenger_trend = document.getElementById("chart-passenger_trend");
-		if (containerpassenger_trend) {
-			const chartpassenger_trend = plot(lineY(from("flights_summary"), {
+		const containercost_analysis = document.getElementById("chart-cost_analysis");
+		if (containercost_analysis) try {
+			const chartcost_analysis = plot(lineY(from("daily_metrics", { filterBy: dateBrush }), {
 				x: "date",
-				y: sum$2("passengers"),
+				y: "cost",
+				stroke: fill,
 				strokeWidth: 2
-			}), intervalX({ as: flightsBrush }), xLabel("Date (brush here to filter)"), yLabel("Daily Passengers"), width(600), height(250));
-			containerpassenger_trend.appendChild(chartpassenger_trend);
+			}), ruleY(from("daily_metrics", { filterBy: dateBrush }), {
+				y: median$1("cost"),
+				stroke: "#ed64a6",
+				strokeWidth: 2,
+				strokeDasharray: "4 4"
+			}), width(400), height(250));
+			containercost_analysis.appendChild(chartcost_analysis);
+		} catch (error) {
+			console.error("Error rendering chart cost_analysis:", error);
+			containercost_analysis.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
 		}
-		const containerflights_by_origin = document.getElementById("chart-flights_by_origin");
-		if (containerflights_by_origin) {
-			const chartflights_by_origin = plot(barY(from("flights_summary", { filterBy: flightsBrush }), {
-				x: "origin",
-				y: sum$2("flights"),
-				fill: "mediumpurple",
-				fillOpacity: .8
-			}), xLabel("Origin Airport"), yLabel("Total Flights"), width(600), height(300));
-			containerflights_by_origin.appendChild(chartflights_by_origin);
-		}
-		const containerdelay_by_origin = document.getElementById("chart-delay_by_origin");
-		if (containerdelay_by_origin) {
-			const chartdelay_by_origin = plot(barY(from("flights_summary", { filterBy: flightsBrush }), {
-				x: "origin",
-				y: avg("delay_minutes"),
-				fill: "crimson",
-				fillOpacity: .8
-			}), xLabel("Origin Airport"), yLabel("Avg Delay (minutes)"), width(600), height(300));
-			containerdelay_by_origin.appendChild(chartdelay_by_origin);
-		}
+		const containersummary_text = document.getElementById("chart-summary_text");
+		if (containersummary_text) containersummary_text.innerHTML = `
+      <div style="padding: 1.5rem; background: #f7fafc; border-radius: 0.5rem; line-height: 1.6;">
+        <p><h3>Methodology</h3></p><p><strong>Overlays explained:</strong><br>- <em>Mean</em> (horizontal line) = average value across all data points<br>- <em>Median</em> (horizontal line) = middle value when sorted<br>- <em>Trend</em> (diagonal line) = linear regression best fit<br>- <em>Moving Average</em> (smooth line) = rolling average over N days</p><p>Overlays update dynamically when you filter the data by brushing charts.<br></p>
+      </div>
+    `;
 		if (statusEl) {
 			statusEl.textContent = "✅ Dashboard ready! Brush line charts to filter other charts. Share URL to preserve filters.";
 			statusEl.style.color = "green";

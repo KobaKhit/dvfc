@@ -44393,8 +44393,8 @@ function plot(...directives) {
 coordinator().databaseConnector(wasmConnector());
 function saveStateToURL() {
 	const selections = {};
-	if (dateBrush.value) selections["dateBrush"] = dateBrush.value;
-	if (revenueBrush.value) selections["revenueBrush"] = revenueBrush.value;
+	if (salesBrush.value) selections["salesBrush"] = salesBrush.value;
+	if (flightsBrush.value) selections["flightsBrush"] = flightsBrush.value;
 	const params = new URLSearchParams();
 	for (const [key, value] of Object.entries(selections)) if (value) params.set(key, JSON.stringify(value));
 	const newURL = params.toString() ? `${window.location.pathname}?${params}` : window.location.pathname;
@@ -44411,15 +44411,15 @@ function restoreStateFromURL() {
 	return selections;
 }
 async function loadData() {
-	const base = "/dvfc/examples/web-analytics/";
+	const base = "/dvfc/examples/sales-board/";
 	const dataPath = base.endsWith("/") ? base + "data/" : base + "/data/";
 	await coordinator().exec(`
-    CREATE TABLE IF NOT EXISTS page_views AS 
-    SELECT * FROM read_csv_auto('${window.location.origin}${dataPath}page_views.csv')
+    CREATE TABLE IF NOT EXISTS sales_daily AS 
+    SELECT * FROM read_csv_auto('${window.location.origin}${dataPath}sales_daily.csv')
   `);
 	await coordinator().exec(`
-    CREATE TABLE IF NOT EXISTS conversions AS 
-    SELECT * FROM read_csv_auto('${window.location.origin}${dataPath}conversions.csv')
+    CREATE TABLE IF NOT EXISTS flights_summary AS 
+    SELECT * FROM read_csv_auto('${window.location.origin}${dataPath}flights_summary.csv')
   `);
 }
 async function createDashboard() {
@@ -44428,70 +44428,90 @@ async function createDashboard() {
 	try {
 		await loadData();
 		if (statusEl) statusEl.textContent = "Creating visualizations...";
-		const dateBrush = Selection$2.intersect();
-		const revenueBrush = Selection$2.intersect();
+		const salesBrush = Selection$2.intersect();
+		const flightsBrush = Selection$2.intersect();
 		const savedSelections = restoreStateFromURL();
-		if (savedSelections["dateBrush"]) dateBrush.update(savedSelections["dateBrush"]);
-		if (savedSelections["revenueBrush"]) revenueBrush.update(savedSelections["revenueBrush"]);
-		dateBrush.addEventListener("value", () => setTimeout(saveStateToURL, 100));
-		revenueBrush.addEventListener("value", () => setTimeout(saveStateToURL, 100));
-		const containerdaily_views = document.getElementById("chart-daily_views");
-		if (containerdaily_views) {
-			const chartdaily_views = plot(lineY(from("page_views"), {
+		if (savedSelections["salesBrush"]) salesBrush.update(savedSelections["salesBrush"]);
+		if (savedSelections["flightsBrush"]) flightsBrush.update(savedSelections["flightsBrush"]);
+		salesBrush.addEventListener("value", () => setTimeout(saveStateToURL, 100));
+		flightsBrush.addEventListener("value", () => setTimeout(saveStateToURL, 100));
+		const containersales_trend = document.getElementById("chart-sales_trend");
+		if (containersales_trend) try {
+			const chartsales_trend = plot(lineY(from("sales_daily"), {
 				x: "date",
-				y: sum$2("views"),
+				y: sum$2("sales"),
+				stroke: fill,
 				strokeWidth: 2
-			}), intervalX({ as: dateBrush }), xLabel("Date (brush to filter)"), yLabel("Total Views"), width(700), height(250));
-			containerdaily_views.appendChild(chartdaily_views);
+			}), intervalX({ as: salesBrush }), xLabel("Date (brush here to filter)"), yLabel("Daily Sales ($)"), width(600), height(250));
+			containersales_trend.appendChild(chartsales_trend);
+		} catch (error) {
+			console.error("Error rendering chart sales_trend:", error);
+			containersales_trend.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
 		}
-		const containerviews_by_page = document.getElementById("chart-views_by_page");
-		if (containerviews_by_page) {
-			const chartviews_by_page = plot(barY(from("page_views", { filterBy: dateBrush }), {
-				x: "page",
-				y: sum$2("views"),
+		const containersales_by_region = document.getElementById("chart-sales_by_region");
+		if (containersales_by_region) try {
+			const chartsales_by_region = plot(barY(from("sales_daily", { filterBy: salesBrush }), {
+				x: "region",
+				y: sum$2("sales"),
 				fill: "steelblue",
 				fillOpacity: .8
-			}), xLabel("Page"), yLabel("Total Views"), width(700), height(300));
-			containerviews_by_page.appendChild(chartviews_by_page);
+			}), xLabel("Region"), yLabel("Total Sales ($)"), width(600), height(300));
+			containersales_by_region.appendChild(chartsales_by_region);
+		} catch (error) {
+			console.error("Error rendering chart sales_by_region:", error);
+			containersales_by_region.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
 		}
-		const containerbounce_rate = document.getElementById("chart-bounce_rate");
-		if (containerbounce_rate) {
-			const chartbounce_rate = plot(barY(from("page_views", { filterBy: dateBrush }), {
-				x: "page",
-				y: avg("bounce_rate"),
-				fill: "crimson",
-				fillOpacity: .8
-			}), xLabel("Page"), yLabel("Avg Bounce Rate"), width(700), height(300));
-			containerbounce_rate.appendChild(chartbounce_rate);
-		}
-		const containerdaily_revenue = document.getElementById("chart-daily_revenue");
-		if (containerdaily_revenue) {
-			const chartdaily_revenue = plot(lineY(from("conversions"), {
-				x: "date",
-				y: sum$2("revenue"),
-				strokeWidth: 2
-			}), intervalX({ as: revenueBrush }), xLabel("Date (brush to filter)"), yLabel("Total Revenue ($)"), width(700), height(250));
-			containerdaily_revenue.appendChild(chartdaily_revenue);
-		}
-		const containerrevenue_by_source = document.getElementById("chart-revenue_by_source");
-		if (containerrevenue_by_source) {
-			const chartrevenue_by_source = plot(barY(from("conversions", { filterBy: revenueBrush }), {
-				x: "source",
-				y: sum$2("revenue"),
+		const containersales_by_product = document.getElementById("chart-sales_by_product");
+		if (containersales_by_product) try {
+			const chartsales_by_product = plot(barY(from("sales_daily", { filterBy: salesBrush }), {
+				x: "product",
+				y: sum$2("sales"),
 				fill: "darkorange",
 				fillOpacity: .8
-			}), xLabel("Source"), yLabel("Total Revenue ($)"), width(700), height(300));
-			containerrevenue_by_source.appendChild(chartrevenue_by_source);
+			}), xLabel("Product"), yLabel("Total Sales ($)"), width(600), height(300));
+			containersales_by_product.appendChild(chartsales_by_product);
+		} catch (error) {
+			console.error("Error rendering chart sales_by_product:", error);
+			containersales_by_product.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
 		}
-		const containerconversion_rate = document.getElementById("chart-conversion_rate");
-		if (containerconversion_rate) {
-			const chartconversion_rate = plot(barY(from("conversions", { filterBy: revenueBrush }), {
-				x: "source",
-				y: sum$2("conversions"),
-				fill: "mediumseagreen",
+		const containerpassenger_trend = document.getElementById("chart-passenger_trend");
+		if (containerpassenger_trend) try {
+			const chartpassenger_trend = plot(lineY(from("flights_summary"), {
+				x: "date",
+				y: sum$2("passengers"),
+				stroke: fill,
+				strokeWidth: 2
+			}), intervalX({ as: flightsBrush }), xLabel("Date (brush here to filter)"), yLabel("Daily Passengers"), width(600), height(250));
+			containerpassenger_trend.appendChild(chartpassenger_trend);
+		} catch (error) {
+			console.error("Error rendering chart passenger_trend:", error);
+			containerpassenger_trend.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
+		}
+		const containerflights_by_origin = document.getElementById("chart-flights_by_origin");
+		if (containerflights_by_origin) try {
+			const chartflights_by_origin = plot(barY(from("flights_summary", { filterBy: flightsBrush }), {
+				x: "origin",
+				y: sum$2("flights"),
+				fill: "mediumpurple",
 				fillOpacity: .8
-			}), xLabel("Source"), yLabel("Total Conversions"), width(700), height(300));
-			containerconversion_rate.appendChild(chartconversion_rate);
+			}), xLabel("Origin Airport"), yLabel("Total Flights"), width(600), height(300));
+			containerflights_by_origin.appendChild(chartflights_by_origin);
+		} catch (error) {
+			console.error("Error rendering chart flights_by_origin:", error);
+			containerflights_by_origin.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
+		}
+		const containerdelay_by_origin = document.getElementById("chart-delay_by_origin");
+		if (containerdelay_by_origin) try {
+			const chartdelay_by_origin = plot(barY(from("flights_summary", { filterBy: flightsBrush }), {
+				x: "origin",
+				y: avg("delay_minutes"),
+				fill: "crimson",
+				fillOpacity: .8
+			}), xLabel("Origin Airport"), yLabel("Avg Delay (minutes)"), width(600), height(300));
+			containerdelay_by_origin.appendChild(chartdelay_by_origin);
+		} catch (error) {
+			console.error("Error rendering chart delay_by_origin:", error);
+			containerdelay_by_origin.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
 		}
 		if (statusEl) {
 			statusEl.textContent = "✅ Dashboard ready! Brush line charts to filter other charts. Share URL to preserve filters.";

@@ -5647,6 +5647,14 @@ function argmin(y, x) {
 	return aggFn("arg_min", y, x);
 }
 /**
+* Compute an average aggregate.
+* @param expr The expression to aggregate.
+* @returns A SQL aggregate function call.
+*/
+function avg(expr) {
+	return aggFn("avg", expr);
+}
+/**
 * Compute a count aggregate.
 * @param [expr] An optional expression
 *  to count. If specified, only non-null expression values are counted.
@@ -44386,6 +44394,7 @@ coordinator().databaseConnector(wasmConnector());
 function saveStateToURL() {
 	const selections = {};
 	if (dateBrush.value) selections["dateBrush"] = dateBrush.value;
+	if (revenueBrush.value) selections["revenueBrush"] = revenueBrush.value;
 	const params = new URLSearchParams();
 	for (const [key, value] of Object.entries(selections)) if (value) params.set(key, JSON.stringify(value));
 	const newURL = params.toString() ? `${window.location.pathname}?${params}` : window.location.pathname;
@@ -44402,11 +44411,15 @@ function restoreStateFromURL() {
 	return selections;
 }
 async function loadData() {
-	const base = "/dvfc/examples/dbt-jaffle/";
+	const base = "/dvfc/examples/web-analytics/";
 	const dataPath = base.endsWith("/") ? base + "data/" : base + "/data/";
 	await coordinator().exec(`
-    CREATE TABLE IF NOT EXISTS customer_orders AS 
-    SELECT * FROM read_csv_auto('${window.location.origin}${dataPath}customer_orders.csv')
+    CREATE TABLE IF NOT EXISTS page_views AS 
+    SELECT * FROM read_csv_auto('${window.location.origin}${dataPath}page_views.csv')
+  `);
+	await coordinator().exec(`
+    CREATE TABLE IF NOT EXISTS conversions AS 
+    SELECT * FROM read_csv_auto('${window.location.origin}${dataPath}conversions.csv')
   `);
 }
 async function createDashboard() {
@@ -44416,47 +44429,89 @@ async function createDashboard() {
 		await loadData();
 		if (statusEl) statusEl.textContent = "Creating visualizations...";
 		const dateBrush = Selection$2.intersect();
+		const revenueBrush = Selection$2.intersect();
 		const savedSelections = restoreStateFromURL();
 		if (savedSelections["dateBrush"]) dateBrush.update(savedSelections["dateBrush"]);
+		if (savedSelections["revenueBrush"]) revenueBrush.update(savedSelections["revenueBrush"]);
 		dateBrush.addEventListener("value", () => setTimeout(saveStateToURL, 100));
-		const containerdaily_revenue = document.getElementById("chart-daily_revenue");
-		if (containerdaily_revenue) {
-			const chartdaily_revenue = plot(lineY(from("customer_orders"), {
-				x: "order_date",
-				y: sum$2("amount"),
+		revenueBrush.addEventListener("value", () => setTimeout(saveStateToURL, 100));
+		const containerdaily_views = document.getElementById("chart-daily_views");
+		if (containerdaily_views) try {
+			const chartdaily_views = plot(lineY(from("page_views"), {
+				x: "date",
+				y: sum$2("views"),
+				stroke: fill,
 				strokeWidth: 2
-			}), intervalX({ as: dateBrush }), xLabel("Order Date (brush to filter)"), yLabel("Total Revenue ($)"), width(700), height(250));
-			containerdaily_revenue.appendChild(chartdaily_revenue);
+			}), intervalX({ as: dateBrush }), xLabel("Date (brush to filter)"), yLabel("Total Views"), width(700), height(250));
+			containerdaily_views.appendChild(chartdaily_views);
+		} catch (error) {
+			console.error("Error rendering chart daily_views:", error);
+			containerdaily_views.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
 		}
-		const containerrevenue_by_method = document.getElementById("chart-revenue_by_method");
-		if (containerrevenue_by_method) {
-			const chartrevenue_by_method = plot(barY(from("customer_orders", { filterBy: dateBrush }), {
-				x: "payment_method",
-				y: sum$2("amount"),
+		const containerviews_by_page = document.getElementById("chart-views_by_page");
+		if (containerviews_by_page) try {
+			const chartviews_by_page = plot(barY(from("page_views", { filterBy: dateBrush }), {
+				x: "page",
+				y: sum$2("views"),
 				fill: "steelblue",
 				fillOpacity: .8
-			}), xLabel("Payment Method"), yLabel("Total Revenue ($)"), width(700), height(300));
-			containerrevenue_by_method.appendChild(chartrevenue_by_method);
+			}), xLabel("Page"), yLabel("Total Views"), width(700), height(300));
+			containerviews_by_page.appendChild(chartviews_by_page);
+		} catch (error) {
+			console.error("Error rendering chart views_by_page:", error);
+			containerviews_by_page.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
 		}
-		const containertop_customers = document.getElementById("chart-top_customers");
-		if (containertop_customers) {
-			const charttop_customers = plot(barY(from("customer_orders", { filterBy: dateBrush }), {
-				x: "customer_name",
-				y: sum$2("amount"),
+		const containerbounce_rate = document.getElementById("chart-bounce_rate");
+		if (containerbounce_rate) try {
+			const chartbounce_rate = plot(barY(from("page_views", { filterBy: dateBrush }), {
+				x: "page",
+				y: avg("bounce_rate"),
+				fill: "crimson",
+				fillOpacity: .8
+			}), xLabel("Page"), yLabel("Avg Bounce Rate"), width(700), height(300));
+			containerbounce_rate.appendChild(chartbounce_rate);
+		} catch (error) {
+			console.error("Error rendering chart bounce_rate:", error);
+			containerbounce_rate.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
+		}
+		const containerdaily_revenue = document.getElementById("chart-daily_revenue");
+		if (containerdaily_revenue) try {
+			const chartdaily_revenue = plot(lineY(from("conversions"), {
+				x: "date",
+				y: sum$2("revenue"),
+				stroke: fill,
+				strokeWidth: 2
+			}), intervalX({ as: revenueBrush }), xLabel("Date (brush to filter)"), yLabel("Total Revenue ($)"), width(700), height(250));
+			containerdaily_revenue.appendChild(chartdaily_revenue);
+		} catch (error) {
+			console.error("Error rendering chart daily_revenue:", error);
+			containerdaily_revenue.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
+		}
+		const containerrevenue_by_source = document.getElementById("chart-revenue_by_source");
+		if (containerrevenue_by_source) try {
+			const chartrevenue_by_source = plot(barY(from("conversions", { filterBy: revenueBrush }), {
+				x: "source",
+				y: sum$2("revenue"),
 				fill: "darkorange",
 				fillOpacity: .8
-			}), xLabel("Customer"), yLabel("Total Spent ($)"), width(700), height(300));
-			containertop_customers.appendChild(charttop_customers);
+			}), xLabel("Source"), yLabel("Total Revenue ($)"), width(700), height(300));
+			containerrevenue_by_source.appendChild(chartrevenue_by_source);
+		} catch (error) {
+			console.error("Error rendering chart revenue_by_source:", error);
+			containerrevenue_by_source.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
 		}
-		const containerstatus_breakdown = document.getElementById("chart-status_breakdown");
-		if (containerstatus_breakdown) {
-			const chartstatus_breakdown = plot(barY(from("customer_orders", { filterBy: dateBrush }), {
-				x: "order_status",
-				y: count$2("order_status"),
+		const containerconversion_rate = document.getElementById("chart-conversion_rate");
+		if (containerconversion_rate) try {
+			const chartconversion_rate = plot(barY(from("conversions", { filterBy: revenueBrush }), {
+				x: "source",
+				y: sum$2("conversions"),
 				fill: "mediumseagreen",
 				fillOpacity: .8
-			}), xLabel("Status"), yLabel("Order Count"), width(700), height(300));
-			containerstatus_breakdown.appendChild(chartstatus_breakdown);
+			}), xLabel("Source"), yLabel("Total Conversions"), width(700), height(300));
+			containerconversion_rate.appendChild(chartconversion_rate);
+		} catch (error) {
+			console.error("Error rendering chart conversion_rate:", error);
+			containerconversion_rate.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
 		}
 		if (statusEl) {
 			statusEl.textContent = "✅ Dashboard ready! Brush line charts to filter other charts. Share URL to preserve filters.";

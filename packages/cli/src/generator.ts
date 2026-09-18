@@ -75,10 +75,49 @@ async function loadData() {
   const base = '${ctx.base || '/'}';
   const dataPath = base.endsWith('/') ? base + 'data/' : base + '/data/';
   
-${spec.data.map(ds => `  await vg.coordinator().exec(\`
+${spec.data.map(ds => {
+    // Find all moving_average overlays for this dataSource
+    const maColumns = new Map<string, {field: string, window: number, xField: string}>();
+    
+    spec.charts.forEach(chart => {
+      if (chart.dataSource === ds.id && chart.overlays && chart.encoding) {
+        const xField = chart.encoding.x?.field;
+        if (!xField) return;
+        
+        chart.overlays.forEach(overlay => {
+          if (overlay.type === 'moving_average') {
+            const field = overlay.field || chart.encoding!.y?.field;
+            if (field) {
+              const window = overlay.window || 7;
+              const colName = `${field}_ma${window}`;
+              maColumns.set(colName, { field, window, xField });
+            }
+          }
+        });
+      }
+    });
+    
+    let sql = `  await vg.coordinator().exec(\`
     CREATE TABLE IF NOT EXISTS ${ds.id} AS 
     SELECT * FROM read_csv_auto('\${window.location.origin}\${dataPath}${ds.id}.csv')
-  \`);`).join('\n')}
+  \`);`;
+    
+    if (maColumns.size > 0) {
+      const maColumnsSQL = Array.from(maColumns.entries()).map(([colName, {field, window, xField}]) => 
+        `AVG(${field}) OVER (ORDER BY ${xField} ROWS BETWEEN ${window - 1} PRECEDING AND CURRENT ROW) AS ${colName}`
+      ).join(',\n      ');
+      
+      sql += `
+  await vg.coordinator().exec(\`
+    CREATE OR REPLACE TABLE ${ds.id} AS
+    SELECT *,
+      ${maColumnsSQL}
+    FROM ${ds.id}
+  \`);`;
+    }
+    
+    return sql;
+  }).join('\n')}
 }
 
 async function createDashboard() {
@@ -200,19 +239,13 @@ function generateChart(chart: ChartSpec, ctx: GeneratorContext): string {
   const markOptions: string[] = [];
   if (xEncoding) markOptions.push(`x: ${xEncoding}`);
   if (yEncoding) markOptions.push(`y: ${yEncoding}`);
+  if (colorEncoding) markOptions.push(`fill: ${colorEncoding}`);
   
   // Chart-type specific styling
-  if (chart.type === 'line') {
-    if (colorEncoding) markOptions.push(`stroke: ${colorEncoding}`);
-    markOptions.push('strokeWidth: 2');
-  } else if (chart.type === 'area') {
-    if (colorEncoding) markOptions.push(`fill: ${colorEncoding}`);
-    markOptions.push('fillOpacity: 0.6');
-  } else {
-    if (colorEncoding) markOptions.push(`fill: ${colorEncoding}`);
-    if (chart.type === 'bar') markOptions.push('fillOpacity: 0.8');
-    if (chart.type === 'heatmap') markOptions.push('fillOpacity: 1');
-  }
+  if (chart.type === 'line') markOptions.push('stroke: fill', 'strokeWidth: 2');
+  if (chart.type === 'bar') markOptions.push('fillOpacity: 0.8');
+  if (chart.type === 'area') markOptions.push('fillOpacity: 0.6');
+  if (chart.type === 'heatmap') markOptions.push('fillOpacity: 1');
 
   // Build from clause with optional filterBy
   const dataSource = chart.dataSource || '';
@@ -255,10 +288,15 @@ function generateChart(chart: ChartSpec, ctx: GeneratorContext): string {
 
   return `const container${chart.id} = document.getElementById('${containerId}');
   if (container${chart.id}) {
-    const chart${chart.id} = vg.plot(
-      ${marks.join(',\n      ')}${plotOptionsStr}
-    );
-    container${chart.id}.appendChild(chart${chart.id});
+    try {
+      const chart${chart.id} = vg.plot(
+        ${marks.join(',\n        ')}${plotOptionsStr}
+      );
+      container${chart.id}.appendChild(chart${chart.id});
+    } catch (error) {
+      console.error('Error rendering chart ${chart.id}:', error);
+      container${chart.id}.innerHTML = '<div style="padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;">⚠️ Error rendering chart: ' + (error instanceof Error ? error.message : String(error)) + '</div>';
+    }
   }`;
 }
 
@@ -478,12 +516,6 @@ function generateOverlayMarks(chart: ChartSpec, ctx: GeneratorContext): string[]
   
   if (!yField) return marks;
   
-  // Build from clause with optional filterBy
-  const dataSource = chart.dataSource || '';
-  const fromClause = chart.interaction?.filterBy ?
-    `vg.from('${dataSource}', { filterBy: ${chart.interaction.filterBy} })` :
-    `vg.from('${dataSource}')`;
-  
   for (const overlay of chart.overlays) {
     const field = overlay.field || yField;
     const color = overlay.color || '#e53e3e';
@@ -491,9 +523,13 @@ function generateOverlayMarks(chart: ChartSpec, ctx: GeneratorContext): string[]
     
     switch (overlay.type) {
       case 'mean':
-        // Use ruleY with vg.avg() aggregate
-        marks.push(`vg.ruleY(
-        ${fromClause},
+        {
+          const meanFromClause = chart.interaction?.filterBy ?
+            `vg.from('${chart.dataSource}', { filterBy: ${chart.interaction.filterBy} })` :
+            `vg.from('${chart.dataSource}')`;
+          
+          marks.push(`vg.ruleY(
+        ${meanFromClause},
         {
           y: vg.avg('${field}'),
           stroke: '${color}',
@@ -501,12 +537,17 @@ function generateOverlayMarks(chart: ChartSpec, ctx: GeneratorContext): string[]
           strokeDasharray: '4 4'
         }
       )`);
+        }
         break;
         
       case 'median':
-        // Use ruleY with vg.median() aggregate
-        marks.push(`vg.ruleY(
-        ${fromClause},
+        {
+          const medianFromClause = chart.interaction?.filterBy ?
+            `vg.from('${chart.dataSource}', { filterBy: ${chart.interaction.filterBy} })` :
+            `vg.from('${chart.dataSource}')`;
+          
+          marks.push(`vg.ruleY(
+        ${medianFromClause},
         {
           y: vg.median('${field}'),
           stroke: '${color}',
@@ -514,13 +555,17 @@ function generateOverlayMarks(chart: ChartSpec, ctx: GeneratorContext): string[]
           strokeDasharray: '4 4'
         }
       )`);
+        }
         break;
         
       case 'trend':
-        // Use regressionY mark for linear regression
-        if (!xField) break;
+        // Use Mosaic's built-in regressionY mark (reliable)
+        const trendFromClause = chart.interaction?.filterBy ?
+          `vg.from('${chart.dataSource}', { filterBy: ${chart.interaction.filterBy} })` :
+          `vg.from('${chart.dataSource}')`;
+        
         marks.push(`vg.regressionY(
-        ${fromClause},
+        ${trendFromClause},
         {
           x: '${xField}',
           y: '${field}',
@@ -532,14 +577,18 @@ function generateOverlayMarks(chart: ChartSpec, ctx: GeneratorContext): string[]
         break;
         
       case 'moving_average':
-        // Use window function: avg().orderby(x).frame(vg.frameRows([-(window-1), 0]))
-        if (!xField) break;
+        // Use precomputed MA column (added during loadData)
         const window = overlay.window || 7;
+        const maColumnName = `${field}_ma${window}`;
+        const fromClause = chart.interaction?.filterBy ?
+          `vg.from('${chart.dataSource}', { filterBy: ${chart.interaction.filterBy} })` :
+          `vg.from('${chart.dataSource}')`;
+        
         marks.push(`vg.lineY(
         ${fromClause},
         {
           x: '${xField}',
-          y: vg.avg('${field}').orderby('${xField}').frame(vg.frameRows([${-(window - 1)}, 0])),
+          y: '${maColumnName}',
           stroke: '${color}',
           strokeWidth: 2,
           curve: 'monotone-x'
@@ -620,14 +669,19 @@ function generateHistogramChart(chart: ChartSpec, ctx: GeneratorContext): string
   
   return `const container${chart.id} = document.getElementById('${containerId}');
   if (container${chart.id}) {
-    const chart${chart.id} = vg.plot(
-      vg.rectY(
-        ${fromClause},
-        vg.bin('${field}', { thresholds: ${bins} }),
-        { y: vg.count(), fill: 'steelblue', fillOpacity: 0.8 }
-      )${plotOptionsStr}
-    );
-    container${chart.id}.appendChild(chart${chart.id});
+    try {
+      const chart${chart.id} = vg.plot(
+        vg.rectY(
+          ${fromClause},
+          vg.bin('${field}', { thresholds: ${bins} }),
+          { y: vg.count(), fill: 'steelblue', fillOpacity: 0.8 }
+        )${plotOptionsStr}
+      );
+      container${chart.id}.appendChild(chart${chart.id});
+    } catch (error) {
+      console.error('Error rendering chart ${chart.id}:', error);
+      container${chart.id}.innerHTML = '<div style="padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;">⚠️ Error rendering chart: ' + (error instanceof Error ? error.message : String(error)) + '</div>';
+    }
   }`;
 }
 
@@ -667,13 +721,18 @@ function generateBoxplotChart(chart: ChartSpec, ctx: GeneratorContext): string {
   
   return `const container${chart.id} = document.getElementById('${containerId}');
   if (container${chart.id}) {
-    const chart${chart.id} = vg.plot(
-      vg.boxY(
-        ${fromClause},
-        ${boxOptions}
-      )${plotOptionsStr}
-    );
-    container${chart.id}.appendChild(chart${chart.id});
+    try {
+      const chart${chart.id} = vg.plot(
+        vg.boxY(
+          ${fromClause},
+          ${boxOptions}
+        )${plotOptionsStr}
+      );
+      container${chart.id}.appendChild(chart${chart.id});
+    } catch (error) {
+      console.error('Error rendering chart ${chart.id}:', error);
+      container${chart.id}.innerHTML = '<div style="padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;">⚠️ Error rendering chart: ' + (error instanceof Error ? error.message : String(error)) + '</div>';
+    }
   }`;
 }
 
@@ -713,14 +772,19 @@ function generateDensityChart(chart: ChartSpec, ctx: GeneratorContext): string {
   
   return `const container${chart.id} = document.getElementById('${containerId}');
   if (container${chart.id}) {
-    const chart${chart.id} = vg.plot(
-      vg.areaY(
-        ${fromClause},
-        vg.densityX('${field}'),
-        { y: 'density', fill: 'steelblue', fillOpacity: 0.6 }
-      )${plotOptionsStr}
-    );
-    container${chart.id}.appendChild(chart${chart.id});
+    try {
+      const chart${chart.id} = vg.plot(
+        vg.areaY(
+          ${fromClause},
+          vg.densityX('${field}'),
+          { y: 'density', fill: 'steelblue', fillOpacity: 0.6 }
+        )${plotOptionsStr}
+      );
+      container${chart.id}.appendChild(chart${chart.id});
+    } catch (error) {
+      console.error('Error rendering chart ${chart.id}:', error);
+      container${chart.id}.innerHTML = '<div style="padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;">⚠️ Error rendering chart: ' + (error instanceof Error ? error.message : String(error)) + '</div>';
+    }
   }`;
 }
 
@@ -745,8 +809,7 @@ export function generateHTML(ctx: GeneratorContext): string {
 
     body {
       font-family: ${spec.theme?.fontFamily || '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'};
-      background: ${spec.theme?.backgroundColor || '#0f0f0f'};
-      color: #e4e4e7;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
       padding: 2rem;
     }
@@ -754,32 +817,31 @@ export function generateHTML(ctx: GeneratorContext): string {
     .container {
       max-width: 1400px;
       margin: 0 auto;
-      background: #1a1a1a;
-      border-radius: 8px;
+      background: ${spec.theme?.backgroundColor || 'white'};
+      border-radius: 12px;
       padding: 2rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     }
 
     h1 {
-      color: #f4f4f5;
+      color: #2d3748;
       margin-bottom: 0.5rem;
       font-size: 2rem;
-      font-weight: 600;
     }
 
     .subtitle {
-      color: #a1a1aa;
+      color: #718096;
       margin-bottom: 1.5rem;
       font-size: 1rem;
     }
 
     #status {
       padding: 1rem;
-      background: #27272a;
-      border-left: 4px solid #3b82f6;
+      background: #edf2f7;
+      border-left: 4px solid #4299e1;
       margin-bottom: 2rem;
       border-radius: 4px;
-      color: #e4e4e7;
+      color: #2d3748;
       font-weight: 500;
     }
 
@@ -813,40 +875,31 @@ export function generateHTML(ctx: GeneratorContext): string {
     ` : ''}
 
     .info-box {
-      background: #27272a;
-      border: 1px solid #3f3f46;
+      background: #f7fafc;
+      border: 1px solid #e2e8f0;
       border-radius: 6px;
       padding: 1rem;
       margin-bottom: 2rem;
     }
 
     .info-box h3 {
-      color: #f4f4f5;
+      color: #2d3748;
       margin-bottom: 0.5rem;
       font-size: 1.1rem;
     }
 
     .info-box p {
-      color: #a1a1aa;
+      color: #4a5568;
       line-height: 1.6;
     }
 
     footer {
       margin-top: 3rem;
       padding-top: 2rem;
-      border-top: 2px solid #27272a;
-      color: #71717a;
+      border-top: 2px solid #e2e8f0;
+      color: #718096;
       text-align: center;
       font-size: 0.9rem;
-    }
-
-    footer a {
-      color: #a1a1aa;
-      text-decoration: underline;
-    }
-
-    footer a:hover {
-      color: #e4e4e7;
     }
 
     @media (max-width: 768px) {
@@ -877,7 +930,7 @@ export function generateHTML(ctx: GeneratorContext): string {
     </div>
 
     <div class="${spec.layout?.type === 'grid' ? 'charts-grid' : spec.layout?.type === 'flex' ? 'charts-flex' : ''}">
-${spec.charts.map(chart => `      <div id="chart-${chart.id}" class="chart-container">${chart.title ? `<h3 style="margin-bottom: 1rem; color: #f4f4f5;">${chart.title}</h3>` : ''}</div>`).join('\n')}
+${spec.charts.map(chart => `      <div id="chart-${chart.id}" class="chart-container">${chart.title ? `<h3 style="margin-bottom: 1rem; color: #2d3748;">${chart.title}</h3>` : ''}</div>`).join('\n')}
     </div>
 
     <footer>
