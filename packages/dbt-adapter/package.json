@@ -30,5 +30,13 @@
     "dbt",
     "manifest",
     "data-transformation"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dvfc/dvfc.git"
+  },
+  "homepage": "https://github.com/dvfc/dvfc#readme",
+  "bugs": {
+    "url": "https://github.com/dvfc/dvfc/issues"
+  }
 }

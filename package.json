@@ -27,7 +27,11 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://origin.cursor.com/git/kobakhit/tmp-7a5579056a50c222.git"
+    "url": "https://github.com/dvfc/dvfc.git"
+  },
+  "homepage": "https://github.com/dvfc/dvfc#readme",
+  "bugs": {
+    "url": "https://github.com/dvfc/dvfc/issues"
   },
   "engines": {
     "node": ">=18.0.0",

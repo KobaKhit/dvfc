@@ -1,5 +1,10 @@
 # Data Viz Factory
 
+[![npm](https://img.shields.io/npm/v/@dvfc/cli?label=npm%20%40dvfc%2Fcli)](https://www.npmjs.com/package/@dvfc/cli)
+[![PyPI](https://img.shields.io/pypi/v/dvfc?label=PyPI%20dvfc)](https://pypi.org/project/dvfc/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![CI](https://img.shields.io/github/actions/workflow/status/dvfc/dvfc/ci.yml?branch=main&label=CI)](https://github.com/dvfc/dvfc/actions)
+
 **dvfc = Data Viz Factory — Cross-filtered boards for humans and agents**
 
 **Build interactive analytics dashboards from declarative YAML** → Powered by [Mosaic](https://idl.uw.edu/mosaic/) + dbt
