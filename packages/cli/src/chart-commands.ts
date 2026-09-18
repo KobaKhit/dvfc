@@ -190,7 +190,7 @@ export async function composeCommand(options: ComposeOptions): Promise<void> {
   
   console.log(`✅ Composed board saved to: ${outFile}`);
   console.log(`\nNext steps:`);
-  console.log(`  Data Viz Factory validate ${outFile}`);
-  console.log(`  Data Viz Factory preview ${outFile}`);
-  console.log(`  Data Viz Factory build ${outFile}\n`);
+  console.log(`  dvfc validate ${outFile}`);
+  console.log(`  dvfc preview ${outFile}`);
+  console.log(`  dvfc build ${outFile}\n`);
 }

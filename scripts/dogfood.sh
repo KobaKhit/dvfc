@@ -75,14 +75,37 @@ echo
 echo -e "${GREEN}✓ Build examples${NC}"
 echo
 
-echo -e "${BLUE}5. dbt Integration${NC}"
-echo "------------------"
+echo -e "${BLUE}5. dbt Integration (End-to-End)${NC}"
+echo "--------------------------------"
 
-echo "Init from dbt manifest..."
-(cd examples/dbt-jaffle && node ../../packages/cli/dist/cli.js init --from-dbt -o /tmp/dogfood-init.yaml)
-echo
+echo "Testing dbt-jaffle example..."
 
-echo -e "${GREEN}✓ dbt integration${NC}"
+echo "  Init from dbt manifest..."
+(cd examples/dbt-jaffle && node ../../packages/cli/dist/cli.js init --from-dbt -o /tmp/dogfood-dbt-init.yaml)
+
+echo "  Validate generated board..."
+$CLI validate /tmp/dogfood-dbt-init.yaml | head -3
+
+echo "  Chart discovery on dbt project..."
+$CLI charts list --board examples/dbt-jaffle/board.yaml | head -8
+
+echo "  Search for specific charts..."
+$CLI charts search "revenue" | head -8
+
+echo "  Get chart metadata..."
+$CLI charts get examples/dbt-jaffle/board.yaml daily_revenue --format json | head -5
+
+echo "  Compose from dbt charts..."
+$CLI charts compose \
+  --charts dbt-jaffle__daily_revenue,dbt-jaffle__revenue_by_method \
+  --title "dbt Revenue Analysis" \
+  -o /tmp/dogfood-dbt-composed.yaml
+
+echo "  Build dbt dashboard..."
+$CLI build examples/dbt-jaffle/board.yaml -o /tmp/dogfood-dbt-dist >/dev/null 2>&1
+test -f /tmp/dogfood-dbt-dist/index.html && echo "  ✓ dbt build successful"
+
+echo -e "${GREEN}✓ dbt integration (full workflow)${NC}"
 echo
 
 echo -e "${BLUE}6. MCP Server${NC}"

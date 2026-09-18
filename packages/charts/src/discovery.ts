@@ -5,7 +5,7 @@
 import { readFile } from 'fs/promises';
 import { parse as parseYAML } from 'yaml';
 import { glob } from 'glob';
-import { relative, basename, dirname } from 'path';
+import { relative, basename, dirname, extname } from 'path';
 import type { DashboardSpec } from '@dvfc/core';
 import type { ChartHit, ChartRef, ChartResource, SearchOptions, ComposeOptions } from './types.js';
 
@@ -15,7 +15,17 @@ import type { ChartHit, ChartRef, ChartResource, SearchOptions, ComposeOptions }
 export function makeDisplayKey(boardPath: string, chartId: string): string {
   // Extract board name from path (e.g., "examples/sales-board/board.yaml" → "sales-board")
   const dir = dirname(boardPath);
-  const boardName = basename(dir);
+  let boardName = basename(dir);
+  
+  // Handle edge case where dirname is "." (current directory)
+  if (boardName === '.') {
+    // Use the board filename without extension as the board name
+    const boardFilename = basename(boardPath, extname(boardPath));
+    boardName = boardFilename === 'board' || boardFilename === 'dashboard' 
+      ? 'default' 
+      : boardFilename;
+  }
+  
   return `${boardName}__${chartId}`;
 }
 

@@ -161,8 +161,8 @@ export async function init(options: InitOptions = {}): Promise<void> {
       
       console.log(`\n✅ Created ${outFile}`);
       console.log(`\nNext steps:`);
-      console.log(`  1. Data Viz Factory validate ${outFile}`);
-      console.log(`  2. Data Viz Factory preview ${outFile}`);
+      console.log(`  1. dvfc validate ${outFile}`);
+      console.log(`  2. dvfc preview ${outFile}`);
       console.log(`  3. Edit ${outFile} to customize\n`);
       
     } catch (error) {
@@ -229,8 +229,8 @@ export async function init(options: InitOptions = {}): Promise<void> {
     console.log(`✅ Created ${outFile}`);
     console.log(`\nNext steps:`);
     console.log(`  1. Edit ${outFile} with your data sources and charts`);
-    console.log(`  2. Data Viz Factory validate ${outFile}`);
-    console.log(`  3. Data Viz Factory preview ${outFile}\n`);
+    console.log(`  2. dvfc validate ${outFile}`);
+    console.log(`  3. dvfc preview ${outFile}\n`);
   }
 }
 
