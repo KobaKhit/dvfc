@@ -200,13 +200,19 @@ function generateChart(chart: ChartSpec, ctx: GeneratorContext): string {
   const markOptions: string[] = [];
   if (xEncoding) markOptions.push(`x: ${xEncoding}`);
   if (yEncoding) markOptions.push(`y: ${yEncoding}`);
-  if (colorEncoding) markOptions.push(`fill: ${colorEncoding}`);
   
   // Chart-type specific styling
-  if (chart.type === 'line') markOptions.push('stroke: fill', 'strokeWidth: 2');
-  if (chart.type === 'bar') markOptions.push('fillOpacity: 0.8');
-  if (chart.type === 'area') markOptions.push('fillOpacity: 0.6');
-  if (chart.type === 'heatmap') markOptions.push('fillOpacity: 1');
+  if (chart.type === 'line') {
+    if (colorEncoding) markOptions.push(`stroke: ${colorEncoding}`);
+    markOptions.push('strokeWidth: 2');
+  } else if (chart.type === 'area') {
+    if (colorEncoding) markOptions.push(`fill: ${colorEncoding}`);
+    markOptions.push('fillOpacity: 0.6');
+  } else {
+    if (colorEncoding) markOptions.push(`fill: ${colorEncoding}`);
+    if (chart.type === 'bar') markOptions.push('fillOpacity: 0.8');
+    if (chart.type === 'heatmap') markOptions.push('fillOpacity: 1');
+  }
 
   // Build from clause with optional filterBy
   const dataSource = chart.dataSource || '';
@@ -744,7 +750,8 @@ export function generateHTML(ctx: GeneratorContext): string {
 
     body {
       font-family: ${spec.theme?.fontFamily || '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'};
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: ${spec.theme?.backgroundColor || '#0f0f0f'};
+      color: #e4e4e7;
       min-height: 100vh;
       padding: 2rem;
     }
@@ -752,31 +759,32 @@ export function generateHTML(ctx: GeneratorContext): string {
     .container {
       max-width: 1400px;
       margin: 0 auto;
-      background: ${spec.theme?.backgroundColor || 'white'};
-      border-radius: 12px;
+      background: #1a1a1a;
+      border-radius: 8px;
       padding: 2rem;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     }
 
     h1 {
-      color: #2d3748;
+      color: #f4f4f5;
       margin-bottom: 0.5rem;
       font-size: 2rem;
+      font-weight: 600;
     }
 
     .subtitle {
-      color: #718096;
+      color: #a1a1aa;
       margin-bottom: 1.5rem;
       font-size: 1rem;
     }
 
     #status {
       padding: 1rem;
-      background: #edf2f7;
-      border-left: 4px solid #4299e1;
+      background: #27272a;
+      border-left: 4px solid #3b82f6;
       margin-bottom: 2rem;
       border-radius: 4px;
-      color: #2d3748;
+      color: #e4e4e7;
       font-weight: 500;
     }
 
@@ -810,31 +818,40 @@ export function generateHTML(ctx: GeneratorContext): string {
     ` : ''}
 
     .info-box {
-      background: #f7fafc;
-      border: 1px solid #e2e8f0;
+      background: #27272a;
+      border: 1px solid #3f3f46;
       border-radius: 6px;
       padding: 1rem;
       margin-bottom: 2rem;
     }
 
     .info-box h3 {
-      color: #2d3748;
+      color: #f4f4f5;
       margin-bottom: 0.5rem;
       font-size: 1.1rem;
     }
 
     .info-box p {
-      color: #4a5568;
+      color: #a1a1aa;
       line-height: 1.6;
     }
 
     footer {
       margin-top: 3rem;
       padding-top: 2rem;
-      border-top: 2px solid #e2e8f0;
-      color: #718096;
+      border-top: 2px solid #27272a;
+      color: #71717a;
       text-align: center;
       font-size: 0.9rem;
+    }
+
+    footer a {
+      color: #a1a1aa;
+      text-decoration: underline;
+    }
+
+    footer a:hover {
+      color: #e4e4e7;
     }
 
     @media (max-width: 768px) {
@@ -865,7 +882,7 @@ export function generateHTML(ctx: GeneratorContext): string {
     </div>
 
     <div class="${spec.layout?.type === 'grid' ? 'charts-grid' : spec.layout?.type === 'flex' ? 'charts-flex' : ''}">
-${spec.charts.map(chart => `      <div id="chart-${chart.id}" class="chart-container">${chart.title ? `<h3 style="margin-bottom: 1rem; color: #2d3748;">${chart.title}</h3>` : ''}</div>`).join('\n')}
+${spec.charts.map(chart => `      <div id="chart-${chart.id}" class="chart-container">${chart.title ? `<h3 style="margin-bottom: 1rem; color: #f4f4f5;">${chart.title}</h3>` : ''}</div>`).join('\n')}
     </div>
 
     <footer>

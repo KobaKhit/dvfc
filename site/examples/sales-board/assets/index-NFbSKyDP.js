@@ -5647,6 +5647,14 @@ function argmin(y, x) {
 	return aggFn("arg_min", y, x);
 }
 /**
+* Compute an average aggregate.
+* @param expr The expression to aggregate.
+* @returns A SQL aggregate function call.
+*/
+function avg(expr) {
+	return aggFn("avg", expr);
+}
+/**
 * Compute a count aggregate.
 * @param [expr] An optional expression
 *  to count. If specified, only non-null expression values are counted.
@@ -44385,7 +44393,8 @@ function plot(...directives) {
 coordinator().databaseConnector(wasmConnector());
 function saveStateToURL() {
 	const selections = {};
-	if (dateBrush.value) selections["dateBrush"] = dateBrush.value;
+	if (salesBrush.value) selections["salesBrush"] = salesBrush.value;
+	if (flightsBrush.value) selections["flightsBrush"] = flightsBrush.value;
 	const params = new URLSearchParams();
 	for (const [key, value] of Object.entries(selections)) if (value) params.set(key, JSON.stringify(value));
 	const newURL = params.toString() ? `${window.location.pathname}?${params}` : window.location.pathname;
@@ -44402,11 +44411,15 @@ function restoreStateFromURL() {
 	return selections;
 }
 async function loadData() {
-	const base = "/dvfc/examples/dbt-jaffle/";
+	const base = "/dvfc/examples/sales-board/";
 	const dataPath = base.endsWith("/") ? base + "data/" : base + "/data/";
 	await coordinator().exec(`
-    CREATE TABLE IF NOT EXISTS customer_orders AS 
-    SELECT * FROM read_csv_auto('${window.location.origin}${dataPath}customer_orders.csv')
+    CREATE TABLE IF NOT EXISTS sales_daily AS 
+    SELECT * FROM read_csv_auto('${window.location.origin}${dataPath}sales_daily.csv')
+  `);
+	await coordinator().exec(`
+    CREATE TABLE IF NOT EXISTS flights_summary AS 
+    SELECT * FROM read_csv_auto('${window.location.origin}${dataPath}flights_summary.csv')
   `);
 }
 async function createDashboard() {
@@ -44415,49 +44428,70 @@ async function createDashboard() {
 	try {
 		await loadData();
 		if (statusEl) statusEl.textContent = "Creating visualizations...";
-		const dateBrush = Selection$2.intersect();
+		const salesBrush = Selection$2.intersect();
+		const flightsBrush = Selection$2.intersect();
 		const savedSelections = restoreStateFromURL();
-		if (savedSelections["dateBrush"]) dateBrush.update(savedSelections["dateBrush"]);
-		dateBrush.addEventListener("value", () => setTimeout(saveStateToURL, 100));
-		const containerdaily_revenue = document.getElementById("chart-daily_revenue");
-		if (containerdaily_revenue) {
-			const chartdaily_revenue = plot(lineY(from("customer_orders"), {
-				x: "order_date",
-				y: sum$2("amount"),
-				stroke: fill,
+		if (savedSelections["salesBrush"]) salesBrush.update(savedSelections["salesBrush"]);
+		if (savedSelections["flightsBrush"]) flightsBrush.update(savedSelections["flightsBrush"]);
+		salesBrush.addEventListener("value", () => setTimeout(saveStateToURL, 100));
+		flightsBrush.addEventListener("value", () => setTimeout(saveStateToURL, 100));
+		const containersales_trend = document.getElementById("chart-sales_trend");
+		if (containersales_trend) {
+			const chartsales_trend = plot(lineY(from("sales_daily"), {
+				x: "date",
+				y: sum$2("sales"),
 				strokeWidth: 2
-			}), intervalX({ as: dateBrush }), xLabel("Order Date (brush to filter)"), yLabel("Total Revenue ($)"), width(700), height(250));
-			containerdaily_revenue.appendChild(chartdaily_revenue);
+			}), intervalX({ as: salesBrush }), xLabel("Date (brush here to filter)"), yLabel("Daily Sales ($)"), width(600), height(250));
+			containersales_trend.appendChild(chartsales_trend);
 		}
-		const containerrevenue_by_method = document.getElementById("chart-revenue_by_method");
-		if (containerrevenue_by_method) {
-			const chartrevenue_by_method = plot(barY(from("customer_orders", { filterBy: dateBrush }), {
-				x: "payment_method",
-				y: sum$2("amount"),
+		const containersales_by_region = document.getElementById("chart-sales_by_region");
+		if (containersales_by_region) {
+			const chartsales_by_region = plot(barY(from("sales_daily", { filterBy: salesBrush }), {
+				x: "region",
+				y: sum$2("sales"),
 				fill: "steelblue",
 				fillOpacity: .8
-			}), xLabel("Payment Method"), yLabel("Total Revenue ($)"), width(700), height(300));
-			containerrevenue_by_method.appendChild(chartrevenue_by_method);
+			}), xLabel("Region"), yLabel("Total Sales ($)"), width(600), height(300));
+			containersales_by_region.appendChild(chartsales_by_region);
 		}
-		const containertop_customers = document.getElementById("chart-top_customers");
-		if (containertop_customers) {
-			const charttop_customers = plot(barY(from("customer_orders", { filterBy: dateBrush }), {
-				x: "customer_name",
-				y: sum$2("amount"),
+		const containersales_by_product = document.getElementById("chart-sales_by_product");
+		if (containersales_by_product) {
+			const chartsales_by_product = plot(barY(from("sales_daily", { filterBy: salesBrush }), {
+				x: "product",
+				y: sum$2("sales"),
 				fill: "darkorange",
 				fillOpacity: .8
-			}), xLabel("Customer"), yLabel("Total Spent ($)"), width(700), height(300));
-			containertop_customers.appendChild(charttop_customers);
+			}), xLabel("Product"), yLabel("Total Sales ($)"), width(600), height(300));
+			containersales_by_product.appendChild(chartsales_by_product);
 		}
-		const containerstatus_breakdown = document.getElementById("chart-status_breakdown");
-		if (containerstatus_breakdown) {
-			const chartstatus_breakdown = plot(barY(from("customer_orders", { filterBy: dateBrush }), {
-				x: "order_status",
-				y: count$2("order_status"),
-				fill: "mediumseagreen",
+		const containerpassenger_trend = document.getElementById("chart-passenger_trend");
+		if (containerpassenger_trend) {
+			const chartpassenger_trend = plot(lineY(from("flights_summary"), {
+				x: "date",
+				y: sum$2("passengers"),
+				strokeWidth: 2
+			}), intervalX({ as: flightsBrush }), xLabel("Date (brush here to filter)"), yLabel("Daily Passengers"), width(600), height(250));
+			containerpassenger_trend.appendChild(chartpassenger_trend);
+		}
+		const containerflights_by_origin = document.getElementById("chart-flights_by_origin");
+		if (containerflights_by_origin) {
+			const chartflights_by_origin = plot(barY(from("flights_summary", { filterBy: flightsBrush }), {
+				x: "origin",
+				y: sum$2("flights"),
+				fill: "mediumpurple",
 				fillOpacity: .8
-			}), xLabel("Status"), yLabel("Order Count"), width(700), height(300));
-			containerstatus_breakdown.appendChild(chartstatus_breakdown);
+			}), xLabel("Origin Airport"), yLabel("Total Flights"), width(600), height(300));
+			containerflights_by_origin.appendChild(chartflights_by_origin);
+		}
+		const containerdelay_by_origin = document.getElementById("chart-delay_by_origin");
+		if (containerdelay_by_origin) {
+			const chartdelay_by_origin = plot(barY(from("flights_summary", { filterBy: flightsBrush }), {
+				x: "origin",
+				y: avg("delay_minutes"),
+				fill: "crimson",
+				fillOpacity: .8
+			}), xLabel("Origin Airport"), yLabel("Avg Delay (minutes)"), width(600), height(300));
+			containerdelay_by_origin.appendChild(chartdelay_by_origin);
 		}
 		if (statusEl) {
 			statusEl.textContent = "✅ Dashboard ready! Brush line charts to filter other charts. Share URL to preserve filters.";

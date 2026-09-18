@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mosaic + dbt Architecture Spike</title>
+  <title>Sales & Flights Analytics</title>
   <style>
     * {
       margin: 0;
@@ -12,8 +12,9 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f0f0f;
+      color: #e4e4e7;
       min-height: 100vh;
       padding: 2rem;
     }
@@ -21,48 +22,49 @@
     .container {
       max-width: 1400px;
       margin: 0 auto;
-      background: white;
-      border-radius: 12px;
+      background: #1a1a1a;
+      border-radius: 8px;
       padding: 2rem;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     }
 
     h1 {
-      color: #2d3748;
+      color: #f4f4f5;
       margin-bottom: 0.5rem;
       font-size: 2rem;
+      font-weight: 600;
     }
 
     .subtitle {
-      color: #718096;
+      color: #a1a1aa;
       margin-bottom: 1.5rem;
       font-size: 1rem;
     }
 
     #status {
       padding: 1rem;
-      background: #edf2f7;
-      border-left: 4px solid #4299e1;
+      background: #27272a;
+      border-left: 4px solid #3b82f6;
       margin-bottom: 2rem;
       border-radius: 4px;
-      color: #2d3748;
+      color: #e4e4e7;
       font-weight: 500;
     }
 
     .dashboard-section {
       margin-bottom: 3rem;
       padding: 1.5rem;
-      background: #f7fafc;
+      background: #27272a;
       border-radius: 8px;
-      border: 1px solid #e2e8f0;
+      border: 1px solid #3f3f46;
     }
 
     .dashboard-section h2 {
-      color: #2d3748;
+      color: #f4f4f5;
       margin-bottom: 1.5rem;
       font-size: 1.5rem;
       padding-bottom: 0.5rem;
-      border-bottom: 2px solid #cbd5e0;
+      border-bottom: 2px solid #3f3f46;
     }
 
     .dashboard-section > div {
@@ -70,48 +72,49 @@
     }
 
     .info-box {
-      background: #fff5f5;
-      border: 1px solid #feb2b2;
+      background: #27272a;
+      border: 1px solid #3f3f46;
       border-radius: 6px;
       padding: 1rem;
       margin-bottom: 2rem;
     }
 
     .info-box h3 {
-      color: #c53030;
+      color: #f4f4f5;
       margin-bottom: 0.5rem;
       font-size: 1.1rem;
     }
 
     .info-box p {
-      color: #742a2a;
+      color: #a1a1aa;
       line-height: 1.6;
     }
 
     .info-box code {
-      background: #fed7d7;
+      background: #3f3f46;
       padding: 0.2rem 0.4rem;
       border-radius: 3px;
       font-family: 'Courier New', monospace;
       font-size: 0.9em;
+      color: #e4e4e7;
     }
 
     footer {
       margin-top: 3rem;
       padding-top: 2rem;
-      border-top: 2px solid #e2e8f0;
-      color: #718096;
+      border-top: 2px solid #27272a;
+      color: #71717a;
       text-align: center;
       font-size: 0.9rem;
     }
 
     footer a {
-      color: #4299e1;
-      text-decoration: none;
+      color: #a1a1aa;
+      text-decoration: underline;
     }
 
     footer a:hover {
-      text-decoration: underline;
+      color: #e4e4e7;
     }
 
     @media (max-width: 768px) {
@@ -131,9 +134,9 @@
 </head>
 <body>
   <div class="container">
-    <h1>🎯 Mosaic + dbt Architecture Spike</h1>
+    <h1>Sales & Flights Analytics</h1>
     <p class="subtitle">
-      Interactive crossfilter dashboard powered by UW Mosaic, DuckDB-WASM, and dbt-style data models
+      Multi-chart dashboard demonstrating Mosaic crossfiltering with dbt models
     </p>
 
     <div id="status">Initializing...</div>
@@ -141,9 +144,9 @@
     <div class="info-box">
       <h3>📊 How to Use Crossfiltering</h3>
       <p>
-        Click and drag horizontally on the <strong>line charts</strong> (time series) to create a date range selection.
-        The bar charts below will automatically filter to show only data from the selected date range.
-        Click outside the selection to reset. This demonstrates Mosaic's native coordination engine.
+        Click and drag horizontally on the time series charts to select a date range.
+        Other charts will automatically filter to show only data from the selected period.
+        Click outside the selection to reset.
       </p>
     </div>
 
@@ -157,9 +160,7 @@
 
     <footer>
       <p>
-        Built with <a href="https://idl.uw.edu/mosaic/" target="_blank">UW Mosaic</a> • 
-        Data from dbt-style models (<code>ref('sales_daily')</code> and <code>ref('flights_summary')</code>) • 
-        Runs entirely in-browser with DuckDB-WASM
+        Built with <a href="https://idl.uw.edu/mosaic/" target="_blank">UW Mosaic</a> + Data Viz Factory
       </p>
     </footer>
   </div>

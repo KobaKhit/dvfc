@@ -5673,14 +5673,6 @@ function max$2(expr) {
 	return aggFn("max", expr);
 }
 /**
-* Compute a median aggregate.
-* @param expr The expression to aggregate.
-* @returns A SQL aggregate function call.
-*/
-function median$1(expr) {
-	return aggFn("median", expr);
-}
-/**
 * Compute a minimum aggregate.
 * @param expr The expression to aggregate.
 * @returns A SQL aggregate function call.
@@ -35683,7 +35675,7 @@ function ruleX(data, options) {
 		y2
 	});
 }
-function ruleY$1(data, options) {
+function ruleY(data, options) {
 	let { y = identity$1, x, x1, x2, ...rest } = maybeIntervalX(options);
 	[x1, x2] = maybeOptionalZero(x, x1, x2);
 	return new RuleY(data, {
@@ -36516,7 +36508,7 @@ function gridFx() {
 	return gridKx("fx", anchorFx(options), data, options);
 }
 function gridKy(k, anchor, data, { y = k === "y" ? void 0 : null, x = null, x1 = anchor === "left" ? x : null, x2 = anchor === "right" ? x : null, ariaLabel = `${k}-grid`, ariaHidden = true, ...options }) {
-	return axisMark(ruleY$1, k, data, {
+	return axisMark(ruleY, k, data, {
 		ariaLabel,
 		ariaHidden
 	}, {
@@ -39289,7 +39281,7 @@ function autoSpec(data, options) {
 			if (isHighCardinality(C)) Z = null;
 			break;
 		case "rule":
-			markImpl = X ? ruleX : ruleY$1;
+			markImpl = X ? ruleX : ruleY;
 			colorMode = "stroke";
 			break;
 		case "bar":
@@ -39333,7 +39325,7 @@ function autoSpec(data, options) {
 		value: Y,
 		...yOptions
 	};
-	if (xZero === void 0) xZero = X && !(transformImpl === bin || transformImpl === binX) && (markImpl === barX || markImpl === areaX || markImpl === rectX || markImpl === ruleY$1);
+	if (xZero === void 0) xZero = X && !(transformImpl === bin || transformImpl === binX) && (markImpl === barX || markImpl === areaX || markImpl === rectX || markImpl === ruleY);
 	if (yZero === void 0) yZero = Y && !(transformImpl === bin || transformImpl === binY) && (markImpl === barY$1 || markImpl === areaY || markImpl === rectY || markImpl === ruleX);
 	return {
 		fx: fx ?? null,
@@ -39373,7 +39365,7 @@ function auto(data, options) {
 	const markImpl = impls[spec.markImpl];
 	const transformImpl = impls[spec.transformImpl];
 	const frames = fx != null || fy != null ? frame({ strokeOpacity: .1 }) : null;
-	const rules = [xZero ? ruleX([0]) : null, yZero ? ruleY$1([0]) : null];
+	const rules = [xZero ? ruleX([0]) : null, yZero ? ruleY([0]) : null];
 	const mark = markImpl(data, transformImpl ? transformImpl(transformOptions, markOptions) : markOptions);
 	return colorMode === "stroke" ? marks(frames, rules, mark) : marks(frames, mark, rules);
 }
@@ -39462,7 +39454,7 @@ var impls = {
 	areaX,
 	areaY,
 	ruleX,
-	ruleY: ruleY$1,
+	ruleY,
 	barX,
 	barY: barY$1,
 	rect,
@@ -39936,7 +39928,7 @@ function tickY(data, { y = identity$1, ...options } = {}) {
 //#region .dvfc-build/node_modules/@observablehq/plot/src/marks/box.js
 function boxX(data, { x = identity$1, y = null, r, fill = "#ccc", fillOpacity, stroke = "currentColor", strokeOpacity, strokeWidth = 2, sort, ...options } = {}) {
 	const group = y != null ? groupY : groupZ$1;
-	return marks(ruleY$1(data, group({
+	return marks(ruleY(data, group({
 		x1: loqr1,
 		x2: hiqr2
 	}, {
@@ -40600,7 +40592,7 @@ function crosshairK(pointer, data, options = {}) {
 		...p,
 		inset: -6
 	}, options)));
-	if (y != null) M.push(ruleY$1(data, ruleOptions("y", {
+	if (y != null) M.push(ruleY(data, ruleOptions("y", {
 		...p,
 		inset: -6
 	}, options)));
@@ -43095,7 +43087,7 @@ var src_exports = /* @__PURE__ */ __exportAll({
 	rectY: () => rectY,
 	reverse: () => reverse,
 	ruleX: () => ruleX,
-	ruleY: () => ruleY$1,
+	ruleY: () => ruleY,
 	scale: () => scale,
 	select: () => select,
 	selectFirst: () => selectFirst,
@@ -44332,6 +44324,8 @@ function attribute(name, value) {
 var attrf = (name) => (value) => attribute(name, value);
 var width = attrf("width");
 var height = attrf("height");
+var xLabel = attrf("xLabel");
+var yLabel = attrf("yLabel");
 //#endregion
 //#region .dvfc-build/node_modules/@uwdata/vgplot/src/plot/data.js
 function from(table, options = void 0) {
@@ -44370,7 +44364,6 @@ function explicitType(MarkClass, type, data, channels) {
 }
 var lineY = (...args) => mark("lineY", ...args);
 var barY = (...args) => mark("barY", ...args);
-var ruleY = (...args) => mark("ruleY", ...args);
 //#endregion
 //#region .dvfc-build/node_modules/@uwdata/vgplot/src/plot/interactors.js
 function interactor(InteractorClass, options) {
@@ -44401,6 +44394,7 @@ coordinator().databaseConnector(wasmConnector());
 function saveStateToURL() {
 	const selections = {};
 	if (dateBrush.value) selections["dateBrush"] = dateBrush.value;
+	if (revenueBrush.value) selections["revenueBrush"] = revenueBrush.value;
 	const params = new URLSearchParams();
 	for (const [key, value] of Object.entries(selections)) if (value) params.set(key, JSON.stringify(value));
 	const newURL = params.toString() ? `${window.location.pathname}?${params}` : window.location.pathname;
@@ -44417,11 +44411,15 @@ function restoreStateFromURL() {
 	return selections;
 }
 async function loadData() {
-	const base = "/dvfc/examples/revenue-analysis/";
+	const base = "/dvfc/examples/web-analytics/";
 	const dataPath = base.endsWith("/") ? base + "data/" : base + "/data/";
 	await coordinator().exec(`
-    CREATE TABLE IF NOT EXISTS daily_metrics AS 
-    SELECT * FROM read_csv_auto('${window.location.origin}${dataPath}daily_metrics.csv')
+    CREATE TABLE IF NOT EXISTS page_views AS 
+    SELECT * FROM read_csv_auto('${window.location.origin}${dataPath}page_views.csv')
+  `);
+	await coordinator().exec(`
+    CREATE TABLE IF NOT EXISTS conversions AS 
+    SELECT * FROM read_csv_auto('${window.location.origin}${dataPath}conversions.csv')
   `);
 }
 async function createDashboard() {
@@ -44431,124 +44429,70 @@ async function createDashboard() {
 		await loadData();
 		if (statusEl) statusEl.textContent = "Creating visualizations...";
 		const dateBrush = Selection$2.intersect();
+		const revenueBrush = Selection$2.intersect();
 		const savedSelections = restoreStateFromURL();
 		if (savedSelections["dateBrush"]) dateBrush.update(savedSelections["dateBrush"]);
+		if (savedSelections["revenueBrush"]) revenueBrush.update(savedSelections["revenueBrush"]);
 		dateBrush.addEventListener("value", () => setTimeout(saveStateToURL, 100));
-		const containerintro_text = document.getElementById("chart-intro_text");
-		if (containerintro_text) containerintro_text.innerHTML = `
-      <div style="padding: 1.5rem; background: #f7fafc; border-radius: 0.5rem; line-height: 1.6;">
-        <p><h2>Executive Summary</h2></p><p>This dashboard analyzes <strong>Q1 2024 revenue performance</strong> with advanced overlays showing trends and moving averages.</p><p><strong>Key Features:</strong><br>- Red dashed line = Average revenue<br>- Blue dotted line = Linear trend<br>- Purple line = 7-day moving average</p><p><em>Click and drag on charts to filter by date range.</em><br></p>
-      </div>
-    `;
-		const containerrevenue_trend = document.getElementById("chart-revenue_trend");
-		if (containerrevenue_trend) {
-			const chartrevenue_trend = plot(lineY(from("daily_metrics"), {
+		revenueBrush.addEventListener("value", () => setTimeout(saveStateToURL, 100));
+		const containerdaily_views = document.getElementById("chart-daily_views");
+		if (containerdaily_views) {
+			const chartdaily_views = plot(lineY(from("page_views"), {
 				x: "date",
-				y: "revenue",
-				stroke: fill,
+				y: sum$2("views"),
 				strokeWidth: 2
-			}), ruleY(from("daily_metrics"), {
-				y: avg("revenue"),
-				stroke: "#e53e3e",
-				strokeWidth: 2,
-				strokeDasharray: "4 4"
-			}), lineY(from(`(
-          SELECT 
-            date,
-            regr_intercept(revenue, row_number() over (order by date)) over () + 
-            regr_slope(revenue, row_number() over (order by date)) over () * 
-            row_number() over (order by date) as trend_value
-          FROM daily_metrics
-          ORDER BY date
-        )`), {
-				x: "date",
-				y: "trend_value",
-				stroke: "#3182ce",
-				strokeWidth: 2,
-				strokeDasharray: "2 2"
-			}), lineY(from(`(
-          SELECT 
-            date,
-            AVG(revenue) OVER (
-              ORDER BY date 
-              ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
-            ) as ma_value
-          FROM daily_metrics
-          ORDER BY date
-        )`), {
-				x: "date",
-				y: "ma_value",
-				stroke: "#805ad5",
-				strokeWidth: 2
-			}), intervalX({ as: dateBrush }), width(800), height(300));
-			containerrevenue_trend.appendChild(chartrevenue_trend);
+			}), intervalX({ as: dateBrush }), xLabel("Date (brush to filter)"), yLabel("Total Views"), width(700), height(250));
+			containerdaily_views.appendChild(chartdaily_views);
 		}
-		const containerinsight_text = document.getElementById("chart-insight_text");
-		if (containerinsight_text) containerinsight_text.innerHTML = `
-      <div style="padding: 1.5rem; background: #f7fafc; border-radius: 0.5rem; line-height: 1.6;">
-        <p><h3>Key Insights</h3></p><p>Revenue shows a <strong>strong upward trend</strong> throughout Q1, with the 7-day moving average smoothing daily volatility.<br>The linear trend line indicates consistent growth of approximately <strong>$150-200 per day</strong>.</p><p>February performance exceeded the Q1 average, with peak revenue of <strong>$21,200</strong> on Feb 29.<br></p>
-      </div>
-    `;
-		const containerprofit_analysis = document.getElementById("chart-profit_analysis");
-		if (containerprofit_analysis) {
-			const chartprofit_analysis = plot(lineY(from("daily_metrics", { filterBy: dateBrush }), {
-				x: "date",
-				y: "profit",
-				stroke: fill,
-				strokeWidth: 2
-			}), ruleY(from("daily_metrics"), {
-				y: avg("profit"),
-				stroke: "#48bb78",
-				strokeWidth: 2,
-				strokeDasharray: "4 4"
-			}), lineY(from(`(
-          SELECT 
-            date,
-            AVG(profit) OVER (
-              ORDER BY date 
-              ROWS BETWEEN 4 PRECEDING AND CURRENT ROW
-            ) as ma_value
-          FROM daily_metrics
-          ORDER BY date
-        )`), {
-				x: "date",
-				y: "ma_value",
-				stroke: "#ed8936",
-				strokeWidth: 2
-			}), intervalX({ as: dateBrush }), width(800), height(250));
-			containerprofit_analysis.appendChild(chartprofit_analysis);
-		}
-		const containerregional_breakdown = document.getElementById("chart-regional_breakdown");
-		if (containerregional_breakdown) {
-			const chartregional_breakdown = plot(barY(from("daily_metrics", { filterBy: dateBrush }), {
-				x: "region",
-				y: sum$2("revenue"),
-				fill: "region",
+		const containerviews_by_page = document.getElementById("chart-views_by_page");
+		if (containerviews_by_page) {
+			const chartviews_by_page = plot(barY(from("page_views", { filterBy: dateBrush }), {
+				x: "page",
+				y: sum$2("views"),
+				fill: "steelblue",
 				fillOpacity: .8
-			}), width(400), height(250));
-			containerregional_breakdown.appendChild(chartregional_breakdown);
+			}), xLabel("Page"), yLabel("Total Views"), width(700), height(300));
+			containerviews_by_page.appendChild(chartviews_by_page);
 		}
-		const containercost_analysis = document.getElementById("chart-cost_analysis");
-		if (containercost_analysis) {
-			const chartcost_analysis = plot(lineY(from("daily_metrics", { filterBy: dateBrush }), {
+		const containerbounce_rate = document.getElementById("chart-bounce_rate");
+		if (containerbounce_rate) {
+			const chartbounce_rate = plot(barY(from("page_views", { filterBy: dateBrush }), {
+				x: "page",
+				y: avg("bounce_rate"),
+				fill: "crimson",
+				fillOpacity: .8
+			}), xLabel("Page"), yLabel("Avg Bounce Rate"), width(700), height(300));
+			containerbounce_rate.appendChild(chartbounce_rate);
+		}
+		const containerdaily_revenue = document.getElementById("chart-daily_revenue");
+		if (containerdaily_revenue) {
+			const chartdaily_revenue = plot(lineY(from("conversions"), {
 				x: "date",
-				y: "cost",
-				stroke: fill,
+				y: sum$2("revenue"),
 				strokeWidth: 2
-			}), ruleY(from("daily_metrics"), {
-				y: median$1("cost"),
-				stroke: "#ed64a6",
-				strokeWidth: 2,
-				strokeDasharray: "4 4"
-			}), width(400), height(250));
-			containercost_analysis.appendChild(chartcost_analysis);
+			}), intervalX({ as: revenueBrush }), xLabel("Date (brush to filter)"), yLabel("Total Revenue ($)"), width(700), height(250));
+			containerdaily_revenue.appendChild(chartdaily_revenue);
 		}
-		const containersummary_text = document.getElementById("chart-summary_text");
-		if (containersummary_text) containersummary_text.innerHTML = `
-      <div style="padding: 1.5rem; background: #f7fafc; border-radius: 0.5rem; line-height: 1.6;">
-        <p><h3>Methodology</h3></p><p><strong>Overlays explained:</strong><br>- <em>Mean</em> (horizontal line) = average value across all data points<br>- <em>Median</em> (horizontal line) = middle value when sorted<br>- <em>Trend</em> (diagonal line) = linear regression best fit<br>- <em>Moving Average</em> (smooth line) = rolling average over N days</p><p>Overlays update dynamically when you filter the data by brushing charts.<br></p>
-      </div>
-    `;
+		const containerrevenue_by_source = document.getElementById("chart-revenue_by_source");
+		if (containerrevenue_by_source) {
+			const chartrevenue_by_source = plot(barY(from("conversions", { filterBy: revenueBrush }), {
+				x: "source",
+				y: sum$2("revenue"),
+				fill: "darkorange",
+				fillOpacity: .8
+			}), xLabel("Source"), yLabel("Total Revenue ($)"), width(700), height(300));
+			containerrevenue_by_source.appendChild(chartrevenue_by_source);
+		}
+		const containerconversion_rate = document.getElementById("chart-conversion_rate");
+		if (containerconversion_rate) {
+			const chartconversion_rate = plot(barY(from("conversions", { filterBy: revenueBrush }), {
+				x: "source",
+				y: sum$2("conversions"),
+				fill: "mediumseagreen",
+				fillOpacity: .8
+			}), xLabel("Source"), yLabel("Total Conversions"), width(700), height(300));
+			containerconversion_rate.appendChild(chartconversion_rate);
+		}
 		if (statusEl) {
 			statusEl.textContent = "✅ Dashboard ready! Brush line charts to filter other charts. Share URL to preserve filters.";
 			statusEl.style.color = "green";
