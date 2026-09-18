@@ -19,6 +19,7 @@ export interface BuildOptions {
     outDir?: string;
     minify?: boolean;
     chartId?: string;
+    base?: string;
 }
 export interface ExportPdfOptions {
     outFile?: string;

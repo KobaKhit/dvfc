@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revenue Analysis with Insights</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+      font-size: 2rem;
+    }
+
+    .subtitle {
+      color: #718096;
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+    }
+
+    #status {
+      padding: 1rem;
+      background: #edf2f7;
+      border-left: 4px solid #4299e1;
+      margin-bottom: 2rem;
+      border-radius: 4px;
+      color: #2d3748;
+      font-weight: 500;
+    }
+
+    .chart-container {
+      margin-bottom: 2rem;
+    }
+
+    
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    
+    @media (max-width: 768px) {
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+
+    .info-box {
+      background: #f7fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .info-box h3 {
+      color: #2d3748;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .info-box p {
+      color: #4a5568;
+      line-height: 1.6;
+    }
+
+    footer {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 2px solid #e2e8f0;
+      color: #718096;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+
+      .container {
+        padding: 1rem;
+      }
+    }
+  </style>
+  <script type="module" crossorigin src="/dvfc/assets/index-CnsSbzAl.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Revenue Analysis with Insights</h1>
+    <p class="subtitle">Demonstrating analysis overlays (trend, mean, moving average) and narrative text blocks</p>
+
+    <div id="status">Initializing...</div>
+
+    <div class="info-box">
+      <h3>📊 How to Use Crossfiltering</h3>
+      <p>
+        Click and drag horizontally on the time series charts to select a date range.
+        Other charts will automatically filter to show only data from the selected period.
+        Click outside the selection to reset.
+      </p>
+    </div>
+
+    <div class="charts-grid">
+      <div id="chart-intro_text" class="chart-container"><h3 style="margin-bottom: 1rem; color: #2d3748;">📊 Revenue Analysis Q1 2024</h3></div>
+      <div id="chart-revenue_trend" class="chart-container"><h3 style="margin-bottom: 1rem; color: #2d3748;">Daily Revenue with Analysis Overlays</h3></div>
+      <div id="chart-insight_text" class="chart-container"></div>
+      <div id="chart-profit_analysis" class="chart-container"><h3 style="margin-bottom: 1rem; color: #2d3748;">Profit Trend (with Mean & 5-Day MA)</h3></div>
+      <div id="chart-regional_breakdown" class="chart-container"><h3 style="margin-bottom: 1rem; color: #2d3748;">Revenue by Region</h3></div>
+      <div id="chart-cost_analysis" class="chart-container"><h3 style="margin-bottom: 1rem; color: #2d3748;">Cost Trend (with Median Reference)</h3></div>
+      <div id="chart-summary_text" class="chart-container"></div>
+    </div>
+
+    <footer>
+      <p>Built with <a href="https://idl.uw.edu/mosaic/" target="_blank">UW Mosaic</a> + Data Viz Factory</p>
+    </footer>
+  </div>
+
+</body>
+</html>

@@ -555,6 +555,7 @@ export async function build(specPath, options = {}) {
         // Create Vite config
         const viteConfig = {
             root: tempDir,
+            base: options.base || '/',
             build: {
                 outDir: resolvePath(outDir),
                 emptyOutDir: true,

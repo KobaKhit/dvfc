@@ -243,6 +243,7 @@ export interface BuildOptions {
   outDir?: string;
   minify?: boolean;
   chartId?: string;
+  base?: string;
 }
 
 export interface ExportPdfOptions {
@@ -667,6 +668,7 @@ export async function build(specPath: string, options: BuildOptions = {}): Promi
     // Create Vite config
     const viteConfig = {
       root: tempDir,
+      base: options.base || '/',
       build: {
         outDir: resolvePath(outDir),
         emptyOutDir: true,

@@ -50,12 +50,14 @@ program
     .option('-o, --out-dir <dir>', 'Output directory', 'dist')
     .option('-m, --minify', 'Minify output', false)
     .option('--chart <id>', 'Build single chart with board context')
+    .option('--base <path>', 'Base public path (e.g. /dvfc/ for GitHub Pages)')
     .action(async (spec, options) => {
     try {
         await build(spec, {
             outDir: options.outDir,
             minify: options.minify,
-            chartId: options.chart
+            chartId: options.chart,
+            base: options.base
         });
     }
     catch (error) {
