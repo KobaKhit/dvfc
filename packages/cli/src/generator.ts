@@ -478,6 +478,12 @@ function generateOverlayMarks(chart: ChartSpec, ctx: GeneratorContext): string[]
   
   if (!yField) return marks;
   
+  // Build from clause with optional filterBy
+  const dataSource = chart.dataSource || '';
+  const fromClause = chart.interaction?.filterBy ?
+    `vg.from('${dataSource}', { filterBy: ${chart.interaction.filterBy} })` :
+    `vg.from('${dataSource}')`;
+  
   for (const overlay of chart.overlays) {
     const field = overlay.field || yField;
     const color = overlay.color || '#e53e3e';
@@ -485,8 +491,9 @@ function generateOverlayMarks(chart: ChartSpec, ctx: GeneratorContext): string[]
     
     switch (overlay.type) {
       case 'mean':
+        // Use ruleY with vg.avg() aggregate
         marks.push(`vg.ruleY(
-        vg.from('${chart.dataSource}'),
+        ${fromClause},
         {
           y: vg.avg('${field}'),
           stroke: '${color}',
@@ -497,8 +504,9 @@ function generateOverlayMarks(chart: ChartSpec, ctx: GeneratorContext): string[]
         break;
         
       case 'median':
+        // Use ruleY with vg.median() aggregate
         marks.push(`vg.ruleY(
-        vg.from('${chart.dataSource}'),
+        ${fromClause},
         {
           y: vg.median('${field}'),
           stroke: '${color}',
@@ -509,20 +517,13 @@ function generateOverlayMarks(chart: ChartSpec, ctx: GeneratorContext): string[]
         break;
         
       case 'trend':
-        // Linear regression line using SQL window functions
-        marks.push(`vg.lineY(
-        vg.from(\`(
-          SELECT 
-            ${xField},
-            regr_intercept(${field}, row_number() over (order by ${xField})) over () + 
-            regr_slope(${field}, row_number() over (order by ${xField})) over () * 
-            row_number() over (order by ${xField}) as trend_value
-          FROM ${chart.dataSource}
-          ORDER BY ${xField}
-        )\`),
+        // Use regressionY mark for linear regression
+        if (!xField) break;
+        marks.push(`vg.regressionY(
+        ${fromClause},
         {
           x: '${xField}',
-          y: 'trend_value',
+          y: '${field}',
           stroke: '${color}',
           strokeWidth: 2,
           strokeDasharray: '2 2'
@@ -531,23 +532,17 @@ function generateOverlayMarks(chart: ChartSpec, ctx: GeneratorContext): string[]
         break;
         
       case 'moving_average':
+        // Use window function: avg().orderby(x).rows([-(window-1), 0])
+        if (!xField) break;
         const window = overlay.window || 7;
         marks.push(`vg.lineY(
-        vg.from(\`(
-          SELECT 
-            ${xField},
-            AVG(${field}) OVER (
-              ORDER BY ${xField} 
-              ROWS BETWEEN ${window - 1} PRECEDING AND CURRENT ROW
-            ) as ma_value
-          FROM ${chart.dataSource}
-          ORDER BY ${xField}
-        )\`),
+        ${fromClause},
         {
           x: '${xField}',
-          y: 'ma_value',
+          y: vg.avg('${field}').orderby('${xField}').rows([${-(window - 1)}, 0]),
           stroke: '${color}',
-          strokeWidth: 2
+          strokeWidth: 2,
+          curve: 'monotone-x'
         }
       )`);
         break;
