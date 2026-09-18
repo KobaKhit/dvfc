@@ -532,14 +532,14 @@ function generateOverlayMarks(chart: ChartSpec, ctx: GeneratorContext): string[]
         break;
         
       case 'moving_average':
-        // Use window function: avg().orderby(x).rows([-(window-1), 0])
+        // Use window function: avg().orderby(x).frame(vg.frameRows([-(window-1), 0]))
         if (!xField) break;
         const window = overlay.window || 7;
         marks.push(`vg.lineY(
         ${fromClause},
         {
           x: '${xField}',
-          y: vg.avg('${field}').orderby('${xField}').rows([${-(window - 1)}, 0]),
+          y: vg.avg('${field}').orderby('${xField}').frame(vg.frameRows([${-(window - 1)}, 0])),
           stroke: '${color}',
           strokeWidth: 2,
           curve: 'monotone-x'
