@@ -1,4 +1,4 @@
-# coordboard Python SDK
+# dvfc Python SDK
 
 Python SDK for building analytics dashboards with Mosaic + dbt.
 
@@ -19,7 +19,7 @@ pip install -e python/
 ### Example 1: Simple Dashboard
 
 ```python
-from coordboard import DashboardBuilder, ChartType
+from dvfc import DashboardBuilder, ChartType
 
 # Create a dashboard
 dashboard = (
@@ -48,9 +48,9 @@ dashboard = (
 )
 
 # Build to HTML
-from coordboard import CoordboardClient
+from dvfc import Data Viz FactoryClient
 
-client = CoordboardClient()
+client = Data Viz FactoryClient()
 html_path = client.build(dashboard, out_dir="dist")
 print(f"Dashboard built: {html_path}")
 ```
@@ -58,10 +58,10 @@ print(f"Dashboard built: {html_path}")
 ### Example 2: Load and Modify
 
 ```python
-from coordboard import CoordboardClient
+from dvfc import Data Viz FactoryClient
 from pathlib import Path
 
-client = CoordboardClient()
+client = Data Viz FactoryClient()
 
 # Load existing spec
 spec_path = Path("examples/sales-board/board.yaml")
@@ -78,7 +78,7 @@ if client.validate(spec_path):
 ### Example 3: Programmatic Spec
 
 ```python
-from coordboard import (
+from dvfc import (
     DashboardSpec,
     MetaSpec,
     DataSource,
@@ -108,7 +108,7 @@ spec = DashboardSpec(
     ],
 )
 
-client = CoordboardClient()
+client = Data Viz FactoryClient()
 yaml_str = client.to_yaml(spec)
 print(yaml_str)
 ```
@@ -142,7 +142,7 @@ Fluent API for building chart specifications.
 - `filter_by(selection)` - Add filter interaction
 - `build()` - Build chart spec
 
-### `CoordboardClient`
+### `Data Viz FactoryClient`
 
 Client for building and validating dashboards.
 
@@ -164,7 +164,7 @@ See [example.ipynb](./example.ipynb) for interactive notebook usage.
 
 ```python
 # In Jupyter
-from coordboard import DashboardBuilder, ChartType, CoordboardClient
+from dvfc import DashboardBuilder, ChartType, Data Viz FactoryClient
 
 dashboard = (
     DashboardBuilder("My Dashboard")
@@ -176,7 +176,7 @@ dashboard = (
     .build()
 )
 
-client = CoordboardClient()
+client = Data Viz FactoryClient()
 html = client.to_html(dashboard)
 
 from IPython.display import HTML
@@ -186,8 +186,8 @@ display(HTML(html))
 ## Requirements
 
 - Python 3.8+
-- Node.js 18+ (for coordboard CLI)
-- coordboard npm package installed and in PATH, or built in parent repo
+- Node.js 18+ (for dvfc CLI)
+- dvfc npm package installed and in PATH, or built in parent repo
 
 ## Development
 
@@ -199,10 +199,10 @@ pip install -e ".[dev]"
 pytest
 
 # Format code
-black coordboard/
+black dvfc/
 
 # Type check
-mypy coordboard/
+mypy dvfc/
 ```
 
 ## License

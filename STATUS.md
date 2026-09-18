@@ -1,5 +1,7 @@
-# coordboard Status Report
+# Data Viz Factory (dvfc) Status Report
 
+**Product:** Data Viz Factory — Cross-filtered boards for humans and agents  
+**CLI:** `dvfc` (Data Viz Factory)  
 **Last Updated:** September 17, 2026  
 **Version:** 0.4.0  
 **Status:** ✅ Production Ready - Analysis overlays, text charts, shareable filters shipped
@@ -12,16 +14,16 @@
 
 | Feature | Status | Command |
 |---------|--------|---------|
-| **Validate specs** | ✅ Working | `coordboard validate board.yaml` |
-| **Preview with hot reload** | ✅ Working | `coordboard preview board.yaml` |
-| **Build static HTML** | ✅ Working | `coordboard build board.yaml` |
-| **Build single chart** | ✅ Working | `coordboard build board.yaml --chart id` |
-| **Init from dbt** | ✅ Working | `coordboard init --from-dbt` |
-| **Export to PDF** | ✅ Working | `coordboard export-pdf board.yaml` |
-| **Search charts** | ✅ Working | `coordboard charts search query` |
-| **Get chart metadata** | ✅ Working | `coordboard charts get board.yaml id` |
-| **List charts** | ✅ Working | `coordboard charts list [--board path]` |
-| **Compose boards** | ✅ Working | `coordboard charts compose --charts id,id` |
+| **Validate specs** | ✅ Working | `dvfc validate board.yaml` |
+| **Preview with hot reload** | ✅ Working | `dvfc preview board.yaml` |
+| **Build static HTML** | ✅ Working | `dvfc build board.yaml` |
+| **Build single chart** | ✅ Working | `dvfc build board.yaml --chart id` |
+| **Init from dbt** | ✅ Working | `dvfc init --from-dbt` |
+| **Export to PDF** | ✅ Working | `dvfc export-pdf board.yaml` |
+| **Search charts** | ✅ Working | `dvfc charts search query` |
+| **Get chart metadata** | ✅ Working | `dvfc charts get board.yaml id` |
+| **List charts** | ✅ Working | `dvfc charts list [--board path]` |
+| **Compose boards** | ✅ Working | `dvfc charts compose --charts id,id` |
 | **MCP server** | ✅ Working | `pnpm mcp` (13 tools) |
 | **Python SDK** | ✅ Working | `pip install -e python/` |
 
@@ -74,7 +76,7 @@
 ```bash
 # Clone repo (if not already)
 git clone <repo-url>
-cd coordboard
+cd dvfc
 
 # Install dependencies
 pnpm install
@@ -86,7 +88,7 @@ pnpm build
 ### 2. Validate a Dashboard (5 seconds)
 
 ```bash
-pnpm exec coordboard validate examples/sales-board/board.yaml
+pnpm exec dvfc validate examples/sales-board/board.yaml
 ```
 
 **Output:**
@@ -100,7 +102,7 @@ pnpm exec coordboard validate examples/sales-board/board.yaml
 ### 3. Preview with Hot Reload (10 seconds)
 
 ```bash
-pnpm exec coordboard preview examples/sales-board/board.yaml
+pnpm exec dvfc preview examples/sales-board/board.yaml
 ```
 
 **Opens:** http://localhost:3000  
@@ -112,7 +114,7 @@ pnpm exec coordboard preview examples/sales-board/board.yaml
 ### 4. Build Static HTML (5 seconds)
 
 ```bash
-pnpm exec coordboard build examples/sales-board/board.yaml --out-dir dist
+pnpm exec dvfc build examples/sales-board/board.yaml --out-dir dist
 ```
 
 **Output:** `dist/index.html` (self-contained, ~696KB)
@@ -130,10 +132,10 @@ pnpm exec coordboard build examples/sales-board/board.yaml --out-dir dist
 
 ```bash
 # Preview
-pnpm exec coordboard preview examples/sales-board/board.yaml
+pnpm exec dvfc preview examples/sales-board/board.yaml
 
 # Build
-pnpm exec coordboard build examples/sales-board/board.yaml --out-dir dist/sales
+pnpm exec dvfc build examples/sales-board/board.yaml --out-dir dist/sales
 ```
 
 ### Example 2: Web Analytics Dashboard
@@ -143,10 +145,10 @@ pnpm exec coordboard build examples/sales-board/board.yaml --out-dir dist/sales
 
 ```bash
 # Preview
-pnpm exec coordboard preview examples/web-analytics/board.yaml
+pnpm exec dvfc preview examples/web-analytics/board.yaml
 
 # Build
-pnpm exec coordboard build examples/web-analytics/board.yaml --out-dir dist/web
+pnpm exec dvfc build examples/web-analytics/board.yaml --out-dir dist/web
 ```
 
 ### Example 3: dbt Jaffle Shop
@@ -156,17 +158,17 @@ pnpm exec coordboard build examples/web-analytics/board.yaml --out-dir dist/web
 
 ```bash
 # Validate
-pnpm exec coordboard validate examples/dbt-jaffle/board.yaml
+pnpm exec dvfc validate examples/dbt-jaffle/board.yaml
 
 # Preview
-pnpm exec coordboard preview examples/dbt-jaffle/board.yaml
+pnpm exec dvfc preview examples/dbt-jaffle/board.yaml
 
 # Build
-pnpm exec coordboard build examples/dbt-jaffle/board.yaml --out-dir dist/jaffle
+pnpm exec dvfc build examples/dbt-jaffle/board.yaml --out-dir dist/jaffle
 
 # Generate from dbt
 cd examples/dbt-jaffle
-pnpm exec coordboard init --from-dbt
+pnpm exec dvfc init --from-dbt
 ```
 
 ---
@@ -176,7 +178,7 @@ pnpm exec coordboard init --from-dbt
 ### Validate
 
 ```bash
-coordboard validate <spec.yaml>
+dvfc validate <spec.yaml>
 ```
 
 **Checks:**
@@ -190,7 +192,7 @@ coordboard validate <spec.yaml>
 ### Init
 
 ```bash
-coordboard init [--from-dbt] [--manifest-path <path>] [-o <file>]
+dvfc init [--from-dbt] [--manifest-path <path>] [-o <file>]
 ```
 
 **Scaffold a new dashboard:**
@@ -202,13 +204,13 @@ coordboard init [--from-dbt] [--manifest-path <path>] [-o <file>]
 **Example:**
 ```bash
 cd my-dbt-project
-coordboard init --from-dbt --manifest-path target/manifest.json -o board.yaml
+dvfc init --from-dbt --manifest-path target/manifest.json -o board.yaml
 ```
 
 ### Preview
 
 ```bash
-coordboard preview <spec.yaml> [--port 3000] [--open]
+dvfc preview <spec.yaml> [--port 3000] [--open]
 ```
 
 **Features:**
@@ -222,7 +224,7 @@ coordboard preview <spec.yaml> [--port 3000] [--open]
 ### Build
 
 ```bash
-coordboard build <spec.yaml> [--out-dir dist] [--minify]
+dvfc build <spec.yaml> [--out-dir dist] [--minify]
 ```
 
 **Output:**
@@ -235,18 +237,18 @@ coordboard build <spec.yaml> [--out-dir dist] [--minify]
 ### Export PDF
 
 ```bash
-coordboard export-pdf <spec.yaml> [-o dashboard.pdf] [--no-browser]
+dvfc export-pdf <spec.yaml> [-o dashboard.pdf] [--no-browser]
 ```
 
 **Automated (with Playwright):**
 ```bash
 npm install -D playwright
-coordboard export-pdf board.yaml -o report.pdf
+dvfc export-pdf board.yaml -o report.pdf
 ```
 
 **Manual (browser print):**
 ```bash
-coordboard export-pdf board.yaml --no-browser
+dvfc export-pdf board.yaml --no-browser
 # Follow printed instructions
 ```
 
@@ -260,7 +262,7 @@ coordboard export-pdf board.yaml --no-browser
 
 ## 🤖 MCP Server
 
-The MCP server enables AI agents to author and modify coordboard dashboards programmatically.
+The MCP server enables AI agents to author and modify dvfc dashboards programmatically.
 
 ### Quick Launch
 
@@ -279,9 +281,9 @@ Add to `~/.cursor/mcp.json`:
 ```json
 {
   "mcpServers": {
-    "coordboard": {
+    "dvfc": {
       "command": "node",
-      "args": ["/absolute/path/to/coordboard/packages/mcp/dist/server.js"],
+      "args": ["/absolute/path/to/dvfc/packages/mcp/dist/server.js"],
       "disabled": false
     }
   }
@@ -317,7 +319,7 @@ Add to `~/.cursor/mcp.json`:
 
 ### Agent Skill
 
-**Location:** `.cursor/skills/coordboard/SKILL.md`
+**Location:** `.cursor/skills/dvfc/SKILL.md`
 
 **Provides:**
 - Coordination patterns
@@ -329,7 +331,7 @@ Add to `~/.cursor/mcp.json`:
 
 ## 🐍 Python SDK
 
-Build and manipulate coordboard dashboards from Python.
+Build and manipulate dvfc dashboards from Python.
 
 ### Installation
 
@@ -340,7 +342,7 @@ pip install -e python/
 ### Quick Example
 
 ```python
-from coordboard import DashboardBuilder, ChartType, CoordboardClient
+from dvfc import DashboardBuilder, ChartType, Data Viz FactoryClient
 
 # Create dashboard
 dashboard = (
@@ -362,7 +364,7 @@ dashboard = (
 )
 
 # Build to HTML
-client = CoordboardClient()
+client = Data Viz FactoryClient()
 html_path = client.build(dashboard, out_dir="dist")
 print(f"Built: {html_path}")
 
@@ -390,7 +392,7 @@ yaml_str = client.to_yaml(dashboard)
 
 ## 🔍 Chart Discovery & Addressability
 
-Find, inspect, and compose charts across coordboard dashboards.
+Find, inspect, and compose charts across dvfc dashboards.
 
 ### Key Features
 
@@ -404,23 +406,23 @@ Find, inspect, and compose charts across coordboard dashboards.
 
 ```bash
 # Search across project
-coordboard charts search revenue
+dvfc charts search revenue
 
 # Get chart metadata
-coordboard charts get examples/dbt-jaffle/board.yaml daily_revenue --format json
+dvfc charts get examples/dbt-jaffle/board.yaml daily_revenue --format json
 
 # List all charts
-coordboard charts list
-coordboard charts list --board examples/sales-board/board.yaml
+dvfc charts list
+dvfc charts list --board examples/sales-board/board.yaml
 
 # Compose from multiple boards
-coordboard charts compose \
+dvfc charts compose \
   --charts dbt-jaffle__daily_revenue,web-analytics__daily_revenue \
   --title "Revenue Comparison" \
   -o composed.yaml
 
 # Build single chart
-coordboard build examples/sales-board/board.yaml --chart daily_sales -o dist-single
+dvfc build examples/sales-board/board.yaml --chart daily_sales -o dist-single
 ```
 
 ### Disambiguation
@@ -429,12 +431,12 @@ When a chart ID exists on multiple boards:
 
 ```bash
 # Ambiguous
-$ coordboard charts compose --charts daily_revenue
+$ dvfc charts compose --charts daily_revenue
 Error: Ambiguous chart reference 'daily_revenue'.
 Multiple matches: dbt-jaffle__daily_revenue, web-analytics__daily_revenue
 
 # Use display key
-$ coordboard charts compose --charts dbt-jaffle__daily_revenue
+$ dvfc charts compose --charts dbt-jaffle__daily_revenue
 ✅ Composed board saved
 ```
 
@@ -453,12 +455,12 @@ $ coordboard charts compose --charts dbt-jaffle__daily_revenue
 
 ## 🔌 Adapters
 
-coordboard supports multiple data transformation tools via adapters.
+dvfc supports multiple data transformation tools via adapters.
 
 ### dbt (Built-in)
 
 ```typescript
-import { createDbtResolver } from '@coordboard/dbt-adapter';
+import { createDbtResolver } from '@dvfc/dbt-adapter';
 
 const resolver = createDbtResolver({
   manifestPath: 'target/manifest.json',
@@ -471,7 +473,7 @@ const path = await resolver.resolve('my_model');
 ### SQLMesh
 
 ```typescript
-import { createSqlMeshResolver } from '@coordboard/adapter-sqlmesh';
+import { createSqlMeshResolver } from '@dvfc/adapter-sqlmesh';
 
 const resolver = createSqlMeshResolver({
   contextPath: 'sqlmesh/context.yaml',
@@ -484,7 +486,7 @@ const path = await resolver.resolve('my_model');
 ### Bruin
 
 ```typescript
-import { createBruinResolver } from '@coordboard/adapter-bruin';
+import { createBruinResolver } from '@dvfc/adapter-bruin';
 
 const resolver = createBruinResolver({
   pipelinePath: 'pipeline.yml',
@@ -509,7 +511,7 @@ All adapters follow the same ModelRef API pattern:
 ## 📦 Package Structure
 
 ```
-coordboard/
+dvfc/
 ├── packages/
 │   ├── core/              # TypeScript types + JSON Schema
 │   ├── dbt-adapter/       # dbt manifest resolver
@@ -519,7 +521,7 @@ coordboard/
 │   ├── cli/               # CLI commands (validate, preview, build, charts, etc.)
 │   └── mcp/               # MCP server for AI integration
 ├── python/                # Python SDK
-│   ├── coordboard/        # SDK package
+│   ├── dvfc/        # SDK package
 │   └── example.py         # Usage example
 ├── examples/
 │   ├── sales-board/       # Business analytics example
@@ -530,7 +532,7 @@ coordboard/
 │   ├── pdf-export.md      # PDF export documentation
 │   └── chart-discovery.md # Chart discovery guide
 └── .cursor/skills/
-    └── coordboard/        # Agent skill for Cursor
+    └── dvfc/        # Agent skill for Cursor
 ```
 
 ---
@@ -613,15 +615,15 @@ charts:
 ### Validate Examples
 
 ```bash
-pnpm exec coordboard validate examples/sales-board/board.yaml
-pnpm exec coordboard validate examples/web-analytics/board.yaml
+pnpm exec dvfc validate examples/sales-board/board.yaml
+pnpm exec dvfc validate examples/web-analytics/board.yaml
 ```
 
 ### Build Examples
 
 ```bash
-pnpm exec coordboard build examples/sales-board/board.yaml --out-dir test-sales
-pnpm exec coordboard build examples/web-analytics/board.yaml --out-dir test-web
+pnpm exec dvfc build examples/sales-board/board.yaml --out-dir test-sales
+pnpm exec dvfc build examples/web-analytics/board.yaml --out-dir test-web
 ```
 
 ### Test MCP Server
@@ -630,7 +632,7 @@ pnpm exec coordboard build examples/web-analytics/board.yaml --out-dir test-web
 # Start server (stdio mode)
 node packages/mcp/dist/server.js
 
-# Server should print: "coordboard MCP server running"
+# Server should print: "dvfc MCP server running"
 # Stop with Ctrl+C
 ```
 
@@ -638,21 +640,21 @@ node packages/mcp/dist/server.js
 
 ```bash
 # Search for revenue charts
-pnpm exec coordboard charts search revenue
+pnpm exec dvfc charts search revenue
 
 # List charts in board
-pnpm exec coordboard charts list --board examples/dbt-jaffle/board.yaml
+pnpm exec dvfc charts list --board examples/dbt-jaffle/board.yaml
 
 # Get chart metadata
-pnpm exec coordboard charts get examples/dbt-jaffle/board.yaml daily_revenue
+pnpm exec dvfc charts get examples/dbt-jaffle/board.yaml daily_revenue
 
 # Compose board from charts
-pnpm exec coordboard charts compose \
+pnpm exec dvfc charts compose \
   --charts dbt-jaffle__daily_revenue,web-analytics__daily_revenue \
   -o test-composed.yaml
 
 # Build single chart
-pnpm exec coordboard build examples/dbt-jaffle/board.yaml \
+pnpm exec dvfc build examples/dbt-jaffle/board.yaml \
   --chart daily_revenue -o test-single
 ```
 
@@ -734,7 +736,7 @@ pnpm test
 - **[docs/pdf-export.md](./docs/pdf-export.md)** - PDF export documentation
 - **[packages/mcp/README.md](./packages/mcp/README.md)** - MCP tools reference
 - **[python/README.md](./python/README.md)** - Python SDK guide
-- **[.cursor/skills/coordboard/SKILL.md](./.cursor/skills/coordboard/SKILL.md)** - Agent skill
+- **[.cursor/skills/dvfc/SKILL.md](./.cursor/skills/dvfc/SKILL.md)** - Agent skill
 - **[scripts/dogfood.sh](./scripts/dogfood.sh)** - Comprehensive test suite
 
 ---
@@ -745,7 +747,7 @@ All v0.2 goals achieved:
 
 ### Task 1: Real dbt Smoke Test ✅
 - ✅ `examples/dbt-jaffle/` with real dbt manifest + lineage
-- ✅ `coordboard init --from-dbt` command
+- ✅ `dvfc init --from-dbt` command
 - ✅ End-to-end validate → preview → build working
 - ✅ Auto-detects mart models, creates charts
 
@@ -772,15 +774,15 @@ All v0.2 goals achieved:
 - ✅ to_yaml, to_json, to_html methods
 
 **B. PDF Export ✅**
-- ✅ `coordboard export-pdf` command
+- ✅ `dvfc export-pdf` command
 - ✅ Automated via Playwright (optional peer dep)
 - ✅ Manual browser print fallback
 - ✅ Print-optimized styles (A4, margins)
 - ✅ No Chromium bundled in core
 
 **C. Adapters ✅**
-- ✅ `@coordboard/adapter-sqlmesh`
-- ✅ `@coordboard/adapter-bruin`
+- ✅ `@dvfc/adapter-sqlmesh`
+- ✅ `@dvfc/adapter-bruin`
 - ✅ Same ModelRef API as dbt
 - ✅ Read metadata, resolve file paths
 - ✅ Documented stub implementations
@@ -788,14 +790,14 @@ All v0.2 goals achieved:
 ### Task 5: Chart Discovery & Addressability (issue #20) ✅
 
 **CLI Commands ✅**
-- ✅ `coordboard charts search <query>` - project-wide search with scoring
-- ✅ `coordboard charts get <board> <chart>` - metadata with board context
-- ✅ `coordboard charts list [--board]` - enumerate all charts
-- ✅ `coordboard charts compose --charts` - ephemeral board from IDs
-- ✅ `coordboard build --chart` - single chart with board context
+- ✅ `dvfc charts search <query>` - project-wide search with scoring
+- ✅ `dvfc charts get <board> <chart>` - metadata with board context
+- ✅ `dvfc charts list [--board]` - enumerate all charts
+- ✅ `dvfc charts compose --charts` - ephemeral board from IDs
+- ✅ `dvfc build --chart` - single chart with board context
 - ✅ Disambiguation: ambiguous IDs return candidates
 
-**Library (@coordboard/charts) ✅**
+**Library (@dvfc/charts) ✅**
 - ✅ `searchCharts(projectRoot, query)` → ChartHit[]
 - ✅ `getChart(boardPath, chartId)` → ChartResource
 - ✅ `listCharts(projectRoot, boardPath?)` → ChartHit[]

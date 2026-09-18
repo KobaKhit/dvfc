@@ -25,13 +25,13 @@ A comprehensive web analytics dashboard tracking page views, traffic sources, an
 cd /workspace
 
 # Validate the spec
-pnpm exec coordboard validate examples/web-analytics/board.yaml
+pnpm exec dvfc validate examples/web-analytics/board.yaml
 
 # Preview with hot reload
-pnpm exec coordboard preview examples/web-analytics/board.yaml
+pnpm exec dvfc preview examples/web-analytics/board.yaml
 
 # Build static HTML
-pnpm exec coordboard build examples/web-analytics/board.yaml --out-dir dist/web-analytics
+pnpm exec dvfc build examples/web-analytics/board.yaml --out-dir dist/web-analytics
 ```
 
 ## Data Sources

@@ -1,7 +1,7 @@
 {
-  "name": "@coordboard/adapter-bruin",
+  "name": "@dvfc/adapter-bruin",
   "version": "0.1.0",
-  "description": "Bruin adapter for coordboard - resolve asset references",
+  "description": "Bruin adapter for Data Viz Factory - resolve asset references",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -30,7 +30,7 @@
   "keywords": [
     "bruin",
     "adapter",
-    "coordboard",
+    "dvfc",
     "analytics"
   ]
 }

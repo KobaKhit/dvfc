@@ -3,14 +3,14 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "coordboard"
+name = "dvfc"
 version = "0.1.0"
-description = "Python SDK for coordboard - Analytics dashboards with Mosaic + dbt"
+description = "Python SDK for Data Viz Factory - Cross-filtered boards for humans and agents"
 readme = "README.md"
 requires-python = ">=3.8"
 license = {text = "Apache-2.0"}
 authors = [
-    {name = "coordboard contributors"}
+    {name = "Data Viz Factory contributors"}
 ]
 keywords = ["dashboard", "analytics", "mosaic", "dbt", "visualization", "crossfilter"]
 classifiers = [
@@ -37,13 +37,13 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/coordboard/coordboard"
-Documentation = "https://github.com/coordboard/coordboard#readme"
-Repository = "https://github.com/coordboard/coordboard"
+Homepage = "https://github.com/dvfc/dvfc"
+Documentation = "https://github.com/dvfc/dvfc#readme"
+Repository = "https://github.com/dvfc/dvfc"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["coordboard*"]
+include = ["dvfc*"]
 
 [tool.black]
 line-length = 100

@@ -3,7 +3,7 @@
  * Transforms DashboardSpec into executable vgplot code
  */
 
-import type { DashboardSpec, ChartSpec } from '@coordboard/core';
+import type { DashboardSpec, ChartSpec } from '@dvfc/core';
 
 export interface GeneratorContext {
   spec: DashboardSpec;
@@ -711,7 +711,7 @@ ${spec.charts.map(chart => `      <div id="chart-${chart.id}" class="chart-conta
     </div>
 
     <footer>
-      <p>Built with <a href="https://idl.uw.edu/mosaic/" target="_blank">UW Mosaic</a> + coordboard</p>
+      <p>Built with <a href="https://idl.uw.edu/mosaic/" target="_blank">UW Mosaic</a> + Data Viz Factory</p>
     </footer>
   </div>
 

@@ -1,23 +1,23 @@
-# @coordboard/adapter-sqlmesh
+# @dvfc/adapter-sqlmesh
 
-SQLMesh adapter for coordboard - resolve model references to data files.
+SQLMesh adapter for dvfc - resolve model references to data files.
 
 ## Installation
 
 ```bash
-npm install @coordboard/adapter-sqlmesh
+npm install @dvfc/adapter-sqlmesh
 ```
 
 Or in monorepo:
 
 ```bash
-pnpm add @coordboard/adapter-sqlmesh
+pnpm add @dvfc/adapter-sqlmesh
 ```
 
 ## Usage
 
 ```typescript
-import { createSqlMeshResolver } from '@coordboard/adapter-sqlmesh';
+import { createSqlMeshResolver } from '@dvfc/adapter-sqlmesh';
 
 const resolver = createSqlMeshResolver({
   contextPath: 'sqlmesh/context.yaml',  // or .json
@@ -107,16 +107,16 @@ Or JSON:
 }
 ```
 
-## Integration with coordboard CLI
+## Integration with dvfc CLI
 
-The coordboard CLI will auto-detect SQLMesh projects and use this adapter:
+The dvfc CLI will auto-detect SQLMesh projects and use this adapter:
 
 ```bash
 # Auto-detect from sqlmesh/ directory
-coordboard build board.yaml --adapter sqlmesh
+dvfc build board.yaml --adapter sqlmesh
 
 # Or specify context path
-coordboard build board.yaml --sqlmesh-context sqlmesh/context.yaml
+dvfc build board.yaml --sqlmesh-context sqlmesh/context.yaml
 ```
 
 *(CLI integration coming soon)*

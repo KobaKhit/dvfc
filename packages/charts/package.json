@@ -1,7 +1,7 @@
 {
-  "name": "@coordboard/charts",
+  "name": "@dvfc/charts",
   "version": "0.2.0",
-  "description": "Chart discovery and addressability for coordboard",
+  "description": "Chart discovery and addressability for Data Viz Factory",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -21,7 +21,7 @@
     "test": "node --test test/*.test.js"
   },
   "dependencies": {
-    "@coordboard/core": "workspace:*",
+    "@dvfc/core": "workspace:*",
     "yaml": "^2.7.0",
     "glob": "^10.3.10"
   },
@@ -31,7 +31,8 @@
   },
   "license": "Apache-2.0",
   "keywords": [
-    "coordboard",
+    "dvfc",
+    "data-viz-factory",
     "charts",
     "discovery",
     "analytics"

@@ -3,8 +3,8 @@
  */
 
 import Ajv from 'ajv';
-import type { DashboardSpec } from '@coordboard/core';
-import { DashboardSpecSchema } from '@coordboard/core';
+import type { DashboardSpec } from '@dvfc/core';
+import { DashboardSpecSchema } from '@dvfc/core';
 
 const ajv = new Ajv({ allErrors: true, verbose: true });
 

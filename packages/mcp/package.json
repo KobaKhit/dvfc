@@ -1,12 +1,12 @@
 {
-  "name": "@coordboard/mcp",
+  "name": "@dvfc/mcp",
   "version": "0.1.0",
-  "description": "MCP server for coordboard - build coordinated dashboards with AI",
+  "description": "MCP server for Data Viz Factory - build cross-filtered dashboards with AI",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "coordboard-mcp": "./dist/server.js"
+    "dvfc-mcp": "./dist/server.js"
   },
   "exports": {
     ".": {
@@ -24,10 +24,10 @@
     "start": "node dist/server.js"
   },
   "dependencies": {
-    "@coordboard/core": "workspace:*",
-    "@coordboard/dbt-adapter": "workspace:*",
-    "@coordboard/cli": "workspace:*",
-    "@coordboard/charts": "workspace:*",
+    "@dvfc/core": "workspace:*",
+    "@dvfc/dbt-adapter": "workspace:*",
+    "@dvfc/cli": "workspace:*",
+    "@dvfc/charts": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.0.4",
     "yaml": "^2.7.0"
   },

@@ -5,14 +5,14 @@
 import { readFile, writeFile } from 'fs/promises';
 import { resolve as resolvePath } from 'path';
 import { stringify as stringifyYAML } from 'yaml';
-import type { ChartHit, ChartResource } from '@coordboard/charts';
+import type { ChartHit, ChartResource } from '@dvfc/charts';
 import {
   searchCharts,
   getChart,
   listCharts,
   composeBoard,
   resolveChartRef
-} from '@coordboard/charts';
+} from '@dvfc/charts';
 
 export interface SearchChartsOptions {
   all?: boolean;
@@ -190,7 +190,7 @@ export async function composeCommand(options: ComposeOptions): Promise<void> {
   
   console.log(`✅ Composed board saved to: ${outFile}`);
   console.log(`\nNext steps:`);
-  console.log(`  coordboard validate ${outFile}`);
-  console.log(`  coordboard preview ${outFile}`);
-  console.log(`  coordboard build ${outFile}\n`);
+  console.log(`  Data Viz Factory validate ${outFile}`);
+  console.log(`  Data Viz Factory preview ${outFile}`);
+  console.log(`  Data Viz Factory build ${outFile}\n`);
 }

@@ -1,7 +1,7 @@
 {
-  "name": "@coordboard/core",
+  "name": "@dvfc/core",
   "version": "0.1.0",
-  "description": "Core types and schemas for coordboard dashboard specifications",
+  "description": "Core types and schemas for dvfc dashboard specifications",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

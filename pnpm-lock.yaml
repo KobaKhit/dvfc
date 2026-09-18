@@ -58,7 +58,7 @@ importers:
 
   packages/charts:
     dependencies:
-      '@coordboard/core':
+      '@dvfc/core':
         specifier: workspace:*
         version: link:../core
       glob:
@@ -77,13 +77,13 @@ importers:
 
   packages/cli:
     dependencies:
-      '@coordboard/charts':
+      '@dvfc/charts':
         specifier: workspace:*
         version: link:../charts
-      '@coordboard/core':
+      '@dvfc/core':
         specifier: workspace:*
         version: link:../core
-      '@coordboard/dbt-adapter':
+      '@dvfc/dbt-adapter':
         specifier: workspace:*
         version: link:../dbt-adapter
       '@duckdb/duckdb-wasm':
@@ -132,7 +132,7 @@ importers:
 
   packages/dbt-adapter:
     dependencies:
-      '@coordboard/core':
+      '@dvfc/core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
@@ -142,16 +142,16 @@ importers:
 
   packages/mcp:
     dependencies:
-      '@coordboard/charts':
+      '@dvfc/charts':
         specifier: workspace:*
         version: link:../charts
-      '@coordboard/cli':
+      '@dvfc/cli':
         specifier: workspace:*
         version: link:../cli
-      '@coordboard/core':
+      '@dvfc/core':
         specifier: workspace:*
         version: link:../core
-      '@coordboard/dbt-adapter':
+      '@dvfc/dbt-adapter':
         specifier: workspace:*
         version: link:../dbt-adapter
       '@modelcontextprotocol/sdk':

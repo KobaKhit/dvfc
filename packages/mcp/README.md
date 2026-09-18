@@ -1,6 +1,6 @@
-# @coordboard/mcp
+# @dvfc/mcp
 
-**MCP Server for coordboard** - Build coordinated analytics dashboards with AI
+**MCP Server for dvfc** - Build coordinated analytics dashboards with AI
 
 ## What This Is
 
@@ -28,19 +28,19 @@ Add to your Cursor settings (Settings → Features → Model Context Protocol):
 ```json
 {
   "mcpServers": {
-    "coordboard": {
+    "dvfc": {
       "command": "node",
-      "args": ["/absolute/path/to/coordboard/packages/mcp/dist/server.js"]
+      "args": ["/absolute/path/to/dvfc/packages/mcp/dist/server.js"]
     }
   }
 }
 ```
 
-**Important:** Replace `/absolute/path/to/coordboard` with your actual repository path.
+**Important:** Replace `/absolute/path/to/dvfc` with your actual repository path.
 
 ### 3. Restart Cursor
 
-The coordboard MCP server will be available in your AI chat.
+The dvfc MCP server will be available in your AI chat.
 
 ### 4. Verify Installation
 
@@ -146,9 +146,9 @@ Result: Working dashboard with crossfiltering!
 
 ## Skill Integration
 
-A coordboard agent skill is available at:
+A dvfc agent skill is available at:
 ```
-.cursor/skills/coordboard/SKILL.md
+.cursor/skills/dvfc/SKILL.md
 ```
 
 This provides:
@@ -186,5 +186,5 @@ node dist/server.js
 ## Resources
 
 - [MCP Specification](https://modelcontextprotocol.io/)
-- [coordboard README](../../README.md)
-- [Agent Skill](.cursor/skills/coordboard/SKILL.md)
+- [dvfc README](../../README.md)
+- [Agent Skill](.cursor/skills/dvfc/SKILL.md)

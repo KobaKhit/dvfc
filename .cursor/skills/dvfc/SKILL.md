@@ -1,4 +1,4 @@
-# coordboard: Build Coordinated Analytics Dashboards
+# dvfc: Build Coordinated Analytics Dashboards
 
 **Skill for authoring interactive dashboards with native Mosaic crossfiltering**
 
@@ -13,9 +13,9 @@ Trigger when the user wants to:
 
 Keywords: dashboard, crossfilter, linked views, coordinated views, analytics, dbt, Mosaic
 
-## What coordboard Does
+## What dvfc Does
 
-coordboard transforms declarative YAML specs into interactive dashboards:
+dvfc transforms declarative YAML specs into interactive dashboards:
 - **Native crossfiltering** via Mosaic coordination engine
 - **In-browser SQL** with DuckDB-WASM (no backend)
 - **dbt integration** with `ref()` resolution
@@ -23,7 +23,7 @@ coordboard transforms declarative YAML specs into interactive dashboards:
 
 ## MCP Tools Available
 
-Use the `coordboard-mcp` server for:
+Use the `dvfc-mcp` server for:
 
 ### 1. validate_dashboard_spec
 Validate a dashboard spec (JSON Schema + semantic checks)
@@ -279,7 +279,7 @@ See working examples:
 
 ## Chart Discovery (NEW)
 
-coordboard now supports cross-project chart discovery and composition!
+dvfc now supports cross-project chart discovery and composition!
 
 ### Key Concepts
 
@@ -416,5 +416,5 @@ User: "Add dbt revenue chart to the web analytics board"
 
 - [Mosaic Docs](https://idl.uw.edu/mosaic/)
 - [Chart Discovery Guide](../docs/chart-discovery.md)
-- [coordboard README](../README.md)
+- [dvfc README](../README.md)
 - [Examples Gallery](../examples/README.md)

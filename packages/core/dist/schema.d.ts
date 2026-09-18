@@ -4,9 +4,9 @@
  */
 export declare const DashboardSpecSchema: {
     readonly $schema: "http://json-schema.org/draft-07/schema#";
-    readonly $id: "https://coordboard.dev/schema/dashboard-spec.json";
+    readonly $id: "https://dvfc.dev/schema/dashboard-spec.json";
     readonly title: "DashboardSpec";
-    readonly description: "Schema for coordboard dashboard specifications";
+    readonly description: "Schema for Data Viz Factory dashboard specifications";
     readonly type: "object";
     readonly required: readonly ["meta", "data", "charts"];
     readonly properties: {

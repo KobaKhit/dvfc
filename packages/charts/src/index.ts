@@ -1,5 +1,5 @@
 /**
- * @coordboard/charts
+ * @dvfc/charts
  * Chart discovery and addressability
  */
 

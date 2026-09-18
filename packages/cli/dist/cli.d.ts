@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * coordboard CLI
+ * Data Viz Factory CLI (dvfc)
  * Main entry point for command-line interface
  */
 export {};

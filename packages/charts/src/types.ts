@@ -2,7 +2,7 @@
  * Chart discovery and addressability types
  */
 
-import type { DashboardSpec, ChartSpec } from '@coordboard/core';
+import type { DashboardSpec, ChartSpec } from '@dvfc/core';
 
 /**
  * Chart reference with board context

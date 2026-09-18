@@ -26,9 +26,9 @@ dbt-jaffle/
 
 ```bash
 # From repo root
-coordboard validate examples/dbt-jaffle/board.yaml
-coordboard preview examples/dbt-jaffle/board.yaml
-coordboard build examples/dbt-jaffle/board.yaml -o dist/jaffle
+dvfc validate examples/dbt-jaffle/board.yaml
+dvfc preview examples/dbt-jaffle/board.yaml
+dvfc build examples/dbt-jaffle/board.yaml -o dist/jaffle
 ```
 
 ## Testing init from dbt
@@ -37,7 +37,7 @@ This example can also be regenerated using:
 
 ```bash
 cd examples/dbt-jaffle
-coordboard init --from-dbt -o board-generated.yaml
+dvfc init --from-dbt -o board-generated.yaml
 ```
 
 The `init --from-dbt` command reads `dbt-stub/manifest.json` and scaffolds a starter `board.yaml` with charts for mart models.

@@ -1,7 +1,7 @@
 {
-  "name": "@coordboard/adapter-sqlmesh",
+  "name": "@dvfc/adapter-sqlmesh",
   "version": "0.1.0",
-  "description": "SQLMesh adapter for coordboard - resolve model references",
+  "description": "SQLMesh adapter for Data Viz Factory - resolve model references",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -30,7 +30,7 @@
   "keywords": [
     "sqlmesh",
     "adapter",
-    "coordboard",
+    "dvfc",
     "analytics"
   ]
 }

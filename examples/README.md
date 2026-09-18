@@ -1,6 +1,6 @@
 # Examples Gallery
 
-Interactive dashboard examples demonstrating coordboard capabilities.
+Interactive dashboard examples demonstrating dvfc capabilities.
 
 ## Available Examples
 
@@ -17,7 +17,7 @@ Interactive dashboard examples demonstrating coordboard capabilities.
 
 **Quick start:**
 ```bash
-pnpm exec coordboard preview examples/sales-board/board.yaml
+pnpm exec dvfc preview examples/sales-board/board.yaml
 ```
 
 ---
@@ -35,7 +35,7 @@ pnpm exec coordboard preview examples/sales-board/board.yaml
 
 **Quick start:**
 ```bash
-pnpm exec coordboard preview examples/web-analytics/board.yaml
+pnpm exec dvfc preview examples/web-analytics/board.yaml
 ```
 
 ---
@@ -53,7 +53,7 @@ pnpm exec coordboard preview examples/web-analytics/board.yaml
 
 **Quick start:**
 ```bash
-pnpm exec coordboard preview examples/dbt-jaffle/board.yaml
+pnpm exec dvfc preview examples/dbt-jaffle/board.yaml
 ```
 
 ---
@@ -78,7 +78,7 @@ pnpm exec coordboard preview examples/dbt-jaffle/board.yaml
 
 **Quick start:**
 ```bash
-pnpm exec coordboard preview examples/revenue-analysis/board.yaml
+pnpm exec dvfc preview examples/revenue-analysis/board.yaml
 ```
 
 ---
@@ -87,17 +87,17 @@ pnpm exec coordboard preview examples/revenue-analysis/board.yaml
 
 ### Validate a board
 ```bash
-pnpm exec coordboard validate examples/<example>/board.yaml
+pnpm exec dvfc validate examples/<example>/board.yaml
 ```
 
 ### Preview with hot reload
 ```bash
-pnpm exec coordboard preview examples/<example>/board.yaml
+pnpm exec dvfc preview examples/<example>/board.yaml
 ```
 
 ### Build static HTML
 ```bash
-pnpm exec coordboard build examples/<example>/board.yaml --out-dir dist/<example>
+pnpm exec dvfc build examples/<example>/board.yaml --out-dir dist/<example>
 ```
 
 ## Example Structure
@@ -121,8 +121,8 @@ examples/<name>/
 5. Validate and preview
 
 ```bash
-pnpm exec coordboard validate your-board.yaml
-pnpm exec coordboard preview your-board.yaml
+pnpm exec dvfc validate your-board.yaml
+pnpm exec dvfc preview your-board.yaml
 ```
 
 ## Learn More

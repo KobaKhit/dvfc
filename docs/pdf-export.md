@@ -1,6 +1,6 @@
 # PDF Export
 
-coordboard supports exporting dashboards to PDF for reports and documentation.
+dvfc supports exporting dashboards to PDF for reports and documentation.
 
 ## Quick Start
 
@@ -12,14 +12,14 @@ npm install -D playwright
 npx playwright install chromium
 
 # Export to PDF
-coordboard export-pdf board.yaml -o dashboard.pdf
+dvfc export-pdf board.yaml -o dashboard.pdf
 ```
 
 ### Manual Print-to-PDF
 
 ```bash
 # Build HTML first
-coordboard build board.yaml -o dist
+dvfc build board.yaml -o dist
 
 # Then:
 # 1. Open dist/index.html in your browser
@@ -31,13 +31,13 @@ coordboard build board.yaml -o dist
 Or let the CLI guide you:
 
 ```bash
-coordboard export-pdf board.yaml --no-browser
+dvfc export-pdf board.yaml --no-browser
 ```
 
 ## CLI Options
 
 ```bash
-coordboard export-pdf <spec> [options]
+dvfc export-pdf <spec> [options]
 
 Arguments:
   spec                  Path to dashboard spec (YAML or JSON)
@@ -64,7 +64,7 @@ The exported PDF includes:
 
 ## Peer Dependency: Playwright
 
-Playwright is an **optional** peer dependency. coordboard works without it, but you won't get automated PDF generation.
+Playwright is an **optional** peer dependency. dvfc works without it, but you won't get automated PDF generation.
 
 **Why optional?**
 - Playwright is large (~200MB with browser binaries)
@@ -90,15 +90,15 @@ pnpm exec playwright install chromium
 The Python SDK also supports PDF export:
 
 ```python
-from coordboard import CoordboardClient
+from dvfc import Data Viz FactoryClient
 
-client = CoordboardClient()
+client = Data Viz FactoryClient()
 spec = client.load("board.yaml")
 
 # Build HTML first
 html_path = client.build(spec, out_dir="dist")
 
-# Then use coordboard CLI or manual browser print
+# Then use dvfc CLI or manual browser print
 ```
 
 ## Troubleshooting
@@ -130,7 +130,7 @@ Run: `npx playwright install chromium`
 Individual charts can be exported as SVG for inclusion in other documents:
 
 ```bash
-coordboard export-svg board.yaml --chart daily_sales -o chart.svg
+dvfc export-svg board.yaml --chart daily_sales -o chart.svg
 ```
 
 *(Not yet implemented)*
@@ -138,7 +138,7 @@ coordboard export-svg board.yaml --chart daily_sales -o chart.svg
 ### Typst Integration (Future)
 
 For programmable document generation, consider:
-- Build coordboard dashboard HTML
+- Build dvfc dashboard HTML
 - Embed in Typst document with `#link()` or screenshot
 - Compile Typst to PDF
 
@@ -149,4 +149,4 @@ As specified in the architecture:
 - **No bundled PDF libs** - We use browser's native PDF engine
 - **Print path only** - No custom PDF rendering
 
-This keeps coordboard lightweight while still supporting PDF output when needed.
+This keeps dvfc lightweight while still supporting PDF output when needed.

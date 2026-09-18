@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * MCP Server for coordboard
+ * MCP Server for Data Viz Factory
  * Provides tools for building coordinated analytics dashboards with AI
  */
 
@@ -13,16 +13,16 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 import { readFile, writeFile } from 'fs/promises';
 import { parse as parseYAML, stringify as stringifyYAML } from 'yaml';
-import type { DashboardSpec, ChartSpec } from '@coordboard/core';
-import { validateWithReport, validateSemantics, validate, build } from '@coordboard/cli';
-import { createDbtResolver, type DbtManifest } from '@coordboard/dbt-adapter';
-import { searchCharts, getChart, listCharts, composeBoard, resolveChartRef } from '@coordboard/charts';
+import type { DashboardSpec, ChartSpec } from '@dvfc/core';
+import { validateWithReport, validateSemantics, validate, build } from '@dvfc/cli';
+import { createDbtResolver, type DbtManifest } from '@dvfc/dbt-adapter';
+import { searchCharts, getChart, listCharts, composeBoard, resolveChartRef } from '@dvfc/charts';
 import { dirname, join } from 'path';
 
 // Create MCP server
 const server = new Server(
   {
-    name: 'coordboard-mcp',
+    name: 'Data Viz Factory-mcp',
     version: '0.1.0',
   },
   {
@@ -731,7 +731,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
-  console.error('coordboard MCP server running');
+  console.error('Data Viz Factory MCP server running');
 }
 
 main().catch((error) => {

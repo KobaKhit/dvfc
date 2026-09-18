@@ -1,6 +1,6 @@
 # Chart Discovery & Addressability
 
-Chart discovery enables finding, inspecting, and composing charts across coordboard dashboards.
+Chart discovery enables finding, inspecting, and composing charts across dvfc dashboards.
 
 ## Overview
 
@@ -19,16 +19,16 @@ Search for charts across the project:
 
 ```bash
 # Search by query (matches ID, title, type, fields)
-coordboard charts search revenue
+dvfc charts search revenue
 
 # Return all matches (default: top 10)
-coordboard charts search revenue --all
+dvfc charts search revenue --all
 
 # Filter by board
-coordboard charts search revenue --board examples/sales-board/board.yaml
+dvfc charts search revenue --board examples/sales-board/board.yaml
 
 # JSON output (for scripting/agents)
-coordboard charts search revenue --json
+dvfc charts search revenue --json
 ```
 
 **Output example:**
@@ -56,10 +56,10 @@ Get full chart specification with board context:
 
 ```bash
 # Get chart (JSON format)
-coordboard charts get examples/dbt-jaffle/board.yaml daily_revenue
+dvfc charts get examples/dbt-jaffle/board.yaml daily_revenue
 
 # YAML format
-coordboard charts get examples/dbt-jaffle/board.yaml daily_revenue --format yaml
+dvfc charts get examples/dbt-jaffle/board.yaml daily_revenue --format yaml
 ```
 
 **Returns:**
@@ -73,13 +73,13 @@ List all charts in project or specific board:
 
 ```bash
 # List all charts in project
-coordboard charts list
+dvfc charts list
 
 # List charts in specific board
-coordboard charts list --board examples/sales-board/board.yaml
+dvfc charts list --board examples/sales-board/board.yaml
 
 # JSON output
-coordboard charts list --json
+dvfc charts list --json
 ```
 
 ### Compose Boards
@@ -88,16 +88,16 @@ Compose ephemeral boards from chart IDs:
 
 ```bash
 # Compose from display keys
-coordboard charts compose \
+dvfc charts compose \
   --charts dbt-jaffle__daily_revenue,web-analytics__daily_revenue \
   --title "Revenue Comparison" \
   -o revenue-comparison.yaml
 
 # Compose from chart IDs (must be unambiguous)
-coordboard charts compose --charts daily_sales,top_products
+dvfc charts compose --charts daily_sales,top_products
 
 # With metric (stub for now)
-coordboard charts compose \
+dvfc charts compose \
   --charts sales-board__daily_sales \
   --metric "Total Revenue" \
   --title "Sales Dashboard"
@@ -116,10 +116,10 @@ Build a single chart while preserving board context:
 
 ```bash
 # Build specific chart from board
-coordboard build examples/sales-board/board.yaml --chart daily_sales -o dist-single
+dvfc build examples/sales-board/board.yaml --chart daily_sales -o dist-single
 
 # Regular build (all charts)
-coordboard build examples/sales-board/board.yaml -o dist
+dvfc build examples/sales-board/board.yaml -o dist
 ```
 
 **Preserves:**
@@ -241,7 +241,7 @@ import {
   composeBoard,
   resolveChartRef,
   makeDisplayKey
-} from '@coordboard/charts';
+} from '@dvfc/charts';
 
 // Search
 const hits = await searchCharts({
@@ -276,14 +276,14 @@ When multiple charts match an ID:
 
 ```bash
 # This fails if "revenue" exists on multiple boards
-$ coordboard charts compose --charts revenue
+$ dvfc charts compose --charts revenue
 
 Error: Ambiguous chart reference 'revenue'. Multiple matches found:
   dbt-jaffle__daily_revenue, web-analytics__daily_revenue
 Use display key format (boardName__chartId) to disambiguate.
 
 # Use display key instead
-$ coordboard charts compose --charts dbt-jaffle__daily_revenue
+$ dvfc charts compose --charts dbt-jaffle__daily_revenue
 ✅ Composed board saved
 ```
 
@@ -293,23 +293,23 @@ $ coordboard charts compose --charts dbt-jaffle__daily_revenue
 
 ```bash
 # Find all revenue charts
-coordboard charts search revenue --all
+dvfc charts search revenue --all
 
 # Compose comparison board
-coordboard charts compose \
+dvfc charts compose \
   --charts dbt-jaffle__daily_revenue,web-analytics__daily_revenue \
   --title "Revenue Comparison (dbt vs Analytics)" \
   -o revenue-comparison.yaml
 
 # Build it
-coordboard build revenue-comparison.yaml
+dvfc build revenue-comparison.yaml
 ```
 
 ### Extract Single Chart
 
 ```bash
 # Build just the daily revenue chart from dbt-jaffle
-coordboard build examples/dbt-jaffle/board.yaml \
+dvfc build examples/dbt-jaffle/board.yaml \
   --chart daily_revenue \
   -o dist-revenue-only
 ```
@@ -343,5 +343,5 @@ coordboard build examples/dbt-jaffle/board.yaml \
 ## See Also
 
 - [MCP Cursor Setup](./mcp-cursor.md) - Configure MCP in Cursor
-- [Agent Skill](../.cursor/skills/coordboard/SKILL.md) - Agent usage patterns
+- [Agent Skill](../.cursor/skills/dvfc/SKILL.md) - Agent usage patterns
 - [CLI README](../README.md) - Main documentation

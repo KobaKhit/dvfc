@@ -6,7 +6,7 @@ import { readFile } from 'fs/promises';
 import { parse as parseYAML } from 'yaml';
 import { glob } from 'glob';
 import { relative, basename, dirname } from 'path';
-import type { DashboardSpec } from '@coordboard/core';
+import type { DashboardSpec } from '@dvfc/core';
 import type { ChartHit, ChartRef, ChartResource, SearchOptions, ComposeOptions } from './types.js';
 
 /**

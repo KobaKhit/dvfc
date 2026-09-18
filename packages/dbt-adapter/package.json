@@ -1,7 +1,7 @@
 {
-  "name": "@coordboard/dbt-adapter",
+  "name": "@dvfc/dbt-adapter",
   "version": "0.1.0",
-  "description": "dbt manifest resolver for coordboard",
+  "description": "dbt manifest resolver for Data Viz Factory",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -20,7 +20,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@coordboard/core": "workspace:*"
+    "@dvfc/core": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.7.3"

@@ -1,6 +1,6 @@
 /**
- * @coordboard/adapter-bruin
- * Bruin adapter for coordboard
+ * @dvfc/adapter-bruin
+ * Bruin adapter for Data Viz Factory
  */
 
 export * from './types.js';

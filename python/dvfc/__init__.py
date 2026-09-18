@@ -1,7 +1,7 @@
 """
-coordboard Python SDK
+Data Viz Factory (dvfc) Python SDK
 
-Build analytics dashboards with Mosaic + dbt from Python.
+Build cross-filtered boards for humans and agents from Python.
 """
 
 from .spec import (
@@ -13,7 +13,7 @@ from .spec import (
     InteractionSpec,
 )
 from .builder import DashboardBuilder
-from .client import CoordboardClient
+from .client import DataVizFactoryClient
 
 __version__ = "0.1.0"
 __all__ = [
@@ -24,5 +24,5 @@ __all__ = [
     "EncodingChannel",
     "InteractionSpec",
     "DashboardBuilder",
-    "CoordboardClient",
+    "DataVizFactoryClient",
 ]

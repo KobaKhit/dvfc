@@ -1,7 +1,7 @@
 /**
- * CLI commands for coordboard
+ * CLI commands for Data Viz Factory
  */
-import type { DashboardSpec } from '@coordboard/core';
+import type { DashboardSpec } from '@dvfc/core';
 export interface InitOptions {
     fromDbt?: boolean;
     manifestPath?: string;

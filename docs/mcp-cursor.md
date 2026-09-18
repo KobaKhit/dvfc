@@ -1,10 +1,10 @@
-# coordboard MCP Server for Cursor
+# dvfc MCP Server for Cursor
 
-This document explains how to use the `@coordboard/mcp` server with Cursor IDE to enable AI-powered dashboard authoring.
+This document explains how to use the `@dvfc/mcp` server with Cursor IDE to enable AI-powered dashboard authoring.
 
 ## What is the MCP Server?
 
-The Model Context Protocol (MCP) server exposes `coordboard` functionality to AI agents, allowing them to:
+The Model Context Protocol (MCP) server exposes `dvfc` functionality to AI agents, allowing them to:
 
 - Validate dashboard specifications
 - Build dashboards from YAML specs
@@ -17,7 +17,7 @@ The Model Context Protocol (MCP) server exposes `coordboard` functionality to AI
 
 ### 1. Build the MCP Server
 
-From the coordboard repository root:
+From the dvfc repository root:
 
 ```bash
 pnpm install
@@ -33,10 +33,10 @@ Add the MCP server to your Cursor configuration file (`~/.cursor/mcp.json` or wo
 ```json
 {
   "mcpServers": {
-    "coordboard": {
+    "dvfc": {
       "command": "node",
       "args": [
-        "/absolute/path/to/coordboard/packages/mcp/dist/server.js"
+        "/absolute/path/to/dvfc/packages/mcp/dist/server.js"
       ],
       "disabled": false
     }
@@ -44,11 +44,11 @@ Add the MCP server to your Cursor configuration file (`~/.cursor/mcp.json` or wo
 }
 ```
 
-**Replace `/absolute/path/to/coordboard/`** with the actual path to your cloned repository.
+**Replace `/absolute/path/to/dvfc/`** with the actual path to your cloned repository.
 
 For example:
-- macOS/Linux: `"/Users/yourname/projects/coordboard/packages/mcp/dist/server.js"`
-- Windows: `"C:\\Users\\yourname\\projects\\coordboard\\packages\\mcp\\dist\\server.js"`
+- macOS/Linux: `"/Users/yourname/projects/dvfc/packages/mcp/dist/server.js"`
+- Windows: `"C:\\Users\\yourname\\projects\\dvfc\\packages\\mcp\\dist\\server.js"`
 
 ### 3. Restart Cursor
 
@@ -59,7 +59,7 @@ After updating `mcp.json`, restart Cursor IDE to load the new MCP server.
 Open the Cursor AI chat and ask:
 
 ```
-List available coordboard MCP tools
+List available dvfc MCP tools
 ```
 
 You should see 8 tools:
@@ -96,7 +96,7 @@ Use these prompts in Cursor to verify the MCP server:
 ### ✅ 1. Validate a Dashboard
 
 ```
-Use coordboard MCP to validate examples/sales-board/board.yaml
+Use dvfc MCP to validate examples/sales-board/board.yaml
 ```
 
 Expected: Validation passes with schema and semantic checks.
@@ -104,7 +104,7 @@ Expected: Validation passes with schema and semantic checks.
 ### ✅ 2. List dbt Models
 
 ```
-Use coordboard MCP to list models from examples/dbt-jaffle/dbt-stub/manifest.json
+Use dvfc MCP to list models from examples/dbt-jaffle/dbt-stub/manifest.json
 ```
 
 Expected: Returns 1 mart model (`customer_orders`) and 3 seeds.
@@ -112,7 +112,7 @@ Expected: Returns 1 mart model (`customer_orders`) and 3 seeds.
 ### ✅ 3. Explain Coordination
 
 ```
-Use coordboard MCP to explain coordination in examples/sales-board/board.yaml
+Use dvfc MCP to explain coordination in examples/sales-board/board.yaml
 ```
 
 Expected: Shows brush selections and which charts are filtered by each selection.
@@ -120,7 +120,7 @@ Expected: Shows brush selections and which charts are filtered by each selection
 ### ✅ 4. Create a Chart
 
 ```
-Use coordboard MCP to add a new bar chart to examples/sales-board/board.yaml:
+Use dvfc MCP to add a new bar chart to examples/sales-board/board.yaml:
 - id: new_chart
 - dataSource: sales_daily
 - x: product, y: revenue (sum)
@@ -131,7 +131,7 @@ Expected: Chart added to YAML file.
 ### ✅ 5. Build Dashboard
 
 ```
-Use coordboard MCP to build examples/sales-board/board.yaml to dist/test
+Use dvfc MCP to build examples/sales-board/board.yaml to dist/test
 ```
 
 Expected: Static HTML dashboard built successfully.
@@ -139,7 +139,7 @@ Expected: Static HTML dashboard built successfully.
 ### ✅ 6. Search Charts
 
 ```
-Use coordboard MCP to search for all charts with type "line" in examples/sales-board/board.yaml
+Use dvfc MCP to search for all charts with type "line" in examples/sales-board/board.yaml
 ```
 
 Expected: Returns matching chart specs.
@@ -147,7 +147,7 @@ Expected: Returns matching chart specs.
 ### ✅ 7. Apply Filter Plan
 
 ```
-Use coordboard MCP to wire a filter from chart "daily_sales" (selection: "dateBrush") 
+Use dvfc MCP to wire a filter from chart "daily_sales" (selection: "dateBrush") 
 to filter charts ["revenue_by_region", "top_products"]
 ```
 
@@ -156,7 +156,7 @@ Expected: `board.yaml` updated with brush and filterBy interactions.
 ### ✅ 8. Update Chart
 
 ```
-Use coordboard MCP to update the title of chart "daily_sales" to "Sales Trend (2024)"
+Use dvfc MCP to update the title of chart "daily_sales" to "Sales Trend (2024)"
 ```
 
 Expected: Chart title updated in YAML.
@@ -164,7 +164,7 @@ Expected: Chart title updated in YAML.
 ### ✅ 9. Search Charts
 
 ```
-Use coordboard MCP to search for charts matching "revenue" across the project
+Use dvfc MCP to search for charts matching "revenue" across the project
 ```
 
 Expected: Returns multiple hits from different boards (dbt-jaffle, web-analytics) with scores.
@@ -172,7 +172,7 @@ Expected: Returns multiple hits from different boards (dbt-jaffle, web-analytics
 ### ✅ 10. Get Chart
 
 ```
-Use coordboard MCP to get chart metadata for "daily_revenue" from examples/dbt-jaffle/board.yaml
+Use dvfc MCP to get chart metadata for "daily_revenue" from examples/dbt-jaffle/board.yaml
 ```
 
 Expected: Returns full chart spec with board context (data sources, theme, layout).
@@ -180,7 +180,7 @@ Expected: Returns full chart spec with board context (data sources, theme, layou
 ### ✅ 11. List Charts
 
 ```
-Use coordboard MCP to list all charts in examples/sales-board/board.yaml
+Use dvfc MCP to list all charts in examples/sales-board/board.yaml
 ```
 
 Expected: Returns all charts in the board with display keys.
@@ -188,7 +188,7 @@ Expected: Returns all charts in the board with display keys.
 ### ✅ 12. Compose Board
 
 ```
-Use coordboard MCP to compose a board from these charts:
+Use dvfc MCP to compose a board from these charts:
 - dbt-jaffle__daily_revenue
 - web-analytics__daily_revenue
 Title: "Revenue Comparison"
@@ -199,7 +199,7 @@ Expected: Returns composed board YAML with both charts and merged data sources.
 ### ✅ 13. Render Chart
 
 ```
-Use coordboard MCP to render only the "daily_revenue" chart from examples/dbt-jaffle/board.yaml
+Use dvfc MCP to render only the "daily_revenue" chart from examples/dbt-jaffle/board.yaml
 ```
 
 Expected: Builds HTML with single chart while preserving board context.
@@ -221,10 +221,10 @@ Expected: Builds HTML with single chart while preserving board context.
 
 ## Agent Skill
 
-The coordboard Agent Skill (`.cursor/skills/coordboard/SKILL.md`) provides prompts and guidance for AI agents to use these MCP tools effectively. It's automatically loaded by Cursor when working with coordboard dashboards.
+The dvfc Agent Skill (`.cursor/skills/dvfc/SKILL.md`) provides prompts and guidance for AI agents to use these MCP tools effectively. It's automatically loaded by Cursor when working with dvfc dashboards.
 
 ## Reference
 
 - [MCP Package README](../packages/mcp/README.md)
-- [Agent Skill Documentation](../.cursor/skills/coordboard/SKILL.md)
+- [Agent Skill Documentation](../.cursor/skills/dvfc/SKILL.md)
 - [Main README](../README.md)

@@ -1,5 +1,5 @@
 /**
- * @coordboard/mcp
+ * @dvfc/mcp
  * MCP server for building coordinated dashboards with AI
  */
 

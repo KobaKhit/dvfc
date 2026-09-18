@@ -1,14 +1,14 @@
 /**
- * CLI commands for coordboard
+ * CLI commands for Data Viz Factory
  */
 
 import { readFile, writeFile, mkdir, cp } from 'fs/promises';
 import { join, dirname, resolve as resolvePath } from 'path';
 import { parse as parseYAML, stringify as stringifyYAML } from 'yaml';
 import { watch } from 'chokidar';
-import type { DashboardSpec } from '@coordboard/core';
-import type { DbtManifest } from '@coordboard/dbt-adapter';
-import { createDbtResolver } from '@coordboard/dbt-adapter';
+import type { DashboardSpec } from '@dvfc/core';
+import type { DbtManifest } from '@dvfc/dbt-adapter';
+import { createDbtResolver } from '@dvfc/dbt-adapter';
 import { generateMainScript, generateHTML, type GeneratorContext } from './generator.js';
 import { build as viteBuild, createServer as createViteServer } from 'vite';
 import { validateWithReport, validateSemantics, type ValidationResult } from './validator.js';
@@ -161,8 +161,8 @@ export async function init(options: InitOptions = {}): Promise<void> {
       
       console.log(`\n✅ Created ${outFile}`);
       console.log(`\nNext steps:`);
-      console.log(`  1. coordboard validate ${outFile}`);
-      console.log(`  2. coordboard preview ${outFile}`);
+      console.log(`  1. Data Viz Factory validate ${outFile}`);
+      console.log(`  2. Data Viz Factory preview ${outFile}`);
       console.log(`  3. Edit ${outFile} to customize\n`);
       
     } catch (error) {
@@ -229,8 +229,8 @@ export async function init(options: InitOptions = {}): Promise<void> {
     console.log(`✅ Created ${outFile}`);
     console.log(`\nNext steps:`);
     console.log(`  1. Edit ${outFile} with your data sources and charts`);
-    console.log(`  2. coordboard validate ${outFile}`);
-    console.log(`  3. coordboard preview ${outFile}\n`);
+    console.log(`  2. Data Viz Factory validate ${outFile}`);
+    console.log(`  3. Data Viz Factory preview ${outFile}\n`);
   }
 }
 
@@ -259,7 +259,7 @@ export async function exportPdf(specPath: string, options: ExportPdfOptions = {}
   console.log(`📄 Exporting dashboard to PDF: ${outFile}\n`);
   
   // First, build to HTML
-  const tmpDir = '.coordboard-pdf-build';
+  const tmpDir = '.dvfc-pdf-build';
   await build(specPath, { outDir: tmpDir, minify: false });
   
   const htmlPath = join(tmpDir, 'index.html');
@@ -411,7 +411,7 @@ export async function preview(specPath: string, options: PreviewOptions = {}): P
     const specDir = dirname(resolvePath(specPath));
     
     // Create temporary preview directory
-    const tempDir = join(process.cwd(), '.coordboard-preview');
+    const tempDir = join(process.cwd(), '.dvfc-preview');
     await mkdir(tempDir, { recursive: true });
     await mkdir(join(tempDir, 'data'), { recursive: true });
     
@@ -487,7 +487,7 @@ async function generatePreviewFiles(specPath: string, tempDir: string): Promise<
   
   // Create package.json if it doesn't exist
   const tempPackageJson = {
-    name: 'coordboard-preview',
+    name: 'dvfc-preview',
     type: 'module',
     dependencies: {
       '@uwdata/vgplot': '^0.31.0',
@@ -612,13 +612,13 @@ export async function build(specPath: string, options: BuildOptions = {}): Promi
     }
     
     // Create temporary build directory
-    const tempDir = join(process.cwd(), '.coordboard-build');
+    const tempDir = join(process.cwd(), '.dvfc-build');
     await mkdir(tempDir, { recursive: true });
     await mkdir(join(tempDir, 'data'), { recursive: true });
     
     // Create package.json with dependencies
     const tempPackageJson = {
-      name: 'coordboard-temp-build',
+      name: 'dvfc-temp-build',
       type: 'module',
       dependencies: {
         '@uwdata/vgplot': '^0.31.0',

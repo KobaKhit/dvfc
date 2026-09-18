@@ -1,6 +1,6 @@
 /**
- * @coordboard/cli
- * CLI tool for coordboard
+ * @dvfc/cli
+ * CLI tool for Data Viz Factory
  */
 
 export * from './commands.js';

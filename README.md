@@ -1,4 +1,6 @@
-# coordboard
+# Data Viz Factory
+
+**dvfc = Data Viz Factory — Cross-filtered boards for humans and agents**
 
 **Build interactive analytics dashboards from declarative YAML** → Powered by [Mosaic](https://idl.uw.edu/mosaic/) + dbt
 
@@ -11,14 +13,14 @@ Define dashboards in YAML, get native crossfiltering and in-browser SQL. No back
 ```bash
 # 1. Clone and install (1 min)
 git clone <repo-url>
-cd coordboard
+cd dvfc
 pnpm install
 
 # 2. Build packages (30 sec)
 pnpm build
 
 # 3. Preview example with hot reload (30 sec)
-pnpm exec coordboard preview examples/sales-board/board.yaml
+pnpm exec dvfc preview examples/sales-board/board.yaml
 # Opens at http://localhost:3000
 
 # 4. Try crossfiltering! (2 min)
@@ -50,19 +52,19 @@ pnpm exec coordboard preview examples/sales-board/board.yaml
 ### Example 1: Sales & Flights
 6-chart dashboard with time-based crossfiltering
 ```bash
-pnpm exec coordboard preview examples/sales-board/board.yaml
+pnpm exec dvfc preview examples/sales-board/board.yaml
 ```
 
 ### Example 2: Web Analytics
 Traffic sources, conversions, and revenue
 ```bash
-pnpm exec coordboard preview examples/web-analytics/board.yaml
+pnpm exec dvfc preview examples/web-analytics/board.yaml
 ```
 
 ### Example 3: Revenue Analysis with Overlays
 Analysis overlays (trend, mean, MA) + narrative text blocks
 ```bash
-pnpm exec coordboard preview examples/revenue-analysis/board.yaml
+pnpm exec dvfc preview examples/revenue-analysis/board.yaml
 ```
 
 See [examples/README.md](./examples/README.md) for full gallery.
@@ -73,7 +75,7 @@ See [examples/README.md](./examples/README.md) for full gallery.
 
 ### Validate a board spec
 ```bash
-coordboard validate board.yaml
+dvfc validate board.yaml
 ```
 - JSON Schema validation
 - Semantic checks (data refs, selections)
@@ -81,7 +83,7 @@ coordboard validate board.yaml
 
 ### Preview with hot reload
 ```bash
-coordboard preview board.yaml --port 3000
+dvfc preview board.yaml --port 3000
 ```
 - Vite dev server
 - File watching
@@ -89,7 +91,7 @@ coordboard preview board.yaml --port 3000
 
 ### Build static HTML
 ```bash
-coordboard build board.yaml --out-dir dist
+dvfc build board.yaml --out-dir dist
 ```
 - Generates self-contained HTML
 - ~333KB gzipped
@@ -152,7 +154,7 @@ charts:
 ## 📂 Project Structure
 
 ```
-coordboard/
+dvfc/
 ├── packages/
 │   ├── core/              # Types + JSON Schema
 │   ├── dbt-adapter/       # dbt manifest resolver
@@ -199,7 +201,7 @@ pnpm example:sales
 ✅ Flexible (Observable Plot + vgplot)  
 ✅ Production-ready (UW IDL active maintenance)
 
-### What coordboard adds
+### What dvfc adds
 ✅ Declarative YAML specs  
 ✅ CLI tooling (validate, preview, build)  
 ✅ dbt integration (ref() resolution)  
@@ -231,5 +233,5 @@ Apache-2.0
 **Ready to build?** Start with [examples/README.md](./examples/README.md) or run:
 
 ```bash
-pnpm exec coordboard preview examples/sales-board/board.yaml
+pnpm exec dvfc preview examples/sales-board/board.yaml
 ```

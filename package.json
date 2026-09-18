@@ -1,19 +1,19 @@
 {
-  "name": "@coordboard/monorepo",
+  "name": "@dvfc/monorepo",
   "version": "0.1.0",
   "private": true,
-  "description": "coordboard - Analytics dashboards with Mosaic + dbt",
+  "description": "Data Viz Factory - Cross-filtered boards for humans and agents",
   "type": "module",
   "scripts": {
-    "build": "pnpm -r --filter='!@coordboard/example-*' build",
-    "dev": "pnpm -r --parallel --filter='!@coordboard/example-*' dev",
+    "build": "pnpm -r --filter='!@dvfc/example-*' build",
+    "dev": "pnpm -r --parallel --filter='!@dvfc/example-*' dev",
     "clean": "pnpm -r --parallel clean && rm -rf dist node_modules",
     "mcp": "node packages/mcp/dist/server.js",
     "dogfood": "./scripts/dogfood.sh",
-    "test": "pnpm -r --filter='@coordboard/charts' test",
-    "example:sales": "pnpm --filter @coordboard/example-sales-board dev",
-    "example:build": "pnpm --filter @coordboard/example-sales-board build",
-    "example:preview": "pnpm --filter @coordboard/example-sales-board preview"
+    "test": "pnpm -r --filter='@dvfc/charts' test",
+    "example:sales": "pnpm --filter @dvfc/example-sales-board dev",
+    "example:build": "pnpm --filter @dvfc/example-sales-board build",
+    "example:preview": "pnpm --filter @dvfc/example-sales-board preview"
   },
   "keywords": [
     "dashboard",

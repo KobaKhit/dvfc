@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Simple example of using coordboard Python SDK
+Simple example of using Data Viz Factory (dvfc) Python SDK
 """
 
-from coordboard import ChartType, CoordboardClient, DashboardBuilder
+from dvfc import ChartType, DataVizFactoryClient, DashboardBuilder
 
 # Create a dashboard using fluent API
 dashboard = (
@@ -50,7 +50,7 @@ dashboard.chart("products_pie", ChartType.PIE, "products").title("Product Mix").
 spec = dashboard.build()
 
 # Output YAML
-client = CoordboardClient()
+client = DataVizFactoryClient()
 print("Dashboard YAML:")
 print("=" * 60)
 print(client.to_yaml(spec))
@@ -62,11 +62,11 @@ if client.validate(spec):
 else:
     print("✗ Spec is invalid")
 
-# Build to HTML (requires coordboard CLI in PATH or in parent repo)
+# Build to HTML (requires dvfc CLI in PATH or in parent repo)
 try:
     html_path = client.build(spec, out_dir="dist-python")
     print(f"\n✓ Dashboard built: {html_path}")
     print(f"  Preview: npx serve dist-python")
 except Exception as e:
-    print(f"\n⚠ Build failed (coordboard CLI not found or error): {e}")
-    print("  Install coordboard or run from repo with built CLI")
+    print(f"\n⚠ Build failed (dvfc CLI not found or error): {e}")
+    print("  Install dvfc or run from repo with built CLI")

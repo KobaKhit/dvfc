@@ -1,5 +1,5 @@
 /**
- * Core types for coordboard dashboard specifications
+ * Core types for Data Viz Factory dashboard specifications
  * Defines the structure of YAML/JSON board configurations
  */
 /**

@@ -1,10 +1,10 @@
 {
-  "name": "@coordboard/cli",
+  "name": "@dvfc/cli",
   "version": "0.1.0",
-  "description": "CLI tool for coordboard - preview and build dashboards",
+  "description": "CLI tool for Data Viz Factory - preview and build dashboards",
   "type": "module",
   "bin": {
-    "coordboard": "./dist/cli.js"
+    "dvfc": "./dist/cli.js"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -23,9 +23,9 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@coordboard/core": "workspace:*",
-    "@coordboard/dbt-adapter": "workspace:*",
-    "@coordboard/charts": "workspace:*",
+    "@dvfc/core": "workspace:*",
+    "@dvfc/dbt-adapter": "workspace:*",
+    "@dvfc/charts": "workspace:*",
     "@duckdb/duckdb-wasm": "^1.32.0",
     "@uwdata/vgplot": "^0.31.0",
     "ajv": "^8.20.0",

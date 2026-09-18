@@ -5,9 +5,9 @@
 
 export const DashboardSpecSchema = {
   $schema: 'http://json-schema.org/draft-07/schema#',
-  $id: 'https://coordboard.dev/schema/dashboard-spec.json',
+  $id: 'https://dvfc.dev/schema/dashboard-spec.json',
   title: 'DashboardSpec',
-  description: 'Schema for coordboard dashboard specifications',
+  description: 'Schema for Data Viz Factory dashboard specifications',
   type: 'object',
   required: ['meta', 'data', 'charts'],
   properties: {

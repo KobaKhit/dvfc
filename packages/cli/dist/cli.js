@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * coordboard CLI
+ * Data Viz Factory CLI (dvfc)
  * Main entry point for command-line interface
  */
 import { Command } from 'commander';
@@ -8,9 +8,9 @@ import { preview, build, validate, init, exportPdf } from './commands.js';
 import { searchChartsCommand, getChartCommand, listChartsCommand, composeCommand } from './chart-commands.js';
 const program = new Command();
 program
-    .name('coordboard')
-    .description('CLI tool for building analytics dashboards with Mosaic + dbt')
-    .version('0.1.0');
+    .name('dvfc')
+    .description('Data Viz Factory - Cross-filtered boards for humans and agents')
+    .version('0.4.0');
 program
     .command('validate')
     .description('Validate dashboard spec')

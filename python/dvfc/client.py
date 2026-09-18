@@ -1,5 +1,5 @@
 """
-CoordboardClient - interface to build dashboards
+DataVizFactoryClient - interface to build dashboards
 """
 
 import json
@@ -15,9 +15,9 @@ import yaml
 from .spec import DashboardSpec
 
 
-class CoordboardClient:
+class DataVizFactoryClient:
     """
-    Client for building coordboard dashboards.
+    Client for building Data Viz Factory dashboards.
     
     Shells to the Node.js CLI or emits IR for rendering.
     """
@@ -27,14 +27,14 @@ class CoordboardClient:
         Initialize the client.
         
         Args:
-            cli_path: Path to coordboard CLI. If None, searches PATH.
+            cli_path: Path to dvfc CLI. If None, searches PATH.
         """
         self.cli_path = cli_path or self._find_cli()
 
     def _find_cli(self) -> str:
-        """Find coordboard CLI in PATH or common locations"""
+        """Find dvfc CLI in PATH or common locations"""
         # Try PATH
-        cli_path = shutil.which("coordboard")
+        cli_path = shutil.which("dvfc")
         if cli_path:
             return cli_path
         
@@ -46,8 +46,8 @@ class CoordboardClient:
             return f"node {node_cli}"
         
         raise RuntimeError(
-            "Could not find coordboard CLI. "
-            "Install coordboard npm package or set cli_path explicitly."
+            "Could not find dvfc CLI. "
+            "Install dvfc npm package or set cli_path explicitly."
         )
 
     def build(

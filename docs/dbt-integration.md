@@ -1,11 +1,11 @@
-# Using coordboard with Real dbt Projects
+# Using dvfc with Real dbt Projects
 
-This guide shows how to use coordboard with a real dbt project's `target/manifest.json`.
+This guide shows how to use dvfc with a real dbt project's `target/manifest.json`.
 
 ## Prerequisites
 
 - A dbt project with `target/manifest.json` generated
-- coordboard CLI installed (`pnpm install` from repo root)
+- dvfc CLI installed (`pnpm install` from repo root)
 
 ## Quick Start with Real dbt
 
@@ -28,7 +28,7 @@ ls -lh target/manifest.json
 
 ```bash
 # From your dbt project root
-coordboard init --from-dbt \
+dvfc init --from-dbt \
   --manifest-path target/manifest.json \
   -o board.yaml
 ```
@@ -41,7 +41,7 @@ This will:
 
 ### 3. Prepare Data Files
 
-coordboard needs CSV exports of your dbt models. You have two options:
+dvfc needs CSV exports of your dbt models. You have two options:
 
 #### Option A: Use dbt seeds (recommended for dashboards)
 
@@ -130,22 +130,22 @@ charts:
 
 ```bash
 # Validate
-coordboard validate board.yaml
+dvfc validate board.yaml
 
 # Preview with hot reload
-coordboard preview board.yaml
+dvfc preview board.yaml
 
 # Build static HTML
-coordboard build board.yaml -o dist
+dvfc build board.yaml -o dist
 ```
 
 ## manifest.json Location
 
-coordboard looks for `dbt-stub/manifest.json` relative to your `board.yaml` by default.
+dvfc looks for `dbt-stub/manifest.json` relative to your `board.yaml` by default.
 
 **Custom location:**
 - Edit your board.yaml path if needed
-- coordboard CLI assumes `dbt-stub/` in the same directory as board.yaml
+- dvfc CLI assumes `dbt-stub/` in the same directory as board.yaml
 - For now, you need to copy manifest and CSVs to this location
 
 **Future:** Direct `--manifest-path` and `--data-dir` flags on build/preview commands.
@@ -156,11 +156,11 @@ coordboard looks for `dbt-stub/manifest.json` relative to your `board.yaml` by d
 
 ```bash
 # Generate from marts only
-coordboard init --from-dbt \
+dvfc init --from-dbt \
   --manifest-path target/manifest.json \
   -o marts-board.yaml
 
-# coordboard auto-detects models in marts/ schema
+# dvfc auto-detects models in marts/ schema
 ```
 
 ### Pattern 2: Specific Models Dashboard
@@ -196,7 +196,7 @@ dbt show --select my_model --limit 1000 > /tmp/my_model.json
 jq -r '...' /tmp/my_model.json > dbt-stub/my_model.csv
 
 # Terminal 3: Preview dashboard
-coordboard preview board.yaml
+dvfc preview board.yaml
 ```
 
 ## Refreshing Data
@@ -214,7 +214,7 @@ dbt run
 cp new-exports/*.csv dbt-stub/
 
 # 4. If schema changed, regenerate board
-coordboard init --from-dbt -o board-new.yaml
+dvfc init --from-dbt -o board-new.yaml
 # Merge changes into your existing board.yaml
 ```
 
@@ -222,7 +222,7 @@ coordboard init --from-dbt -o board-new.yaml
 
 ### "dbt manifest not found"
 
-coordboard expects `dbt-stub/manifest.json` next to your `board.yaml`.
+dvfc expects `dbt-stub/manifest.json` next to your `board.yaml`.
 
 ```bash
 # Check paths
@@ -262,7 +262,7 @@ head dbt-stub/my_model.csv
 # Regenerate manifest
 cd my-dbt-project
 dbt parse
-cp target/manifest.json path/to/coordboard/dbt-stub/
+cp target/manifest.json path/to/dvfc/dbt-stub/
 ```
 
 ## Best Practices

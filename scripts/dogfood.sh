@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 #
-# Dogfood script - runs coordboard commands on examples
+# Dogfood script - runs dvfc commands on examples
 # Tests: search, get, compose, validate, build
 #
 
 set -e
 
-echo "🐕 coordboard Dogfood Test Suite"
+echo "🐕 dvfc Dogfood Test Suite"
 echo "================================="
 echo
 

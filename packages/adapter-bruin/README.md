@@ -1,23 +1,23 @@
-# @coordboard/adapter-bruin
+# @dvfc/adapter-bruin
 
-Bruin adapter for coordboard - resolve asset references to data files.
+Bruin adapter for dvfc - resolve asset references to data files.
 
 ## Installation
 
 ```bash
-npm install @coordboard/adapter-bruin
+npm install @dvfc/adapter-bruin
 ```
 
 Or in monorepo:
 
 ```bash
-pnpm add @coordboard/adapter-bruin
+pnpm add @dvfc/adapter-bruin
 ```
 
 ## Usage
 
 ```typescript
-import { createBruinResolver } from '@coordboard/adapter-bruin';
+import { createBruinResolver } from '@dvfc/adapter-bruin';
 
 const resolver = createBruinResolver({
   pipelinePath: 'pipeline.yml',
@@ -110,16 +110,16 @@ Or JSON:
 }
 ```
 
-## Integration with coordboard CLI
+## Integration with dvfc CLI
 
-The coordboard CLI will auto-detect Bruin projects and use this adapter:
+The dvfc CLI will auto-detect Bruin projects and use this adapter:
 
 ```bash
 # Auto-detect from pipeline.yml
-coordboard build board.yaml --adapter bruin
+dvfc build board.yaml --adapter bruin
 
 # Or specify pipeline path
-coordboard build board.yaml --bruin-pipeline pipeline.yml
+dvfc build board.yaml --bruin-pipeline pipeline.yml
 ```
 
 *(CLI integration coming soon)*
