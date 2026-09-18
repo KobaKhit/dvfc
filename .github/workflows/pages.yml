@@ -1,0 +1,89 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build packages
+        run: pnpm run build
+
+      - name: Build site
+        run: |
+          mkdir -p site/examples
+          
+          # Prevent GitHub Pages Jekyll processing
+          touch site/.nojekyll
+          
+          echo "Building sales-board example..."
+          node packages/cli/dist/cli.js build examples/sales-board/board.yaml -o site/examples/sales-board --base /dvfc/
+          
+          echo "Building web-analytics example..."
+          node packages/cli/dist/cli.js build examples/web-analytics/board.yaml -o site/examples/web-analytics --base /dvfc/
+          
+          echo "Building dbt-jaffle example..."
+          node packages/cli/dist/cli.js build examples/dbt-jaffle/board.yaml -o site/examples/dbt-jaffle --base /dvfc/
+          
+          echo "Building revenue-analysis example..."
+          node packages/cli/dist/cli.js build examples/revenue-analysis/board.yaml -o site/examples/revenue-analysis --base /dvfc/
+          
+          echo "✅ All examples built successfully"
+          ls -lh site/examples/*/index.html
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './site'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

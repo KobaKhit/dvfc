@@ -11,6 +11,18 @@ Define dashboards in YAML, get native crossfiltering and in-browser SQL. No back
 
 ---
 
+## 🌐 Live Demos
+
+**See it in action:** [https://kobakhit.github.io/dvfc/](https://kobakhit.github.io/dvfc/)
+
+Try the interactive examples (click and drag to crossfilter):
+- [Sales & Flights Dashboard](https://kobakhit.github.io/dvfc/examples/sales-board/) — Business analytics with time-based brushing
+- [Web Analytics](https://kobakhit.github.io/dvfc/examples/web-analytics/) — Traffic sources and conversion metrics
+- [dbt Jaffle Shop](https://kobakhit.github.io/dvfc/examples/dbt-jaffle/) — E-commerce order analytics
+- [Revenue Analysis](https://kobakhit.github.io/dvfc/examples/revenue-analysis/) — Financial performance with analysis overlays
+
+---
+
 ## ⚡ 5-Minute Quickstart
 
 ```bash
