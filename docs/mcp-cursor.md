@@ -30,6 +30,29 @@ This builds `packages/mcp/dist/server.js`.
 
 Add the MCP server to your Cursor configuration file (`~/.cursor/mcp.json` or workspace-specific config):
 
+**Recommended: Workspace-relative path**
+
+If you're working within the dvfc repository:
+
+```json
+{
+  "mcpServers": {
+    "dvfc": {
+      "command": "node",
+      "args": [
+        "${workspaceFolder}/packages/mcp/dist/server.js"
+      ],
+      "disabled": false,
+      "env": {}
+    }
+  }
+}
+```
+
+**Alternative: Absolute path**
+
+For global installation or use outside the repository:
+
 ```json
 {
   "mcpServers": {
@@ -38,7 +61,8 @@ Add the MCP server to your Cursor configuration file (`~/.cursor/mcp.json` or wo
       "args": [
         "/absolute/path/to/dvfc/packages/mcp/dist/server.js"
       ],
-      "disabled": false
+      "disabled": false,
+      "env": {}
     }
   }
 }
@@ -49,6 +73,23 @@ Add the MCP server to your Cursor configuration file (`~/.cursor/mcp.json` or wo
 For example:
 - macOS/Linux: `"/Users/yourname/projects/dvfc/packages/mcp/dist/server.js"`
 - Windows: `"C:\\Users\\yourname\\projects\\dvfc\\packages\\mcp\\dist\\server.js"`
+
+**Using pnpm script:**
+
+You can also configure Cursor to use the pnpm script:
+
+```json
+{
+  "mcpServers": {
+    "dvfc": {
+      "command": "pnpm",
+      "args": ["mcp"],
+      "cwd": "${workspaceFolder}",
+      "disabled": false
+    }
+  }
+}
+```
 
 ### 3. Restart Cursor
 
@@ -62,15 +103,20 @@ Open the Cursor AI chat and ask:
 List available dvfc MCP tools
 ```
 
-You should see 8 tools:
+You should see 13 tools:
 1. `validate_dashboard_spec`
 2. `build_dashboard`
 3. `list_models`
 4. `create_chart`
 5. `update_chart`
 6. `search_charts`
-7. `explain_coordination`
-8. `apply_filter_plan`
+7. `get_chart`
+8. `list_charts`
+9. `compose_board`
+10. `render_chart`
+11. `explain_coordination`
+12. `apply_filter_plan`
+13. `compile_dashboard`
 
 ## Quick Launch (Alternative)
 
@@ -88,6 +134,97 @@ node packages/mcp/dist/server.js
 ```
 
 The server runs on stdio and waits for MCP protocol messages.
+
+## End-to-End Agent Loop
+
+Here's how an AI agent can use dvfc MCP tools to build coordinated dashboards:
+
+### Discovery → Composition Workflow
+
+**1. Search for charts**
+```
+Agent: Use search_charts to find all revenue-related charts
+Result: Multiple hits across different boards (sales, dbt-jaffle, web-analytics)
+```
+
+**2. Get detailed metadata**
+```
+Agent: Use get_chart for each interesting chart
+Result: Full chart spec + board context (data sources, theme, layout)
+```
+
+**3. Compose new dashboard**
+```
+Agent: Use compose_board with selected chart display keys
+Result: New board spec merging charts from multiple sources
+```
+
+**4. Validate**
+```
+Agent: Use validate_dashboard_spec on composed board
+Result: Schema + semantic validation passes
+```
+
+**5. Build or render**
+```
+Agent: Use build_dashboard to create static HTML
+Or: Use render_chart to build single chart for testing
+Result: Interactive dashboard with native crossfiltering
+```
+
+### Iteration → Enhancement Workflow
+
+**1. Explain current coordination**
+```
+Agent: Use explain_coordination on existing board
+Result: Shows which charts brush and which are filtered
+```
+
+**2. Apply filter plan**
+```
+Agent: Use apply_filter_plan to wire up new interactions
+Result: Board updated with brush and filterBy connections
+```
+
+**3. Create new charts**
+```
+Agent: Use create_chart or update_chart to add visualizations
+Result: Charts added to board with proper encodings
+```
+
+**4. Validate and build**
+```
+Agent: Validate, then build to test changes
+Result: Updated dashboard with new interactions
+```
+
+### dbt Integration Workflow
+
+**1. List available models**
+```
+Agent: Use list_models on target/manifest.json
+Result: All dbt models with schemas and dependencies
+```
+
+**2. Select mart models**
+```
+Agent: Filter for models in marts/ or tagged 'mart'
+Result: Subset of models suitable for visualization
+```
+
+**3. Create charts for each model**
+```
+Agent: Use create_chart for time-series, categoricals, KPIs
+Result: Dashboard spec with auto-generated charts
+```
+
+**4. Wire coordination**
+```
+Agent: Use apply_filter_plan to connect time brushes to filters
+Result: Full coordinated dashboard from dbt models
+```
+
+This workflow is automated in the Agent Skill (`.cursor/skills/dvfc/SKILL.md`).
 
 ## Dogfood Checklist
 
