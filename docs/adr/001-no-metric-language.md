@@ -1,4 +1,4 @@
-# ADR 001: No metric language — dbt owns semantics
+# ADR 001: No metric language, dbt owns semantics
 
 **Status:** Accepted  
 **Date:** 2026-09-20

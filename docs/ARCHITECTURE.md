@@ -2,7 +2,7 @@
 
 **Status:** Target architecture (implementation roadmap in [ROADMAP.md](./ROADMAP.md))  
 **Last updated:** 2026-09-20  
-**Supersedes (directionally):** board-centric model in `STATUS.md` — examples and docs are **Dash IR** only (`*.dash.yaml`).
+**Supersedes (directionally):** board-centric model in `STATUS.md`, examples and docs are **Dash IR** only (`*.dash.yaml`).
 
 ---
 
@@ -10,11 +10,11 @@
 
 **dvfc** (Data Viz Factory) is a **chart compiler and dash composer** for humans and agents.
 
-- **Auditable specs** (YAML / TOML / JSON) — not vibecoded dashboard apps  
-- **Portable artifacts** — interactive HTML (Mosaic + DuckDB-WASM) and standalone SVG / PNG (Vega-Lite)  
-- **Exploration-first** — native crossfiltering (dc.js lineage), not only static reports  
-- **Turnkey** — validate → preview → export without a warehouse requirement  
-- **dbt-native metrics** — consume dbt OSS semantic layer; **do not** invent a metric language  
+- **Auditable specs** (YAML / TOML / JSON), not vibecoded dashboard apps  
+- **Portable artifacts**, interactive HTML (Mosaic + DuckDB-WASM) and standalone SVG / PNG (Vega-Lite)  
+- **Exploration-first**, native crossfiltering (dc.js lineage), not only static reports  
+- **Turnkey**, validate → preview → export without a warehouse requirement  
+- **dbt-native metrics**, consume dbt OSS semantic layer; **do not** invent a metric language  
 
 **Not in scope as identity:** rebuilding on Observable Framework (optional future *emit* only).  
 **Competitors we differentiate from:** [dbt Charts](https://github.com/dbt-labs/dbt-charts) (board/report-centric) by making **charts atomic** and **dashes composable**, with auto-coordination as a value-add.
@@ -51,7 +51,7 @@ dbt semantic metrics / models     sql | files | tables
 | Layer | Owner | Notes |
 |-------|--------|------|
 | Metric definitions & semantics | **dbt OSS** (semantic layer / MetricFlow) | Resolve to SQL or a relation; no parallel algebra in dvfc |
-| SQL execution / file reads | **DuckDB** (WASM or native), engine APIs | Passthrough — Mosaic/vgplot/Vega-Lite already expect tables/SQL |
+| SQL execution / file reads | **DuckDB** (WASM or native), engine APIs | Passthrough, Mosaic/vgplot/Vega-Lite already expect tables/SQL |
 | Interactive coordination | **Mosaic / vgplot** | Brush / selections for HTML dashes |
 | Static vector/raster export | **Vega-Lite** (+ PNG encode) | Per-chart SVG/PNG; optional static HTML |
 | Chart + dash grammar, validate, compose, CLI, MCP, Python SDK | **dvfc** | Product surface |
@@ -62,7 +62,7 @@ dbt semantic metrics / models     sql | files | tables
 
 All public specs accept **YAML, TOML, and JSON** with the same JSON Schema (generated from TypeScript types in `@dvfc/core`).
 
-### 4.1 Data binding (connectors — not languages)
+### 4.1 Data binding (connectors, not languages)
 
 A chart’s `data` is one of:
 
@@ -79,7 +79,7 @@ data:
   type: dbt
   model: sales_daily              # manifest ref → relation/file
 
-# C) inline SQL (engine runs it — same idea as dbt Charts queries)
+# C) inline SQL (engine runs it, same idea as dbt Charts queries)
 data:
   type: sql
   sql: |
@@ -160,7 +160,7 @@ charts:
       filterBy: time
 
 theme:
-  # optional — light theming tokens only in v1
+  # optional, light theming tokens only in v1
 ```
 
 **Rules:**
@@ -284,7 +284,7 @@ If only one renderer is implemented, `build --format` for the other fails with �
 
 ## 9. Python SDK
 
-Mirror the IR — not a second product:
+Mirror the IR, not a second product:
 
 ```python
 from dvfc import Chart, Dash, build
@@ -344,7 +344,7 @@ Legacy **`board.yaml`** and board-shaped specs are **removed** from examples, pr
 
 ## 14. Related docs
 
-- [ROADMAP.md](./ROADMAP.md) — phased implementation plan  
-- [dbt-integration.md](./dbt-integration.md) — current model resolver (to extend)  
-- [chart-discovery.md](./chart-discovery.md) — search, get, list, `composeDash`, and dash-scoped addressability  
-- Root `VERDICT.md` — Mosaic GO for interactive path (still valid for HTML renderer)
+- [ROADMAP.md](./ROADMAP.md), phased implementation plan  
+- [dbt-integration.md](./dbt-integration.md), current model resolver (to extend)  
+- [chart-discovery.md](./chart-discovery.md), search, get, list, `composeDash`, and dash-scoped addressability  
+- Root `VERDICT.md`, Mosaic GO for interactive path (still valid for HTML renderer)

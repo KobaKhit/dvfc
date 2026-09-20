@@ -21,10 +21,10 @@ interface ChartTypeModule {
 }
 ```
 
-- **id** — value of `type:` in `*.chart.yaml` and inline dash charts.
-- **capabilities** — drives CLI/MCP listing (`dvfc charts types`) and export paths (Mosaic HTML vs Vega-Lite SVG/PNG).
-- **validate** — optional encoding/options checks beyond JSON Schema.
-- **renderMosaic** / **renderVegaLite** — emit renderer-specific specs (generator calls these as types migrate off the central switch).
+- **id**, value of `type:` in `*.chart.yaml` and inline dash charts.
+- **capabilities**, drives CLI/MCP listing (`dvfc charts types`) and export paths (Mosaic HTML vs Vega-Lite SVG/PNG).
+- **validate**, optional encoding/options checks beyond JSON Schema.
+- **renderMosaic** / **renderVegaLite**, emit renderer-specific specs (generator calls these as types migrate off the central switch).
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) §7 for the full renderer story.
 

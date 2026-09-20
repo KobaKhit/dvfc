@@ -11,11 +11,13 @@
       "import": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf dist",
-    "test": "pnpm build && node --test test/*.test.js"
+    "test": "pnpm build && node --experimental-strip-types --test test/**/*.test.ts"
   },
   "dependencies": {
     "@dvfc/core": "workspace:*",

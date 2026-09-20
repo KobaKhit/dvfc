@@ -1,0 +1,72 @@
+id: cosmic-showcase
+title: Other Worlds Observatory
+description: Brush the discovery timeline to filter every view.
+version: 0.1.0
+coordination:
+  auto: true
+data:
+  - id: worlds
+    type: csv
+    path: exoplanets.csv
+charts:
+  - id: discovery_timeline
+    type: line
+    title: Discoveries over time
+    dataSource: worlds
+    encoding:
+      x: { field: discovery_year, type: ordinal, label: Discovery year }
+      y: { field: planet, type: quantitative, aggregate: count, label: Worlds }
+    interaction:
+      brush: true
+      brushAxis: x
+      publishes: era
+      selection: era
+    width: 460
+    height: 230
+
+  - id: discovery_methods
+    type: bar
+    title: Discovery methods
+    dataSource: worlds
+    encoding:
+      x: { field: method, type: nominal, label: Method }
+      y: { field: planet, type: quantitative, aggregate: count, label: Worlds }
+      color: "#0b7f6e"
+    interaction:
+      filterBy: era
+    width: 460
+    height: 230
+
+  - id: habitability_scatter
+    type: scatter
+    title: Temperature × habitability
+    dataSource: worlds
+    encoding:
+      x: { field: equilibrium_k, type: quantitative, label: Temperature (K) }
+      y: { field: habitability_score, type: quantitative, label: Habitability }
+      color: { field: mission, type: nominal }
+    interaction:
+      filterBy: era
+    width: 460
+    height: 230
+
+  - id: mission_mix
+    type: bar
+    title: Mission contribution
+    dataSource: worlds
+    encoding:
+      x: { field: mission, type: nominal, label: Mission }
+      y: { field: planet, type: quantitative, aggregate: count, label: Worlds }
+      color: "#2f6f94"
+    interaction:
+      filterBy: era
+    width: 460
+    height: 230
+
+layout:
+  type: grid
+  columns: 2
+  gap: 16
+theme:
+  backgroundColor: "#ffffff"
+  fontFamily: "Inter, system-ui, sans-serif"

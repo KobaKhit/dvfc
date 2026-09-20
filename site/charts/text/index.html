@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text chart | dvfc</title>
+  <meta name="description" content="Place interpretation beside the evidence so a dashboard says what the numbers mean.">
+  <link rel="stylesheet" href="/dvfc/style.css?v=20260920b">
+</head>
+<body class="chart-example-page" style="--example-accent:#c47a1a">
+  <nav class="nav" aria-label="Primary">
+    <div class="wrap nav-inner">
+      <a class="brand" href="/dvfc/">dv<em>fc</em></a>
+      <ul class="nav-links">
+        <li><a href="/dvfc/#how">How it works</a></li>
+        <li><a href="/dvfc/#gallery">Examples</a></li>
+        <li><a href="/dvfc/charts.html">Chart types</a></li>
+        <li><a href="https://github.com/KobaKhit/dvfc" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a class="btn btn-primary btn-sm" href="/dvfc/#demo">Live demo</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main>
+    <header class="example-hero wrap">
+      <div>
+        <a class="breadcrumb" href="/dvfc/charts.html">← All chart types</a>
+        <p class="section-kicker">Explain what matters</p>
+        <h1>Text chart</h1>
+        <p>Place interpretation beside the evidence so a dashboard says what the numbers mean.</p>
+      </div>
+      <div class="example-number">13</div>
+    </header>
+
+    <section class="example-stage wrap-wide">
+      <div class="example-visual"><article class="field-note">
+    <span class="field-note-index">FIELD NOTE 07</span>
+    <h2>Proximity is not familiarity.</h2>
+    <p>A high habitability score is a prompt for observation, not proof of life.</p>
+    <p>The most interesting worlds in this atlas orbit small red stars. Their closeness makes atmospheric follow-up possible, while stellar flares make those atmospheres difficult to keep.</p>
+    <blockquote>Good visual analysis tells you what to look at next, not what to believe.</blockquote>
+  </article></div>
+      <aside class="example-insight">
+        <span class="tag">narrative</span>
+        <h2>Field note: proximity is not familiarity</h2>
+        <p>Narrative is a first-class chart type because analysis without context is just decoration.</p>
+        <dl>
+          <div><dt>Dataset</dt><dd>Landmark exoplanets</dd></div>
+          <div><dt>Renderer</dt><dd>Mosaic HTML</dd></div>
+          <div><dt>Source</dt><dd><code>cosmic-atlas.dash.yaml</code></dd></div>
+        </dl>
+      </aside>
+    </section>
+
+    <section class="example-code wrap">
+      <div>
+        <p class="section-kicker">Source</p>
+        <h2>The spec behind this chart</h2>
+        <p>Copy this block into a dash file, point <code>dataSource</code> at your own data, and run <code>dvfc build</code>.</p>
+      </div>
+      <pre><code>- id: field_note
+  type: text
+  title: &quot;Field note: proximity is not familiarity&quot;
+  content: |
+    **A high habitability score is a prompt for observation, not proof of life.**
+
+    The most interesting worlds in this atlas orbit small red stars. Their closeness makes atmospheric follow-up possible, while stellar flares make those atmospheres difficult to keep.</code></pre>
+    </section>
+
+    <nav class="example-pagination wrap" aria-label="Chart examples">
+      <a href="/dvfc/charts/table/"><span>Previous</span><strong>← Table</strong></a>
+      <a href="/dvfc/charts/line/"><span>Next</span><strong>Line →</strong></a>
+    </nav>
+  </main>
+</body>
+</html>

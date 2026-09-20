@@ -1,6 +1,6 @@
 # Data Viz Factory (dvfc) Status Report
 
-**Product:** Data Viz Factory — Cross-filtered boards for humans and agents  
+**Product:** Data Viz Factory, Cross-filtered boards for humans and agents  
 **CLI:** `dvfc` (Data Viz Factory)  
 **Last Updated:** September 18, 2026  
 **Version:** 0.5.0  

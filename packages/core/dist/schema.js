@@ -123,7 +123,8 @@ export const DashboardSpecSchema = {
                     items: { type: 'string' }
                 },
                 fontFamily: { type: 'string' },
-                backgroundColor: { type: 'string' }
+                backgroundColor: { type: 'string' },
+                chartBorders: { type: 'boolean' }
             }
         }
     },

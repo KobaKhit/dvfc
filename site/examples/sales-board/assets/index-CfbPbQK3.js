@@ -61,7 +61,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 	}
 })();
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/throttle.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/throttle.js
 var NIL = {};
 /**
 * Throttle invocations of a callback function. The callback must return
@@ -104,7 +104,7 @@ function throttle(callback, debounce = false) {
 	return debounce ? delay : process;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/MosaicClient.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/MosaicClient.js
 function isMosaicClient(x) {
 	return x instanceof MosaicClient;
 }
@@ -316,7 +316,7 @@ var MosaicClient = class {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/constants.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/constants.js
 /** Magic bytes 'ARROW1' indicating the Arrow 'file' format. */
 var MAGIC$1 = Uint8Array.of(65, 82, 82, 79, 87, 49);
 /**
@@ -703,7 +703,7 @@ var BodyCompressionMethod$1 = {
 */
 BUFFER: 0 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/util/arrays.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/util/arrays.js
 /**
 * @import { Int64ArrayConstructor, IntArrayConstructor, IntegerArray, TypedArray } from '../types.js'
 */
@@ -785,7 +785,7 @@ function bisect(offsets, index) {
 	return a;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/util/objects.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/util/objects.js
 /**
 * Return the input value if it passes a test.
 * Otherwise throw an error using the given message generator.
@@ -825,7 +825,7 @@ function keyFor(object, value) {
 	return "<Unknown>";
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/data-types.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/data-types.js
 /**
 * @import { BinaryType, BinaryViewType, BoolType, DataType, DateType, DateUnit_, DecimalType, DictionaryType, DurationType, Field, FixedSizeBinaryType, FixedSizeListType, FloatType, IntBitWidth, IntervalType, IntervalUnit_, IntType, LargeBinaryType, LargeListType, LargeListViewType, LargeUtf8Type, ListType, ListViewType, MapType, NullType, Precision_, RunEndEncodedType, StructType, TimestampType, TimeType, TimeUnit_, UnionMode_, UnionType, Utf8Type, Utf8ViewType } from './types.js'
 */
@@ -1351,7 +1351,7 @@ function fromDecimal256(buf, offset) {
 	return x;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/util/strings.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/util/strings.js
 var textDecoder = new TextDecoder("utf-8");
 new TextEncoder();
 /**
@@ -1506,7 +1506,7 @@ function readVector(buf, offset, stride, extract) {
 	return Array.from({ length: readInt32(buf, base) }, (_, i) => extract(buf, base + 4 + i * stride));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/util/struct.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/util/struct.js
 /**
 * @import { Batch } from '../batch.js';
 */
@@ -1575,7 +1575,7 @@ function structObject(names, batches, index) {
 	return obj;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/batch.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/batch.js
 /**
 * @import { Column } from './column.js'
 * @import { DataType, DecimalType, IntegerArray, OffsetArray, TypedArray, TypedArrayConstructor, ValueArray } from './types.js'
@@ -2353,7 +2353,7 @@ var Utf8ViewBatch = class extends ViewBatch {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/column.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/column.js
 /**
 * @import { Batch } from './batch.js'
 * @import { DataType, ValueArray } from './types.js'
@@ -2509,7 +2509,7 @@ function extractArray(array, data) {
 	return array;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/table.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/table.js
 /**
 * @import { Column } from './column.js'
 * @import { Schema, StructFactory, TypeMap, ValueArray } from './types.js'
@@ -2697,7 +2697,7 @@ function renameField(field, name) {
 	} : field;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/batch-type.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/batch-type.js
 /**
 * @import { DataType, ExtractionOptions } from './types.js';
 */
@@ -2748,7 +2748,7 @@ function wrap$1(BaseClass, WrapperClass) {
 	} : BaseClass;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/compression.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/compression.js
 /** @import { Codec, CompressionType_ } from './types.js' */
 var LENGTH_NO_COMPRESSED_DATA = -1;
 var COMPRESS_LENGTH_PREFIX = 8;
@@ -2793,7 +2793,7 @@ function decompressBuffer(body, { offset, length }, codec) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/decode/block.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/decode/block.js
 /**
 * Decode a block that points to messages within an Arrow 'file' format.
 * @param {Uint8Array} buf A byte buffer of binary Arrow IPC data
@@ -2817,7 +2817,7 @@ function decodeBlocks(buf, index) {
 	return readVector(buf, index, 24, decodeBlock);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/decode/body-compression.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/decode/body-compression.js
 /**
 * @import { BodyCompression, BodyCompressionMethod_, CompressionType_ } from '../types.js'
 */
@@ -2835,7 +2835,7 @@ function decodeBodyCompression(buf, index) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/decode/record-batch.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/decode/record-batch.js
 /**
 * @import { RecordBatch, Version_ } from '../types.js'
 */
@@ -2864,7 +2864,7 @@ function decodeRecordBatch$1(buf, index, version) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/decode/dictionary-batch.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/decode/dictionary-batch.js
 /**
 * @import { DictionaryBatch, Version_ } from '../types.js'
 */
@@ -2889,7 +2889,7 @@ function decodeDictionaryBatch$1(buf, index, version) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/decode/data-type.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/decode/data-type.js
 /**
 * @import { DataType, Field } from '../types.js'
 */
@@ -2931,7 +2931,7 @@ function decodeDataType(buf, index, typeId, children) {
 	return { typeId };
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/decode/metadata.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/decode/metadata.js
 /**
 * @import { Metadata } from '../types.js'
 */
@@ -2949,7 +2949,7 @@ function decodeMetadata(buf, index) {
 	return entries.length ? new Map(entries) : null;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/decode/schema.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/decode/schema.js
 /**
 * @import { DictionaryType, Endianness_, Field, IntType, Schema, Version_ } from '../types.js'
 */
@@ -3021,7 +3021,7 @@ function decodeInt(buf, index) {
 	return decodeDataType(buf, index, Type$2.Int);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/decode/message.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/decode/message.js
 /**
 * @import { Message, MessageHeader_, Version_ } from '../types.js'
 */
@@ -3070,7 +3070,7 @@ function decodeMessage(buf, index) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/decode/decode-ipc.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/decode/decode-ipc.js
 /**
 * @import { ArrowData, Version_ } from '../types.js'
 */
@@ -3169,7 +3169,7 @@ function decodeIPCFile(data) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/decode/table-from-ipc.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+flechette@2.5.0/node_modules/@uwdata/flechette/src/decode/table-from-ipc.js
 /**
 * @import { ArrowData, BodyCompression, ExtractionOptions, Field, RecordBatch, Schema } from '../types.js'
 */
@@ -3406,7 +3406,7 @@ function visit(type, ctx) {
 }
 new Uint16Array(new Uint8Array([1, 0]).buffer)[0];
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/decode-ipc.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/decode-ipc.js
 /**
 * Decode Arrow IPC bytes to a table instance.
 * The default options map date and timestamp values to JS Date objects.
@@ -3420,7 +3420,7 @@ function decodeIPC(data, options = { useDate: true }) {
 	return tableFromIPC(data, options);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/connectors/socket.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/connectors/socket.js
 /**
 * DuckDB socket connector.
 */
@@ -3506,7 +3506,7 @@ var SocketConnector = class {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/node.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/node.js
 /**
 * Check if a value is a SQL AST node.
 * @param value The value to check.
@@ -3557,7 +3557,7 @@ var SQLNode = class {
 */
 var ExprNode = class extends SQLNode {};
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/constants.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/constants.js
 var COLUMN_REF = "COLUMN_REF";
 var COLUMN_PARAM = "COLUMN_PARAM";
 var TABLE_REF = "TABLE_REF";
@@ -3603,7 +3603,7 @@ var CREATE_QUERY = "CREATE_QUERY";
 var CREATE_SCHEMA_QUERY = "CREATE_SCHEMA_QUERY";
 var SCALAR_SUBQUERY = "SCALAR_SUBQUERY";
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/from.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/from.js
 /**
 * AST node corresponding to a table source which can appear
 * within a SQL `FROM` clause.
@@ -3641,7 +3641,7 @@ var FromClauseNode = class FromClauseNode extends FromNode {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/param.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/param.js
 var ParamNode = class extends ExprNode {
 	/** The dynamic parameter. */
 	param;
@@ -3661,7 +3661,7 @@ var ParamNode = class extends ExprNode {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/function.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/function.js
 var FunctionNode = class extends ExprNode {
 	/** The function name. */
 	name;
@@ -3679,7 +3679,7 @@ var FunctionNode = class extends ExprNode {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/util/function.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/util/function.js
 /**
 * Create a new function call AST node.
 * @param name The function name.
@@ -3730,7 +3730,7 @@ function argsList(list) {
 	return i < n ? list.slice(0, i) : list;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/window.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/window.js
 var WindowClauseNode = class extends SQLNode {
 	/** The window name. */
 	name;
@@ -3858,7 +3858,7 @@ function deriveDef(def, options) {
 	return new WindowDefNode(options.name ?? def.name, options.partition ?? def.partition, options.order ?? def.order, options.framedef ?? def.framedef);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/column-ref.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/column-ref.js
 /**
 * Check if a value is a column reference node.
 * @param value The value to check.
@@ -3905,7 +3905,7 @@ var ColumnNameRefNode = class extends ColumnRefNode {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/column-param.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/column-param.js
 /**
 * Check if a value is a dynamic column reference node.
 * @param value The value to check.
@@ -3933,7 +3933,7 @@ var ColumnParamNode = class extends ColumnRefNode {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/util/type-check.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/util/type-check.js
 /**
 * Check if a value is a string.
 * @param value The value to check.
@@ -3960,7 +3960,7 @@ function isParamLike(value) {
 	return false;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/column.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/column.js
 /**
 * Create a column reference.
 * @param name The column name, as a string or as a dynamic parameter.
@@ -3971,7 +3971,7 @@ function column$1(name, table) {
 	return isParamLike(name) ? new ColumnParamNode(new ParamNode(name), tref) : new ColumnNameRefNode(name, tref);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/literal.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/literal.js
 var LiteralNode = class extends ExprNode {
 	/** The literal value. */
 	value;
@@ -4002,7 +4002,7 @@ function literalToSQL(value) {
 	}
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/verbatim.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/verbatim.js
 var VerbatimNode = class extends ExprNode {
 	/** The verbatim content to include. */
 	value;
@@ -4020,7 +4020,7 @@ var VerbatimNode = class extends ExprNode {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/literal.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/literal.js
 /**
 * Return a SQL AST node for a literal value. The supported types are
 * null, string, number, boolean, Date, and RegExp. Otherwise, the
@@ -4039,7 +4039,7 @@ function verbatim(value, hint) {
 	return new VerbatimNode(value, hint);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/table-ref.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/table-ref.js
 /**
 * Check if a value is a table reference node.
 * @param value The value to check.
@@ -4066,7 +4066,7 @@ var TableRefNode = class extends ExprNode {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/table-ref.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/table-ref.js
 /**
 * Returns a named table or view reference.
 * @param ids Table and namespace identifiers.
@@ -4078,7 +4078,7 @@ function tableRef(...ids) {
 	return args?.length ? new TableRefNode(args) : void 0;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/util/string.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/util/string.js
 function quoteIdentifier(value) {
 	return `"${value.replaceAll("\"", "\"\"")}"`;
 }
@@ -4089,7 +4089,7 @@ function isDoubleQuoted(s) {
 	return s[0] === "\"" && s[s.length - 1] === "\"";
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/util/ast.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/util/ast.js
 /**
 * Interpret a value as a SQL AST node. String values are assumed to be
 * column references. All other primitive values are interpreted as
@@ -4141,7 +4141,7 @@ function getTableRef(value) {
 	return isString(value) ? tableRef(value) : isArray$1(value) ? tableRef(value) : value;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/aggregate.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/aggregate.js
 var AggregateNode = class AggregateNode extends ExprNode {
 	/** The aggregate function name. */
 	name;
@@ -4311,7 +4311,7 @@ var aggregateNames = [
 	"weighted_avg"
 ];
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/between-op.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/between-op.js
 var AbstractBetweenOpNode = class extends ExprNode {
 	/** The input expression. */
 	expr;
@@ -4348,7 +4348,7 @@ var BetweenOpNode = class extends AbstractBetweenOpNode {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/binary-op.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/binary-op.js
 var BinaryOpNode = class extends ExprNode {
 	/** The operator type. */
 	op;
@@ -4370,7 +4370,7 @@ var BinaryOpNode = class extends ExprNode {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/cast.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/cast.js
 var CastNode = class extends ExprNode {
 	/** The expression to type cast. */
 	expr;
@@ -4388,7 +4388,7 @@ var CastNode = class extends ExprNode {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/fragment.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/fragment.js
 /**
 * A SQL AST node made up of disjoint fragments that are combined to form
 * a coherent expression. Along with verbatim content, this class serves
@@ -4407,7 +4407,7 @@ var FragmentNode = class extends ExprNode {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/logical-op.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/logical-op.js
 var LogicalOpNode = class extends ExprNode {
 	/** The logical operator */
 	op;
@@ -4443,7 +4443,7 @@ var OrNode = class extends LogicalOpNode {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/sample.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/sample.js
 var SampleClauseNode = class extends SQLNode {
 	/** The sample size as either a row count or percentage. */
 	size;
@@ -4471,7 +4471,7 @@ var SampleClauseNode = class extends SQLNode {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/select.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/select.js
 var SelectClauseNode = class extends SQLNode {
 	/** The select expression. */
 	expr;
@@ -4489,7 +4489,7 @@ var SelectClauseNode = class extends SQLNode {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/with.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/with.js
 var WithClauseNode = class extends SQLNode {
 	/** The common table expression (CTE) name. */
 	name;
@@ -4517,7 +4517,7 @@ var WithClauseNode = class extends SQLNode {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/query.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/query.js
 /**
 * Check if a value is a selection query or set operation.
 * @param value The value to check.
@@ -5113,7 +5113,7 @@ var WithClause = class {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/pivot.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/pivot.js
 var PivotQuery = class PivotQuery extends Query {
 	/** The relation to pivot. */
 	source;
@@ -5219,7 +5219,7 @@ var PivotQuery = class PivotQuery extends Query {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/unary-op.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/unary-op.js
 var AbstractUnaryOpNode = class extends ExprNode {
 	/** The operator type. */
 	op;
@@ -5248,7 +5248,7 @@ var UnaryPostfixOpNode = class extends AbstractUnaryOpNode {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/unnest.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/unnest.js
 var UnnestNode = class extends ExprNode {
 	/** An expression that resolves to a list or a struct */
 	expr;
@@ -5268,13 +5268,13 @@ var UnnestNode = class extends ExprNode {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/window-frame.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/ast/window-frame.js
 var PRECEDING = "PRECEDING";
 var FOLLOWING = "FOLLOWING";
 var CURRENT_ROW = "CURRENT ROW";
 var UNBOUNDED = "UNBOUNDED";
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/visit/codegen/sql.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/visit/codegen/sql.js
 /**
 * Abstract base class for SQL code generation visitors.
 */
@@ -5352,7 +5352,7 @@ var SQLCodeGenerator = class {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/visit/codegen/duckdb.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/visit/codegen/duckdb.js
 /**
 * DuckDB SQL dialect visitor for converting AST nodes to DuckDB-compatible SQL.
 */
@@ -5624,10 +5624,10 @@ function formatFrameExpr(visitor, value, scope) {
 	return isNode(value) && value.type === "WINDOW_EXTENT_EXPR" ? x : x != null && typeof x !== "number" ? `${x} ${scope}` : x === 0 ? CURRENT_ROW : !(x && Number.isFinite(x)) ? `${UNBOUNDED} ${scope}` : `${Math.abs(x)} ${scope}`;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/init.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/init.js
 setDefaultVisitor(new DuckDBCodeGenerator());
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/aggregate.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/aggregate.js
 /**
 * Compute an arg_max aggregate.
 * @param y The argument to return.
@@ -5671,14 +5671,6 @@ function count$2(expr) {
 */
 function max$2(expr) {
 	return aggFn("max", expr);
-}
-/**
-* Compute a median aggregate.
-* @param expr The expression to aggregate.
-* @returns A SQL aggregate function call.
-*/
-function median$1(expr) {
-	return aggFn("median", expr);
 }
 /**
 * Compute a minimum aggregate.
@@ -5725,7 +5717,7 @@ function sum$2(expr) {
 	return aggFn("sum", expr);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/cast.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/cast.js
 /**
 * Perform a type cast.
 * @param expr The expression to type cast.
@@ -5749,7 +5741,7 @@ function float64$1(expr) {
 	return cast(expr, "DOUBLE");
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/cte.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/cte.js
 /**
 * Create a common table expression (CTE) to include within a WITH clause.
 * @param name The common table expression (CTE) name.
@@ -5763,7 +5755,7 @@ function cte(name, query, materialized = null, columnNames) {
 	return new WithClauseNode(name, query, materialized, columnNames);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/datetime.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/datetime.js
 /**
 * Given a date/time value, return the milliseconds since the UNIX epoch.
 * @param {ExprValue} expr The date/time expression.
@@ -5772,7 +5764,7 @@ function epoch_ms(expr) {
 	return fn("epoch_ms", expr);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/numeric.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/numeric.js
 /**
 * Compute the exponentional function `e ** expr`.
 * @param expr The input number.
@@ -5840,7 +5832,7 @@ function round$1(expr, places) {
 	return fn("round", expr, places);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/operators.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/operators.js
 function unaryPostfixOp(op, expr) {
 	return new UnaryPostfixOpNode(op, asNode(expr));
 }
@@ -5924,7 +5916,7 @@ function isBetween(expr, extent) {
 	return new BetweenOpNode(asNode(expr), extent?.map(asNode));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/sql-template-tag.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/sql-template-tag.js
 /**
 * Template tag function for SQL fragments. Interpolated values
 * may be strings, other SQL expression objects (such as column
@@ -5950,7 +5942,7 @@ function parseSQL(strings, exprs) {
 	return spans.filter((s) => s).map((s) => isString(s) ? new VerbatimNode(s) : s);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/unnest.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/unnest.js
 /**
 * Create an Unnest Node to flatten nested structures, either structs or lists.
 * @param value
@@ -5961,7 +5953,7 @@ function unnest(value, recursive = false, maxDepth = 0) {
 	return new UnnestNode(asNode(value), recursive, maxDepth);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/util.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/functions/util.js
 /**
 * Returns the first non-null argument.
 * @param expr The input expressions.
@@ -5970,7 +5962,7 @@ function coalesce(...expr) {
 	return fn("coalesce", ...expr);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/visit/recurse.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/visit/recurse.js
 var recurse = {
 	[AGGREGATE]: [
 		"args",
@@ -6051,7 +6043,7 @@ var recurse = {
 	[WITH_CLAUSE]: ["query"]
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/visit/rewrite.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/visit/rewrite.js
 /**
 * Rewrite a SQL expression, based on a map of nodes to replace.
 * This method copies nodes as needed; it does not modify the input node.
@@ -6079,7 +6071,7 @@ function rewrite(node, map) {
 	return node;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/visit/walk.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/visit/walk.js
 /**
 * Perform a traversal of a SQL expression AST.
 * @param node Root node for AST traversal.
@@ -6108,7 +6100,7 @@ function _walk(node, parent, visit) {
 	}
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/visit/visitors.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/visit/visitors.js
 var aggrRegExp = new RegExp(`^(${aggregateNames.join("|")})$`);
 var funcRegExp = /(\\'|\\"|"(?:\\"|[^"])*"|'(?:\\'|[^'])*'|\w+\()/g;
 var windowRegExp = /\)\s*over(\s*\(|\s+[\w"])/;
@@ -6186,7 +6178,7 @@ function collectParams(root) {
 	return Array.from(params);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/load/create.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/load/create.js
 function createTable(name, query, options = {}) {
 	return new CreateQuery(name, query, options);
 }
@@ -6194,7 +6186,7 @@ function createSchema(name, options = {}) {
 	return new CreateSchemaQuery(name, options);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/transforms/bin-1d.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/transforms/bin-1d.js
 /**
 * Compute binned values over a one-dimensional extent.
 * @param x The expression to bin.
@@ -6222,7 +6214,7 @@ var durationMonth$2 = durationDay$2 * 30;
 durationDay$2 * 365;
 durationSecond$2 * 5, durationSecond$2 * 15, durationSecond$2 * 30, durationMinute$2 * 5, durationMinute$2 * 15, durationMinute$2 * 30, durationHour$2 * 3, durationHour$2 * 6, durationHour$2 * 12, durationMonth$2 * 3;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/util/identity.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/util/identity.js
 /**
 * Identity function.
 * @param x
@@ -6231,7 +6223,7 @@ function identity$7(x) {
 	return x;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/transforms/scales.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/transforms/scales.js
 function scaleLinear() {
 	return {
 		apply: identity$7,
@@ -6323,7 +6315,7 @@ function isDateLiteral(x) {
 	return x instanceof LiteralNode && x.value instanceof Date;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/transforms/m4.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-sql@0.31.0/node_modules/@uwdata/mosaic-sql/dist/src/transforms/m4.js
 /**
 * M4 is an optimization for value-preserving time-series aggregation
 * (https://www.vldb.org/pvldb/vol7/p797-jugel.pdf). This implementation uses
@@ -6360,7 +6352,7 @@ function m4(input, bin, x, y, groups = []) {
 	}, ...groups])).orderby(groups, x);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/hash.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/hash.js
 function fnv_hash(v) {
 	let a = 2166136261;
 	for (let i = 0, n = v.length; i < n; ++i) {
@@ -6383,7 +6375,7 @@ function fnv_mix(a) {
 	return a & 4294967295;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/positional.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/positional.js
 /**
 * Resolve a positional (1-based index) reference to a select clause entry.
 * Returns the corresponding select clause node if found, otherwise returns
@@ -6398,7 +6390,7 @@ function resolvePositional(expr, select) {
 	}
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/preagg/sufficient-statistics.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/preagg/sufficient-statistics.js
 /**
 * Determine sufficient statistics to preaggregate the given node. This
 * method populates the *preagg* and *aggrs* arguments with necessary
@@ -6798,7 +6790,7 @@ function regrInterceptExpr(preagg, node, avg) {
 	return sub(regrAvgYExpr(preagg, node), mul$1(regrSlopeExpr(preagg, node, avg), ax));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/preagg/preagg-columns.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/preagg/preagg-columns.js
 /**
 * Determine pre-aggregation columns for a given Mosaic client.
 * @param client The Mosaic client.
@@ -6903,7 +6895,7 @@ function getBase(query, get) {
 	return base;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/preagg/PreAggregator.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/preagg/PreAggregator.js
 /**
 * Dummy preaggregate info object that indicates a view should be skipped
 * (not filtered) as it is a source of a cross-filtering operation.
@@ -7266,7 +7258,7 @@ var PreAggregateInfo = class {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/void-logger.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/void-logger.js
 function voidLogger() {
 	return {
 		debug() {},
@@ -7280,7 +7272,7 @@ function voidLogger() {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/query-result.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/query-result.js
 var QueryState = Object.freeze({
 	pending: Symbol("pending"),
 	ready: Symbol("ready"),
@@ -7356,7 +7348,7 @@ var QueryResult = class extends Promise {
 };
 QueryResult.prototype.constructor = Promise;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/QueryConsolidator.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/QueryConsolidator.js
 function wait(callback) {
 	if (typeof requestAnimationFrame !== "undefined") return requestAnimationFrame(callback);
 	else if (typeof setImmediate !== "undefined") return setImmediate(callback);
@@ -7554,7 +7546,7 @@ function filterResult(data, map) {
 	return result;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/cache.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/cache.js
 var requestIdle = typeof requestIdleCallback !== "undefined" ? requestIdleCallback : setTimeout;
 /**
 * Create a new cache that ignores all values.
@@ -7612,7 +7604,7 @@ function lruCache({ max = 1e3, ttl = 108e5 } = {}) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/priority-queue.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/priority-queue.js
 var PriorityQueue = class {
 	queue;
 	/**
@@ -7684,7 +7676,7 @@ var PriorityQueue = class {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/QueryManager.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/QueryManager.js
 var Priority = Object.freeze({
 	High: 0,
 	Normal: 1,
@@ -7835,7 +7827,7 @@ var QueryManager = class {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/query-error.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/query-error.js
 function asError(value) {
 	return value instanceof Error ? value : /* @__PURE__ */ new Error(`${value}`);
 }
@@ -7853,7 +7845,7 @@ var QueryError = class extends Error {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/Coordinator.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/Coordinator.js
 /**
 * The singleton Coordinator instance.
 */
@@ -8091,7 +8083,7 @@ function updateSelection(mc, selection) {
 	}));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/AsyncDispatch.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/AsyncDispatch.js
 /**
 * Event dispatcher supporting asynchronous updates. If an event handler
 * callback returns a Promise, the dispatcher waits for all such Promises
@@ -8253,7 +8245,7 @@ var DispatchQueue = class {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/distinct.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/distinct.js
 function distinct(a, b) {
 	return a === b ? false : a instanceof Date && b instanceof Date ? +a !== +b : Array.isArray(a) && Array.isArray(b) ? distinctArray(a, b) : true;
 }
@@ -8263,7 +8255,7 @@ function distinctArray(a, b) {
 	return false;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/Param.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/Param.js
 /**
 * Test if a value is a Param instance.
 * @param x The value to test.
@@ -8344,7 +8336,7 @@ var Param = class Param extends AsyncDispatch {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/Selection.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/Selection.js
 function create$2(options, include) {
 	return new Selection$2(new SelectionResolver(options), include ? [include].flat() : void 0);
 }
@@ -8645,7 +8637,7 @@ var SelectionResolver = class {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/tslib@2.8.1/node_modules/tslib/tslib.es6.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/tslib@2.8.1/node_modules/tslib/tslib.es6.mjs
 function __awaiter(thisArg, _arguments, P, generator) {
 	function adopt(value) {
 		return value instanceof P ? value : new P(function(resolve) {
@@ -8773,7 +8765,7 @@ function __asyncValues(o) {
 	}
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/utf8.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/utf8.mjs
 var decoder = new TextDecoder("utf-8");
 /** @ignore */
 var decodeUtf8 = (buffer) => decoder.decode(buffer);
@@ -8781,7 +8773,7 @@ var encoder = new TextEncoder();
 /** @ignore */
 var encodeUtf8 = (value) => encoder.encode(value);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/compat.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/compat.mjs
 /** @ignore */ var isNumber = (x) => typeof x === "number";
 /** @ignore */ var isBoolean = (x) => typeof x === "boolean";
 /** @ignore */ var isFunction = (x) => typeof x === "function";
@@ -8837,7 +8829,7 @@ var isFlatbuffersByteBuffer = (x) => {
 	return isObject$1(x) && isFunction(x["clear"]) && isFunction(x["bytes"]) && isFunction(x["position"]) && isFunction(x["setPosition"]) && isFunction(x["capacity"]) && isFunction(x["getBufferIdentifier"]) && isFunction(x["createLong"]);
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/buffer.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/buffer.mjs
 /** @ignore */
 var SharedArrayBuf = typeof SharedArrayBuffer !== "undefined" ? SharedArrayBuffer : ArrayBuffer;
 /** @ignore */
@@ -8979,7 +8971,7 @@ function compareArrayLike(a, b) {
 	return true;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/io/adapters.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/io/adapters.mjs
 /** @ignore */
 var adapters_default = {
 	fromIterable(source) {
@@ -9218,7 +9210,7 @@ function fromNodeStream(stream) {
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/metadata-version.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/metadata-version.mjs
 /**
 * Logical types, vector layouts, and schemas
 * Format Version History.
@@ -9257,14 +9249,14 @@ var MetadataVersion;
 	MetadataVersion[MetadataVersion["V5"] = 4] = "V5";
 })(MetadataVersion || (MetadataVersion = {}));
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/union-mode.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/union-mode.mjs
 var UnionMode;
 (function(UnionMode) {
 	UnionMode[UnionMode["Sparse"] = 0] = "Sparse";
 	UnionMode[UnionMode["Dense"] = 1] = "Dense";
 })(UnionMode || (UnionMode = {}));
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/precision.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/precision.mjs
 var Precision;
 (function(Precision) {
 	Precision[Precision["HALF"] = 0] = "HALF";
@@ -9272,14 +9264,14 @@ var Precision;
 	Precision[Precision["DOUBLE"] = 2] = "DOUBLE";
 })(Precision || (Precision = {}));
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/date-unit.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/date-unit.mjs
 var DateUnit;
 (function(DateUnit) {
 	DateUnit[DateUnit["DAY"] = 0] = "DAY";
 	DateUnit[DateUnit["MILLISECOND"] = 1] = "MILLISECOND";
 })(DateUnit || (DateUnit = {}));
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/time-unit.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/time-unit.mjs
 var TimeUnit;
 (function(TimeUnit) {
 	TimeUnit[TimeUnit["SECOND"] = 0] = "SECOND";
@@ -9288,7 +9280,7 @@ var TimeUnit;
 	TimeUnit[TimeUnit["NANOSECOND"] = 3] = "NANOSECOND";
 })(TimeUnit || (TimeUnit = {}));
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/interval-unit.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/interval-unit.mjs
 var IntervalUnit;
 (function(IntervalUnit) {
 	IntervalUnit[IntervalUnit["YEAR_MONTH"] = 0] = "YEAR_MONTH";
@@ -9296,20 +9288,20 @@ var IntervalUnit;
 	IntervalUnit[IntervalUnit["MONTH_DAY_NANO"] = 2] = "MONTH_DAY_NANO";
 })(IntervalUnit || (IntervalUnit = {}));
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/flatbuffers@24.12.23/node_modules/flatbuffers/mjs/utils.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/flatbuffers@24.12.23/node_modules/flatbuffers/mjs/utils.js
 var int32 = /* @__PURE__ */ new Int32Array(2);
 var float32 = new Float32Array(int32.buffer);
 var float64 = new Float64Array(int32.buffer);
 var isLittleEndian = new Uint16Array(new Uint8Array([1, 0]).buffer)[0] === 1;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/flatbuffers@24.12.23/node_modules/flatbuffers/mjs/encoding.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/flatbuffers@24.12.23/node_modules/flatbuffers/mjs/encoding.js
 var Encoding;
 (function(Encoding) {
 	Encoding[Encoding["UTF8_BYTES"] = 1] = "UTF8_BYTES";
 	Encoding[Encoding["UTF16_STRING"] = 2] = "UTF16_STRING";
 })(Encoding || (Encoding = {}));
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/flatbuffers@24.12.23/node_modules/flatbuffers/mjs/byte-buffer.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/flatbuffers@24.12.23/node_modules/flatbuffers/mjs/byte-buffer.js
 var ByteBuffer$2 = class ByteBuffer$2 {
 	/**
 	* Create a new ByteBuffer with a given array of bytes (`Uint8Array`)
@@ -9535,7 +9527,7 @@ var ByteBuffer$2 = class ByteBuffer$2 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/flatbuffers@24.12.23/node_modules/flatbuffers/mjs/builder.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/flatbuffers@24.12.23/node_modules/flatbuffers/mjs/builder.js
 var Builder$2 = class Builder$2 {
 	/**
 	* Create a FlatBufferBuilder.
@@ -9987,7 +9979,7 @@ var Builder$2 = class Builder$2 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/body-compression-method.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/body-compression-method.mjs
 /**
 * Provided for forward compatibility in case we need to support different
 * strategies for compressing the IPC message body (like whole-body
@@ -10007,14 +9999,14 @@ var BodyCompressionMethod;
 	BodyCompressionMethod[BodyCompressionMethod["BUFFER"] = 0] = "BUFFER";
 })(BodyCompressionMethod || (BodyCompressionMethod = {}));
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/compression-type.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/compression-type.mjs
 var CompressionType;
 (function(CompressionType) {
 	CompressionType[CompressionType["LZ4_FRAME"] = 0] = "LZ4_FRAME";
 	CompressionType[CompressionType["ZSTD"] = 1] = "ZSTD";
 })(CompressionType || (CompressionType = {}));
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/body-compression.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/body-compression.mjs
 /**
 * Optional compression for the memory buffers constituting IPC message
 * bodies. Intended for use with RecordBatch but could be used for other
@@ -10072,7 +10064,7 @@ var BodyCompression = class BodyCompression {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/buffer.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/buffer.mjs
 /**
 * ----------------------------------------------------------------------
 * A Buffer represents a single contiguous memory segment
@@ -10115,7 +10107,7 @@ var Buffer$1 = class {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/field-node.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/field-node.mjs
 /**
 * ----------------------------------------------------------------------
 * Data structures for describing a table row batch (a collection of
@@ -10163,7 +10155,7 @@ var FieldNode$1 = class {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/record-batch.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/record-batch.mjs
 /**
 * A data header describing the shared memory layout of a "record" or "row"
 * batch. Some systems call this a "row batch" internally and others a "record
@@ -10254,7 +10246,7 @@ var RecordBatch$2 = class RecordBatch$2 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/dictionary-batch.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/dictionary-batch.mjs
 /**
 * For sending dictionary encoding information. Any Field can be
 * dictionary-encoded, but in this case none of its children may be
@@ -10314,7 +10306,7 @@ var DictionaryBatch$1 = class DictionaryBatch$1 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/endianness.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/endianness.mjs
 /**
 * ----------------------------------------------------------------------
 * Endianness of the platform producing the data
@@ -10325,7 +10317,7 @@ var Endianness;
 	Endianness[Endianness["Big"] = 1] = "Big";
 })(Endianness || (Endianness = {}));
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/dictionary-kind.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/dictionary-kind.mjs
 /**
 * ----------------------------------------------------------------------
 * Dictionary encoding metadata
@@ -10338,7 +10330,7 @@ var DictionaryKind;
 	DictionaryKind[DictionaryKind["DenseArray"] = 0] = "DenseArray";
 })(DictionaryKind || (DictionaryKind = {}));
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/int.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/int.mjs
 var Int = class Int {
 	constructor() {
 		this.bb = null;
@@ -10384,7 +10376,7 @@ var Int = class Int {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/dictionary-encoding.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/dictionary-encoding.mjs
 var DictionaryEncoding = class DictionaryEncoding {
 	constructor() {
 		this.bb = null;
@@ -10456,7 +10448,7 @@ var DictionaryEncoding = class DictionaryEncoding {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/key-value.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/key-value.mjs
 /**
 * ----------------------------------------------------------------------
 * user defined key value pairs to add custom metadata to arrow
@@ -10507,7 +10499,7 @@ var KeyValue = class KeyValue {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/binary.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/binary.mjs
 /**
 * Opaque binary data
 */
@@ -10540,7 +10532,7 @@ var Binary$1 = class Binary$1 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/bool.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/bool.mjs
 var Bool$1 = class Bool$1 {
 	constructor() {
 		this.bb = null;
@@ -10570,7 +10562,7 @@ var Bool$1 = class Bool$1 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/date.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/date.mjs
 /**
 * Date is either a 32-bit or 64-bit signed integer type representing an
 * elapsed time since UNIX epoch (1970-01-01), stored in either of two units:
@@ -10616,7 +10608,7 @@ var Date$1 = class Date$1 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/decimal.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/decimal.mjs
 /**
 * Exact decimal value represented as an integer value in two's
 * complement. Currently only 128-bit (16-byte) and 256-bit (32-byte) integers
@@ -10686,7 +10678,7 @@ var Decimal$1 = class Decimal$1 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/duration.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/duration.mjs
 var Duration$1 = class Duration$1 {
 	constructor() {
 		this.bb = null;
@@ -10724,7 +10716,7 @@ var Duration$1 = class Duration$1 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/fixed-size-binary.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/fixed-size-binary.mjs
 var FixedSizeBinary$1 = class FixedSizeBinary$1 {
 	constructor() {
 		this.bb = null;
@@ -10765,7 +10757,7 @@ var FixedSizeBinary$1 = class FixedSizeBinary$1 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/fixed-size-list.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/fixed-size-list.mjs
 var FixedSizeList$1 = class FixedSizeList$1 {
 	constructor() {
 		this.bb = null;
@@ -10806,7 +10798,7 @@ var FixedSizeList$1 = class FixedSizeList$1 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/floating-point.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/floating-point.mjs
 var FloatingPoint = class FloatingPoint {
 	constructor() {
 		this.bb = null;
@@ -10844,7 +10836,7 @@ var FloatingPoint = class FloatingPoint {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/interval.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/interval.mjs
 var Interval = class Interval {
 	constructor() {
 		this.bb = null;
@@ -10882,7 +10874,7 @@ var Interval = class Interval {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/large-binary.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/large-binary.mjs
 /**
 * Same as Binary, but with 64-bit offsets, allowing to represent
 * extremely large data values.
@@ -10916,7 +10908,7 @@ var LargeBinary$1 = class LargeBinary$1 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/large-utf8.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/large-utf8.mjs
 /**
 * Same as Utf8, but with 64-bit offsets, allowing to represent
 * extremely large data values.
@@ -10950,7 +10942,7 @@ var LargeUtf8$1 = class LargeUtf8$1 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/list.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/list.mjs
 var List$1 = class List$1 {
 	constructor() {
 		this.bb = null;
@@ -10980,7 +10972,7 @@ var List$1 = class List$1 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/map.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/map.mjs
 /**
 * A Map is a logical nested type that is represented as
 *
@@ -11048,7 +11040,7 @@ var Map$1 = class Map$1 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/null.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/null.mjs
 /**
 * These are stored in the flatbuffer in the Type union below
 */
@@ -11081,7 +11073,7 @@ var Null$1 = class Null$1 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/struct-.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/struct-.mjs
 /**
 * A Struct_ in the flatbuffer metadata is the same as an Arrow Struct
 * (according to the physical memory layout). We used Struct_ here as
@@ -11116,7 +11108,7 @@ var Struct_ = class Struct_ {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/time.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/time.mjs
 /**
 * Time is either a 32-bit or 64-bit signed integer type representing an
 * elapsed time since midnight, stored in either of four units: seconds,
@@ -11178,7 +11170,7 @@ var Time = class Time {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/timestamp.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/timestamp.mjs
 /**
 * Timestamp is a 64-bit signed integer representing an elapsed time since a
 * fixed epoch, stored in either of four units: seconds, milliseconds,
@@ -11331,7 +11323,7 @@ var Timestamp = class Timestamp {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/union.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/union.mjs
 /**
 * A union is a complex type with children in Field
 * By default ids in the type vector refer to the offsets in the children
@@ -11399,7 +11391,7 @@ var Union = class Union {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/utf8.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/utf8.mjs
 /**
 * Unicode with UTF-8 encoding
 */
@@ -11432,7 +11424,7 @@ var Utf8$1 = class Utf8$1 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/type.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/type.mjs
 /**
 * ----------------------------------------------------------------------
 * Top-level Type value, enabling extensible type-specific metadata. We can
@@ -11465,7 +11457,7 @@ var Type$1;
 	Type[Type["RunEndEncoded"] = 22] = "RunEndEncoded";
 })(Type$1 || (Type$1 = {}));
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/field.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/field.mjs
 /**
 * ----------------------------------------------------------------------
 * A field represents a named column in a record / row batch or child of a
@@ -11585,7 +11577,7 @@ var Field$1 = class Field$1 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/schema.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/schema.mjs
 /**
 * ----------------------------------------------------------------------
 * A Schema describes the columns in a row batch
@@ -11701,7 +11693,7 @@ var Schema$1 = class Schema$1 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/message-header.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/message-header.mjs
 /**
 * ----------------------------------------------------------------------
 * The root Message type
@@ -11722,7 +11714,7 @@ var MessageHeader;
 	MessageHeader[MessageHeader["SparseTensor"] = 5] = "SparseTensor";
 })(MessageHeader || (MessageHeader = {}));
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/enum.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/enum.mjs
 /**
 * Main data type enumeration.
 *
@@ -11822,7 +11814,7 @@ var BufferType;
 	BufferType[BufferType["TYPE"] = 3] = "TYPE";
 })(BufferType || (BufferType = {}));
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/pretty.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/pretty.mjs
 /** @ignore */ var undf = void 0;
 /** @ignore */
 function valueToString(x) {
@@ -11841,7 +11833,7 @@ function valueToString(x) {
 	return ArrayBuffer.isView(x) ? `[${x}]` : JSON.stringify(x, (_, y) => typeof y === "bigint" ? `${y}` : y);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/bigint.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/bigint.mjs
 /**
 * Converts an integer as a number or bigint to a number, throwing an error if the input cannot safely be represented as a number.
 */
@@ -11862,7 +11854,7 @@ function divideBigInts(number, divisor) {
 	return bigIntToNumber(number / divisor) + bigIntToNumber(number % divisor) / bigIntToNumber(divisor);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/bn.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/bn.mjs
 /** @ignore */
 var isArrowBigNumSymbol = Symbol.for("isArrowBigNum");
 /** @ignore */
@@ -12016,7 +12008,7 @@ var BN = class BN {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/type.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/type.mjs
 var _a$3;
 var _b;
 var _c;
@@ -12651,7 +12643,7 @@ function strideForType(type) {
 	}
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/visitor.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/visitor.mjs
 var Visitor = class {
 	visitMany(nodes, ...args) {
 		return nodes.map((node, i) => this.visit(node, ...args.map((x) => x[i])));
@@ -13003,7 +12995,7 @@ Visitor.prototype.visitDurationMillisecond = null;
 Visitor.prototype.visitDurationMicrosecond = null;
 Visitor.prototype.visitDurationNanosecond = null;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/math.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/math.mjs
 var f64 = /* @__PURE__ */ new Float64Array(1);
 var u32 = new Uint32Array(f64.buffer);
 /**
@@ -13052,7 +13044,7 @@ function float64ToUint16(d) {
 	return sign | expo | sigf & 65535;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/visitor/set.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/visitor/set.mjs
 /** @ignore */
 var SetVisitor = class extends Visitor {};
 /** @ignore */
@@ -13326,7 +13318,7 @@ SetVisitor.prototype.visitMap = wrapSet(setMap);
 /** @ignore */
 var instance$5 = new SetVisitor();
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/row/struct.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/row/struct.mjs
 /** @ignore */ var kParent = Symbol.for("parent");
 /** @ignore */ var kRowIndex = Symbol.for("rowIndex");
 var StructRow = class {
@@ -13443,7 +13435,7 @@ var StructRowProxyHandler = class {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/visitor/get.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/visitor/get.mjs
 /** @ignore */
 var GetVisitor = class extends Visitor {};
 /** @ignore */
@@ -13659,7 +13651,7 @@ GetVisitor.prototype.visitMap = wrapGet(getMap);
 /** @ignore */
 var instance$4 = new GetVisitor();
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/row/map.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/row/map.mjs
 /** @ignore */ var kKeys = Symbol.for("keys");
 /** @ignore */ var kVals = Symbol.for("vals");
 /** @ignore */ var kKeysAsStrings = Symbol.for("kKeysAsStrings");
@@ -13788,7 +13780,7 @@ Object.defineProperties(MapRow.prototype, {
 	}
 });
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/vector.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/vector.mjs
 /** @ignore */
 var tmp;
 /** @ignore */
@@ -13891,7 +13883,7 @@ function compareObject(comparators, obj, keys) {
 	return false;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/bit.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/bit.mjs
 /** @ignore */
 function getBool(_data, _index, byte, bit) {
 	return (byte & 1 << bit) !== 0;
@@ -14386,7 +14378,7 @@ function makeData(props) {
 	return makeDataVisitor.visit(props);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/chunk.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/chunk.mjs
 /** @ignore */
 var ChunkedIterator = class {
 	constructor(numChunks = 0, getChunkIterator) {
@@ -14504,7 +14496,7 @@ function wrapChunkedIndexOf(indexOf) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/visitor/indexof.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/visitor/indexof.mjs
 /** @ignore */
 var IndexOfVisitor = class extends Visitor {};
 /** @ignore */
@@ -14595,7 +14587,7 @@ IndexOfVisitor.prototype.visitMap = indexOfValue;
 /** @ignore */
 var instance$3 = new IndexOfVisitor();
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/visitor/iterator.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/visitor/iterator.mjs
 /** @ignore */
 var IteratorVisitor = class extends Visitor {};
 /** @ignore */
@@ -14683,7 +14675,7 @@ IteratorVisitor.prototype.visitMap = vectorIterator;
 /** @ignore */
 var instance$2 = new IteratorVisitor();
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/vector.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/vector.mjs
 var _a$2;
 var visitorsByTypeId = {};
 var vectorPrototypesByTypeId = {};
@@ -14972,7 +14964,7 @@ var MemoizedVector = class MemoizedVector extends Vector$1 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/block.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/block.mjs
 var Block = class {
 	constructor() {
 		this.bb = null;
@@ -15015,7 +15007,7 @@ var Block = class {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/footer.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/footer.mjs
 /**
 * ----------------------------------------------------------------------
 * Arrow File metadata
@@ -15116,7 +15108,7 @@ var Footer = class Footer {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/schema.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/schema.mjs
 var Schema = class Schema {
 	constructor(fields = [], metadata, dictionaries, metadataVersion = MetadataVersion.V5) {
 		this.fields = fields || [];
@@ -15224,7 +15216,7 @@ function generateDictionaryMap(fields, dictionaries = /* @__PURE__ */ new Map())
 	return dictionaries;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/ipc/metadata/file.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/ipc/metadata/file.mjs
 var Builder$1 = Builder$2;
 var ByteBuffer$1 = ByteBuffer$2;
 /** @ignore */
@@ -15325,7 +15317,7 @@ var FileBlock = class FileBlock {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/io/interfaces.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/io/interfaces.mjs
 /** @ignore */
 var ITERATOR_DONE = Object.freeze({
 	done: true,
@@ -15457,7 +15449,7 @@ var AsyncQueue = class extends ReadableInterop {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/io/stream.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/io/stream.mjs
 /** @ignore */
 var AsyncByteQueue = class extends AsyncQueue {
 	write(value) {
@@ -15630,7 +15622,7 @@ var AsyncByteStreamSource = class {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/io/file.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/io/file.mjs
 /** @ignore */
 var RandomAccessFile = class extends ByteStream {
 	constructor(buffer, byteLength) {
@@ -15758,7 +15750,7 @@ var AsyncRandomAccessFile = class extends AsyncByteStream {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/int.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/int.mjs
 /** @ignore */
 var carryBit16 = 65536;
 /** @ignore */
@@ -16054,7 +16046,7 @@ var Int128 = class Int128 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/visitor/vectorloader.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/visitor/vectorloader.mjs
 /** @ignore */
 var VectorLoader = class extends Visitor {
 	constructor(bytes, nodes, buffers, dictionaries, metadataVersion = MetadataVersion.V5) {
@@ -16340,7 +16332,7 @@ function binaryDataFromJSON(values) {
 	return data;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/visitor/typecomparator.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/visitor/typecomparator.mjs
 /** @ignore */
 var TypeComparator = class extends Visitor {
 	compareSchemas(schema, other) {
@@ -16457,7 +16449,7 @@ function compareSchemas(schema, other) {
 	return instance$1.compareSchemas(schema, other);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/recordbatch.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/util/recordbatch.mjs
 /** @ignore */
 function distributeVectorsIntoRecordBatches(schema, vecs) {
 	return uniformlyDistributeChunksAcrossRecordBatches(schema, vecs.map((v) => v.data.concat()));
@@ -16515,7 +16507,7 @@ function distributeChildren(fields, batchLength, children, columns, memo) {
 	return children;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/table.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/table.mjs
 var _a$1;
 /**
 * Tables are collections of {@link Vector}s and have a {@link Schema}. Use the convenience methods {@link makeTable}
@@ -16775,7 +16767,7 @@ Table[_a$1] = ((proto) => {
 	return "Table";
 })(Table.prototype);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/recordbatch.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/recordbatch.mjs
 var _a;
 /** @ignore */
 var RecordBatch$1 = class RecordBatch$1 {
@@ -17059,7 +17051,7 @@ var _InternalEmptyPlaceholderRecordBatch = class extends RecordBatch$1 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/message.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/fb/message.mjs
 var Message$1 = class Message$1 {
 	constructor() {
 		this.bb = null;
@@ -17147,7 +17139,7 @@ var Message$1 = class Message$1 {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/visitor/typeassembler.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/visitor/typeassembler.mjs
 /** @ignore */
 var TypeAssembler = class extends Visitor {
 	visit(node, builder) {
@@ -17266,7 +17258,7 @@ var TypeAssembler = class extends Visitor {
 /** @ignore */
 var instance = new TypeAssembler();
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/ipc/metadata/json.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/ipc/metadata/json.mjs
 /** @ignore */
 function schemaFromJSON(_schema, dictionaries = /* @__PURE__ */ new Map()) {
 	return new Schema(schemaFieldsFromJSON(_schema, dictionaries), customMetadataFromJSON(_schema["metadata"]), dictionaries);
@@ -17412,7 +17404,7 @@ function typeFromJSON(f, children) {
 	throw new Error(`Unrecognized type: "${typeId}"`);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/ipc/metadata/message.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/ipc/metadata/message.mjs
 var Builder = Builder$2;
 var ByteBuffer = ByteBuffer$2;
 /**
@@ -17822,7 +17814,7 @@ var platformIsLittleEndian = (() => {
 	return new Int16Array(buffer)[0] === 256;
 })();
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/ipc/message.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/ipc/message.mjs
 /** @ignore */ var invalidMessageType = (type) => `Expected ${MessageHeader[type]} Message in stream, but was null or length 0.`;
 /** @ignore */ var nullMessage = (type) => `Header pointer of flatbuffer-encoded ${MessageHeader[type]} Message is null or length 0.`;
 /** @ignore */ var invalidMessageMetadata = (expected, actual) => `Expected to read ${expected} metadata bytes, but only read ${actual}.`;
@@ -18043,7 +18035,7 @@ var magicAndPadding = magicLength + 4;
 /** @ignore */
 var magicX2AndPadding = magicLength * 2 + 4;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/ipc/reader.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/ipc/reader.mjs
 var RecordBatchReader = class RecordBatchReader extends ReadableInterop {
 	constructor(impl) {
 		super();
@@ -18642,7 +18634,7 @@ function fromFileHandle(source) {
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/visitor/vectorassembler.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/visitor/vectorassembler.mjs
 /** @ignore */
 var VectorAssembler = class VectorAssembler extends Visitor {
 	/** @nocollapse */
@@ -18793,7 +18785,7 @@ VectorAssembler.prototype.visitDuration = assembleFlatVector;
 VectorAssembler.prototype.visitFixedSizeList = assembleListVector;
 VectorAssembler.prototype.visitMap = assembleListVector;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/ipc/writer.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/ipc/writer.mjs
 var RecordBatchWriter = class extends ReadableInterop {
 	/** @nocollapse */
 	static throughNode(options) {
@@ -19034,7 +19026,7 @@ function writeAllAsync(writer, batches) {
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/ipc/serialization.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/apache-arrow@17.0.0/node_modules/apache-arrow/ipc/serialization.mjs
 /**
 * Serialize a {@link Table} to the IPC format. This function is a convenience
 * wrapper for {@link RecordBatchStreamWriter} and {@link RecordBatchFileWriter}.
@@ -19047,7 +19039,7 @@ function tableToIPC(table, type = "stream") {
 	return (type === "stream" ? RecordBatchStreamWriter : RecordBatchFileWriter).writeAll(table).toUint8Array(true);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@duckdb+duckdb-wasm@1.33.1-dev57.0/node_modules/@duckdb/duckdb-wasm/dist/duckdb-browser.mjs
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@duckdb+duckdb-wasm@1.33.1-dev57.0/node_modules/@duckdb/duckdb-wasm/dist/duckdb-browser.mjs
 var j = Object.create;
 var P = Object.defineProperty;
 var K$1 = Object.getOwnPropertyDescriptor;
@@ -20089,7 +20081,7 @@ async function Xe(s) {
 }
 Z(q());
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/connectors/wasm.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/connectors/wasm.js
 /**
 * Connect to a DuckDB-WASM instance.
 * @param options Connector options.
@@ -20184,7 +20176,7 @@ async function initDatabase({ log = false } = {}) {
 	return db;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/SelectionClause.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/SelectionClause.js
 /**
 * Generate a selection clause for a selected 1D interval.
 * @param field The table column or expression to select.
@@ -20217,7 +20209,7 @@ function clauseInterval(field, value, { source, clients = isMosaicClient(source)
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/is-arrow-table.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/is-arrow-table.js
 /**
 * Test if a value is a Flechette Arrow table.
 * We use a "duck typing" approach and check for a getChild function.
@@ -20228,7 +20220,7 @@ function isArrowTable$1(values) {
 	return typeof values?.getChild === "function";
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/synchronizer.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/synchronizer.js
 /**
 * Synchronizer class to aid synchronization of updates on multiple pending operations.
 */
@@ -20281,7 +20273,7 @@ var Synchronizer = class {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/to-data-columns.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/to-data-columns.js
 /**
 * Convert input data to a set of column arrays.
 * @param data The input data.
@@ -20334,7 +20326,7 @@ function arrayToColumns(data) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/js-type.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/js-type.js
 /**
 * Maps a SQL data type to its corresponding JavaScript type.
 * @param type The name of a SQL data type
@@ -20381,7 +20373,7 @@ function jsType(type) {
 	}
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/field-info.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-core@0.31.0/node_modules/@uwdata/mosaic-core/dist/src/util/field-info.js
 var Count = "count";
 var Nulls = "nulls";
 var Distinct = "distinct";
@@ -20463,21 +20455,21 @@ async function getTableInfo(mc, table) {
 	}));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/symbols.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/symbols.js
 var Fixed = Symbol("Fixed");
 var Transform$1 = Symbol("Transform");
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/ascending.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/ascending.js
 function ascending$1(a, b) {
 	return a == null || b == null ? NaN : a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/descending.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/descending.js
 function descending(a, b) {
 	return a == null || b == null ? NaN : b < a ? -1 : b > a ? 1 : b >= a ? 0 : NaN;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/bisector.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/bisector.js
 function bisector(f) {
 	let compare1, compare2, delta;
 	if (f.length !== 2) {
@@ -20525,7 +20517,7 @@ function zero$1() {
 	return 0;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/number.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/number.js
 function number$5(x) {
 	return x === null ? NaN : +x;
 }
@@ -20538,13 +20530,13 @@ function* numbers(values, valueof) {
 	}
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/bisect.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/bisect.js
 var ascendingBisect = bisector(ascending$1);
 var bisectRight = ascendingBisect.right;
 ascendingBisect.left;
 bisector(number$5).center;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/blur.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/blur.js
 var blur2 = Blur2(blurf);
 var blurImage = Blur2(blurfImage);
 function Blur2(blur) {
@@ -20626,7 +20618,7 @@ function bluri(radius) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/count.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/count.js
 function count$1(values, valueof) {
 	let count = 0;
 	if (valueof === void 0) {
@@ -20638,7 +20630,7 @@ function count$1(values, valueof) {
 	return count;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/cross.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/cross.js
 function length$1(array) {
 	return array.length | 0;
 }
@@ -20669,13 +20661,13 @@ function cross$1(...values) {
 	}
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/cumsum.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/cumsum.js
 function cumsum(values, valueof) {
 	var sum = 0, index = 0;
 	return Float64Array.from(values, valueof === void 0 ? (v) => sum += +v || 0 : (v) => sum += +valueof(v, index++, values) || 0);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/variance.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/variance.js
 function variance(values, valueof) {
 	let count = 0;
 	let delta;
@@ -20698,13 +20690,13 @@ function variance(values, valueof) {
 	if (count > 1) return sum / (count - 1);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/deviation.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/deviation.js
 function deviation(values, valueof) {
 	const v = variance(values, valueof);
 	return v ? Math.sqrt(v) : v;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/extent.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/extent.js
 function extent$1(values, valueof) {
 	let min;
 	let max;
@@ -20731,7 +20723,7 @@ function extent$1(values, valueof) {
 	return [min, max];
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/fsum.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/fsum.js
 var Adder = class {
 	constructor() {
 		this._partials = /* @__PURE__ */ new Float64Array(32);
@@ -20771,7 +20763,7 @@ var Adder = class {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/internmap@2.0.3/node_modules/internmap/src/index.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/internmap@2.0.3/node_modules/internmap/src/index.js
 var InternMap = class extends Map {
 	constructor(entries, key = keyof$1) {
 		super();
@@ -20835,12 +20827,12 @@ function keyof$1(value) {
 	return value !== null && typeof value === "object" ? value.valueOf() : value;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/identity.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/identity.js
 function identity$6(x) {
 	return x;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/group.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/group.js
 function group$1(values, ...keys) {
 	return nest(values, identity$6, identity$6, keys);
 }
@@ -20867,12 +20859,12 @@ function nest(values, map, reduce, keys) {
 	})(values, 0);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/permute.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/permute.js
 function permute(source, keys) {
 	return Array.from(keys, (key) => source[key]);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/sort.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/sort.js
 function sort$1(values, ...F) {
 	if (typeof values[Symbol.iterator] !== "function") throw new TypeError("values is not iterable");
 	values = Array.from(values);
@@ -20908,12 +20900,12 @@ function ascendingDefined$1(a, b) {
 	return (a == null || !(a >= a)) - (b == null || !(b >= b)) || (a < b ? -1 : a > b ? 1 : 0);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/groupSort.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/groupSort.js
 function groupSort(values, reduce, key) {
 	return (reduce.length !== 2 ? sort$1(rollup(values, reduce, key), (([ak, av], [bk, bv]) => ascending$1(av, bv) || ascending$1(ak, bk))) : sort$1(group$1(values, key), (([ak, av], [bk, bv]) => reduce(av, bv) || ascending$1(ak, bk)))).map(([key]) => key);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/ticks.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/ticks.js
 var e10 = Math.sqrt(50);
 var e5 = Math.sqrt(10);
 var e2 = Math.sqrt(2);
@@ -20965,7 +20957,7 @@ function tickStep(start, stop, count) {
 	return (reverse ? -1 : 1) * (inc < 0 ? 1 / -inc : inc);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/nice.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/nice.js
 function nice$1(start, stop, count) {
 	let prestep;
 	while (true) {
@@ -20982,12 +20974,12 @@ function nice$1(start, stop, count) {
 	}
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/threshold/sturges.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/threshold/sturges.js
 function thresholdSturges(values) {
 	return Math.max(1, Math.ceil(Math.log(count$1(values)) / Math.LN2) + 1);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/max.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/max.js
 function max$1(values, valueof) {
 	let max;
 	if (valueof === void 0) {
@@ -20999,7 +20991,7 @@ function max$1(values, valueof) {
 	return max;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/maxIndex.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/maxIndex.js
 function maxIndex(values, valueof) {
 	let max;
 	let maxIndex = -1;
@@ -21012,7 +21004,7 @@ function maxIndex(values, valueof) {
 	return maxIndex;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/min.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/min.js
 function min$2(values, valueof) {
 	let min;
 	if (valueof === void 0) {
@@ -21024,7 +21016,7 @@ function min$2(values, valueof) {
 	return min;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/minIndex.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/minIndex.js
 function minIndex(values, valueof) {
 	let min;
 	let minIndex = -1;
@@ -21037,7 +21029,7 @@ function minIndex(values, valueof) {
 	return minIndex;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/quickselect.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/quickselect.js
 function quickselect(array, k, left = 0, right = Infinity, compare) {
 	k = Math.floor(k);
 	left = Math.floor(Math.max(0, left));
@@ -21078,7 +21070,7 @@ function swap$1(array, i, j) {
 	array[j] = t;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/greatest.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/greatest.js
 function greatest(values, compare = ascending$1) {
 	let max;
 	let defined = false;
@@ -21099,7 +21091,7 @@ function greatest(values, compare = ascending$1) {
 	return max;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/quantile.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/quantile.js
 function quantile$1(values, p, valueof) {
 	values = Float64Array.from(numbers(values, valueof));
 	if (!(n = values.length) || isNaN(p = +p)) return;
@@ -21116,19 +21108,19 @@ function quantileSorted(values, p, valueof = number$5) {
 	return value0 + (+valueof(values[i0 + 1], i0 + 1, values) - value0) * (i - i0);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/threshold/freedmanDiaconis.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/threshold/freedmanDiaconis.js
 function thresholdFreedmanDiaconis(values, min, max) {
 	const c = count$1(values), d = quantile$1(values, .75) - quantile$1(values, .25);
 	return c && d ? Math.ceil((max - min) / (2 * d * Math.pow(c, -1 / 3))) : 1;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/threshold/scott.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/threshold/scott.js
 function thresholdScott(values, min, max) {
 	const c = count$1(values), d = deviation(values);
 	return c && d ? Math.ceil((max - min) * Math.cbrt(c) / (3.49 * d)) : 1;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/mean.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/mean.js
 function mean(values, valueof) {
 	let count = 0;
 	let sum = 0;
@@ -21141,12 +21133,12 @@ function mean(values, valueof) {
 	if (count) return sum / count;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/median.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/median.js
 function median(values, valueof) {
 	return quantile$1(values, .5, valueof);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/merge.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/merge.js
 function* flatten(arrays) {
 	for (const array of arrays) yield* array;
 }
@@ -21154,7 +21146,7 @@ function merge(arrays) {
 	return Array.from(flatten(arrays));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/mode.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/mode.js
 function mode(values, valueof) {
 	const counts = new InternMap();
 	if (valueof === void 0) {
@@ -21172,7 +21164,7 @@ function mode(values, valueof) {
 	return modeValue;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/pairs.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/pairs.js
 function pairs(values, pairof = pair) {
 	const pairs = [];
 	let previous;
@@ -21188,7 +21180,7 @@ function pair(a, b) {
 	return [a, b];
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/range.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/range.js
 function range$1(start, stop, step) {
 	start = +start, stop = +stop, step = (n = arguments.length) < 2 ? (stop = start, start = 0, 1) : n < 3 ? 1 : +step;
 	var i = -1, n = Math.max(0, Math.ceil((stop - start) / step)) | 0, range = new Array(n);
@@ -21196,7 +21188,7 @@ function range$1(start, stop, step) {
 	return range;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/rank.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/rank.js
 function rank(values, valueof = ascending$1) {
 	if (typeof values[Symbol.iterator] !== "function") throw new TypeError("values is not iterable");
 	let V = Array.from(values);
@@ -21216,7 +21208,7 @@ function rank(values, valueof = ascending$1) {
 	return R;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/least.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/least.js
 function least(values, compare = ascending$1) {
 	let min;
 	let defined = false;
@@ -21237,7 +21229,7 @@ function least(values, compare = ascending$1) {
 	return min;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/sum.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/sum.js
 function sum$1(values, valueof) {
 	let sum = 0;
 	if (valueof === void 0) {
@@ -21249,18 +21241,18 @@ function sum$1(values, valueof) {
 	return sum;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/reverse.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-array@3.2.4/node_modules/d3-array/src/reverse.js
 function reverse$1(values) {
 	if (typeof values[Symbol.iterator] !== "function") throw new TypeError("values is not iterable");
 	return Array.from(values).reverse();
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-axis@3.0.0/node_modules/d3-axis/src/identity.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-axis@3.0.0/node_modules/d3-axis/src/identity.js
 function identity_default$2(x) {
 	return x;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-axis@3.0.0/node_modules/d3-axis/src/axis.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-axis@3.0.0/node_modules/d3-axis/src/axis.js
 var top = 1;
 var right = 2;
 var bottom = 3;
@@ -21352,7 +21344,7 @@ function axisBottom(scale) {
 	return axis$1(bottom, scale);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-dispatch@3.0.1/node_modules/d3-dispatch/src/dispatch.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-dispatch@3.0.1/node_modules/d3-dispatch/src/dispatch.js
 var noop$1 = { value: () => {} };
 function dispatch() {
 	for (var i = 0, n = arguments.length, _ = {}, t; i < n; ++i) {
@@ -21425,7 +21417,7 @@ var namespaces_default = {
 	xmlns: "http://www.w3.org/2000/xmlns/"
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/namespace.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/namespace.js
 function namespace_default(name) {
 	var prefix = name += "", i = prefix.indexOf(":");
 	if (i >= 0 && (prefix = name.slice(0, i)) !== "xmlns") name = name.slice(i + 1);
@@ -21435,7 +21427,7 @@ function namespace_default(name) {
 	} : name;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/creator.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/creator.js
 function creatorInherit(name) {
 	return function() {
 		var document = this.ownerDocument, uri = this.namespaceURI;
@@ -21452,7 +21444,7 @@ function creator_default(name) {
 	return (fullname.local ? creatorFixed : creatorInherit)(fullname);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selector.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selector.js
 function none() {}
 function selector_default(selector) {
 	return selector == null ? none : function() {
@@ -21460,7 +21452,7 @@ function selector_default(selector) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/select.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/select.js
 function select_default$2(select) {
 	if (typeof select !== "function") select = selector_default(select);
 	for (var groups = this._groups, m = groups.length, subgroups = new Array(m), j = 0; j < m; ++j) for (var group = groups[j], n = group.length, subgroup = subgroups[j] = new Array(n), node, subnode, i = 0; i < n; ++i) if ((node = group[i]) && (subnode = select.call(node, node.__data__, i, group))) {
@@ -21470,12 +21462,12 @@ function select_default$2(select) {
 	return new Selection$1(subgroups, this._parents);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/array.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/array.js
 function array$1(x) {
 	return x == null ? [] : Array.isArray(x) ? x : Array.from(x);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selectorAll.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selectorAll.js
 function empty$1() {
 	return [];
 }
@@ -21485,7 +21477,7 @@ function selectorAll_default(selector) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/selectAll.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/selectAll.js
 function arrayAll(select) {
 	return function() {
 		return array$1(select.apply(this, arguments));
@@ -21501,7 +21493,7 @@ function selectAll_default$1(select) {
 	return new Selection$1(subgroups, parents);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/matcher.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/matcher.js
 function matcher_default(selector) {
 	return function() {
 		return this.matches(selector);
@@ -21513,7 +21505,7 @@ function childMatcher(selector) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/selectChild.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/selectChild.js
 var find$1 = Array.prototype.find;
 function childFind(match) {
 	return function() {
@@ -21527,7 +21519,7 @@ function selectChild_default(match) {
 	return this.select(match == null ? childFirst : childFind(typeof match === "function" ? match : childMatcher(match)));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/selectChildren.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/selectChildren.js
 var filter$1 = Array.prototype.filter;
 function children() {
 	return Array.from(this.children);
@@ -21541,19 +21533,19 @@ function selectChildren_default(match) {
 	return this.selectAll(match == null ? children : childrenFilter(typeof match === "function" ? match : childMatcher(match)));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/filter.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/filter.js
 function filter_default$1(match) {
 	if (typeof match !== "function") match = matcher_default(match);
 	for (var groups = this._groups, m = groups.length, subgroups = new Array(m), j = 0; j < m; ++j) for (var group = groups[j], n = group.length, subgroup = subgroups[j] = [], node, i = 0; i < n; ++i) if ((node = group[i]) && match.call(node, node.__data__, i, group)) subgroup.push(node);
 	return new Selection$1(subgroups, this._parents);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/sparse.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/sparse.js
 function sparse_default(update) {
 	return new Array(update.length);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/enter.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/enter.js
 function enter_default() {
 	return new Selection$1(this._enter || this._groups.map(sparse_default), this._parents);
 }
@@ -21580,14 +21572,14 @@ EnterNode.prototype = {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/constant.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/constant.js
 function constant_default$4(x) {
 	return function() {
 		return x;
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/data.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/data.js
 function bindIndex(parent, group, enter, update, exit, data) {
 	var i = 0, node, groupLength = group.length, dataLength = data.length;
 	for (; i < dataLength; ++i) if (node = group[i]) {
@@ -21638,12 +21630,12 @@ function arraylike(data) {
 	return typeof data === "object" && "length" in data ? data : Array.from(data);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/exit.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/exit.js
 function exit_default() {
 	return new Selection$1(this._exit || this._groups.map(sparse_default), this._parents);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/join.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/join.js
 function join_default(onenter, onupdate, onexit) {
 	var enter = this.enter(), update = this, exit = this.exit();
 	if (typeof onenter === "function") {
@@ -21659,7 +21651,7 @@ function join_default(onenter, onupdate, onexit) {
 	return enter && update ? enter.merge(update).order() : update;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/merge.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/merge.js
 function merge_default$1(context) {
 	var selection = context.selection ? context.selection() : context;
 	for (var groups0 = this._groups, groups1 = selection._groups, m0 = groups0.length, m1 = groups1.length, m = Math.min(m0, m1), merges = new Array(m0), j = 0; j < m; ++j) for (var group0 = groups0[j], group1 = groups1[j], n = group0.length, merge = merges[j] = new Array(n), node, i = 0; i < n; ++i) if (node = group0[i] || group1[i]) merge[i] = node;
@@ -21667,7 +21659,7 @@ function merge_default$1(context) {
 	return new Selection$1(merges, this._parents);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/order.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/order.js
 function order_default() {
 	for (var groups = this._groups, j = -1, m = groups.length; ++j < m;) for (var group = groups[j], i = group.length - 1, next = group[i], node; --i >= 0;) if (node = group[i]) {
 		if (next && node.compareDocumentPosition(next) ^ 4) next.parentNode.insertBefore(node, next);
@@ -21676,7 +21668,7 @@ function order_default() {
 	return this;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/sort.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/sort.js
 function sort_default$1(compare) {
 	if (!compare) compare = ascending;
 	function compareNode(a, b) {
@@ -21692,7 +21684,7 @@ function ascending(a, b) {
 	return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/call.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/call.js
 function call_default() {
 	var callback = arguments[0];
 	arguments[0] = this;
@@ -21700,12 +21692,12 @@ function call_default() {
 	return this;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/nodes.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/nodes.js
 function nodes_default() {
 	return Array.from(this);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/node.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/node.js
 function node_default() {
 	for (var groups = this._groups, j = 0, m = groups.length; j < m; ++j) for (var group = groups[j], i = 0, n = group.length; i < n; ++i) {
 		var node = group[i];
@@ -21714,25 +21706,25 @@ function node_default() {
 	return null;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/size.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/size.js
 function size_default() {
 	let size = 0;
 	for (const node of this) ++size;
 	return size;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/empty.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/empty.js
 function empty_default() {
 	return !this.node();
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/each.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/each.js
 function each_default$1(callback) {
 	for (var groups = this._groups, j = 0, m = groups.length; j < m; ++j) for (var group = groups[j], i = 0, n = group.length, node; i < n; ++i) if (node = group[i]) callback.call(node, node.__data__, i, group);
 	return this;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/attr.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/attr.js
 function attrRemove$1(name) {
 	return function() {
 		this.removeAttribute(name);
@@ -21776,12 +21768,12 @@ function attr_default$1(name, value) {
 	return this.each((value == null ? fullname.local ? attrRemoveNS$1 : attrRemove$1 : typeof value === "function" ? fullname.local ? attrFunctionNS$1 : attrFunction$1 : fullname.local ? attrConstantNS$1 : attrConstant$1)(fullname, value));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/window.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/window.js
 function window_default(node) {
 	return node.ownerDocument && node.ownerDocument.defaultView || node.document && node || node.defaultView;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/style.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/style.js
 function styleRemove$1(name) {
 	return function() {
 		this.style.removeProperty(name);
@@ -21806,7 +21798,7 @@ function styleValue(node, name) {
 	return node.style.getPropertyValue(name) || window_default(node).getComputedStyle(node, null).getPropertyValue(name);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/property.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/property.js
 function propertyRemove(name) {
 	return function() {
 		delete this[name];
@@ -21828,7 +21820,7 @@ function property_default(name, value) {
 	return arguments.length > 1 ? this.each((value == null ? propertyRemove : typeof value === "function" ? propertyFunction : propertyConstant)(name, value)) : this.node()[name];
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/classed.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/classed.js
 function classArray(string) {
 	return string.trim().split(/^|\s+/);
 }
@@ -21890,7 +21882,7 @@ function classed_default(name, value) {
 	return this.each((typeof value === "function" ? classedFunction : value ? classedTrue : classedFalse)(names, value));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/text.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/text.js
 function textRemove() {
 	this.textContent = "";
 }
@@ -21909,7 +21901,7 @@ function text_default$1(value) {
 	return arguments.length ? this.each(value == null ? textRemove : (typeof value === "function" ? textFunction$1 : textConstant$1)(value)) : this.node().textContent;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/html.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/html.js
 function htmlRemove() {
 	this.innerHTML = "";
 }
@@ -21928,7 +21920,7 @@ function html_default(value) {
 	return arguments.length ? this.each(value == null ? htmlRemove : (typeof value === "function" ? htmlFunction : htmlConstant)(value)) : this.node().innerHTML;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/raise.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/raise.js
 function raise() {
 	if (this.nextSibling) this.parentNode.appendChild(this);
 }
@@ -21936,7 +21928,7 @@ function raise_default() {
 	return this.each(raise);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/lower.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/lower.js
 function lower() {
 	if (this.previousSibling) this.parentNode.insertBefore(this, this.parentNode.firstChild);
 }
@@ -21944,7 +21936,7 @@ function lower_default() {
 	return this.each(lower);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/append.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/append.js
 function append_default(name) {
 	var create = typeof name === "function" ? name : creator_default(name);
 	return this.select(function() {
@@ -21952,7 +21944,7 @@ function append_default(name) {
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/insert.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/insert.js
 function constantNull() {
 	return null;
 }
@@ -21963,7 +21955,7 @@ function insert_default(name, before) {
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/remove.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/remove.js
 function remove() {
 	var parent = this.parentNode;
 	if (parent) parent.removeChild(this);
@@ -21972,7 +21964,7 @@ function remove_default$1() {
 	return this.each(remove);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/clone.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/clone.js
 function selection_cloneShallow() {
 	var clone = this.cloneNode(false), parent = this.parentNode;
 	return parent ? parent.insertBefore(clone, this.nextSibling) : clone;
@@ -21985,12 +21977,12 @@ function clone_default(deep) {
 	return this.select(deep ? selection_cloneDeep : selection_cloneShallow);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/datum.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/datum.js
 function datum_default(value) {
 	return arguments.length ? this.property("__data__", value) : this.node().__data__;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/on.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/on.js
 function contextListener(listener) {
 	return function(event) {
 		listener.call(this, event, this.__data__);
@@ -22053,7 +22045,7 @@ function on_default$1(typename, value, options) {
 	return this;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/dispatch.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/dispatch.js
 function dispatchEvent(node, type, params) {
 	var window = window_default(node), event = window.CustomEvent;
 	if (typeof event === "function") event = new event(type, params);
@@ -22078,12 +22070,12 @@ function dispatch_default(type, params) {
 	return this.each((typeof params === "function" ? dispatchFunction : dispatchConstant)(type, params));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/iterator.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/iterator.js
 function* iterator_default$1() {
 	for (var groups = this._groups, j = 0, m = groups.length; j < m; ++j) for (var group = groups[j], i = 0, n = group.length, node; i < n; ++i) if (node = group[i]) yield node;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/index.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/selection/index.js
 var root = [null];
 function Selection$1(groups, parents) {
 	this._groups = groups;
@@ -22134,19 +22126,19 @@ Selection$1.prototype = selection.prototype = {
 	[Symbol.iterator]: iterator_default$1
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/select.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/select.js
 function select_default$1(selector) {
 	return typeof selector === "string" ? new Selection$1([[document.querySelector(selector)]], [document.documentElement]) : new Selection$1([[selector]], root);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/sourceEvent.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/sourceEvent.js
 function sourceEvent_default(event) {
 	let sourceEvent;
 	while (sourceEvent = event.sourceEvent) event = sourceEvent;
 	return event;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/pointer.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-selection@3.0.0/node_modules/d3-selection/src/pointer.js
 function pointer_default(event, node) {
 	event = sourceEvent_default(event);
 	if (node === void 0) node = event.currentTarget;
@@ -22166,7 +22158,7 @@ function pointer_default(event, node) {
 	return [event.pageX, event.pageY];
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-drag@3.0.0/node_modules/d3-drag/src/noevent.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-drag@3.0.0/node_modules/d3-drag/src/noevent.js
 var nonpassivecapture = {
 	capture: true,
 	passive: false
@@ -22176,7 +22168,7 @@ function noevent_default$1(event) {
 	event.stopImmediatePropagation();
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-drag@3.0.0/node_modules/d3-drag/src/nodrag.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-drag@3.0.0/node_modules/d3-drag/src/nodrag.js
 function nodrag_default(view) {
 	var root = view.document.documentElement, selection = select_default$1(view).on("dragstart.drag", noevent_default$1, nonpassivecapture);
 	if ("onselectstart" in root) selection.on("selectstart.drag", noevent_default$1, nonpassivecapture);
@@ -22200,7 +22192,7 @@ function yesdrag(view, noclick) {
 	}
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-color@3.1.0/node_modules/d3-color/src/define.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-color@3.1.0/node_modules/d3-color/src/define.js
 function define_default(constructor, factory, prototype) {
 	constructor.prototype = factory.prototype = prototype;
 	prototype.constructor = constructor;
@@ -22211,7 +22203,7 @@ function extend(parent, definition) {
 	return prototype;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-color@3.1.0/node_modules/d3-color/src/color.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-color@3.1.0/node_modules/d3-color/src/color.js
 function Color() {}
 var darker = .7;
 var brighter = 1 / darker;
@@ -22538,11 +22530,11 @@ function hsl2rgb(h, m1, m2) {
 	return (h < 60 ? m1 + (m2 - m1) * h / 60 : h < 180 ? m2 : h < 240 ? m1 + (m2 - m1) * (240 - h) / 60 : m1) * 255;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-color@3.1.0/node_modules/d3-color/src/math.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-color@3.1.0/node_modules/d3-color/src/math.js
 var radians$2 = Math.PI / 180;
 var degrees$2 = 180 / Math.PI;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-color@3.1.0/node_modules/d3-color/src/lab.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-color@3.1.0/node_modules/d3-color/src/lab.js
 var K = 18;
 var Xn = .96422;
 var Yn = 1;
@@ -22632,7 +22624,7 @@ define_default(Hcl, hcl$1, extend(Color, {
 	}
 }));
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-color@3.1.0/node_modules/d3-color/src/cubehelix.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-color@3.1.0/node_modules/d3-color/src/cubehelix.js
 var A = -.14861;
 var B$1 = 1.78277;
 var C = -.29227;
@@ -22671,7 +22663,7 @@ define_default(Cubehelix, cubehelix$1, extend(Color, {
 	}
 }));
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/basis.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/basis.js
 function basis(t1, v0, v1, v2, v3) {
 	var t2 = t1 * t1, t3 = t2 * t1;
 	return ((1 - 3 * t1 + 3 * t2 - t3) * v0 + (4 - 6 * t2 + 3 * t3) * v1 + (1 + 3 * t1 + 3 * t2 - 3 * t3) * v2 + t3 * v3) / 6;
@@ -22684,10 +22676,10 @@ function basis_default$1(values) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/constant.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/constant.js
 var constant_default$3 = (x) => () => x;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/color.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/color.js
 function linear$1(a, d) {
 	return function(t) {
 		return a + t * d;
@@ -22712,7 +22704,7 @@ function nogamma(a, b) {
 	return d ? linear$1(a, d) : constant_default$3(isNaN(a) ? b : a);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/rgb.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/rgb.js
 var rgb_default = (function rgbGamma(y) {
 	var color = gamma(y);
 	function rgb$1(start, end) {
@@ -22751,7 +22743,7 @@ function rgbSpline(spline) {
 }
 var rgbBasis = rgbSpline(basis_default$1);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/numberArray.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/numberArray.js
 function numberArray_default(a, b) {
 	if (!b) b = [];
 	var n = a ? Math.min(b.length, a.length) : 0, c = b.slice(), i;
@@ -22764,7 +22756,7 @@ function isNumberArray$1(x) {
 	return ArrayBuffer.isView(x) && !(x instanceof DataView);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/array.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/array.js
 function genericArray(a, b) {
 	var nb = b ? b.length : 0, na = a ? Math.min(nb, a.length) : 0, x = new Array(na), c = new Array(nb), i = 0;
 	for (; i < na; ++i) x[i] = value_default(a[i], b[i]);
@@ -22775,7 +22767,7 @@ function genericArray(a, b) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/date.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/date.js
 function date_default(a, b) {
 	var d = /* @__PURE__ */ new Date();
 	return a = +a, b = +b, function(t) {
@@ -22783,14 +22775,14 @@ function date_default(a, b) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/number.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/number.js
 function number_default(a, b) {
 	return a = +a, b = +b, function(t) {
 		return a * (1 - t) + b * t;
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/object.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/object.js
 function object_default(a, b) {
 	var i = {}, c = {}, k;
 	if (a === null || typeof a !== "object") a = {};
@@ -22803,7 +22795,7 @@ function object_default(a, b) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/string.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/string.js
 var reA = /[-+]?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]?\d+)?/g;
 var reB = new RegExp(reA.source, "g");
 function zero(b) {
@@ -22848,20 +22840,20 @@ function string_default(a, b) {
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/value.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/value.js
 function value_default(a, b) {
 	var t = typeof b, c;
 	return b == null || t === "boolean" ? constant_default$3(b) : (t === "number" ? number_default : t === "string" ? (c = color$1(b)) ? (b = c, rgb_default) : string_default : b instanceof color$1 ? rgb_default : b instanceof Date ? date_default : isNumberArray$1(b) ? numberArray_default : Array.isArray(b) ? genericArray : typeof b.valueOf !== "function" && typeof b.toString !== "function" || isNaN(b) ? object_default : number_default)(a, b);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/round.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/round.js
 function round_default(a, b) {
 	return a = +a, b = +b, function(t) {
 		return Math.round(a * (1 - t) + b * t);
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/transform/decompose.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/transform/decompose.js
 var degrees$1 = 180 / Math.PI;
 var identity$5 = {
 	translateX: 0,
@@ -22887,7 +22879,7 @@ function decompose_default(a, b, c, d, e, f) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/transform/parse.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/transform/parse.js
 var svgNode;
 function parseCss(value) {
 	const m = new (typeof DOMMatrix === "function" ? DOMMatrix : WebKitCSSMatrix)(value + "");
@@ -22902,7 +22894,7 @@ function parseSvg(value) {
 	return decompose_default(value.a, value.b, value.c, value.d, value.e, value.f);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/transform/index.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/transform/index.js
 function interpolateTransform(parse, pxComma, pxParen, degParen) {
 	function pop(s) {
 		return s.length ? s.pop() + " " : "";
@@ -22966,7 +22958,7 @@ function interpolateTransform(parse, pxComma, pxParen, degParen) {
 var interpolateTransformCss = interpolateTransform(parseCss, "px, ", "px)", "deg)");
 var interpolateTransformSvg = interpolateTransform(parseSvg, ", ", ")", ")");
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/hsl.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/hsl.js
 function hsl(hue) {
 	return function(start, end) {
 		var h = hue((start = hsl$1(start)).h, (end = hsl$1(end)).h), s = nogamma(start.s, end.s), l = nogamma(start.l, end.l), opacity = nogamma(start.opacity, end.opacity);
@@ -22981,7 +22973,7 @@ function hsl(hue) {
 }
 var hsl_default = hsl(hue);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/lab.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/lab.js
 function lab(start, end) {
 	var l = nogamma((start = lab$1(start)).l, (end = lab$1(end)).l), a = nogamma(start.a, end.a), b = nogamma(start.b, end.b), opacity = nogamma(start.opacity, end.opacity);
 	return function(t) {
@@ -22993,7 +22985,7 @@ function lab(start, end) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/hcl.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/hcl.js
 function hcl(hue) {
 	return function(start, end) {
 		var h = hue((start = hcl$1(start)).h, (end = hcl$1(end)).h), c = nogamma(start.c, end.c), l = nogamma(start.l, end.l), opacity = nogamma(start.opacity, end.opacity);
@@ -23008,7 +23000,7 @@ function hcl(hue) {
 }
 var hcl_default = hcl(hue);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/cubehelix.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/cubehelix.js
 function cubehelix(hue) {
 	return (function cubehelixGamma(y) {
 		y = +y;
@@ -23029,7 +23021,7 @@ function cubehelix(hue) {
 cubehelix(hue);
 var cubehelixLong = cubehelix(nogamma);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/piecewise.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/piecewise.js
 function piecewise(interpolate, values) {
 	if (values === void 0) values = interpolate, interpolate = value_default;
 	var i = 0, n = values.length - 1, v = values[0], I = new Array(n < 0 ? 0 : n);
@@ -23040,14 +23032,14 @@ function piecewise(interpolate, values) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/quantize.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-interpolate@3.0.1/node_modules/d3-interpolate/src/quantize.js
 function quantize_default(interpolator, n) {
 	var samples = new Array(n);
 	for (var i = 0; i < n; ++i) samples[i] = interpolator(i / (n - 1));
 	return samples;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-timer@3.0.1/node_modules/d3-timer/src/timer.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-timer@3.0.1/node_modules/d3-timer/src/timer.js
 var frame$1 = 0;
 var timeout = 0;
 var interval = 0;
@@ -23146,7 +23138,7 @@ function sleep(time) {
 	}
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-timer@3.0.1/node_modules/d3-timer/src/timeout.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-timer@3.0.1/node_modules/d3-timer/src/timeout.js
 function timeout_default(callback, delay, time) {
 	var t = new Timer();
 	delay = delay == null ? 0 : +delay;
@@ -23157,7 +23149,7 @@ function timeout_default(callback, delay, time) {
 	return t;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/schedule.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/schedule.js
 var emptyOn = dispatch("start", "end", "cancel", "interrupt");
 var emptyTween = [];
 function schedule_default(node, name, id, index, group, timing) {
@@ -23253,7 +23245,7 @@ function create$1(node, id, self) {
 	}
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/interrupt.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/interrupt.js
 function interrupt_default$1(node, name) {
 	var schedules = node.__transition, schedule, active, empty = true, i;
 	if (!schedules) return;
@@ -23272,14 +23264,14 @@ function interrupt_default$1(node, name) {
 	if (empty) delete node.__transition;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/selection/interrupt.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/selection/interrupt.js
 function interrupt_default(name) {
 	return this.each(function() {
 		interrupt_default$1(this, name);
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/tween.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/tween.js
 function tweenRemove(id, name) {
 	var tween0, tween1;
 	return function() {
@@ -23335,13 +23327,13 @@ function tweenValue(transition, name, value) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/interpolate.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/interpolate.js
 function interpolate_default(a, b) {
 	var c;
 	return (typeof b === "number" ? number_default : b instanceof color$1 ? rgb_default : (c = color$1(b)) ? (b = c, rgb_default) : string_default)(a, b);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/attr.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/attr.js
 function attrRemove(name) {
 	return function() {
 		this.removeAttribute(name);
@@ -23391,7 +23383,7 @@ function attr_default(name, value) {
 	return this.attrTween(name, typeof value === "function" ? (fullname.local ? attrFunctionNS : attrFunction)(fullname, i, tweenValue(this, "attr." + name, value)) : value == null ? (fullname.local ? attrRemoveNS : attrRemove)(fullname) : (fullname.local ? attrConstantNS : attrConstant)(fullname, i, value));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/attrTween.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/attrTween.js
 function attrInterpolate(name, i) {
 	return function(t) {
 		this.setAttribute(name, i.call(this, t));
@@ -23431,7 +23423,7 @@ function attrTween_default(name, value) {
 	return this.tween(key, (fullname.local ? attrTweenNS : attrTween)(fullname, value));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/delay.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/delay.js
 function delayFunction(id, value) {
 	return function() {
 		init(this, id).delay = +value.apply(this, arguments);
@@ -23447,7 +23439,7 @@ function delay_default(value) {
 	return arguments.length ? this.each((typeof value === "function" ? delayFunction : delayConstant)(id, value)) : get(this.node(), id).delay;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/duration.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/duration.js
 function durationFunction(id, value) {
 	return function() {
 		set(this, id).duration = +value.apply(this, arguments);
@@ -23463,7 +23455,7 @@ function duration_default(value) {
 	return arguments.length ? this.each((typeof value === "function" ? durationFunction : durationConstant)(id, value)) : get(this.node(), id).duration;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/ease.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/ease.js
 function easeConstant(id, value) {
 	if (typeof value !== "function") throw new Error();
 	return function() {
@@ -23475,7 +23467,7 @@ function ease_default(value) {
 	return arguments.length ? this.each(easeConstant(id, value)) : get(this.node(), id).ease;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/easeVarying.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/easeVarying.js
 function easeVarying(id, value) {
 	return function() {
 		var v = value.apply(this, arguments);
@@ -23488,14 +23480,14 @@ function easeVarying_default(value) {
 	return this.each(easeVarying(this._id, value));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/filter.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/filter.js
 function filter_default(match) {
 	if (typeof match !== "function") match = matcher_default(match);
 	for (var groups = this._groups, m = groups.length, subgroups = new Array(m), j = 0; j < m; ++j) for (var group = groups[j], n = group.length, subgroup = subgroups[j] = [], node, i = 0; i < n; ++i) if ((node = group[i]) && match.call(node, node.__data__, i, group)) subgroup.push(node);
 	return new Transition(subgroups, this._parents, this._name, this._id);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/merge.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/merge.js
 function merge_default(transition) {
 	if (transition._id !== this._id) throw new Error();
 	for (var groups0 = this._groups, groups1 = transition._groups, m0 = groups0.length, m1 = groups1.length, m = Math.min(m0, m1), merges = new Array(m0), j = 0; j < m; ++j) for (var group0 = groups0[j], group1 = groups1[j], n = group0.length, merge = merges[j] = new Array(n), node, i = 0; i < n; ++i) if (node = group0[i] || group1[i]) merge[i] = node;
@@ -23503,7 +23495,7 @@ function merge_default(transition) {
 	return new Transition(merges, this._parents, this._name, this._id);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/on.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/on.js
 function start(name) {
 	return (name + "").trim().split(/^|\s+/).every(function(t) {
 		var i = t.indexOf(".");
@@ -23524,7 +23516,7 @@ function on_default(name, listener) {
 	return arguments.length < 2 ? get(this.node(), id).on.on(name) : this.each(onFunction(id, name, listener));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/remove.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/remove.js
 function removeFunction(id) {
 	return function() {
 		var parent = this.parentNode;
@@ -23536,7 +23528,7 @@ function remove_default() {
 	return this.on("end.remove", removeFunction(this._id));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/select.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/select.js
 function select_default(select) {
 	var name = this._name, id = this._id;
 	if (typeof select !== "function") select = selector_default(select);
@@ -23548,7 +23540,7 @@ function select_default(select) {
 	return new Transition(subgroups, this._parents, name, id);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/selectAll.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/selectAll.js
 function selectAll_default(select) {
 	var name = this._name, id = this._id;
 	if (typeof select !== "function") select = selectorAll_default(select);
@@ -23560,13 +23552,13 @@ function selectAll_default(select) {
 	return new Transition(subgroups, parents, name, id);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/selection.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/selection.js
 var Selection = selection.prototype.constructor;
 function selection_default() {
 	return new Selection(this._groups, this._parents);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/style.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/style.js
 function styleNull(name, interpolate) {
 	var string00, string10, interpolate0;
 	return function() {
@@ -23607,7 +23599,7 @@ function style_default(name, value, priority) {
 	return value == null ? this.styleTween(name, styleNull(name, i)).on("end.style." + name, styleRemove(name)) : typeof value === "function" ? this.styleTween(name, styleFunction(name, i, tweenValue(this, "style." + name, value))).each(styleMaybeRemove(this._id, name)) : this.styleTween(name, styleConstant(name, i, value), priority).on("end.style." + name, null);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/styleTween.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/styleTween.js
 function styleInterpolate(name, i, priority) {
 	return function(t) {
 		this.style.setProperty(name, i.call(this, t), priority);
@@ -23631,7 +23623,7 @@ function styleTween_default(name, value, priority) {
 	return this.tween(key, styleTween(name, value, priority == null ? "" : priority));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/text.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/text.js
 function textConstant(value) {
 	return function() {
 		this.textContent = value;
@@ -23647,7 +23639,7 @@ function text_default(value) {
 	return this.tween("text", typeof value === "function" ? textFunction(tweenValue(this, "text", value)) : textConstant(value == null ? "" : value + ""));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/textTween.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/textTween.js
 function textInterpolate(i) {
 	return function(t) {
 		this.textContent = i.call(this, t);
@@ -23671,7 +23663,7 @@ function textTween_default(value) {
 	return this.tween(key, textTween(value));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/transition.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/transition.js
 function transition_default$1() {
 	var name = this._name, id0 = this._id, id1 = newId();
 	for (var groups = this._groups, m = groups.length, j = 0; j < m; ++j) for (var group = groups[j], n = group.length, node, i = 0; i < n; ++i) if (node = group[i]) {
@@ -23686,7 +23678,7 @@ function transition_default$1() {
 	return new Transition(groups, this._parents, name, id1);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/end.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/end.js
 function end_default() {
 	var on0, on1, that = this, id = that._id, size = that.size();
 	return new Promise(function(resolve, reject) {
@@ -23707,7 +23699,7 @@ function end_default() {
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/index.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/transition/index.js
 var id = 0;
 function Transition(groups, parents, name, id) {
 	this._groups = groups;
@@ -23755,12 +23747,12 @@ Transition.prototype = transition.prototype = {
 	[Symbol.iterator]: selection_prototype[Symbol.iterator]
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-ease@3.0.1/node_modules/d3-ease/src/cubic.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-ease@3.0.1/node_modules/d3-ease/src/cubic.js
 function cubicInOut(t) {
 	return ((t *= 2) <= 1 ? t * t * t : (t -= 2) * t * t + 2) / 2;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/selection/transition.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/selection/transition.js
 var defaultTiming = {
 	time: null,
 	delay: 0,
@@ -23780,14 +23772,14 @@ function transition_default(name) {
 	return new Transition(groups, this._parents, name, id);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/selection/index.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-transition@3.0.1_d3-selection@3.0.0/node_modules/d3-transition/src/selection/index.js
 selection.prototype.interrupt = interrupt_default;
 selection.prototype.transition = transition_default;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-brush@3.0.0/node_modules/d3-brush/src/constant.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-brush@3.0.0/node_modules/d3-brush/src/constant.js
 var constant_default$2 = (x) => () => x;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-brush@3.0.0/node_modules/d3-brush/src/event.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-brush@3.0.0/node_modules/d3-brush/src/event.js
 function BrushEvent(type, { sourceEvent, target, selection, mode, dispatch }) {
 	Object.defineProperties(this, {
 		type: {
@@ -23819,7 +23811,7 @@ function BrushEvent(type, { sourceEvent, target, selection, mode, dispatch }) {
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-brush@3.0.0/node_modules/d3-brush/src/noevent.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-brush@3.0.0/node_modules/d3-brush/src/noevent.js
 function nopropagation(event) {
 	event.stopImmediatePropagation();
 }
@@ -23828,7 +23820,7 @@ function noevent_default(event) {
 	event.stopImmediatePropagation();
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-brush@3.0.0/node_modules/d3-brush/src/brush.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-brush@3.0.0/node_modules/d3-brush/src/brush.js
 var MODE_DRAG = { name: "drag" };
 var MODE_SPACE = { name: "space" };
 var MODE_HANDLE = { name: "handle" };
@@ -24270,7 +24262,7 @@ function brush(dim) {
 	return brush;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-path@3.1.0/node_modules/d3-path/src/path.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-path@3.1.0/node_modules/d3-path/src/path.js
 var pi$3 = Math.PI;
 var tau$4 = 2 * pi$3;
 var epsilon$4 = 1e-6;
@@ -24353,22 +24345,22 @@ function pathRound(digits = 3) {
 }
 var slice$2 = Array.prototype.slice;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-contour@4.0.2/node_modules/d3-contour/src/ascending.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-contour@4.0.2/node_modules/d3-contour/src/ascending.js
 function ascending_default(a, b) {
 	return a - b;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-contour@4.0.2/node_modules/d3-contour/src/area.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-contour@4.0.2/node_modules/d3-contour/src/area.js
 function area_default$1(ring) {
 	var i = 0, n = ring.length, area = ring[n - 1][1] * ring[0][0] - ring[n - 1][0] * ring[0][1];
 	while (++i < n) area += ring[i - 1][1] * ring[i][0] - ring[i - 1][0] * ring[i][1];
 	return area;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-contour@4.0.2/node_modules/d3-contour/src/constant.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-contour@4.0.2/node_modules/d3-contour/src/constant.js
 var constant_default$1 = (x) => () => x;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-contour@4.0.2/node_modules/d3-contour/src/contains.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-contour@4.0.2/node_modules/d3-contour/src/contains.js
 function contains_default(ring, hole) {
 	var i = -1, n = hole.length, c;
 	while (++i < n) if (c = ringContains(ring, hole[i])) return c;
@@ -24394,10 +24386,10 @@ function within(p, q, r) {
 	return p <= q && q <= r || r <= q && q <= p;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-contour@4.0.2/node_modules/d3-contour/src/noop.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-contour@4.0.2/node_modules/d3-contour/src/noop.js
 function noop_default$1() {}
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-contour@4.0.2/node_modules/d3-contour/src/contours.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-contour@4.0.2/node_modules/d3-contour/src/contours.js
 var cases = [
 	[],
 	[[[1, 1.5], [.5, 1]]],
@@ -24561,7 +24553,7 @@ function smooth1(x, v0, v1, value) {
 	return isNaN(d) ? x : x + d - .5;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-contour@4.0.2/node_modules/d3-contour/src/density.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-contour@4.0.2/node_modules/d3-contour/src/density.js
 function defaultX(d) {
 	return d[0];
 }
@@ -24658,7 +24650,7 @@ function density_default() {
 	return density;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/robust-predicates@3.0.3/node_modules/robust-predicates/esm/util.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/robust-predicates@3.0.3/node_modules/robust-predicates/esm/util.js
 var epsilon$3 = 11102230246251565e-32;
 var splitter$1 = 134217729;
 var resulterrbound = 3.000000000000001 * epsilon$3;
@@ -24732,7 +24724,7 @@ function vec(n) {
 	return new Float64Array(n);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/robust-predicates@3.0.3/node_modules/robust-predicates/esm/orient2d.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/robust-predicates@3.0.3/node_modules/robust-predicates/esm/orient2d.js
 var ccwerrboundA = (3 + 16 * epsilon$3) * epsilon$3;
 var ccwerrboundB = (2 + 12 * epsilon$3) * epsilon$3;
 var ccwerrboundC = (9 + 64 * epsilon$3) * epsilon$3 * epsilon$3;
@@ -24996,7 +24988,7 @@ vec(96);
 vec(96);
 vec(1152);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/delaunator@5.1.0/node_modules/delaunator/index.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/delaunator@5.1.0/node_modules/delaunator/index.js
 var EPSILON = Math.pow(2, -52);
 var EDGE_STACK = /* @__PURE__ */ new Uint32Array(512);
 /** @template {ArrayLike<number>} T */
@@ -25467,7 +25459,7 @@ function defaultGetY(p) {
 	return p[1];
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-delaunay@6.0.4/node_modules/d3-delaunay/src/path.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-delaunay@6.0.4/node_modules/d3-delaunay/src/path.js
 var epsilon$2 = 1e-6;
 var Path = class {
 	constructor() {
@@ -25504,7 +25496,7 @@ var Path = class {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-delaunay@6.0.4/node_modules/d3-delaunay/src/polygon.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-delaunay@6.0.4/node_modules/d3-delaunay/src/polygon.js
 var Polygon = class {
 	constructor() {
 		this._ = [];
@@ -25523,7 +25515,7 @@ var Polygon = class {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-delaunay@6.0.4/node_modules/d3-delaunay/src/voronoi.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-delaunay@6.0.4/node_modules/d3-delaunay/src/voronoi.js
 var Voronoi$1 = class {
 	constructor(delaunay, [xmin, ymin, xmax, ymax] = [
 		0,
@@ -25876,7 +25868,7 @@ var Voronoi$1 = class {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-delaunay@6.0.4/node_modules/d3-delaunay/src/delaunay.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-delaunay@6.0.4/node_modules/d3-delaunay/src/delaunay.js
 var tau$3 = 2 * Math.PI;
 var pow$2 = Math.pow;
 function pointX(p) {
@@ -26092,7 +26084,7 @@ function* flatIterable(points, fx, fy, that) {
 	}
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/formatDecimal.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/formatDecimal.js
 function formatDecimal_default(x) {
 	return Math.abs(x = Math.round(x)) >= 1e21 ? x.toLocaleString("en").replace(/,/g, "") : x.toString(10);
 }
@@ -26102,12 +26094,12 @@ function formatDecimalParts(x, p) {
 	return [coefficient.length > 1 ? coefficient[0] + coefficient.slice(2) : coefficient, +x.slice(i + 1)];
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/exponent.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/exponent.js
 function exponent_default(x) {
 	return x = formatDecimalParts(Math.abs(x)), x ? x[1] : NaN;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/formatGroup.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/formatGroup.js
 function formatGroup_default(grouping, thousands) {
 	return function(value, width) {
 		var i = value.length, t = [], j = 0, g = grouping[0], length = 0;
@@ -26121,7 +26113,7 @@ function formatGroup_default(grouping, thousands) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/formatNumerals.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/formatNumerals.js
 function formatNumerals_default(numerals) {
 	return function(value) {
 		return value.replace(/[0-9]/g, function(i) {
@@ -26130,7 +26122,7 @@ function formatNumerals_default(numerals) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/formatSpecifier.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/formatSpecifier.js
 var re$1 = /^(?:(.)?([<>=^]))?([+\-( ])?([$#])?(0)?(\d+)?(,)?(\.\d+)?(~)?([a-z%])?$/i;
 function formatSpecifier(specifier) {
 	if (!(match = re$1.exec(specifier))) throw new Error("invalid format: " + specifier);
@@ -26165,7 +26157,7 @@ FormatSpecifier.prototype.toString = function() {
 	return this.fill + this.align + this.sign + this.symbol + (this.zero ? "0" : "") + (this.width === void 0 ? "" : Math.max(1, this.width | 0)) + (this.comma ? "," : "") + (this.precision === void 0 ? "" : "." + Math.max(0, this.precision | 0)) + (this.trim ? "~" : "") + this.type;
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/formatTrim.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/formatTrim.js
 function formatTrim_default(s) {
 	out: for (var n = s.length, i = 1, i0 = -1, i1; i < n; ++i) switch (s[i]) {
 		case ".":
@@ -26182,7 +26174,7 @@ function formatTrim_default(s) {
 	return i0 > 0 ? s.slice(0, i0) + s.slice(i1 + 1) : s;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/formatPrefixAuto.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/formatPrefixAuto.js
 var prefixExponent;
 function formatPrefixAuto_default(x, p) {
 	var d = formatDecimalParts(x, p);
@@ -26191,7 +26183,7 @@ function formatPrefixAuto_default(x, p) {
 	return i === n ? coefficient : i > n ? coefficient + new Array(i - n + 1).join("0") : i > 0 ? coefficient.slice(0, i) + "." + coefficient.slice(i) : "0." + new Array(1 - i).join("0") + formatDecimalParts(x, Math.max(0, p + i - 1))[0];
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/formatRounded.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/formatRounded.js
 function formatRounded_default(x, p) {
 	var d = formatDecimalParts(x, p);
 	if (!d) return x + "";
@@ -26199,7 +26191,7 @@ function formatRounded_default(x, p) {
 	return exponent < 0 ? "0." + new Array(-exponent).join("0") + coefficient : coefficient.length > exponent + 1 ? coefficient.slice(0, exponent + 1) + "." + coefficient.slice(exponent + 1) : coefficient + new Array(exponent - coefficient.length + 2).join("0");
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/formatTypes.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/formatTypes.js
 var formatTypes_default = {
 	"%": (x, p) => (x * 100).toFixed(p),
 	"b": (x) => Math.round(x).toString(2),
@@ -26216,12 +26208,12 @@ var formatTypes_default = {
 	"x": (x) => Math.round(x).toString(16)
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/identity.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/identity.js
 function identity_default$1(x) {
 	return x;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/locale.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/locale.js
 var map$2 = Array.prototype.map;
 var prefixes = [
 	"y",
@@ -26309,7 +26301,7 @@ function locale_default(locale) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/defaultLocale.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/defaultLocale.js
 var locale$1;
 var format$1;
 var formatPrefix;
@@ -26325,23 +26317,23 @@ function defaultLocale$1(definition) {
 	return locale$1;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/precisionFixed.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/precisionFixed.js
 function precisionFixed_default(step) {
 	return Math.max(0, -exponent_default(Math.abs(step)));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/precisionPrefix.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/precisionPrefix.js
 function precisionPrefix_default(step, value) {
 	return Math.max(0, Math.max(-8, Math.min(8, Math.floor(exponent_default(value) / 3))) * 3 - exponent_default(Math.abs(step)));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/precisionRound.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-format@3.1.2/node_modules/d3-format/src/precisionRound.js
 function precisionRound_default(step, max) {
 	step = Math.abs(step), max = Math.abs(max) - step;
 	return Math.max(0, exponent_default(max) - exponent_default(step)) + 1;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/math.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/math.js
 var epsilon$1 = 1e-6;
 var pi$2 = Math.PI;
 var halfPi$1 = pi$2 / 2;
@@ -26371,10 +26363,10 @@ function asin(x) {
 	return x > 1 ? halfPi$1 : x < -1 ? -halfPi$1 : Math.asin(x);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/noop.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/noop.js
 function noop() {}
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/stream.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/stream.js
 function streamGeometry(geometry, stream) {
 	if (geometry && streamGeometryType.hasOwnProperty(geometry.type)) streamGeometryType[geometry.type](geometry, stream);
 }
@@ -26435,7 +26427,7 @@ function stream_default(object, stream) {
 	else streamGeometry(object, stream);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/cartesian.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/cartesian.js
 function spherical(cartesian) {
 	return [atan2(cartesian[1], cartesian[0]), asin(cartesian[2])];
 }
@@ -26472,7 +26464,7 @@ function cartesianNormalizeInPlace(d) {
 	d[0] /= l, d[1] /= l, d[2] /= l;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/centroid.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/centroid.js
 var W0;
 var W1;
 var X0$1;
@@ -26583,7 +26575,7 @@ function centroid_default(object) {
 	return [atan2(y, x) * degrees, asin(z / m) * degrees];
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/compose.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/compose.js
 function compose_default(a, b) {
 	function compose(x, y) {
 		return x = a(x, y), b(x[0], x[1]);
@@ -26594,7 +26586,7 @@ function compose_default(a, b) {
 	return compose;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/rotation.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/rotation.js
 function rotationIdentity(lambda, phi) {
 	if (abs(lambda) > pi$2) lambda -= Math.round(lambda / tau$2) * tau$2;
 	return [lambda, phi];
@@ -26640,7 +26632,7 @@ function rotation_default(rotate) {
 	return forward;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/circle.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/circle.js
 function circleStream(stream, radius, delta, direction, t0, t1) {
 	if (!delta) return;
 	var cosRadius = cos$1(radius), sinRadius = sin$1(radius), step = direction * delta;
@@ -26668,7 +26660,7 @@ function circleRadius(cosRadius, point) {
 	return ((-point[2] < 0 ? -radius : radius) + tau$2 - epsilon$1) % tau$2;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/clip/buffer.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/clip/buffer.js
 function buffer_default() {
 	var lines = [], line;
 	return {
@@ -26695,12 +26687,12 @@ function buffer_default() {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/pointEqual.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/pointEqual.js
 function pointEqual_default(a, b) {
 	return abs(a[0] - b[0]) < 1e-6 && abs(a[1] - b[1]) < 1e-6;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/clip/rejoin.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/clip/rejoin.js
 function Intersection(point, points, other, entry) {
 	this.x = point;
 	this.z = points;
@@ -26771,7 +26763,7 @@ function link$1(array) {
 	b.p = a;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/polygonContains.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/polygonContains.js
 function longitude(point) {
 	return abs(point[0]) <= pi$2 ? point[0] : sign$1(point[0]) * ((abs(point[0]) + pi$2) % tau$2 - pi$2);
 }
@@ -26804,7 +26796,7 @@ function polygonContains_default(polygon, point) {
 	return (angle < -1e-6 || angle < 1e-6 && sum < -1e-12) ^ winding & 1;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/clip/index.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/clip/index.js
 function clip_default(pointVisible, clipLine, interpolate, start) {
 	return function(sink) {
 		var line = clipLine(sink), ringBuffer = buffer_default(), ringSink = clipLine(ringBuffer), polygonStarted = false, polygon, segments, ring;
@@ -26898,7 +26890,7 @@ function compareIntersection(a, b) {
 	return ((a = a.x)[0] < 0 ? a[1] - halfPi$1 - epsilon$1 : halfPi$1 - a[1]) - ((b = b.x)[0] < 0 ? b[1] - halfPi$1 - epsilon$1 : halfPi$1 - b[1]);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/clip/antimeridian.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/clip/antimeridian.js
 var antimeridian_default = clip_default(function() {
 	return true;
 }, clipAntimeridianLine, clipAntimeridianInterpolate, [-pi$2, -halfPi$1]);
@@ -26967,7 +26959,7 @@ function clipAntimeridianInterpolate(from, to, direction, stream) {
 	} else stream.point(to[0], to[1]);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/clip/circle.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/clip/circle.js
 function circle_default$1(radius) {
 	var cr = cos$1(radius), delta = 2 * radians$1, smallRadius = cr > 0, notHemisphere = abs(cr) > epsilon$1;
 	function interpolate(from, to, direction, stream) {
@@ -27068,7 +27060,7 @@ function circle_default$1(radius) {
 	return clip_default(visible, clipLine, interpolate, smallRadius ? [0, -radius] : [-pi$2, radius - pi$2]);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/clip/line.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/clip/line.js
 function line_default$1(a, b, x0, y0, x1, y1) {
 	var ax = a[0], ay = a[1], bx = b[0], by = b[1], t0 = 0, t1 = 1, dx = bx - ax, dy = by - ay, r = x0 - ax;
 	if (!dx && r > 0) return;
@@ -27115,7 +27107,7 @@ function line_default$1(a, b, x0, y0, x1, y1) {
 	return true;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/clip/rectangle.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/clip/rectangle.js
 var clipMax = 1e9;
 var clipMin = -clipMax;
 function clipRectangle(x0, y0, x1, y1) {
@@ -27227,7 +27219,7 @@ function clipRectangle(x0, y0, x1, y1) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/graticule.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/graticule.js
 function graticuleX(y0, y1, dy) {
 	var y = range$1(y0, y1 - epsilon$1, dy).concat(y1);
 	return function(x) {
@@ -27322,10 +27314,10 @@ function graticule10() {
 	return graticule$1()();
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/identity.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/identity.js
 var identity_default = (x) => x;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/path/area.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/path/area.js
 var areaSum = new Adder();
 var areaRingSum = new Adder();
 var x00$2;
@@ -27366,7 +27358,7 @@ function areaRingEnd() {
 	areaPoint(x00$2, y00$2);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/path/bounds.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/path/bounds.js
 var x0$2 = Infinity;
 var y0$2 = x0$2;
 var x1 = -x0$2;
@@ -27390,7 +27382,7 @@ function boundsPoint(x, y) {
 	if (y > y1) y1 = y;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/path/centroid.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/path/centroid.js
 var X0 = 0;
 var Y0 = 0;
 var Z0 = 0;
@@ -27467,7 +27459,7 @@ function centroidPointRing(x, y) {
 	centroidPoint(x0$1 = x, y0$1 = y);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/path/context.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/path/context.js
 function PathContext(context) {
 	this._context = context;
 }
@@ -27506,7 +27498,7 @@ PathContext.prototype = {
 	result: noop
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/path/measure.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/path/measure.js
 var lengthSum = new Adder();
 var lengthRing;
 var x00;
@@ -27544,7 +27536,7 @@ function lengthPoint(x, y) {
 	x0 = x, y0 = y;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/path/string.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/path/string.js
 var cacheDigits;
 var cacheAppend;
 var cacheRadius;
@@ -27623,7 +27615,7 @@ function appendRound(digits) {
 	return cacheAppend;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/path/index.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/path/index.js
 function path_default$1(projection, context) {
 	let digits = 3, pointRadius = 4.5, projectionStream, contextStream;
 	function path(object) {
@@ -27679,7 +27671,7 @@ function path_default$1(projection, context) {
 	return path.projection(projection).digits(digits).context(context);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/transform.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/transform.js
 function transform_default(methods) {
 	return { stream: transformer$2(methods) };
 }
@@ -27714,7 +27706,7 @@ TransformStream.prototype = {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/fit.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/fit.js
 function fit(projection, fitBounds, object) {
 	var clip = projection.clipExtent && projection.clipExtent();
 	projection.scale(150).translate([0, 0]);
@@ -27746,7 +27738,7 @@ function fitHeight(projection, height, object) {
 	}, object);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/resample.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/resample.js
 var maxDepth = 16;
 var cosMinDistance = cos$1(30 * radians$1);
 function resample_default(project, delta2) {
@@ -27821,7 +27813,7 @@ function resample(project, delta2) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/index.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/index.js
 var transformRadians = transformer$2({ point: function(x, y) {
 	this.stream.point(x * radians$1, y * radians$1);
 } });
@@ -27943,7 +27935,7 @@ function projectionMutator(projectAt) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/conic.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/conic.js
 function conicProjection$1(projectAt) {
 	var phi0 = 0, phi1 = pi$2 / 3, m = projectionMutator(projectAt), p = m(phi0, phi1);
 	p.parallels = function(_) {
@@ -27952,7 +27944,7 @@ function conicProjection$1(projectAt) {
 	return p;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/cylindricalEqualArea.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/cylindricalEqualArea.js
 function cylindricalEqualAreaRaw(phi0) {
 	var cosPhi0 = cos$1(phi0);
 	function forward(lambda, phi) {
@@ -27964,7 +27956,7 @@ function cylindricalEqualAreaRaw(phi0) {
 	return forward;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/conicEqualArea.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/conicEqualArea.js
 function conicEqualAreaRaw(y0, y1) {
 	var sy0 = sin$1(y0), n = (sy0 + sin$1(y1)) / 2;
 	if (abs(n) < 1e-6) return cylindricalEqualAreaRaw(y0);
@@ -27984,12 +27976,12 @@ function conicEqualArea_default() {
 	return conicProjection$1(conicEqualAreaRaw).scale(155.424).center([0, 33.6442]);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/albers.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/albers.js
 function albers_default() {
 	return conicEqualArea_default().parallels([29.5, 45.5]).scale(1070).translate([480, 250]).rotate([96, 0]).center([-.6, 38.7]);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/albersUsa.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/albersUsa.js
 function multiplex(streams) {
 	var n = streams.length;
 	return {
@@ -28075,7 +28067,7 @@ function albersUsa_default() {
 	return albersUsa.scale(1070);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/azimuthal.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/azimuthal.js
 function azimuthalRaw(scale) {
 	return function(x, y) {
 		var cx = cos$1(x), cy = cos$1(y), k = scale(cx * cy);
@@ -28090,7 +28082,7 @@ function azimuthalInvert(angle) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/azimuthalEqualArea.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/azimuthalEqualArea.js
 var azimuthalEqualAreaRaw = azimuthalRaw(function(cxcy) {
 	return sqrt$1(2 / (1 + cxcy));
 });
@@ -28101,7 +28093,7 @@ function azimuthalEqualArea_default() {
 	return projection$1(azimuthalEqualAreaRaw).scale(124.75).clipAngle(179.999);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/azimuthalEquidistant.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/azimuthalEquidistant.js
 var azimuthalEquidistantRaw = azimuthalRaw(function(c) {
 	return (c = acos(c)) && c / sin$1(c);
 });
@@ -28112,7 +28104,7 @@ function azimuthalEquidistant_default() {
 	return projection$1(azimuthalEquidistantRaw).scale(79.4188).clipAngle(179.999);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/mercator.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/mercator.js
 function mercatorRaw(lambda, phi) {
 	return [lambda, log$1(tan((halfPi$1 + phi) / 2))];
 }
@@ -28143,7 +28135,7 @@ function mercatorProjection(project) {
 	return reclip();
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/conicConformal.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/conicConformal.js
 function tany(y) {
 	return tan((halfPi$1 + y) / 2);
 }
@@ -28168,7 +28160,7 @@ function conicConformal_default() {
 	return conicProjection$1(conicConformalRaw).scale(109.5).parallels([30, 30]);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/equirectangular.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/equirectangular.js
 function equirectangularRaw(lambda, phi) {
 	return [lambda, phi];
 }
@@ -28177,7 +28169,7 @@ function equirectangular_default() {
 	return projection$1(equirectangularRaw).scale(152.63);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/conicEquidistant.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/conicEquidistant.js
 function conicEquidistantRaw(y0, y1) {
 	var cy0 = cos$1(y0), n = y0 === y1 ? sin$1(y0) : (cy0 - cos$1(y1)) / (y1 - y0), g = cy0 / n + y0;
 	if (abs(n) < 1e-6) return equirectangularRaw;
@@ -28196,7 +28188,7 @@ function conicEquidistant_default() {
 	return conicProjection$1(conicEquidistantRaw).scale(131.154).center([0, 13.9389]);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/equalEarth.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/equalEarth.js
 var A1 = 1.340264;
 var A2 = -.081106;
 var A3 = 893e-6;
@@ -28221,7 +28213,7 @@ function equalEarth_default() {
 	return projection$1(equalEarthRaw).scale(177.158);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/gnomonic.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/gnomonic.js
 function gnomonicRaw(x, y) {
 	var cy = cos$1(y), k = cos$1(x) * cy;
 	return [cy * sin$1(x) / k, sin$1(y) / k];
@@ -28231,7 +28223,7 @@ function gnomonic_default() {
 	return projection$1(gnomonicRaw).scale(144.049).clipAngle(60);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/orthographic.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/orthographic.js
 function orthographicRaw(x, y) {
 	return [cos$1(y) * sin$1(x), sin$1(y)];
 }
@@ -28240,7 +28232,7 @@ function orthographic_default() {
 	return projection$1(orthographicRaw).scale(249.5).clipAngle(90 + epsilon$1);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/stereographic.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/stereographic.js
 function stereographicRaw(x, y) {
 	var cy = cos$1(y), k = 1 + cos$1(x) * cy;
 	return [cy * sin$1(x) / k, sin$1(y) / k];
@@ -28252,7 +28244,7 @@ function stereographic_default() {
 	return projection$1(stereographicRaw).scale(250).clipAngle(142);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/transverseMercator.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-geo@3.1.1/node_modules/d3-geo/src/projection/transverseMercator.js
 function transverseMercatorRaw(lambda, phi) {
 	return [log$1(tan((halfPi$1 + phi) / 2)), -lambda];
 }
@@ -28282,7 +28274,7 @@ function transverseMercator_default() {
 	]).scale(159.155);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/cluster.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/cluster.js
 function defaultSeparation$1(a, b) {
 	return a.parent === b.parent ? 1 : 2;
 }
@@ -28344,7 +28336,7 @@ function cluster_default() {
 	return cluster;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/count.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/count.js
 function count(node) {
 	var sum = 0, children = node.children, i = children && children.length;
 	if (!i) sum = 1;
@@ -28355,14 +28347,14 @@ function count_default() {
 	return this.eachAfter(count);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/each.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/each.js
 function each_default(callback, that) {
 	let index = -1;
 	for (const node of this) callback.call(that, node, ++index, this);
 	return this;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/eachBefore.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/eachBefore.js
 function eachBefore_default(callback, that) {
 	var node = this, nodes = [node], children, i, index = -1;
 	while (node = nodes.pop()) {
@@ -28372,7 +28364,7 @@ function eachBefore_default(callback, that) {
 	return this;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/eachAfter.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/eachAfter.js
 function eachAfter_default(callback, that) {
 	var node = this, nodes = [node], next = [], children, i, n, index = -1;
 	while (node = nodes.pop()) {
@@ -28383,13 +28375,13 @@ function eachAfter_default(callback, that) {
 	return this;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/find.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/find.js
 function find_default(callback, that) {
 	let index = -1;
 	for (const node of this) if (callback.call(that, node, ++index, this)) return node;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/sum.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/sum.js
 function sum_default(value) {
 	return this.eachAfter(function(node) {
 		var sum = +value(node.data) || 0, children = node.children, i = children && children.length;
@@ -28398,14 +28390,14 @@ function sum_default(value) {
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/sort.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/sort.js
 function sort_default(compare) {
 	return this.eachBefore(function(node) {
 		if (node.children) node.children.sort(compare);
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/path.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/path.js
 function path_default(end) {
 	var start = this, ancestor = leastCommonAncestor(start, end), nodes = [start];
 	while (start !== ancestor) {
@@ -28432,19 +28424,19 @@ function leastCommonAncestor(a, b) {
 	return c;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/ancestors.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/ancestors.js
 function ancestors_default() {
 	var node = this, nodes = [node];
 	while (node = node.parent) nodes.push(node);
 	return nodes;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/descendants.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/descendants.js
 function descendants_default() {
 	return Array.from(this);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/leaves.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/leaves.js
 function leaves_default() {
 	var leaves = [];
 	this.eachBefore(function(node) {
@@ -28453,7 +28445,7 @@ function leaves_default() {
 	return leaves;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/links.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/links.js
 function links_default() {
 	var root = this, links = [];
 	root.each(function(node) {
@@ -28465,7 +28457,7 @@ function links_default() {
 	return links;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/iterator.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/iterator.js
 function* iterator_default() {
 	var node = this, current, next = [node], children, i, n;
 	do {
@@ -28477,7 +28469,7 @@ function* iterator_default() {
 	} while (next.length);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/index.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/hierarchy/index.js
 function hierarchy(data, children) {
 	if (data instanceof Map) {
 		data = [void 0, data];
@@ -28536,7 +28528,7 @@ Node.prototype = hierarchy.prototype = {
 	[Symbol.iterator]: iterator_default
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/accessors.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/accessors.js
 function optional(f) {
 	return f == null ? null : required(f);
 }
@@ -28545,7 +28537,7 @@ function required(f) {
 	return f;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/stratify.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/stratify.js
 var preroot = { depth: -1 };
 var ambiguous = {};
 var imputed = {};
@@ -28644,7 +28636,7 @@ function slash$1(path, i) {
 	return false;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/tree.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-hierarchy@3.1.2/node_modules/d3-hierarchy/src/tree.js
 function defaultSeparation(a, b) {
 	return a.parent === b.parent ? 1 : 2;
 }
@@ -28786,7 +28778,7 @@ function tree_default() {
 	return tree;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-random@3.0.1/node_modules/d3-random/src/lcg.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-random@3.0.1/node_modules/d3-random/src/lcg.js
 var mul = 1664525;
 var inc = 1013904223;
 var eps = 1 / 4294967296;
@@ -28795,7 +28787,7 @@ function lcg(seed = Math.random()) {
 	return () => (state = mul * state + inc | 0, eps * (state >>> 0));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/init.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/init.js
 function initRange(domain, range) {
 	switch (arguments.length) {
 		case 0: break;
@@ -28821,7 +28813,7 @@ function initInterpolator(domain, interpolator) {
 	return this;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/ordinal.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/ordinal.js
 var implicit = Symbol("implicit");
 function ordinal() {
 	var index = new InternMap(), domain = [], range = [], unknown = implicit;
@@ -28855,7 +28847,7 @@ function ordinal() {
 	return scale;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/band.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/band.js
 function band() {
 	var scale = ordinal().unknown(void 0), domain = scale.domain, ordinalRange = scale.range, r0 = 0, r1 = 1, step, bandwidth, round = false, paddingInner = 0, paddingOuter = 0, align = .5;
 	delete scale.unknown;
@@ -28920,19 +28912,19 @@ function point$4() {
 	return pointish(band.apply(null, arguments).paddingInner(1));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/constant.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/constant.js
 function constants(x) {
 	return function() {
 		return x;
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/number.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/number.js
 function number$3(x) {
 	return +x;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/continuous.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/continuous.js
 var unit$1 = [0, 1];
 function identity$4(x) {
 	return x;
@@ -29017,7 +29009,7 @@ function continuous() {
 	return transformer$1()(identity$4, identity$4);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/tickFormat.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/tickFormat.js
 function tickFormat(start, stop, count, specifier) {
 	var step = tickStep(start, stop, count), precision;
 	specifier = formatSpecifier(specifier == null ? ",f" : specifier);
@@ -29039,7 +29031,7 @@ function tickFormat(start, stop, count, specifier) {
 	return format$1(specifier);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/linear.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/linear.js
 function linearish(scale) {
 	var domain = scale.domain;
 	scale.ticks = function(count) {
@@ -29092,7 +29084,7 @@ function linear() {
 	return linearish(scale);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/identity.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/identity.js
 function identity$3(domain) {
 	var unknown;
 	function scale(x) {
@@ -29112,7 +29104,7 @@ function identity$3(domain) {
 	return linearish(scale);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/nice.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/nice.js
 function nice(domain, interval) {
 	domain = domain.slice();
 	var i0 = 0, i1 = domain.length - 1, x0 = domain[i0], x1 = domain[i1], t;
@@ -29125,7 +29117,7 @@ function nice(domain, interval) {
 	return domain;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/log.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/log.js
 function transformLog$1(x) {
 	return Math.log(x);
 }
@@ -29230,7 +29222,7 @@ function log() {
 	return scale;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/symlog.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/symlog.js
 function transformSymlog$1(c) {
 	return function(x) {
 		return Math.sign(x) * Math.log1p(Math.abs(x / c));
@@ -29256,7 +29248,7 @@ function symlog() {
 	return initRange.apply(scale, arguments);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/pow.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/pow.js
 function transformPow$1(exponent) {
 	return function(x) {
 		return x < 0 ? -Math.pow(-x, exponent) : Math.pow(x, exponent);
@@ -29287,7 +29279,7 @@ function pow() {
 	return scale;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/quantile.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/quantile.js
 function quantile() {
 	var domain = [], range = [], thresholds = [], unknown;
 	function rescale() {
@@ -29325,7 +29317,7 @@ function quantile() {
 	return initRange.apply(scale, arguments);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/threshold.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/threshold.js
 function threshold() {
 	var domain = [.5], range = [0, 1], unknown, n = 1;
 	function scale(x) {
@@ -29350,7 +29342,7 @@ function threshold() {
 	return initRange.apply(scale, arguments);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/interval.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/interval.js
 var t0 = /* @__PURE__ */ new Date();
 var t1 = /* @__PURE__ */ new Date();
 function timeInterval$1(floori, offseti, count, field) {
@@ -29405,7 +29397,7 @@ function timeInterval$1(floori, offseti, count, field) {
 	return interval;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/millisecond.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/millisecond.js
 var millisecond = timeInterval$1(() => {}, (date, step) => {
 	date.setTime(+date + step);
 }, (start, end) => {
@@ -29425,7 +29417,7 @@ millisecond.every = (k) => {
 };
 millisecond.range;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/duration.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/duration.js
 var durationSecond$1 = 1e3;
 var durationMinute$1 = durationSecond$1 * 60;
 var durationHour$1 = durationMinute$1 * 60;
@@ -29434,7 +29426,7 @@ var durationWeek$1 = durationDay$1 * 7;
 var durationMonth$1 = durationDay$1 * 30;
 var durationYear$1 = durationDay$1 * 365;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/second.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/second.js
 var second$1 = timeInterval$1((date) => {
 	date.setTime(date - date.getMilliseconds());
 }, (date, step) => {
@@ -29446,7 +29438,7 @@ var second$1 = timeInterval$1((date) => {
 });
 second$1.range;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/minute.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/minute.js
 var timeMinute = timeInterval$1((date) => {
 	date.setTime(date - date.getMilliseconds() - date.getSeconds() * durationSecond$1);
 }, (date, step) => {
@@ -29468,7 +29460,7 @@ var utcMinute = timeInterval$1((date) => {
 });
 utcMinute.range;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/hour.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/hour.js
 var timeHour = timeInterval$1((date) => {
 	date.setTime(date - date.getMilliseconds() - date.getSeconds() * durationSecond$1 - date.getMinutes() * durationMinute$1);
 }, (date, step) => {
@@ -29490,7 +29482,7 @@ var utcHour = timeInterval$1((date) => {
 });
 utcHour.range;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/day.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/day.js
 var timeDay = timeInterval$1((date) => date.setHours(0, 0, 0, 0), (date, step) => date.setDate(date.getDate() + step), (start, end) => (end - start - (end.getTimezoneOffset() - start.getTimezoneOffset()) * durationMinute$1) / durationDay$1, (date) => date.getDate() - 1);
 timeDay.range;
 var utcDay = timeInterval$1((date) => {
@@ -29514,7 +29506,7 @@ var unixDay = timeInterval$1((date) => {
 });
 unixDay.range;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/week.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/week.js
 function timeWeekday(i) {
 	return timeInterval$1((date) => {
 		date.setDate(date.getDate() - (date.getDay() + 7 - i) % 7);
@@ -29564,7 +29556,7 @@ utcThursday.range;
 utcFriday.range;
 utcSaturday.range;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/month.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/month.js
 var timeMonth = timeInterval$1((date) => {
 	date.setDate(1);
 	date.setHours(0, 0, 0, 0);
@@ -29588,7 +29580,7 @@ var utcMonth = timeInterval$1((date) => {
 });
 utcMonth.range;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/year.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/year.js
 var timeYear = timeInterval$1((date) => {
 	date.setMonth(0, 1);
 	date.setHours(0, 0, 0, 0);
@@ -29630,7 +29622,7 @@ utcYear.every = (k) => {
 };
 utcYear.range;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/ticks.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-time@3.1.0/node_modules/d3-time/src/ticks.js
 function ticker(year, month, week, day, hour, minute) {
 	const tickIntervals = [
 		[
@@ -29744,7 +29736,7 @@ function ticker(year, month, week, day, hour, minute) {
 var [utcTicks, utcTickInterval] = ticker(utcYear, utcMonth, utcSunday, unixDay, utcHour, utcMinute);
 var [timeTicks, timeTickInterval] = ticker(timeYear, timeMonth, timeSunday, timeDay, timeHour, timeMinute);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-time-format@4.1.0/node_modules/d3-time-format/src/locale.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-time-format@4.1.0/node_modules/d3-time-format/src/locale.js
 function localDate(d) {
 	if (0 <= d.y && d.y < 100) {
 		var date = new Date(-1, d.m, d.d, d.H, d.M, d.S, d.L);
@@ -30293,7 +30285,7 @@ function formatUnixTimestampSeconds(d) {
 	return Math.floor(+d / 1e3);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-time-format@4.1.0/node_modules/d3-time-format/src/defaultLocale.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-time-format@4.1.0/node_modules/d3-time-format/src/defaultLocale.js
 var locale;
 var timeFormat;
 var utcFormat;
@@ -30358,7 +30350,7 @@ function defaultLocale(definition) {
 	return locale;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/time.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/time.js
 function date(t) {
 	return new Date(t);
 }
@@ -30398,17 +30390,17 @@ function time() {
 	return initRange.apply(calendar(timeTicks, timeTickInterval, timeYear, timeMonth, timeSunday, timeDay, timeHour, timeMinute, second$1, timeFormat).domain([new Date(2e3, 0, 1), new Date(2e3, 0, 2)]), arguments);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/utcTime.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/utcTime.js
 function utcTime() {
 	return initRange.apply(calendar(utcTicks, utcTickInterval, utcYear, utcMonth, utcSunday, utcDay, utcHour, utcMinute, second$1, utcFormat).domain([Date.UTC(2e3, 0, 1), Date.UTC(2e3, 0, 2)]), arguments);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/sequential.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/sequential.js
 function copy(source, target) {
 	return target.domain(source.domain()).interpolator(source.interpolator()).clamp(source.clamp()).unknown(source.unknown());
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/diverging.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale@4.0.2/node_modules/d3-scale/src/diverging.js
 function transformer() {
 	var x0 = 0, x1 = .5, x2 = 1, s = 1, t0, t1, t2, k10, k21, interpolator = identity$4, transform, clamp = false, unknown;
 	function scale(x) {
@@ -30484,167 +30476,167 @@ function divergingPow() {
 	return initInterpolator.apply(scale, arguments);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/colors.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/colors.js
 function colors_default(specifier) {
 	var n = specifier.length / 6 | 0, colors = new Array(n), i = 0;
 	while (i < n) colors[i] = "#" + specifier.slice(i * 6, ++i * 6);
 	return colors;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/category10.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/category10.js
 var category10_default = colors_default("1f77b4ff7f0e2ca02cd627289467bd8c564be377c27f7f7fbcbd2217becf");
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/Accent.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/Accent.js
 var Accent_default = colors_default("7fc97fbeaed4fdc086ffff99386cb0f0027fbf5b17666666");
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/Dark2.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/Dark2.js
 var Dark2_default = colors_default("1b9e77d95f027570b3e7298a66a61ee6ab02a6761d666666");
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/observable10.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/observable10.js
 var observable10_default = colors_default("4269d0efb118ff725c6cc5b03ca951ff8ab7a463f297bbf59c6b4e9498a0");
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/Paired.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/Paired.js
 var Paired_default = colors_default("a6cee31f78b4b2df8a33a02cfb9a99e31a1cfdbf6fff7f00cab2d66a3d9affff99b15928");
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/Pastel1.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/Pastel1.js
 var Pastel1_default = colors_default("fbb4aeb3cde3ccebc5decbe4fed9a6ffffcce5d8bdfddaecf2f2f2");
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/Pastel2.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/Pastel2.js
 var Pastel2_default = colors_default("b3e2cdfdcdaccbd5e8f4cae4e6f5c9fff2aef1e2cccccccc");
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/Set1.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/Set1.js
 var Set1_default = colors_default("e41a1c377eb84daf4a984ea3ff7f00ffff33a65628f781bf999999");
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/Set2.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/Set2.js
 var Set2_default = colors_default("66c2a5fc8d628da0cbe78ac3a6d854ffd92fe5c494b3b3b3");
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/Set3.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/Set3.js
 var Set3_default = colors_default("8dd3c7ffffb3bebadafb807280b1d3fdb462b3de69fccde5d9d9d9bc80bdccebc5ffed6f");
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/Tableau10.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/categorical/Tableau10.js
 var Tableau10_default = colors_default("4e79a7f28e2ce1575976b7b259a14fedc949af7aa1ff9da79c755fbab0ab");
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/ramp.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/ramp.js
 var ramp_default = (scheme) => rgbBasis(scheme[scheme.length - 1]);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/diverging/BrBG.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/diverging/BrBG.js
 var scheme$26 = new Array(3).concat("d8b365f5f5f55ab4ac", "a6611adfc27d80cdc1018571", "a6611adfc27df5f5f580cdc1018571", "8c510ad8b365f6e8c3c7eae55ab4ac01665e", "8c510ad8b365f6e8c3f5f5f5c7eae55ab4ac01665e", "8c510abf812ddfc27df6e8c3c7eae580cdc135978f01665e", "8c510abf812ddfc27df6e8c3f5f5f5c7eae580cdc135978f01665e", "5430058c510abf812ddfc27df6e8c3c7eae580cdc135978f01665e003c30", "5430058c510abf812ddfc27df6e8c3f5f5f5c7eae580cdc135978f01665e003c30").map(colors_default);
 var BrBG_default = ramp_default(scheme$26);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/diverging/PRGn.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/diverging/PRGn.js
 var scheme$25 = new Array(3).concat("af8dc3f7f7f77fbf7b", "7b3294c2a5cfa6dba0008837", "7b3294c2a5cff7f7f7a6dba0008837", "762a83af8dc3e7d4e8d9f0d37fbf7b1b7837", "762a83af8dc3e7d4e8f7f7f7d9f0d37fbf7b1b7837", "762a839970abc2a5cfe7d4e8d9f0d3a6dba05aae611b7837", "762a839970abc2a5cfe7d4e8f7f7f7d9f0d3a6dba05aae611b7837", "40004b762a839970abc2a5cfe7d4e8d9f0d3a6dba05aae611b783700441b", "40004b762a839970abc2a5cfe7d4e8f7f7f7d9f0d3a6dba05aae611b783700441b").map(colors_default);
 var PRGn_default = ramp_default(scheme$25);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/diverging/PiYG.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/diverging/PiYG.js
 var scheme$24 = new Array(3).concat("e9a3c9f7f7f7a1d76a", "d01c8bf1b6dab8e1864dac26", "d01c8bf1b6daf7f7f7b8e1864dac26", "c51b7de9a3c9fde0efe6f5d0a1d76a4d9221", "c51b7de9a3c9fde0eff7f7f7e6f5d0a1d76a4d9221", "c51b7dde77aef1b6dafde0efe6f5d0b8e1867fbc414d9221", "c51b7dde77aef1b6dafde0eff7f7f7e6f5d0b8e1867fbc414d9221", "8e0152c51b7dde77aef1b6dafde0efe6f5d0b8e1867fbc414d9221276419", "8e0152c51b7dde77aef1b6dafde0eff7f7f7e6f5d0b8e1867fbc414d9221276419").map(colors_default);
 var PiYG_default = ramp_default(scheme$24);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/diverging/PuOr.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/diverging/PuOr.js
 var scheme$23 = new Array(3).concat("998ec3f7f7f7f1a340", "5e3c99b2abd2fdb863e66101", "5e3c99b2abd2f7f7f7fdb863e66101", "542788998ec3d8daebfee0b6f1a340b35806", "542788998ec3d8daebf7f7f7fee0b6f1a340b35806", "5427888073acb2abd2d8daebfee0b6fdb863e08214b35806", "5427888073acb2abd2d8daebf7f7f7fee0b6fdb863e08214b35806", "2d004b5427888073acb2abd2d8daebfee0b6fdb863e08214b358067f3b08", "2d004b5427888073acb2abd2d8daebf7f7f7fee0b6fdb863e08214b358067f3b08").map(colors_default);
 var PuOr_default = ramp_default(scheme$23);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/diverging/RdBu.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/diverging/RdBu.js
 var scheme$22 = new Array(3).concat("ef8a62f7f7f767a9cf", "ca0020f4a58292c5de0571b0", "ca0020f4a582f7f7f792c5de0571b0", "b2182bef8a62fddbc7d1e5f067a9cf2166ac", "b2182bef8a62fddbc7f7f7f7d1e5f067a9cf2166ac", "b2182bd6604df4a582fddbc7d1e5f092c5de4393c32166ac", "b2182bd6604df4a582fddbc7f7f7f7d1e5f092c5de4393c32166ac", "67001fb2182bd6604df4a582fddbc7d1e5f092c5de4393c32166ac053061", "67001fb2182bd6604df4a582fddbc7f7f7f7d1e5f092c5de4393c32166ac053061").map(colors_default);
 var RdBu_default = ramp_default(scheme$22);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/diverging/RdGy.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/diverging/RdGy.js
 var scheme$21 = new Array(3).concat("ef8a62ffffff999999", "ca0020f4a582bababa404040", "ca0020f4a582ffffffbababa404040", "b2182bef8a62fddbc7e0e0e09999994d4d4d", "b2182bef8a62fddbc7ffffffe0e0e09999994d4d4d", "b2182bd6604df4a582fddbc7e0e0e0bababa8787874d4d4d", "b2182bd6604df4a582fddbc7ffffffe0e0e0bababa8787874d4d4d", "67001fb2182bd6604df4a582fddbc7e0e0e0bababa8787874d4d4d1a1a1a", "67001fb2182bd6604df4a582fddbc7ffffffe0e0e0bababa8787874d4d4d1a1a1a").map(colors_default);
 var RdGy_default = ramp_default(scheme$21);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/diverging/RdYlBu.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/diverging/RdYlBu.js
 var scheme$20 = new Array(3).concat("fc8d59ffffbf91bfdb", "d7191cfdae61abd9e92c7bb6", "d7191cfdae61ffffbfabd9e92c7bb6", "d73027fc8d59fee090e0f3f891bfdb4575b4", "d73027fc8d59fee090ffffbfe0f3f891bfdb4575b4", "d73027f46d43fdae61fee090e0f3f8abd9e974add14575b4", "d73027f46d43fdae61fee090ffffbfe0f3f8abd9e974add14575b4", "a50026d73027f46d43fdae61fee090e0f3f8abd9e974add14575b4313695", "a50026d73027f46d43fdae61fee090ffffbfe0f3f8abd9e974add14575b4313695").map(colors_default);
 var RdYlBu_default = ramp_default(scheme$20);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/diverging/RdYlGn.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/diverging/RdYlGn.js
 var scheme$19 = new Array(3).concat("fc8d59ffffbf91cf60", "d7191cfdae61a6d96a1a9641", "d7191cfdae61ffffbfa6d96a1a9641", "d73027fc8d59fee08bd9ef8b91cf601a9850", "d73027fc8d59fee08bffffbfd9ef8b91cf601a9850", "d73027f46d43fdae61fee08bd9ef8ba6d96a66bd631a9850", "d73027f46d43fdae61fee08bffffbfd9ef8ba6d96a66bd631a9850", "a50026d73027f46d43fdae61fee08bd9ef8ba6d96a66bd631a9850006837", "a50026d73027f46d43fdae61fee08bffffbfd9ef8ba6d96a66bd631a9850006837").map(colors_default);
 var RdYlGn_default = ramp_default(scheme$19);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/diverging/Spectral.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/diverging/Spectral.js
 var scheme$18 = new Array(3).concat("fc8d59ffffbf99d594", "d7191cfdae61abdda42b83ba", "d7191cfdae61ffffbfabdda42b83ba", "d53e4ffc8d59fee08be6f59899d5943288bd", "d53e4ffc8d59fee08bffffbfe6f59899d5943288bd", "d53e4ff46d43fdae61fee08be6f598abdda466c2a53288bd", "d53e4ff46d43fdae61fee08bffffbfe6f598abdda466c2a53288bd", "9e0142d53e4ff46d43fdae61fee08be6f598abdda466c2a53288bd5e4fa2", "9e0142d53e4ff46d43fdae61fee08bffffbfe6f598abdda466c2a53288bd5e4fa2").map(colors_default);
 var Spectral_default = ramp_default(scheme$18);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/BuGn.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/BuGn.js
 var scheme$17 = new Array(3).concat("e5f5f999d8c92ca25f", "edf8fbb2e2e266c2a4238b45", "edf8fbb2e2e266c2a42ca25f006d2c", "edf8fbccece699d8c966c2a42ca25f006d2c", "edf8fbccece699d8c966c2a441ae76238b45005824", "f7fcfde5f5f9ccece699d8c966c2a441ae76238b45005824", "f7fcfde5f5f9ccece699d8c966c2a441ae76238b45006d2c00441b").map(colors_default);
 var BuGn_default = ramp_default(scheme$17);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/BuPu.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/BuPu.js
 var scheme$16 = new Array(3).concat("e0ecf49ebcda8856a7", "edf8fbb3cde38c96c688419d", "edf8fbb3cde38c96c68856a7810f7c", "edf8fbbfd3e69ebcda8c96c68856a7810f7c", "edf8fbbfd3e69ebcda8c96c68c6bb188419d6e016b", "f7fcfde0ecf4bfd3e69ebcda8c96c68c6bb188419d6e016b", "f7fcfde0ecf4bfd3e69ebcda8c96c68c6bb188419d810f7c4d004b").map(colors_default);
 var BuPu_default = ramp_default(scheme$16);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/GnBu.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/GnBu.js
 var scheme$15 = new Array(3).concat("e0f3dba8ddb543a2ca", "f0f9e8bae4bc7bccc42b8cbe", "f0f9e8bae4bc7bccc443a2ca0868ac", "f0f9e8ccebc5a8ddb57bccc443a2ca0868ac", "f0f9e8ccebc5a8ddb57bccc44eb3d32b8cbe08589e", "f7fcf0e0f3dbccebc5a8ddb57bccc44eb3d32b8cbe08589e", "f7fcf0e0f3dbccebc5a8ddb57bccc44eb3d32b8cbe0868ac084081").map(colors_default);
 var GnBu_default = ramp_default(scheme$15);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/OrRd.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/OrRd.js
 var scheme$14 = new Array(3).concat("fee8c8fdbb84e34a33", "fef0d9fdcc8afc8d59d7301f", "fef0d9fdcc8afc8d59e34a33b30000", "fef0d9fdd49efdbb84fc8d59e34a33b30000", "fef0d9fdd49efdbb84fc8d59ef6548d7301f990000", "fff7ecfee8c8fdd49efdbb84fc8d59ef6548d7301f990000", "fff7ecfee8c8fdd49efdbb84fc8d59ef6548d7301fb300007f0000").map(colors_default);
 var OrRd_default = ramp_default(scheme$14);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/PuBuGn.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/PuBuGn.js
 var scheme$13 = new Array(3).concat("ece2f0a6bddb1c9099", "f6eff7bdc9e167a9cf02818a", "f6eff7bdc9e167a9cf1c9099016c59", "f6eff7d0d1e6a6bddb67a9cf1c9099016c59", "f6eff7d0d1e6a6bddb67a9cf3690c002818a016450", "fff7fbece2f0d0d1e6a6bddb67a9cf3690c002818a016450", "fff7fbece2f0d0d1e6a6bddb67a9cf3690c002818a016c59014636").map(colors_default);
 var PuBuGn_default = ramp_default(scheme$13);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/PuBu.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/PuBu.js
 var scheme$12 = new Array(3).concat("ece7f2a6bddb2b8cbe", "f1eef6bdc9e174a9cf0570b0", "f1eef6bdc9e174a9cf2b8cbe045a8d", "f1eef6d0d1e6a6bddb74a9cf2b8cbe045a8d", "f1eef6d0d1e6a6bddb74a9cf3690c00570b0034e7b", "fff7fbece7f2d0d1e6a6bddb74a9cf3690c00570b0034e7b", "fff7fbece7f2d0d1e6a6bddb74a9cf3690c00570b0045a8d023858").map(colors_default);
 var PuBu_default = ramp_default(scheme$12);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/PuRd.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/PuRd.js
 var scheme$11 = new Array(3).concat("e7e1efc994c7dd1c77", "f1eef6d7b5d8df65b0ce1256", "f1eef6d7b5d8df65b0dd1c77980043", "f1eef6d4b9dac994c7df65b0dd1c77980043", "f1eef6d4b9dac994c7df65b0e7298ace125691003f", "f7f4f9e7e1efd4b9dac994c7df65b0e7298ace125691003f", "f7f4f9e7e1efd4b9dac994c7df65b0e7298ace125698004367001f").map(colors_default);
 var PuRd_default = ramp_default(scheme$11);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/RdPu.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/RdPu.js
 var scheme$10 = new Array(3).concat("fde0ddfa9fb5c51b8a", "feebe2fbb4b9f768a1ae017e", "feebe2fbb4b9f768a1c51b8a7a0177", "feebe2fcc5c0fa9fb5f768a1c51b8a7a0177", "feebe2fcc5c0fa9fb5f768a1dd3497ae017e7a0177", "fff7f3fde0ddfcc5c0fa9fb5f768a1dd3497ae017e7a0177", "fff7f3fde0ddfcc5c0fa9fb5f768a1dd3497ae017e7a017749006a").map(colors_default);
 var RdPu_default = ramp_default(scheme$10);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/YlGnBu.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/YlGnBu.js
 var scheme$9 = new Array(3).concat("edf8b17fcdbb2c7fb8", "ffffcca1dab441b6c4225ea8", "ffffcca1dab441b6c42c7fb8253494", "ffffccc7e9b47fcdbb41b6c42c7fb8253494", "ffffccc7e9b47fcdbb41b6c41d91c0225ea80c2c84", "ffffd9edf8b1c7e9b47fcdbb41b6c41d91c0225ea80c2c84", "ffffd9edf8b1c7e9b47fcdbb41b6c41d91c0225ea8253494081d58").map(colors_default);
 var YlGnBu_default = ramp_default(scheme$9);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/YlGn.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/YlGn.js
 var scheme$8 = new Array(3).concat("f7fcb9addd8e31a354", "ffffccc2e69978c679238443", "ffffccc2e69978c67931a354006837", "ffffccd9f0a3addd8e78c67931a354006837", "ffffccd9f0a3addd8e78c67941ab5d238443005a32", "ffffe5f7fcb9d9f0a3addd8e78c67941ab5d238443005a32", "ffffe5f7fcb9d9f0a3addd8e78c67941ab5d238443006837004529").map(colors_default);
 var YlGn_default = ramp_default(scheme$8);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/YlOrBr.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/YlOrBr.js
 var scheme$7 = new Array(3).concat("fff7bcfec44fd95f0e", "ffffd4fed98efe9929cc4c02", "ffffd4fed98efe9929d95f0e993404", "ffffd4fee391fec44ffe9929d95f0e993404", "ffffd4fee391fec44ffe9929ec7014cc4c028c2d04", "ffffe5fff7bcfee391fec44ffe9929ec7014cc4c028c2d04", "ffffe5fff7bcfee391fec44ffe9929ec7014cc4c02993404662506").map(colors_default);
 var YlOrBr_default = ramp_default(scheme$7);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/YlOrRd.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/YlOrRd.js
 var scheme$6 = new Array(3).concat("ffeda0feb24cf03b20", "ffffb2fecc5cfd8d3ce31a1c", "ffffb2fecc5cfd8d3cf03b20bd0026", "ffffb2fed976feb24cfd8d3cf03b20bd0026", "ffffb2fed976feb24cfd8d3cfc4e2ae31a1cb10026", "ffffccffeda0fed976feb24cfd8d3cfc4e2ae31a1cb10026", "ffffccffeda0fed976feb24cfd8d3cfc4e2ae31a1cbd0026800026").map(colors_default);
 var YlOrRd_default = ramp_default(scheme$6);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-single/Blues.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-single/Blues.js
 var scheme$5 = new Array(3).concat("deebf79ecae13182bd", "eff3ffbdd7e76baed62171b5", "eff3ffbdd7e76baed63182bd08519c", "eff3ffc6dbef9ecae16baed63182bd08519c", "eff3ffc6dbef9ecae16baed64292c62171b5084594", "f7fbffdeebf7c6dbef9ecae16baed64292c62171b5084594", "f7fbffdeebf7c6dbef9ecae16baed64292c62171b508519c08306b").map(colors_default);
 var Blues_default = ramp_default(scheme$5);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-single/Greens.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-single/Greens.js
 var scheme$4 = new Array(3).concat("e5f5e0a1d99b31a354", "edf8e9bae4b374c476238b45", "edf8e9bae4b374c47631a354006d2c", "edf8e9c7e9c0a1d99b74c47631a354006d2c", "edf8e9c7e9c0a1d99b74c47641ab5d238b45005a32", "f7fcf5e5f5e0c7e9c0a1d99b74c47641ab5d238b45005a32", "f7fcf5e5f5e0c7e9c0a1d99b74c47641ab5d238b45006d2c00441b").map(colors_default);
 var Greens_default = ramp_default(scheme$4);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-single/Greys.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-single/Greys.js
 var scheme$3 = new Array(3).concat("f0f0f0bdbdbd636363", "f7f7f7cccccc969696525252", "f7f7f7cccccc969696636363252525", "f7f7f7d9d9d9bdbdbd969696636363252525", "f7f7f7d9d9d9bdbdbd969696737373525252252525", "fffffff0f0f0d9d9d9bdbdbd969696737373525252252525", "fffffff0f0f0d9d9d9bdbdbd969696737373525252252525000000").map(colors_default);
 var Greys_default = ramp_default(scheme$3);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-single/Purples.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-single/Purples.js
 var scheme$2 = new Array(3).concat("efedf5bcbddc756bb1", "f2f0f7cbc9e29e9ac86a51a3", "f2f0f7cbc9e29e9ac8756bb154278f", "f2f0f7dadaebbcbddc9e9ac8756bb154278f", "f2f0f7dadaebbcbddc9e9ac8807dba6a51a34a1486", "fcfbfdefedf5dadaebbcbddc9e9ac8807dba6a51a34a1486", "fcfbfdefedf5dadaebbcbddc9e9ac8807dba6a51a354278f3f007d").map(colors_default);
 var Purples_default = ramp_default(scheme$2);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-single/Reds.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-single/Reds.js
 var scheme$1 = new Array(3).concat("fee0d2fc9272de2d26", "fee5d9fcae91fb6a4acb181d", "fee5d9fcae91fb6a4ade2d26a50f15", "fee5d9fcbba1fc9272fb6a4ade2d26a50f15", "fee5d9fcbba1fc9272fb6a4aef3b2ccb181d99000d", "fff5f0fee0d2fcbba1fc9272fb6a4aef3b2ccb181d99000d", "fff5f0fee0d2fcbba1fc9272fb6a4aef3b2ccb181da50f1567000d").map(colors_default);
 var Reds_default = ramp_default(scheme$1);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-single/Oranges.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-single/Oranges.js
 var scheme = new Array(3).concat("fee6cefdae6be6550d", "feeddefdbe85fd8d3cd94701", "feeddefdbe85fd8d3ce6550da63603", "feeddefdd0a2fdae6bfd8d3ce6550da63603", "feeddefdd0a2fdae6bfd8d3cf16913d948018c2d04", "fff5ebfee6cefdd0a2fdae6bfd8d3cf16913d948018c2d04", "fff5ebfee6cefdd0a2fdae6bfd8d3cf16913d94801a636037f2704").map(colors_default);
 var Oranges_default = ramp_default(scheme);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/cividis.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/cividis.js
 function cividis_default(t) {
 	t = Math.max(0, Math.min(1, t));
 	return "rgb(" + Math.max(0, Math.min(255, Math.round(-4.54 - t * (35.34 - t * (2381.73 - t * (6402.7 - t * (7024.72 - t * 2710.57))))))) + ", " + Math.max(0, Math.min(255, Math.round(32.49 + t * (170.73 + t * (52.82 - t * (131.46 - t * (176.58 - t * 67.37))))))) + ", " + Math.max(0, Math.min(255, Math.round(81.24 + t * (442.36 - t * (2482.43 - t * (6167.24 - t * (6614.94 - t * 2475.67))))))) + ")";
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/cubehelix.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/cubehelix.js
 var cubehelix_default = cubehelixLong(cubehelix$1(300, .5, 0), cubehelix$1(-240, .5, 1));
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/rainbow.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/rainbow.js
 var warm = cubehelixLong(cubehelix$1(-100, .75, .35), cubehelix$1(80, 1.5, .8));
 var cool = cubehelixLong(cubehelix$1(260, .75, .35), cubehelix$1(80, 1.5, .8));
 var c$2 = cubehelix$1();
@@ -30657,7 +30649,7 @@ function rainbow_default(t) {
 	return c$2 + "";
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/sinebow.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/sinebow.js
 var c$1 = rgb();
 var pi_1_3 = Math.PI / 3;
 var pi_2_3 = Math.PI * 2 / 3;
@@ -30670,13 +30662,13 @@ function sinebow_default(t) {
 	return c$1 + "";
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/turbo.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/turbo.js
 function turbo_default(t) {
 	t = Math.max(0, Math.min(1, t));
 	return "rgb(" + Math.max(0, Math.min(255, Math.round(34.61 + t * (1172.33 - t * (10793.56 - t * (33300.12 - t * (38394.49 - t * 14825.05))))))) + ", " + Math.max(0, Math.min(255, Math.round(23.31 + t * (557.33 + t * (1225.33 - t * (3574.96 - t * (1073.77 + t * 707.56))))))) + ", " + Math.max(0, Math.min(255, Math.round(27.2 + t * (3211.1 - t * (15327.97 - t * (27814 - t * (22569.18 - t * 6838.66))))))) + ")";
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/viridis.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-scale-chromatic@3.1.0/node_modules/d3-scale-chromatic/src/sequential-multi/viridis.js
 function ramp(range) {
 	var n = range.length;
 	return function(t) {
@@ -30688,14 +30680,14 @@ var magma = ramp(colors_default("00000401000501010601010802010902020b02020d03030
 var inferno = ramp(colors_default("00000401000501010601010802010a02020c02020e03021004031204031405041706041907051b08051d09061f0a07220b07240c08260d08290e092b10092d110a30120a32140b34150b37160b39180c3c190c3e1b0c411c0c431e0c451f0c48210c4a230c4c240c4f260c51280b53290b552b0b572d0b592f0a5b310a5c320a5e340a5f3609613809623909633b09643d09653e0966400a67420a68440a68450a69470b6a490b6a4a0c6b4c0c6b4d0d6c4f0d6c510e6c520e6d540f6d550f6d57106e59106e5a116e5c126e5d126e5f136e61136e62146e64156e65156e67166e69166e6a176e6c186e6d186e6f196e71196e721a6e741a6e751b6e771c6d781c6d7a1d6d7c1d6d7d1e6d7f1e6c801f6c82206c84206b85216b87216b88226a8a226a8c23698d23698f24699025689225689326679526679727669827669a28659b29649d29649f2a63a02a63a22b62a32c61a52c60a62d60a82e5fa92e5eab2f5ead305dae305cb0315bb1325ab3325ab43359b63458b73557b93556ba3655bc3754bd3853bf3952c03a51c13a50c33b4fc43c4ec63d4dc73e4cc83f4bca404acb4149cc4248ce4347cf4446d04545d24644d34743d44842d54a41d74b3fd84c3ed94d3dda4e3cdb503bdd513ade5238df5337e05536e15635e25734e35933e45a31e55c30e65d2fe75e2ee8602de9612bea632aeb6429eb6628ec6726ed6925ee6a24ef6c23ef6e21f06f20f1711ff1731df2741cf3761bf37819f47918f57b17f57d15f67e14f68013f78212f78410f8850ff8870ef8890cf98b0bf98c0af98e09fa9008fa9207fa9407fb9606fb9706fb9906fb9b06fb9d07fc9f07fca108fca309fca50afca60cfca80dfcaa0ffcac11fcae12fcb014fcb216fcb418fbb61afbb81dfbba1ffbbc21fbbe23fac026fac228fac42afac62df9c72ff9c932f9cb35f8cd37f8cf3af7d13df7d340f6d543f6d746f5d949f5db4cf4dd4ff4df53f4e156f3e35af3e55df2e661f2e865f2ea69f1ec6df1ed71f1ef75f1f179f2f27df2f482f3f586f3f68af4f88ef5f992f6fa96f8fb9af9fc9dfafda1fcffa4"));
 var plasma = ramp(colors_default("0d088710078813078916078a19068c1b068d1d068e20068f2206902406912605912805922a05932c05942e05952f059631059733059735049837049938049a3a049a3c049b3e049c3f049c41049d43039e44039e46039f48039f4903a04b03a14c02a14e02a25002a25102a35302a35502a45601a45801a45901a55b01a55c01a65e01a66001a66100a76300a76400a76600a76700a86900a86a00a86c00a86e00a86f00a87100a87201a87401a87501a87701a87801a87a02a87b02a87d03a87e03a88004a88104a78305a78405a78606a68707a68808a68a09a58b0aa58d0ba58e0ca48f0da4910ea3920fa39410a29511a19613a19814a099159f9a169f9c179e9d189d9e199da01a9ca11b9ba21d9aa31e9aa51f99a62098a72197a82296aa2395ab2494ac2694ad2793ae2892b02991b12a90b22b8fb32c8eb42e8db52f8cb6308bb7318ab83289ba3388bb3488bc3587bd3786be3885bf3984c03a83c13b82c23c81c33d80c43e7fc5407ec6417dc7427cc8437bc9447aca457acb4679cc4778cc4977cd4a76ce4b75cf4c74d04d73d14e72d24f71d35171d45270d5536fd5546ed6556dd7566cd8576bd9586ada5a6ada5b69db5c68dc5d67dd5e66de5f65de6164df6263e06363e16462e26561e26660e3685fe4695ee56a5de56b5de66c5ce76e5be76f5ae87059e97158e97257ea7457eb7556eb7655ec7754ed7953ed7a52ee7b51ef7c51ef7e50f07f4ff0804ef1814df1834cf2844bf3854bf3874af48849f48948f58b47f58c46f68d45f68f44f79044f79143f79342f89441f89540f9973ff9983ef99a3efa9b3dfa9c3cfa9e3bfb9f3afba139fba238fca338fca537fca636fca835fca934fdab33fdac33fdae32fdaf31fdb130fdb22ffdb42ffdb52efeb72dfeb82cfeba2cfebb2bfebd2afebe2afec029fdc229fdc328fdc527fdc627fdc827fdca26fdcb26fccd25fcce25fcd025fcd225fbd324fbd524fbd724fad824fada24f9dc24f9dd25f8df25f8e125f7e225f7e425f6e626f6e826f5e926f5eb27f4ed27f3ee27f3f027f2f227f1f426f1f525f0f724f0f921"));
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/constant.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/constant.js
 function constant_default(x) {
 	return function constant() {
 		return x;
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/math.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/math.js
 var cos = Math.cos;
 var min = Math.min;
 var sin = Math.sin;
@@ -30704,7 +30696,7 @@ var pi$1 = Math.PI;
 pi$1 / 2;
 var tau$1 = 2 * pi$1;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/path.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/path.js
 function withPath(shape) {
 	let digits = 3;
 	shape.digits = function(_) {
@@ -30724,7 +30716,7 @@ function array_default(x) {
 	return typeof x === "object" && "length" in x ? x : Array.from(x);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/linear.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/linear.js
 function Linear(context) {
 	this._context = context;
 }
@@ -30758,7 +30750,7 @@ function linear_default(context) {
 	return new Linear(context);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/point.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/point.js
 function x(p) {
 	return p[0];
 }
@@ -30766,7 +30758,7 @@ function y(p) {
 	return p[1];
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/line.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/line.js
 function line_default(x$2, y$2) {
 	var defined = constant_default(true), context = null, curve = linear_default, output = null, path = withPath(line);
 	x$2 = typeof x$2 === "function" ? x$2 : x$2 === void 0 ? x : constant_default(x$2);
@@ -30801,7 +30793,7 @@ function line_default(x$2, y$2) {
 	return line;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/area.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/area.js
 function area_default(x0, y0, y1) {
 	var x1 = null, defined = constant_default(true), context = null, curve = linear_default, output = null, path = withPath(area);
 	x0 = typeof x0 === "function" ? x0 : x0 === void 0 ? x : constant_default(+x0);
@@ -30873,7 +30865,7 @@ function area_default(x0, y0, y1) {
 	return area;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/bump.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/bump.js
 var Bump = class {
 	constructor(context, x) {
 		this._context = context;
@@ -30914,7 +30906,7 @@ function bumpY(context) {
 	return new Bump(context, false);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/asterisk.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/asterisk.js
 var sqrt3$3 = sqrt(3);
 var asterisk_default = { draw(context, size) {
 	const r = sqrt(size + min(size / 28, .75)) * .59436;
@@ -30928,14 +30920,14 @@ var asterisk_default = { draw(context, size) {
 	context.lineTo(u, -t);
 } };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/circle.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/circle.js
 var circle_default = { draw(context, size) {
 	const r = sqrt(size / pi$1);
 	context.moveTo(r, 0);
 	context.arc(0, 0, r, 0, tau$1);
 } };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/cross.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/cross.js
 var cross_default = { draw(context, size) {
 	const r = sqrt(size / 5) / 2;
 	context.moveTo(-3 * r, -r);
@@ -30953,7 +30945,7 @@ var cross_default = { draw(context, size) {
 	context.closePath();
 } };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/diamond.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/diamond.js
 var tan30 = sqrt(1 / 3);
 var tan30_2 = tan30 * 2;
 var diamond_default = { draw(context, size) {
@@ -30966,7 +30958,7 @@ var diamond_default = { draw(context, size) {
 	context.closePath();
 } };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/diamond2.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/diamond2.js
 var diamond2_default = { draw(context, size) {
 	const r = sqrt(size) * .62625;
 	context.moveTo(0, -r);
@@ -30976,7 +30968,7 @@ var diamond2_default = { draw(context, size) {
 	context.closePath();
 } };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/plus.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/plus.js
 var plus_default = { draw(context, size) {
 	const r = sqrt(size - min(size / 7, 2)) * .87559;
 	context.moveTo(-r, 0);
@@ -30985,14 +30977,14 @@ var plus_default = { draw(context, size) {
 	context.lineTo(0, -r);
 } };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/square.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/square.js
 var square_default = { draw(context, size) {
 	const w = sqrt(size);
 	const x = -w / 2;
 	context.rect(x, x, w, w);
 } };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/square2.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/square2.js
 var square2_default = { draw(context, size) {
 	const r = sqrt(size) * .4431;
 	context.moveTo(r, r);
@@ -31002,7 +30994,7 @@ var square2_default = { draw(context, size) {
 	context.closePath();
 } };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/star.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/star.js
 var ka = .8908130915292852;
 var kr = sin(pi$1 / 10) / sin(7 * pi$1 / 10);
 var kx = sin(tau$1 / 10) * kr;
@@ -31023,7 +31015,7 @@ var star_default = { draw(context, size) {
 	context.closePath();
 } };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/triangle.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/triangle.js
 var sqrt3$2 = sqrt(3);
 var triangle_default = { draw(context, size) {
 	const y = -sqrt(size / (sqrt3$2 * 3));
@@ -31033,7 +31025,7 @@ var triangle_default = { draw(context, size) {
 	context.closePath();
 } };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/triangle2.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/triangle2.js
 var sqrt3$1 = sqrt(3);
 var triangle2_default = { draw(context, size) {
 	const s = sqrt(size) * .6824;
@@ -31045,7 +31037,7 @@ var triangle2_default = { draw(context, size) {
 	context.closePath();
 } };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/wye.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/wye.js
 var c = -.5;
 var s = sqrt(3) / 2;
 var k = 1 / sqrt(12);
@@ -31067,7 +31059,7 @@ var wye_default = { draw(context, size) {
 	context.closePath();
 } };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/times.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol/times.js
 var times_default = { draw(context, size) {
 	const r = sqrt(size - min(size / 6, 1.7)) * .6189;
 	context.moveTo(-r, -r);
@@ -31076,7 +31068,7 @@ var times_default = { draw(context, size) {
 	context.lineTo(r, -r);
 } };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/symbol.js
 var symbolsFill = [
 	circle_default,
 	cross_default,
@@ -31096,10 +31088,10 @@ var symbolsStroke = [
 	diamond2_default
 ];
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/noop.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/noop.js
 function noop_default() {}
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/basis.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/basis.js
 function point$3(that, x, y) {
 	that._context.bezierCurveTo((2 * that._x0 + that._x1) / 3, (2 * that._y0 + that._y1) / 3, (that._x0 + 2 * that._x1) / 3, (that._y0 + 2 * that._y1) / 3, (that._x0 + 4 * that._x1 + x) / 6, (that._y0 + 4 * that._y1 + y) / 6);
 }
@@ -31148,7 +31140,7 @@ function basis_default(context) {
 	return new Basis(context);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/basisClosed.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/basisClosed.js
 function BasisClosed(context) {
 	this._context = context;
 }
@@ -31202,7 +31194,7 @@ function basisClosed_default(context) {
 	return new BasisClosed(context);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/basisOpen.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/basisOpen.js
 function BasisOpen(context) {
 	this._context = context;
 }
@@ -31246,7 +31238,7 @@ function basisOpen_default(context) {
 	return new BasisOpen(context);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/bundle.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/bundle.js
 function Bundle(context, beta) {
 	this._basis = new Basis(context);
 	this._beta = beta;
@@ -31284,7 +31276,7 @@ var bundle_default = (function custom(beta) {
 	return bundle;
 })(.85);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/cardinal.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/cardinal.js
 function point$2(that, x, y) {
 	that._context.bezierCurveTo(that._x1 + that._k * (that._x2 - that._x0), that._y1 + that._k * (that._y2 - that._y0), that._x2 + that._k * (that._x1 - x), that._y2 + that._k * (that._y1 - y), that._x2, that._y2);
 }
@@ -31341,7 +31333,7 @@ var cardinal_default = (function custom(tension) {
 	return cardinal;
 })(0);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/cardinalClosed.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/cardinalClosed.js
 function CardinalClosed(context, tension) {
 	this._context = context;
 	this._k = (1 - tension) / 6;
@@ -31400,7 +31392,7 @@ var cardinalClosed_default = (function custom(tension) {
 	return cardinal;
 })(0);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/cardinalOpen.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/cardinalOpen.js
 function CardinalOpen(context, tension) {
 	this._context = context;
 	this._k = (1 - tension) / 6;
@@ -31450,7 +31442,7 @@ var cardinalOpen_default = (function custom(tension) {
 	return cardinal;
 })(0);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/catmullRom.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/catmullRom.js
 function point$1(that, x, y) {
 	var x1 = that._x1, y1 = that._y1, x2 = that._x2, y2 = that._y2;
 	if (that._l01_a > 1e-12) {
@@ -31523,7 +31515,7 @@ var catmullRom_default = (function custom(alpha) {
 	return catmullRom;
 })(.5);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/catmullRomClosed.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/catmullRomClosed.js
 function CatmullRomClosed(context, alpha) {
 	this._context = context;
 	this._alpha = alpha;
@@ -31588,7 +31580,7 @@ var catmullRomClosed_default = (function custom(alpha) {
 	return catmullRom;
 })(.5);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/catmullRomOpen.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/catmullRomOpen.js
 function CatmullRomOpen(context, alpha) {
 	this._context = context;
 	this._alpha = alpha;
@@ -31644,7 +31636,7 @@ var catmullRomOpen_default = (function custom(alpha) {
 	return catmullRom;
 })(.5);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/linearClosed.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/linearClosed.js
 function LinearClosed(context) {
 	this._context = context;
 }
@@ -31667,7 +31659,7 @@ function linearClosed_default(context) {
 	return new LinearClosed(context);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/monotone.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/monotone.js
 function sign(x) {
 	return x < 0 ? -1 : 1;
 }
@@ -31760,7 +31752,7 @@ function monotoneY(context) {
 	return new MonotoneY(context);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/natural.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/natural.js
 function Natural(context) {
 	this._context = context;
 }
@@ -31810,7 +31802,7 @@ function natural_default(context) {
 	return new Natural(context);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/step.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-shape@3.2.0/node_modules/d3-shape/src/curve/step.js
 function Step(context, t) {
 	this._context = context;
 	this._t = t;
@@ -31861,7 +31853,7 @@ function stepAfter(context) {
 	return new Step(context, 1);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/d3-zoom@3.0.0/node_modules/d3-zoom/src/transform.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/d3-zoom@3.0.0/node_modules/d3-zoom/src/transform.js
 function Transform(k, x, y) {
 	this.k = k;
 	this.x = x;
@@ -31910,7 +31902,7 @@ function transform(node) {
 	return node.__zoom;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/defined.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/defined.js
 function defined(x) {
 	return x != null && !Number.isNaN(x);
 }
@@ -31933,7 +31925,7 @@ function negative(x) {
 	return x < 0 && isFinite(x) ? x : NaN;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/isoformat@0.2.1/node_modules/isoformat/src/format.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/isoformat@0.2.1/node_modules/isoformat/src/format.js
 function format(date, fallback) {
 	if (!(date instanceof Date)) date = /* @__PURE__ */ new Date(+date);
 	if (isNaN(date)) return typeof fallback === "function" ? fallback(date) : fallback;
@@ -31950,14 +31942,14 @@ function pad$1(value, width) {
 	return `${value}`.padStart(width, "0");
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/isoformat@0.2.1/node_modules/isoformat/src/parse.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/isoformat@0.2.1/node_modules/isoformat/src/parse.js
 var re = /^(?:[-+]\d{2})?\d{4}(?:-\d{2}(?:-\d{2})?)?(?:T\d{2}:\d{2}(?::\d{2}(?:\.\d{3})?)?(?:Z|[-+]\d{2}:?\d{2})?)?$/;
 function parse(string, fallback) {
 	if (!re.test(string += "")) return typeof fallback === "function" ? fallback(string) : fallback;
 	return new Date(string);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/order.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/order.js
 function orderof(values) {
 	if (values == null) return;
 	const first = values[0];
@@ -31965,7 +31957,7 @@ function orderof(values) {
 	return descending(first, last);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/time.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/time.js
 var durationSecond = 1e3;
 var durationMinute = durationSecond * 60;
 var durationHour = durationMinute * 60;
@@ -32234,7 +32226,7 @@ function formatConditional(format1, format2, template) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/options.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/options.js
 var TypedArray = Object.getPrototypeOf(Uint8Array);
 var objectToString = Object.prototype.toString;
 function isArray(value) {
@@ -32638,7 +32630,7 @@ function isArrowDateType(type) {
 	return type && (type.typeId === 8 || type.typeId === 10) && type.unit === 1;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/scales/index.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/scales/index.js
 var position$1 = Symbol("position");
 var color = Symbol("color");
 var radius = Symbol("radius");
@@ -32665,7 +32657,7 @@ function hasNumericRange(kind) {
 	return kind === position$1 || kind === radius || kind === length || kind === opacity;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/symbol.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/symbol.js
 var sqrt3 = Math.sqrt(3);
 var sqrt4_3 = 2 / sqrt3;
 var symbols$1 = /* @__PURE__ */ new Map([
@@ -32716,7 +32708,7 @@ function maybeSymbolChannel(symbol) {
 	return [symbol, void 0];
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/basic.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/basic.js
 function basic({ filter: f1, sort: s1, reverse: r1, transform: t1, initializer: i1, ...options } = {}, transform) {
 	if (t1 === void 0) {
 		if (f1 != null) t1 = filterTransform(f1);
@@ -32853,7 +32845,7 @@ function sortValue(value) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/group.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/group.js
 function groupZ$1(outputs, options) {
 	return groupn(null, null, outputs, options);
 }
@@ -33162,7 +33154,7 @@ function find(test) {
 	} };
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/channel.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/channel.js
 function createChannel(data, { scale, type, value, filter, hint, label = labelof(value) }, name) {
 	if (hint === void 0 && typeof value?.transform === "function") hint = value.hint;
 	return inferChannelScale(name, {
@@ -33293,7 +33285,7 @@ function getSource(channels, key) {
 	return channel.source === null ? null : channel;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/scales/schemes.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/scales/schemes.js
 var categoricalSchemes = /* @__PURE__ */ new Map([
 	["accent", Accent_default],
 	["category10", category10_default],
@@ -33466,7 +33458,7 @@ function isDivergingScheme(scheme) {
 	return scheme != null && divergingSchemes.has(`${scheme}`.toLowerCase());
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/scales/quantitative.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/scales/quantitative.js
 var flip = (i) => (t) => i(1 - t);
 var unit = [0, 1];
 var interpolators = /* @__PURE__ */ new Map([
@@ -33657,7 +33649,7 @@ function interpolatePiecewise(interpolate) {
 	return (i, j) => (t) => interpolate(i + t * (j - i));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/warnings.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/warnings.js
 var warnings = 0;
 var lastMessage;
 function consumeWarnings() {
@@ -33673,7 +33665,7 @@ function warn(message) {
 	++warnings;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/scales/diverging.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/scales/diverging.js
 function createScaleD(key, scale, transform, channels, { type, nice, clamp, domain = inferDomain$1(channels), unknown, pivot = 0, scheme, range, symmetric = true, interpolate = registry.get(key) === color ? scheme == null && range !== void 0 ? rgb_default : quantitativeScheme(scheme !== void 0 ? scheme : "rdbu") : number_default, reverse }) {
 	pivot = +pivot;
 	domain = arrayify(domain);
@@ -33773,7 +33765,7 @@ function transformSymlog(constant) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/scales/temporal.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/scales/temporal.js
 function createScaleT(key, scale, channels, options) {
 	return createScaleQ(key, scale, channels, options);
 }
@@ -33784,7 +33776,7 @@ function createScaleUtc(key, channels, options) {
 	return createScaleT(key, utcTime(), channels, options);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/scales/ordinal.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/scales/ordinal.js
 var ordinalImplicit = Symbol("ordinal");
 function createScaleO(key, scale, channels, { type, interval, domain, range, reverse, hint }) {
 	interval = maybeRangeInterval(interval, type);
@@ -33882,7 +33874,7 @@ function inferSymbolRange(hint) {
 	return isNoneish(hint.fill) ? symbolsStroke : symbolsFill;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/scales.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/scales.js
 function createScales(channelsByScale, { label: globalLabel, inset: globalInset = 0, insetTop: globalInsetTop = globalInset, insetRight: globalInsetRight = globalInset, insetBottom: globalInsetBottom = globalInset, insetLeft: globalInsetLeft = globalInset, round, nice, clamp, zero, align, padding, projection, facet: { label: facetLabel = globalLabel } = {}, ...options } = {}) {
 	const scales = {};
 	for (const [key, channels] of channelsByScale) {
@@ -34226,7 +34218,7 @@ function exposeScale({ scale, type, domain, range, interpolate, interval, transf
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/facet.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/facet.js
 function createFacets(channelsByScale, options) {
 	const { fx, fy } = createScales(channelsByScale, options);
 	const fxDomain = fx?.scale.domain();
@@ -34364,7 +34356,7 @@ function facetFilter(facets, { channels: { fx, fy }, groups }) {
 	return fx && fy ? facets.map(({ x, y }) => groups.get(x)?.get(y) ?? []) : fx ? facets.map(({ x }) => groups.get(x) ?? []) : facets.map(({ y }) => groups.get(y) ?? []);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/projection.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/projection.js
 var pi = Math.PI;
 var tau = 2 * pi;
 var defaultAspectRatio = .618;
@@ -34561,7 +34553,7 @@ function xyProjection({ x: X, y: Y }) {
 	}
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/context.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/context.js
 function createContext(options = {}) {
 	const { document = typeof window !== "undefined" ? window.document : void 0, clip } = options;
 	return {
@@ -34573,7 +34565,7 @@ function create(name, { document }) {
 	return select_default$1(creator_default(name).call(document.documentElement));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/memoize.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/memoize.js
 var unset = Symbol("unset");
 function memoize1(compute) {
 	return (compute.length === 1 ? memoize1Arg : memoize1Args)(compute);
@@ -34600,7 +34592,7 @@ function memoize1Args(compute) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/format.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/format.js
 var numberFormat = memoize1((locale) => {
 	return new Intl.NumberFormat(locale);
 });
@@ -34637,7 +34629,7 @@ function formatAuto$1(locale = "en-US") {
 }
 var formatDefault = formatAuto$1();
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/style.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/style.js
 var offset = (typeof window !== "undefined" ? window.devicePixelRatio > 1 : typeof it === "undefined") ? 0 : .5;
 var nextClipId = 0;
 var nextPatternId = 0;
@@ -34936,7 +34928,7 @@ function applyFrameAnchor({ frameAnchor }, { width, height, marginTop, marginRig
 	return [/left$/.test(frameAnchor) ? marginLeft : /right$/.test(frameAnchor) ? width - marginRight : (marginLeft + width - marginRight) / 2, /^top/.test(frameAnchor) ? marginTop : /^bottom/.test(frameAnchor) ? height - marginBottom : (marginTop + height - marginBottom) / 2];
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/mark.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/mark.js
 var Mark$1 = class {
 	constructor(data, channels = {}, options = {}, defaults) {
 		const { facet = "auto", facetAnchor, fx, fy, sort, dx = 0, dy = 0, margin = 0, marginTop = margin, marginRight = margin, marginBottom = margin, marginLeft = margin, className, clip = defaults?.clip, channels: extraChannels, tip, render } = options;
@@ -35091,7 +35083,7 @@ function withTip(options, pointer) {
 	} : options;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/dimensions.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/dimensions.js
 function createDimensions(scales, marks, options = {}) {
 	let marginTopDefault = .5 - offset, marginRightDefault = .5 + offset, marginBottomDefault = .5 + offset, marginLeftDefault = .5 - offset;
 	for (const { marginTop, marginRight, marginBottom, marginLeft } of marks) {
@@ -35183,7 +35175,7 @@ function aspectRatioLength(k, scale) {
 	return Math.abs(transform(max) - transform(min));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/interactions/pointer.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/interactions/pointer.js
 var states = /* @__PURE__ */ new WeakMap();
 function pointerK(kx, ky, { x, y, px, py, maxRadius = 40, channels, render, ...options } = {}) {
 	maxRadius = +maxRadius;
@@ -35344,12 +35336,12 @@ function anchorY$1({ y1: Y1, y2: Y2, y: Y = Y1 }, cy) {
 	return Y1 && Y2 ? (i) => (Y1[i] + Y2[i]) / 2 : Y ? (i) => Y[i] : () => cy;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/axes.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/axes.js
 function inferFontVariant$2(scale) {
 	return isOrdinalScale(scale) && scale.interval === void 0 ? void 0 : "tabular-nums";
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/legends/ramp.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/legends/ramp.js
 function legendRamp(color, options) {
 	let { label = color.label, tickSize = 6, width = 240, height = 44 + tickSize, marginTop = 18, marginRight = 0, marginBottom = 16 + tickSize, marginLeft = 0, style, ticks = (width - marginLeft - marginRight) / 64, tickFormat, fontVariant = inferFontVariant$2(color), round = true, opacity, className } = options;
 	const context = createContext(options);
@@ -35400,10 +35392,10 @@ function legendRamp(color, options) {
 	return svg.node();
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/math.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/math.js
 var radians = Math.PI / 180;
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marker.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marker.js
 function markers(mark, { marker, markerStart = marker, markerMid = marker, markerEnd = marker } = {}) {
 	mark.markerStart = maybeMarker(markerStart);
 	mark.markerMid = maybeMarker(markerMid);
@@ -35503,7 +35495,7 @@ function applyMarkersColor(path, { markerStart, markerMid, markerEnd, stroke }, 
 	if (markerEnd) path.each(applyMarker("marker-end", markerEnd, orient && ((i) => orient(i) & END)));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/inset.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/inset.js
 function maybeInsetX({ inset, insetLeft, insetRight, ...options } = {}) {
 	[insetLeft, insetRight] = maybeInset(inset, insetLeft, insetRight);
 	return {
@@ -35526,7 +35518,7 @@ function maybeInset(inset, inset1, inset2) {
 	return inset === void 0 && inset1 === void 0 && inset2 === void 0 ? offset ? [1, 0] : [.5, .5] : [inset1, inset2];
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/interval.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/interval.js
 function maybeIntervalValue(value, { interval }) {
 	value = { ...maybeValue(value) };
 	value.interval = maybeInterval(value.interval === void 0 ? interval : value.interval);
@@ -35603,7 +35595,7 @@ function maybeIntervalMidY(options = {}) {
 	return maybeIntervalMidK("y", maybeInsetY, options);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/rule.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/rule.js
 var defaults$20 = {
 	ariaLabel: "rule",
 	fill: null,
@@ -35683,7 +35675,7 @@ function ruleX(data, options) {
 		y2
 	});
 }
-function ruleY$1(data, options) {
+function ruleY(data, options) {
 	let { y = identity$1, x, x1, x2, ...rest } = maybeIntervalX(options);
 	[x1, x2] = maybeOptionalZero(x, x1, x2);
 	return new RuleY(data, {
@@ -35703,7 +35695,7 @@ function maybeOptionalZero(x, x1, x2) {
 	return [x1, x2];
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/template.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/template.js
 function template(strings, ...parts) {
 	let n = parts.length;
 	for (let j = 0, copy = true; j < n; ++j) if (typeof parts[j] !== "function") {
@@ -35722,7 +35714,7 @@ function template(strings, ...parts) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/text.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/text.js
 var defaults$19 = {
 	ariaLabel: "text",
 	strokeLinejoin: "round",
@@ -36127,7 +36119,7 @@ function isPictographic(text, i) {
 	return isAscii(text, i) ? false : (rePictographic.lastIndex = i, rePictographic.test(text));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/vector.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/vector.js
 var defaults$18 = {
 	ariaLabel: "vector",
 	fill: "none",
@@ -36253,7 +36245,7 @@ function spike(data, options = {}) {
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/axis.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/axis.js
 function maybeData(data, options) {
 	if (arguments.length < 2 && !isIterable(data)) options = data, data = null;
 	if (options === void 0) options = {};
@@ -36516,7 +36508,7 @@ function gridFx() {
 	return gridKx("fx", anchorFx(options), data, options);
 }
 function gridKy(k, anchor, data, { y = k === "y" ? void 0 : null, x = null, x1 = anchor === "left" ? x : null, x2 = anchor === "right" ? x : null, ariaLabel = `${k}-grid`, ariaHidden = true, ...options }) {
-	return axisMark(ruleY$1, k, data, {
+	return axisMark(ruleY, k, data, {
 		ariaLabel,
 		ariaHidden
 	}, {
@@ -36698,7 +36690,7 @@ function hasTemporalDomain(scale) {
 	return isTemporal(scale.domain());
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/legends/swatches.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/legends/swatches.js
 function maybeScale(scale, key) {
 	if (key == null) return key;
 	const s = scale(key);
@@ -36775,7 +36767,7 @@ function legendItems(scale, options = {}, swatch) {
 ${extraStyle}`)).style("margin-left", marginLeft ? `${+marginLeft}px` : null).style("width", width === void 0 ? null : `${+width}px`).style("font-variant", impliedString(fontVariant, "normal")).call(applyInlineStyles, style).node();
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/legends.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/legends.js
 var legendRegistry = /* @__PURE__ */ new Map([
 	["symbol", legendSymbols],
 	["color", legendColor],
@@ -36854,7 +36846,7 @@ function createLegends(scales, context, options) {
 	return legends;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/identity.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/identity.js
 function maybeIdentityX(options = {}, k = "x") {
 	return hasX(options) ? options : {
 		...options,
@@ -36868,7 +36860,7 @@ function maybeIdentityY(options = {}, k = "y") {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/exclusiveFacets.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/exclusiveFacets.js
 function exclusiveFacets(data, facets) {
 	if (facets.length === 1) return {
 		data,
@@ -36902,7 +36894,7 @@ function exclusiveFacets(data, facets) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/stack.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/stack.js
 function stackX(stackOptions = {}, options = {}) {
 	if (arguments.length === 1) [stackOptions, options] = mergeOptions$2(stackOptions);
 	const { y1, y = y1, x, ...rest } = options;
@@ -37218,7 +37210,7 @@ function orderZDomain(compare, domain) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/rect.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/rect.js
 var defaults$17 = { ariaLabel: "rect" };
 var Rect = class extends Mark$1 {
 	constructor(data, options = {}) {
@@ -37346,7 +37338,7 @@ function rectY(data, options = {}) {
 	return new Rect(data, maybeStackY(maybeTrivialIntervalX(maybeIdentityY(options))));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/frame.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/frame.js
 var defaults$16 = {
 	ariaLabel: "frame",
 	fill: "none",
@@ -37388,7 +37380,7 @@ function frame(options) {
 	return new Frame(options);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/tip.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/tip.js
 var defaults$15 = {
 	ariaLabel: "tip",
 	fill: "var(--plot-background)",
@@ -37707,7 +37699,7 @@ function formatLabel(scales, channels, key, defaultLabel = key) {
 	return String(scale?.label ?? channel?.label ?? defaultLabel);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/plot.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/plot.js
 function plot$1(options = {}) {
 	const { facet, style, title, subtitle, caption, ariaLabel, ariaDescription } = options;
 	const className = maybeClassName(options.className);
@@ -38191,7 +38183,7 @@ function outerRange(scale) {
 	return [x1, x2 + scale.bandwidth()];
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/curve.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/curve.js
 var curves = /* @__PURE__ */ new Map([
 	["basis", basis_default],
 	["basis-closed", basisClosed_default],
@@ -38232,7 +38224,7 @@ function curveAuto(context) {
 	return linear_default(context);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/bin.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/bin.js
 function binX(outputs = { y: "count" }, options = {}) {
 	[outputs, options] = mergeOptions$1(outputs, options);
 	const { x, y } = options;
@@ -38585,7 +38577,7 @@ var reduceY2 = { reduceIndex(I, X, { y2 }) {
 	return y2;
 } };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/area.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/area.js
 var defaults$14 = {
 	ariaLabel: "area",
 	strokeWidth: 1,
@@ -38660,7 +38652,7 @@ function areaY(data, options) {
 	}, x === indexOf ? "y2" : "y")));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/link.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/link.js
 var defaults$13 = {
 	ariaLabel: "link",
 	fill: "none",
@@ -38741,7 +38733,7 @@ function maybeSameValue(x, x1, x2) {
 	return [x1, x2];
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/arrow.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/arrow.js
 var defaults$12 = {
 	ariaLabel: "arrow",
 	fill: "none",
@@ -38877,7 +38869,7 @@ function arrow(data, { x, x1, x2, y, y1, y2, ...options } = {}) {
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/bar.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/bar.js
 var barDefaults = { ariaLabel: "bar" };
 var AbstractBar = class extends Mark$1 {
 	constructor(data, channels, options = {}, defaults = barDefaults) {
@@ -38996,7 +38988,7 @@ function barY$1(data, options = {}) {
 	return new BarY(data, maybeStackY(maybeIntervalY(maybeIdentityY(options))));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/cell.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/cell.js
 var defaults$11 = { ariaLabel: "cell" };
 var Cell = class extends AbstractBar {
 	constructor(data, { x, y, ...options } = {}) {
@@ -39046,7 +39038,7 @@ function cellY(data, { y = indexOf, fill, stroke, ...options } = {}) {
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/dot.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/dot.js
 var defaults$10 = {
 	ariaLabel: "dot",
 	fill: "none",
@@ -39170,7 +39162,7 @@ function hexagon(data, options) {
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/line.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/line.js
 var defaults$9 = {
 	ariaLabel: "line",
 	fill: "none",
@@ -39252,7 +39244,7 @@ function lineY$1(data, { x = indexOf, y = identity$1, ...options } = {}) {
 	}));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/auto.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/auto.js
 function autoSpec(data, options) {
 	options = normalizeOptions(options);
 	const { x, y, color, size } = options;
@@ -39289,7 +39281,7 @@ function autoSpec(data, options) {
 			if (isHighCardinality(C)) Z = null;
 			break;
 		case "rule":
-			markImpl = X ? ruleX : ruleY$1;
+			markImpl = X ? ruleX : ruleY;
 			colorMode = "stroke";
 			break;
 		case "bar":
@@ -39333,7 +39325,7 @@ function autoSpec(data, options) {
 		value: Y,
 		...yOptions
 	};
-	if (xZero === void 0) xZero = X && !(transformImpl === bin || transformImpl === binX) && (markImpl === barX || markImpl === areaX || markImpl === rectX || markImpl === ruleY$1);
+	if (xZero === void 0) xZero = X && !(transformImpl === bin || transformImpl === binX) && (markImpl === barX || markImpl === areaX || markImpl === rectX || markImpl === ruleY);
 	if (yZero === void 0) yZero = Y && !(transformImpl === bin || transformImpl === binY) && (markImpl === barY$1 || markImpl === areaY || markImpl === rectY || markImpl === ruleX);
 	return {
 		fx: fx ?? null,
@@ -39373,7 +39365,7 @@ function auto(data, options) {
 	const markImpl = impls[spec.markImpl];
 	const transformImpl = impls[spec.transformImpl];
 	const frames = fx != null || fy != null ? frame({ strokeOpacity: .1 }) : null;
-	const rules = [xZero ? ruleX([0]) : null, yZero ? ruleY$1([0]) : null];
+	const rules = [xZero ? ruleX([0]) : null, yZero ? ruleY([0]) : null];
 	const mark = markImpl(data, transformImpl ? transformImpl(transformOptions, markOptions) : markOptions);
 	return colorMode === "stroke" ? marks(frames, rules, mark) : marks(frames, mark, rules);
 }
@@ -39462,7 +39454,7 @@ var impls = {
 	areaX,
 	areaY,
 	ruleX,
-	ruleY: ruleY$1,
+	ruleY,
 	barX,
 	barY: barY$1,
 	rect,
@@ -39478,7 +39470,7 @@ var impls = {
 };
 var implNames = Object.fromEntries(Object.entries(impls).map(([name, impl]) => [impl, name]));
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/map.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/map.js
 function mapX(mapper, options = {}) {
 	let { x, x1, x2 } = options;
 	if (x === void 0 && x1 === void 0 && x2 === void 0) options = {
@@ -39563,7 +39555,7 @@ var mapCumsum = { mapIndex(I, S, T) {
 	for (const i of I) T[i] = sum += S[i];
 } };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/window.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/window.js
 function windowX(windowOptions = {}, options) {
 	if (arguments.length === 1) options = windowOptions;
 	return mapX(window$1(windowOptions), options);
@@ -39763,7 +39755,7 @@ function reduceLast(k, s, strict) {
 	} };
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/bollinger.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/bollinger.js
 var defaults$8 = {
 	n: 20,
 	k: 2,
@@ -39833,7 +39825,7 @@ function bollinger({ n = defaults$8.n, k = 0, strict = defaults$8.strict, anchor
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/tick.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/tick.js
 var defaults$7 = {
 	ariaLabel: "tick",
 	fill: null,
@@ -39933,10 +39925,10 @@ function tickY(data, { y = identity$1, ...options } = {}) {
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/box.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/box.js
 function boxX(data, { x = identity$1, y = null, r, fill = "#ccc", fillOpacity, stroke = "currentColor", strokeOpacity, strokeWidth = 2, sort, ...options } = {}) {
 	const group = y != null ? groupY : groupZ$1;
-	return marks(ruleY$1(data, group({
+	return marks(ruleY(data, group({
 		x1: loqr1,
 		x2: hiqr2
 	}, {
@@ -40030,7 +40022,7 @@ function quartile3(values) {
 	return quantile$1(values, .75);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/raster.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/raster.js
 var defaults$6 = {
 	ariaLabel: "raster",
 	stroke: null,
@@ -40440,7 +40432,7 @@ function denseY(y1, y2, width, height) {
 	} };
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/contour.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/contour.js
 var defaults$5 = {
 	ariaLabel: "contour",
 	fill: "none",
@@ -40578,7 +40570,7 @@ function finite(x) {
 	return isFinite(x) ? x : NaN;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/crosshair.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/crosshair.js
 function crosshair(data, options) {
 	return crosshairK(pointer, data, options);
 }
@@ -40600,7 +40592,7 @@ function crosshairK(pointer, data, options = {}) {
 		...p,
 		inset: -6
 	}, options)));
-	if (y != null) M.push(ruleY$1(data, ruleOptions("y", {
+	if (y != null) M.push(ruleY(data, ruleOptions("y", {
 		...p,
 		inset: -6
 	}, options)));
@@ -40685,7 +40677,7 @@ function textChannel(source, options) {
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/delaunay.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/delaunay.js
 var delaunayLinkDefaults = {
 	ariaLabel: "delaunay link",
 	fill: "none",
@@ -40943,7 +40935,7 @@ function voronoiMesh(data, options) {
 	return delaunayMark(VoronoiMesh, data, options);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/density.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/density.js
 var defaults$4 = {
 	ariaLabel: "density",
 	fill: "none",
@@ -41083,7 +41075,7 @@ function isDensity(value) {
 	return /^density$/i.test(value);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/difference.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/difference.js
 function differenceX(data, options) {
 	return differenceK("x", data, options);
 }
@@ -41188,7 +41180,7 @@ function clipDifference(k, positive) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/centroid.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/centroid.js
 function centroid({ geometry = identity$1, ...options } = {}) {
 	const getG = memoize1((data) => valueof(data, geometry));
 	return initializer({
@@ -41232,7 +41224,7 @@ function geoCentroid({ geometry = identity$1, ...options } = {}) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/geo.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/geo.js
 var defaults$3 = {
 	ariaLabel: "geo",
 	fill: "none",
@@ -41301,7 +41293,7 @@ function graticule({ strokeOpacity = .1, ...options } = {}) {
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/hexbin.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/hexbin.js
 var ox = .5;
 function hexbin(outputs = { fill: "count" }, { binWidth, ...options } = {}) {
 	const { z } = options;
@@ -41424,7 +41416,7 @@ function hbin(data, I, X, Y, dx) {
 	return bins.values();
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/hexgrid.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/hexgrid.js
 var defaults$2 = {
 	ariaLabel: "hexgrid",
 	fill: "none",
@@ -41455,7 +41447,7 @@ function round(x) {
 	return Math.round(x * 1e3) / 1e3;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/image.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/image.js
 var defaults$1 = {
 	ariaLabel: "image",
 	fill: null,
@@ -41551,7 +41543,7 @@ function image(data, { x, y, ...options } = {}) {
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/stats.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/stats.js
 function ibetainv(p, a, b) {
 	var EPS = 1e-8;
 	var a1 = a - 1;
@@ -41652,7 +41644,7 @@ function qt(p, dof) {
 	return p > .5 ? x : -x;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/linearRegression.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/linearRegression.js
 var defaults = {
 	ariaLabel: "linear-regression",
 	fill: "currentColor",
@@ -41787,7 +41779,7 @@ function confidenceIntervalF(I, X, Y, p, f) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/tree.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/tree.js
 function treeNode({ path = identity$1, delimiter, frameAnchor, treeLayout = tree_default, treeSort, treeSeparation, treeAnchor, treeFilter, ...options } = {}) {
 	treeAnchor = maybeTreeAnchor(treeAnchor);
 	treeSort = maybeTreeSort(treeSort);
@@ -42062,7 +42054,7 @@ function treeOutputs(options, maybeTreeValue) {
 	return outputs;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/tree.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/tree.js
 function tree(data, { fill, stroke, strokeWidth, strokeOpacity, strokeLinejoin, strokeLinecap, strokeMiterlimit, strokeDasharray, strokeDashoffset, marker, markerStart = marker, markerEnd = marker, dot: dotDot = isNoneish(markerStart) && isNoneish(markerEnd), text: textText = "node:name", textStroke = "var(--plot-background)", title = "node:path", dx, dy, textAnchor, treeLayout = tree_default, textLayout = treeLayout === tree_default || treeLayout === cluster_default ? "mirrored" : "normal", tip, ...options } = {}) {
 	if (dx === void 0) dx = maybeTreeAnchor(options.treeAnchor).dx;
 	if (textAnchor !== void 0) throw new Error("textAnchor is not a configurable tree option");
@@ -42115,7 +42107,7 @@ function cluster(data, options) {
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/waffle.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/marks/waffle.js
 var waffleDefaults = { ariaLabel: "waffle" };
 var WaffleX = class extends BarX {
 	constructor(data, { unit = 1, gap = 1, round, multiple, ...options } = {}) {
@@ -42325,7 +42317,7 @@ function waffleTip(tip) {
 	} : void 0;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/binary-search-bounds@2.0.5/node_modules/binary-search-bounds/search-bounds.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/binary-search-bounds@2.0.5/node_modules/binary-search-bounds/search-bounds.js
 var require_search_bounds = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	function ge(a, y, c, l, h) {
 		var i = h + 1;
@@ -42404,7 +42396,7 @@ var require_search_bounds = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 	};
 }));
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/dodge.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/dodge.js
 var import_interval_tree = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((exports, module) => {
 	var bounds = require_search_bounds();
 	var NOT_FOUND = 0;
@@ -42795,7 +42787,7 @@ function compareAscending(a, b) {
 	return a - b;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/normalize.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/normalize.js
 function normalizeX(basis, options) {
 	if (arguments.length === 1) ({basis, ...options} = basis);
 	return mapX(normalize(basis), options);
@@ -42858,7 +42850,7 @@ var normalizeMedian = normalizeAccessor(median);
 var normalizeMin = normalizeAccessor(min$2);
 var normalizeSum = normalizeAccessor(sum$1);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/shift.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/shift.js
 function shiftX(interval, options) {
 	return shiftK("x", interval, options);
 }
@@ -42896,7 +42888,7 @@ function shiftK(x, interval, options = {}) {
 	return mapped;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/select.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/transforms/select.js
 function select(selector, options = {}) {
 	if (typeof selector === "string") switch (selector.toLowerCase()) {
 		case "first": return selectFirst(options);
@@ -42971,7 +42963,7 @@ function selectChannel(v, selector, options) {
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/index.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@observablehq+plot@0.6.17/node_modules/@observablehq/plot/src/index.js
 var src_exports = /* @__PURE__ */ __exportAll({
 	Area: () => Area,
 	Arrow: () => Arrow,
@@ -43095,7 +43087,7 @@ var src_exports = /* @__PURE__ */ __exportAll({
 	rectY: () => rectY,
 	reverse: () => reverse,
 	ruleX: () => ruleX,
-	ruleY: () => ruleY$1,
+	ruleY: () => ruleY,
 	scale: () => scale,
 	select: () => select,
 	selectFirst: () => selectFirst,
@@ -43147,7 +43139,7 @@ Mark$1.prototype.plot = function({ marks = [], ...options } = {}) {
 	});
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/plot-attributes.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/plot-attributes.js
 var attributeMap = /* @__PURE__ */ new Map([
 	["style", "style"],
 	["width", "width"],
@@ -43377,7 +43369,7 @@ function setAttributes(attributes, spec, symbols) {
 	}
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/plot-renderer.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/plot-renderer.js
 var OPTIONS_ONLY_MARKS = /* @__PURE__ */ new Set([
 	"frame",
 	"hexgrid",
@@ -43473,7 +43465,7 @@ function annotatePlot(svg, indices) {
 	}
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/marks/util/guide-marks.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/marks/util/guide-marks.js
 var guideMarks = /* @__PURE__ */ new Set([
 	"frame",
 	"axisX",
@@ -43487,7 +43479,7 @@ var guideMarks = /* @__PURE__ */ new Set([
 	"hexgrid"
 ]);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/plot.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/plot.js
 var DEFAULT_ATTRIBUTES = {
 	width: 640,
 	marginLeft: 40,
@@ -43647,14 +43639,14 @@ function maybeAspectRatio(plot, top, bottom) {
 	return Math.abs(y[1] - y[0]) * plot.innerWidth() / (ar * dx) + top + bottom;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/marks/util/is-color.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/marks/util/is-color.js
 function isColor(value) {
 	if (typeof value !== "string") return false;
 	value = value.toLowerCase().trim();
 	return value === "none" || value === "currentcolor" || value.startsWith("url(") && value.endsWith(")") || value.startsWith("var(") && value.endsWith(")") || color$1(value) !== null;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/marks/util/is-constant-option.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/marks/util/is-constant-option.js
 var constantOptions = /* @__PURE__ */ new Set([
 	"offset",
 	"order",
@@ -43699,7 +43691,7 @@ function isConstantOption(value) {
 	return constantOptions.has(value);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/marks/util/is-symbol.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/marks/util/is-symbol.js
 var symbols = /* @__PURE__ */ new Set([
 	"asterisk",
 	"circle",
@@ -43720,7 +43712,7 @@ function isSymbol(value) {
 	return symbols.has(`${value}`.toLowerCase());
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/marks/Mark.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/marks/Mark.js
 /** @import { SelectQuery } from '@uwdata/mosaic-sql' */
 /** @import { DataColumns } from '@uwdata/mosaic-core' */
 var isColorChannel = (channel) => channel === "stroke" || channel === "fill";
@@ -43972,7 +43964,7 @@ function markPlotSpec(type, detail, channels, data, options = {}) {
 	}];
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/marks/util/channel-scale.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/marks/util/channel-scale.js
 function channelScale(mark, channel) {
 	const { plot } = mark;
 	let scaleType = plot.getAttribute(`${channel}Scale`);
@@ -43993,7 +43985,7 @@ function channelScale(mark, channel) {
 	return scaleTransform(options);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/marks/util/bin-expr.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/marks/util/bin-expr.js
 /**
 * Generates a SQL expression for 1D pixel-level binning.
 * Adjusts for scale transformations (log, sqrt, ...).
@@ -44012,7 +44004,7 @@ function binExpr(mark, channel, n, extent, pad = 1, expr) {
 	return [bin1d(v, lo, hi, n - pad, reverse), f];
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/marks/util/extent.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/marks/util/extent.js
 var xext = { x: ["min", "max"] };
 var yext = { y: ["min", "max"] };
 ({
@@ -44034,7 +44026,7 @@ function filteredExtent(filter, column) {
 	return lo != null && hi != null && lo !== hi ? [lo, hi] : void 0;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/marks/ConnectedMark.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/marks/ConnectedMark.js
 var ConnectedMark = class extends Mark {
 	constructor(type, source, encodings) {
 		const dim = type.endsWith("X") ? "y" : type.endsWith("Y") ? "x" : null;
@@ -44070,7 +44062,7 @@ var ConnectedMark = class extends Mark {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/interactors/util/to-kebab-case.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/interactors/util/to-kebab-case.js
 function toKebabCase(cc) {
 	const lc = cc.toLowerCase();
 	const n = cc.length;
@@ -44079,14 +44071,14 @@ function toKebabCase(cc) {
 	return kc;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/interactors/util/sanitize-styles.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/interactors/util/sanitize-styles.js
 function sanitizeStyles(styles) {
 	const s = {};
 	for (const name in styles) s[toKebabCase(name)] = styles[name];
 	return s;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/interactors/util/patchScreenCTM.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/interactors/util/patchScreenCTM.js
 /**
 * Patch the getScreenCTM method to memoize the last non-null
 * result seen. This will let the method continue to function
@@ -44102,7 +44094,7 @@ function patchScreenCTM() {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/interactors/util/brush.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/interactors/util/brush.js
 function wrap(brush) {
 	const brushOn = brush.on;
 	let enabled = true;
@@ -44147,13 +44139,13 @@ function brushGroups(svg, root, dx, dy, className) {
 	return groups.each(patchScreenCTM);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/interactors/util/close-to.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/interactors/util/close-to.js
 var EPS = 1e-12;
 function closeTo(a, b) {
 	return a === b || a && b && Math.abs(a[0] - b[0]) < EPS && Math.abs(a[1] - b[1]) < EPS || false;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/interactors/util/get-field.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/interactors/util/get-field.js
 function extractField(field) {
 	if (isNode(field)) {
 		if (field.type === "COLUMN_REF") return field.column;
@@ -44166,12 +44158,12 @@ function getField(mark, channel) {
 	return extractField(mark.channelField(channel)?.field);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/interactors/util/invert.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/interactors/util/invert.js
 function invert(value, scale, pixelSize = 1) {
 	return scale.invert(pixelSize * Math.floor(value / pixelSize));
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/interactors/Interval1D.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-plot@0.31.0/node_modules/@uwdata/mosaic-plot/src/interactors/Interval1D.js
 /** @import { InteractorMark } from '../marks/Mark.js' */
 /**
 * @import {Activatable} from '@uwdata/mosaic-core'
@@ -44236,7 +44228,7 @@ var Interval1D = class {
 	}
 };
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+mosaic-inputs@0.31.0/node_modules/@uwdata/mosaic-inputs/src/util/format.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+mosaic-inputs@0.31.0/node_modules/@uwdata/mosaic-inputs/src/util/format.js
 var formatLocaleAuto = localize((locale) => {
 	const formatNumber = formatLocaleNumber(locale);
 	return (value) => value == null ? "" : typeof value === "number" ? formatNumber(value) : value instanceof Date ? formatDate(value) : `${value}`;
@@ -44276,7 +44268,7 @@ function pad(value, width) {
 	return `${value}`.padStart(width, "0");
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+vgplot@0.31.0/node_modules/@uwdata/vgplot/src/connect.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+vgplot@0.31.0/node_modules/@uwdata/vgplot/src/connect.js
 /**
 * Context-sensitive connector for coordinator and clients.
 * This method proxies access to Coordinator.connect().
@@ -44288,7 +44280,7 @@ function connect(ctx, ...clients) {
 	for (const client of clients) coord.connect(client);
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+vgplot@0.31.0/node_modules/@uwdata/vgplot/src/plot/named-plots.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+vgplot@0.31.0/node_modules/@uwdata/vgplot/src/plot/named-plots.js
 var NamedPlots = class extends Map {
 	request(name, callback) {
 		if (this.has(name)) callback(this.get(name));
@@ -44314,7 +44306,7 @@ var NamedPlots = class extends Map {
 };
 new NamedPlots();
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+vgplot@0.31.0/node_modules/@uwdata/vgplot/src/plot/attributes.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+vgplot@0.31.0/node_modules/@uwdata/vgplot/src/plot/attributes.js
 function setAttribute(plot, name, value) {
 	if (isParam(value)) {
 		value.addEventListener("value", (value) => {
@@ -44332,8 +44324,10 @@ function attribute(name, value) {
 var attrf = (name) => (value) => attribute(name, value);
 var width = attrf("width");
 var height = attrf("height");
+var xLabel = attrf("xLabel");
+var yLabel = attrf("yLabel");
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+vgplot@0.31.0/node_modules/@uwdata/vgplot/src/plot/data.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+vgplot@0.31.0/node_modules/@uwdata/vgplot/src/plot/data.js
 function from(table, options = void 0) {
 	return {
 		table,
@@ -44341,7 +44335,7 @@ function from(table, options = void 0) {
 	};
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+vgplot@0.31.0/node_modules/@uwdata/vgplot/src/plot/marks.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+vgplot@0.31.0/node_modules/@uwdata/vgplot/src/plot/marks.js
 var decorators = /* @__PURE__ */ new Set([
 	"frame",
 	"axisX",
@@ -44370,9 +44364,8 @@ function explicitType(MarkClass, type, data, channels) {
 }
 var lineY = (...args) => mark("lineY", ...args);
 var barY = (...args) => mark("barY", ...args);
-var ruleY = (...args) => mark("ruleY", ...args);
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+vgplot@0.31.0/node_modules/@uwdata/vgplot/src/plot/interactors.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+vgplot@0.31.0/node_modules/@uwdata/vgplot/src/plot/interactors.js
 function interactor(InteractorClass, options) {
 	return (plot) => {
 		const mark = plot.marks[plot.marks.length - 1];
@@ -44387,7 +44380,7 @@ function intervalX({ as, ...rest }) {
 	});
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/node_modules/.pnpm/@uwdata+vgplot@0.31.0/node_modules/@uwdata/vgplot/src/plot/plot.js
+//#region ../../../../tmp/dvfc-build-ERCHlU/node_modules/.pnpm/@uwdata+vgplot@0.31.0/node_modules/@uwdata/vgplot/src/plot/plot.js
 function plot(...directives) {
 	const p = new Plot();
 	directives.flat().forEach((dir) => dir(p));
@@ -44396,11 +44389,12 @@ function plot(...directives) {
 	return p.element;
 }
 //#endregion
-//#region ../../../../tmp/dvfc-build-D1Difo/main.ts
+//#region ../../../../tmp/dvfc-build-ERCHlU/main.ts
 coordinator().databaseConnector(wasmConnector());
 function saveStateToURL() {
 	const selections = {};
-	if (dateBrush.value) selections["dateBrush"] = dateBrush.value;
+	if (salesBrush.value) selections["salesBrush"] = salesBrush.value;
+	if (flightsBrush.value) selections["flightsBrush"] = flightsBrush.value;
 	const params = new URLSearchParams();
 	for (const [key, value] of Object.entries(selections)) if (value) params.set(key, JSON.stringify(value));
 	const newURL = params.toString() ? `${window.location.pathname}?${params}` : window.location.pathname;
@@ -44417,18 +44411,15 @@ function restoreStateFromURL() {
 	return selections;
 }
 async function loadData() {
-	const base = "/dvfc/examples/revenue-analysis/";
+	const base = "/dvfc/examples/sales-board/";
 	const dataPath = base.endsWith("/") ? base + "data/" : base + "/data/";
 	await coordinator().exec(`
-    CREATE TABLE IF NOT EXISTS daily_metrics AS 
-    SELECT * FROM read_csv_auto('${window.location.origin}${dataPath}daily_metrics.csv')
+    CREATE TABLE IF NOT EXISTS sales_daily AS 
+    SELECT * FROM read_csv_auto('${window.location.origin}${dataPath}sales_daily.csv')
   `);
 	await coordinator().exec(`
-    CREATE OR REPLACE TABLE daily_metrics AS
-    SELECT *,
-      AVG(revenue) OVER (ORDER BY date ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) AS revenue_ma7,
-      AVG(profit) OVER (ORDER BY date ROWS BETWEEN 4 PRECEDING AND CURRENT ROW) AS profit_ma5
-    FROM daily_metrics
+    CREATE TABLE IF NOT EXISTS flights_summary AS 
+    SELECT * FROM read_csv_auto('${window.location.origin}${dataPath}flights_summary.csv')
   `);
 }
 async function createDashboard() {
@@ -44437,107 +44428,91 @@ async function createDashboard() {
 	try {
 		await loadData();
 		if (statusEl) statusEl.textContent = "Creating visualizations...";
-		const dateBrush = Selection$2.intersect();
+		const salesBrush = Selection$2.intersect();
+		const flightsBrush = Selection$2.intersect();
 		const savedSelections = restoreStateFromURL();
-		if (savedSelections["dateBrush"]) dateBrush.update(savedSelections["dateBrush"]);
-		dateBrush.addEventListener("value", () => setTimeout(saveStateToURL, 100));
-		const containerintro_text = document.getElementById("chart-intro_text");
-		if (containerintro_text) containerintro_text.innerHTML = `
-      <div style="padding: 1.5rem; background: #f7fafc; border-radius: 0.5rem; line-height: 1.6;">
-        <p><h2>Executive Summary</h2></p><p>This dashboard analyzes <strong>Q1 2024 revenue performance</strong> with advanced overlays showing trends and moving averages.</p><p><strong>Key Features:</strong><br>- Red dashed line = Average revenue<br>- Blue dotted line = Linear trend<br>- Purple line = 7-day moving average</p><p><em>Click and drag on charts to filter by date range.</em><br></p>
-      </div>
-    `;
-		const containerrevenue_trend = document.getElementById("chart-revenue_trend");
-		if (containerrevenue_trend) try {
-			const chartrevenue_trend = plot(lineY(from("daily_metrics"), {
+		if (savedSelections["salesBrush"]) salesBrush.update(savedSelections["salesBrush"]);
+		if (savedSelections["flightsBrush"]) flightsBrush.update(savedSelections["flightsBrush"]);
+		salesBrush.addEventListener("value", () => setTimeout(saveStateToURL, 100));
+		flightsBrush.addEventListener("value", () => setTimeout(saveStateToURL, 100));
+		const containersales_trend = document.getElementById("chart-sales_trend");
+		if (containersales_trend) try {
+			const chartsales_trend = plot(lineY(from("sales_daily"), {
 				x: "date",
-				y: "revenue",
+				y: sum$2("sales"),
 				stroke: "steelblue",
 				strokeWidth: 2
-			}), ruleY(from("daily_metrics"), {
-				y: avg("revenue"),
-				stroke: "#e53e3e",
-				strokeWidth: 2,
-				strokeDasharray: "4 4"
-			}), lineY(from("daily_metrics"), {
-				x: "date",
-				y: "revenue_ma7",
-				stroke: "#805ad5",
-				strokeWidth: 2,
-				curve: "monotone-x"
-			}), intervalX({ as: dateBrush }), width(800), height(300));
-			containerrevenue_trend.appendChild(chartrevenue_trend);
+			}), intervalX({ as: salesBrush }), xLabel("Date (brush here to filter)"), yLabel("Daily Sales ($)"), width(600), height(250));
+			containersales_trend.appendChild(chartsales_trend);
 		} catch (error) {
-			console.error("Error rendering chart revenue_trend:", error);
-			containerrevenue_trend.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
+			console.error("Error rendering chart sales_trend:", error);
+			containersales_trend.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
 		}
-		const containerinsight_text = document.getElementById("chart-insight_text");
-		if (containerinsight_text) containerinsight_text.innerHTML = `
-      <div style="padding: 1.5rem; background: #f7fafc; border-radius: 0.5rem; line-height: 1.6;">
-        <p><h3>Key Insights</h3></p><p>Revenue shows a <strong>strong upward trend</strong> throughout Q1, with the 7-day moving average smoothing daily volatility.<br>The linear trend line indicates consistent growth of approximately <strong>$150-200 per day</strong>.</p><p>February performance exceeded the Q1 average, with peak revenue of <strong>$21,200</strong> on Feb 29.<br></p>
-      </div>
-    `;
-		const containerprofit_analysis = document.getElementById("chart-profit_analysis");
-		if (containerprofit_analysis) try {
-			const chartprofit_analysis = plot(lineY(from("daily_metrics", { filterBy: dateBrush }), {
-				x: "date",
-				y: "profit",
-				stroke: "steelblue",
-				strokeWidth: 2
-			}), ruleY(from("daily_metrics", { filterBy: dateBrush }), {
-				y: avg("profit"),
-				stroke: "#48bb78",
-				strokeWidth: 2,
-				strokeDasharray: "4 4"
-			}), lineY(from("daily_metrics", { filterBy: dateBrush }), {
-				x: "date",
-				y: "profit_ma5",
-				stroke: "#ed8936",
-				strokeWidth: 2,
-				curve: "monotone-x"
-			}), intervalX({ as: dateBrush }), width(800), height(250));
-			containerprofit_analysis.appendChild(chartprofit_analysis);
-		} catch (error) {
-			console.error("Error rendering chart profit_analysis:", error);
-			containerprofit_analysis.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
-		}
-		const containerregional_breakdown = document.getElementById("chart-regional_breakdown");
-		if (containerregional_breakdown) try {
-			const chartregional_breakdown = plot(barY(from("daily_metrics", { filterBy: dateBrush }), {
+		const containersales_by_region = document.getElementById("chart-sales_by_region");
+		if (containersales_by_region) try {
+			const chartsales_by_region = plot(barY(from("sales_daily", { filterBy: salesBrush }), {
 				x: "region",
-				y: sum$2("revenue"),
-				fill: "region",
+				y: sum$2("sales"),
+				fill: "steelblue",
 				fillOpacity: .8
-			}), width(400), height(250));
-			containerregional_breakdown.appendChild(chartregional_breakdown);
+			}), xLabel("Region"), yLabel("Total Sales ($)"), width(600), height(300));
+			containersales_by_region.appendChild(chartsales_by_region);
 		} catch (error) {
-			console.error("Error rendering chart regional_breakdown:", error);
-			containerregional_breakdown.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
+			console.error("Error rendering chart sales_by_region:", error);
+			containersales_by_region.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
 		}
-		const containercost_analysis = document.getElementById("chart-cost_analysis");
-		if (containercost_analysis) try {
-			const chartcost_analysis = plot(lineY(from("daily_metrics", { filterBy: dateBrush }), {
+		const containersales_by_product = document.getElementById("chart-sales_by_product");
+		if (containersales_by_product) try {
+			const chartsales_by_product = plot(barY(from("sales_daily", { filterBy: salesBrush }), {
+				x: "product",
+				y: sum$2("sales"),
+				fill: "darkorange",
+				fillOpacity: .8
+			}), xLabel("Product"), yLabel("Total Sales ($)"), width(600), height(300));
+			containersales_by_product.appendChild(chartsales_by_product);
+		} catch (error) {
+			console.error("Error rendering chart sales_by_product:", error);
+			containersales_by_product.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
+		}
+		const containerpassenger_trend = document.getElementById("chart-passenger_trend");
+		if (containerpassenger_trend) try {
+			const chartpassenger_trend = plot(lineY(from("flights_summary"), {
 				x: "date",
-				y: "cost",
+				y: sum$2("passengers"),
 				stroke: "steelblue",
 				strokeWidth: 2
-			}), ruleY(from("daily_metrics", { filterBy: dateBrush }), {
-				y: median$1("cost"),
-				stroke: "#ed64a6",
-				strokeWidth: 2,
-				strokeDasharray: "4 4"
-			}), width(400), height(250));
-			containercost_analysis.appendChild(chartcost_analysis);
+			}), intervalX({ as: flightsBrush }), xLabel("Date (brush here to filter)"), yLabel("Daily Passengers"), width(600), height(250));
+			containerpassenger_trend.appendChild(chartpassenger_trend);
 		} catch (error) {
-			console.error("Error rendering chart cost_analysis:", error);
-			containercost_analysis.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
+			console.error("Error rendering chart passenger_trend:", error);
+			containerpassenger_trend.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
 		}
-		const containersummary_text = document.getElementById("chart-summary_text");
-		if (containersummary_text) containersummary_text.innerHTML = `
-      <div style="padding: 1.5rem; background: #f7fafc; border-radius: 0.5rem; line-height: 1.6;">
-        <p><h3>Methodology</h3></p><p><strong>Overlays explained:</strong><br>- <em>Mean</em> (horizontal line) = average value across all data points<br>- <em>Median</em> (horizontal line) = middle value when sorted<br>- <em>Trend</em> (diagonal line) = linear regression best fit<br>- <em>Moving Average</em> (smooth line) = rolling average over N days</p><p>Overlays update dynamically when you filter the data by brushing charts.<br></p>
-      </div>
-    `;
+		const containerflights_by_origin = document.getElementById("chart-flights_by_origin");
+		if (containerflights_by_origin) try {
+			const chartflights_by_origin = plot(barY(from("flights_summary", { filterBy: flightsBrush }), {
+				x: "origin",
+				y: sum$2("flights"),
+				fill: "mediumpurple",
+				fillOpacity: .8
+			}), xLabel("Origin Airport"), yLabel("Total Flights"), width(600), height(300));
+			containerflights_by_origin.appendChild(chartflights_by_origin);
+		} catch (error) {
+			console.error("Error rendering chart flights_by_origin:", error);
+			containerflights_by_origin.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
+		}
+		const containerdelay_by_origin = document.getElementById("chart-delay_by_origin");
+		if (containerdelay_by_origin) try {
+			const chartdelay_by_origin = plot(barY(from("flights_summary", { filterBy: flightsBrush }), {
+				x: "origin",
+				y: avg("delay_minutes"),
+				fill: "crimson",
+				fillOpacity: .8
+			}), xLabel("Origin Airport"), yLabel("Avg Delay (minutes)"), width(600), height(300));
+			containerdelay_by_origin.appendChild(chartdelay_by_origin);
+		} catch (error) {
+			console.error("Error rendering chart delay_by_origin:", error);
+			containerdelay_by_origin.innerHTML = "<div style=\"padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;\">⚠️ Error rendering chart: " + (error instanceof Error ? error.message : String(error)) + "</div>";
+		}
 		if (statusEl) {
 			statusEl.textContent = "✅ Dashboard ready! Brush line charts to filter other charts. Share URL to preserve filters.";
 			statusEl.style.color = "green";

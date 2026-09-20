@@ -18,7 +18,7 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "clean": "rm -rf dist",
-    "test": "node --test test/*.test.js"
+    "test": "pnpm build && node --experimental-strip-types --test test/**/*.test.ts"
   },
   "dependencies": {
     "@dvfc/core": "workspace:*",

@@ -198,6 +198,12 @@ export interface ThemeConfig {
   
   /** Background color */
   backgroundColor?: string;
+
+  /**
+   * Draw bordered cards around each chart.
+   * Off by default, set `true` for framed tiles.
+   */
+  chartBorders?: boolean;
 }
 
 /**

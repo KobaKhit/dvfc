@@ -1,5 +1,5 @@
 /**
- * @dvfc/render-mosaic — Mosaic HTML code generation
+ * @dvfc/render-mosaic, Mosaic HTML code generation
  */
 export {
   generateMainScript,

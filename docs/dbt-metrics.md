@@ -92,7 +92,7 @@ Native path: fixture → MetricFlow Python API → `mf` / `dbt sl` CLI. Mosaic `
 
 ## Further reading
 
-- [ADR 001 — No metric language](./adr/001-no-metric-language.md)
+- [ADR 001, No metric language](./adr/001-no-metric-language.md)
 - [dbt MetricFlow commands](https://docs.getdbt.com/docs/build/metricflow-commands)
 - [ARCHITECTURE.md](./ARCHITECTURE.md)
 - [python/README.md](../python/README.md)

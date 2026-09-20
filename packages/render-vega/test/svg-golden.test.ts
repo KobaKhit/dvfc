@@ -1,13 +1,13 @@
 /**
- * Golden SVG test — structural hash + size bounds.
+ * Golden SVG test, structural hash + size bounds.
  * Set UPDATE_GOLDEN=1 to refresh fixtures/revenue_trend.golden.svg and .sha256.
  */
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { readFile, writeFile, mkdir } from 'fs/promises';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { exportStatic } from '../dist/index.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../../..');
@@ -16,8 +16,7 @@ const fixtures = join(dirname(fileURLToPath(import.meta.url)), 'fixtures');
 const goldenSvg = join(fixtures, 'revenue_trend.golden.svg');
 const goldenHash = join(fixtures, 'revenue_trend.sha256');
 
-/** Strip volatile attrs (ids, aria) for stable comparison */
-function normalizeSvg(svg) {
+function normalizeSvg(svg: string): string {
   return svg
     .replace(/\s+/g, ' ')
     .replace(/\s(id|aria-label|aria-hidden)="[^"]*"/g, '')
@@ -25,7 +24,7 @@ function normalizeSvg(svg) {
     .trim();
 }
 
-function sha256(s) {
+function sha256(s: string): string {
   return createHash('sha256').update(s).digest('hex');
 }
 
@@ -55,7 +54,7 @@ test('exportStatic produces SVG matching golden hash', async () => {
   }
 
   const expected = (await readFile(goldenHash, 'utf-8')).trim();
-  assert.equal(hash, expected, 'SVG structural hash mismatch — run UPDATE_GOLDEN=1 if intentional');
+  assert.equal(hash, expected, 'SVG structural hash mismatch, run UPDATE_GOLDEN=1 if intentional');
 });
 
 test('html-static page embeds VL schema and vegaEmbed', async () => {

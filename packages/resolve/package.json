@@ -1,7 +1,7 @@
 {
   "name": "@dvfc/resolve",
   "version": "0.1.0",
-  "description": "Data connectors for dvfc — resolve DataRef (dbt / dbt_metric / sql / data) to relations",
+  "description": "Data connectors for dvfc, resolve DataRef (dbt / dbt_metric / sql / data) to relations",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -18,7 +18,7 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "clean": "rm -rf dist",
-    "test": "pnpm build && node --test test/*.test.js"
+    "test": "pnpm build && node --experimental-strip-types --test test/**/*.test.ts"
   },
   "dependencies": {
     "@dvfc/core": "workspace:*"

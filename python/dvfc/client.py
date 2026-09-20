@@ -1,5 +1,5 @@
 """
-DataVizFactoryClient — build via Node CLI; validate/load/metricflow native in Python.
+DataVizFactoryClient, build via Node CLI; validate/load/metricflow native in Python.
 """
 
 from __future__ import annotations

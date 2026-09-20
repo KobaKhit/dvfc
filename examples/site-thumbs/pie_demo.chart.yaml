@@ -1,0 +1,11 @@
+id: pie_demo
+type: pie
+title: Pie
+data:
+  type: data
+  path: ../dbt-jaffle/dbt-stub/customer_orders.csv
+encoding:
+  x: { field: payment_method, type: nominal }
+  y: { field: amount, type: quantitative, aggregate: sum }
+width: 360
+height: 200

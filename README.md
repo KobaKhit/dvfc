@@ -2,10 +2,11 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![CI](https://img.shields.io/github/actions/workflow/status/KobaKhit/dvfc/ci.yml?branch=main&label=CI)](https://github.com/KobaKhit/dvfc/actions)
+[![Coverage](https://img.shields.io/badge/coverage-93%25-brightgreen)](#-development)
 
-**dvfc = Data Viz Factory — Charts, dashes, and crossfiltering for humans and agents**
+**dvfc = Data Viz Factory, Charts, dashes, and crossfiltering for humans and agents**
 
-**Build interactive analytics from declarative YAML** — atomic `*.chart.yaml` specs and composed `*.dash.yaml` dashboards → Powered by [Mosaic](https://idl.uw.edu/mosaic/) + dbt
+**Build interactive analytics from declarative YAML**, atomic `*.chart.yaml` specs and composed `*.dash.yaml` dashboards → Powered by [Mosaic](https://idl.uw.edu/mosaic/) + dbt
 
 Define charts and dashes in YAML, get native crossfiltering and in-browser SQL. No backend required.
 
@@ -16,10 +17,10 @@ Define charts and dashes in YAML, get native crossfiltering and in-browser SQL. 
 **See it in action:** [https://kobakhit.github.io/dvfc/](https://kobakhit.github.io/dvfc/)
 
 Try the interactive examples (click and drag to crossfilter):
-- [Sales & Flights Dashboard](https://kobakhit.github.io/dvfc/examples/sales-board/) — Business analytics with time-based brushing
-- [Web Analytics](https://kobakhit.github.io/dvfc/examples/web-analytics/) — Traffic sources and conversion metrics
-- [dbt Jaffle Shop](https://kobakhit.github.io/dvfc/examples/dbt-jaffle/) — E-commerce order analytics
-- [Revenue Analysis](https://kobakhit.github.io/dvfc/examples/revenue-analysis/) — Financial performance with analysis overlays
+- [Sales & Flights Dashboard](https://kobakhit.github.io/dvfc/examples/sales-board/), Business analytics with time-based brushing
+- [Web Analytics](https://kobakhit.github.io/dvfc/examples/web-analytics/), Traffic sources and conversion metrics
+- [dbt Jaffle Shop](https://kobakhit.github.io/dvfc/examples/dbt-jaffle/), E-commerce order analytics
+- [Revenue Analysis](https://kobakhit.github.io/dvfc/examples/revenue-analysis/), Financial performance with analysis overlays
 
 ---
 
@@ -79,7 +80,7 @@ dvfc preview examples/web-analytics/web-analytics.dash.yaml
 dvfc preview examples/revenue-analysis/revenue-analysis.dash.yaml
 ```
 
-See [examples/README.md](./examples/README.md) — start with `examples/charts/` and `examples/dashes/`.
+See [examples/README.md](./examples/README.md), start with `examples/charts/` and `examples/dashes/`.
 
 ---
 
@@ -231,10 +232,17 @@ pnpm build
 # Watch mode
 pnpm dev
 
+# Unit tests (@dvfc/core, charts, resolve, render-vega), TypeScript via Node strip-types
+pnpm test
+
+# Line coverage
+pnpm test:coverage
+
 # Run example
 pnpm example:sales
 ```
 
+**Test coverage:** ~**93%** line coverage on package `dist/` sources (`pnpm test:coverage`, excluding `**/test/**`). Tests are TypeScript (`.test.ts`) run with `node --experimental-strip-types`.
 ---
 
 ## 📖 Key Documentation

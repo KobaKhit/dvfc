@@ -122,7 +122,7 @@ def validate(spec: SpecLike) -> ValidationResult:
     if isinstance(spec, Dash):
         return validate_dash(spec)
     if isinstance(spec, DashboardSpec):
-        # Legacy fluent builder shape — structural only
+        # Legacy fluent builder shape, structural only
         try:
             DashboardSpec.model_validate(spec.model_dump(by_alias=True))
             return ValidationResult(valid=True)

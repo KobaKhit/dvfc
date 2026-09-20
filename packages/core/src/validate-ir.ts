@@ -172,7 +172,7 @@ export function validateDashIR(
       if (isDashChartRef(entry)) return;
       const filterBy = entry.interaction?.filterBy;
       if (filterBy && published.size > 0 && !published.has(filterBy)) {
-        // Soft: refs may publish after resolve — only error when all charts are inline
+        // Soft: refs may publish after resolve, only error when all charts are inline
         const allInline = d.charts!.every((e) => !isDashChartRef(e));
         if (allInline) {
           errors.push({

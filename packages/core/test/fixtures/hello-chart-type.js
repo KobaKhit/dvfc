@@ -1,5 +1,5 @@
 /**
- * Example plugin chart type — registers as `hello`
+ * Example plugin chart type, registers as `hello`
  * Load via: loadChartTypeModules([new URL('./hello-chart-type.js', import.meta.url).href])
  */
 

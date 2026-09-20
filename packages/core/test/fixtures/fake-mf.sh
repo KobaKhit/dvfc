@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Fake MetricFlow CLI for tests — prints explain SQL for any metric.
+# Fake MetricFlow CLI for tests, prints explain SQL for any metric.
 # Usage: DVFC_METRICFLOW_BIN=./path/to/fake-mf.sh
 set -euo pipefail
 metric="unknown"

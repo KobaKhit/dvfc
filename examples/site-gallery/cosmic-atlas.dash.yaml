@@ -1,0 +1,145 @@
+id: cosmic-atlas
+title: The Atlas of Other Worlds
+description: A visual tour of landmark exoplanets, their discovery methods, and the missions that found them.
+version: 0.1.0
+data:
+  - id: worlds
+    type: csv
+    path: exoplanets.csv
+charts:
+  - id: discovery_timeline
+    type: line
+    title: Three decades of discovery
+    dataSource: worlds
+    encoding:
+      x: { field: discovery_year, type: ordinal, label: Discovery year }
+      y: { field: planet, type: quantitative, aggregate: count, label: Worlds discovered }
+    width: 680
+    height: 360
+
+  - id: discovery_methods
+    type: bar
+    title: How we find other worlds
+    dataSource: worlds
+    encoding:
+      x: { field: method, type: nominal, label: Discovery method }
+      y: { field: planet, type: quantitative, aggregate: count, label: Confirmed planets }
+      color: "#0b7f6e"
+    width: 680
+    height: 360
+
+  - id: habitable_momentum
+    type: area
+    title: The habitable-zone frontier
+    dataSource: worlds
+    encoding:
+      x: { field: discovery_year, type: ordinal, label: Discovery year }
+      y: { field: habitability_score, type: quantitative, aggregate: sum, label: Combined habitability signal }
+    width: 680
+    height: 360
+
+  - id: world_scatter
+    type: scatter
+    title: A universe of scales
+    dataSource: worlds
+    encoding:
+      x: { field: equilibrium_k, type: quantitative, label: Equilibrium temperature (K) }
+      y: { field: radius_earths, type: quantitative, label: Radius (Earths) }
+      color: { field: mission, type: nominal, label: Discovery mission }
+    width: 680
+    height: 360
+
+  - id: method_share
+    type: pie
+    title: Discovery method share
+    dataSource: worlds
+    encoding:
+      x: { field: method, type: nominal, label: Method }
+      y: { field: planet, type: quantitative, aggregate: count, label: Planets }
+    width: 540
+    height: 360
+
+  - id: mission_mix
+    type: donut
+    title: Missions behind the discoveries
+    dataSource: worlds
+    encoding:
+      x: { field: mission, type: nominal, label: Mission }
+      y: { field: planet, type: quantitative, aggregate: count, label: Planets }
+    width: 540
+    height: 360
+
+  - id: temperature_histogram
+    type: histogram
+    title: Temperatures across alien worlds
+    dataSource: worlds
+    encoding:
+      x: { field: equilibrium_k, type: quantitative, label: Equilibrium temperature (K) }
+    width: 680
+    height: 360
+
+  - id: radius_density
+    type: density
+    title: The shape of planet sizes
+    dataSource: worlds
+    encoding:
+      x: { field: radius_earths, type: quantitative, label: Radius (Earths) }
+      y: { field: density, type: quantitative, label: Probability density }
+    width: 680
+    height: 360
+
+  - id: constellation_heatmap
+    type: heatmap
+    title: Where discoveries cluster in the sky
+    dataSource: worlds
+    encoding:
+      x: { field: method, type: nominal, label: Method }
+      y: { field: constellation, type: nominal, label: Constellation }
+      color: { field: planet, type: quantitative, aggregate: count, label: Planet count }
+    width: 680
+    height: 520
+
+  - id: radius_boxplot
+    type: boxplot
+    title: Planet size by discovery method
+    dataSource: worlds
+    encoding:
+      x: { field: method, type: nominal, label: Discovery method }
+      y: { field: radius_earths, type: quantitative, label: Radius (Earths) }
+    width: 680
+    height: 360
+
+  - id: world_count
+    type: number
+    title: Worlds in this curated atlas
+    dataSource: worlds
+    encoding:
+      y: { field: planet, type: quantitative, aggregate: count, label: Worlds }
+    width: 420
+    height: 180
+
+  - id: candidate_table
+    type: table
+    title: Most promising nearby worlds
+    dataSource: worlds
+    encoding:
+      x: { field: planet, type: nominal, label: Planet }
+      y: { field: habitability_score, type: quantitative, label: Habitability }
+    width: 680
+    height: 420
+
+  - id: field_note
+    type: text
+    title: "Field note: proximity is not familiarity"
+    content: |
+      **A high habitability score is a prompt for observation, not proof of life.**
+
+      The most interesting worlds in this atlas orbit small red stars. Their closeness makes atmospheric follow-up possible, while stellar flares make those atmospheres difficult to keep.
+
+layout:
+  type: grid
+  columns: 2
+  gap: 20
+theme:
+  backgroundColor: "#ffffff"
+  fontFamily: "Inter, system-ui, sans-serif"

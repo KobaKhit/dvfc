@@ -48,12 +48,8 @@ async function loadSpec(filePath: string): Promise<DashboardSpec> {
   const { interpretSpec, listInlineCharts, isDashChartRef } = await import('@dvfc/core');
   const { parse: parseYAML } = await import('yaml');
 
-  let raw: unknown;
-  try {
-    raw = parseYAML(content);
-  } catch {
-    raw = JSON.parse(content);
-  }
+  // YAML is a superset of JSON, so one parser covers *.yaml, *.yml, and *.json.
+  const raw: unknown = parseYAML(content);
 
   const parsed = interpretSpec(raw, { path: filePath });
   if (parsed.kind === 'chart') {
@@ -76,7 +72,7 @@ async function loadSpec(filePath: string): Promise<DashboardSpec> {
       ],
     };
   }
-  // dash — only inline charts for discovery listing
+  // dash, only inline charts for discovery listing
   const inline = listInlineCharts(parsed.dash);
   const refs = parsed.dash.charts.filter((c) => isDashChartRef(c));
   return {

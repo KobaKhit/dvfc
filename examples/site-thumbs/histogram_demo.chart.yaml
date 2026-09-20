@@ -1,0 +1,10 @@
+id: histogram_demo
+type: histogram
+title: Histogram
+data:
+  type: data
+  path: ../charts/sales_daily.csv
+encoding:
+  x: { field: sales, type: quantitative }
+width: 360
+height: 200

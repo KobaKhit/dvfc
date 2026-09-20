@@ -13,7 +13,7 @@ export interface ValidationIssue {
   message: string;
 }
 
-/** Minimal render context — renderers expand later */
+/** Minimal render context, renderers expand later */
 export interface ChartRenderContext {
   chart: unknown;
   dataSql?: string;
@@ -32,9 +32,9 @@ export interface ChartTypeModule {
   /** Optional extra JSON Schema fragment for options/encoding */
   optionsSchema?: Record<string, unknown>;
   validate?(chart: unknown): ValidationIssue[];
-  /** Mosaic / vgplot fragment — implemented per type in later phases */
+  /** Mosaic / vgplot fragment, implemented per type in later phases */
   renderMosaic?(ctx: ChartRenderContext): unknown;
-  /** Vega-Lite unit spec — implemented per type in later phases */
+  /** Vega-Lite unit spec, implemented per type in later phases */
   renderVegaLite?(ctx: ChartRenderContext): unknown;
 }
 

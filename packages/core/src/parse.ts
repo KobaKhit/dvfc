@@ -1,6 +1,6 @@
 /**
  * Parse chart/dash specs from YAML, TOML, or JSON.
- * Legacy board.yaml is not supported — use *.dash.yaml.
+ * Legacy board.yaml is not supported, use *.dash.yaml.
  */
 
 import { parse as parseYAML } from 'yaml';

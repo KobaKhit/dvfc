@@ -102,9 +102,9 @@ site/
 ```
 
 Each example directory contains the full output from `dvfc build`:
-- `index.html` — Entry point
-- `assets/` — Bundled JS with Mosaic, DuckDB-WASM, vgplot
-- `data/` — CSV data files loaded by DuckDB
+- `index.html`, Entry point
+- `assets/`, Bundled JS with Mosaic, DuckDB-WASM, vgplot
+- `data/`, CSV data files loaded by DuckDB
 
 ## Repository Settings
 

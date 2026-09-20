@@ -6,11 +6,11 @@
  * 2. Live invoke: `mf query --explain` or `dbt sl query --compile`
  *
  * Env:
- *   DVFC_METRICFLOW_BIN   — override binary (default: auto-detect mf / dbt)
- *   DVFC_METRICFLOW_MODE  — mf | dbt-sl | auto (default auto)
- *   DVFC_DBT_PROJECT      — dbt project root (else walk parents for dbt_project.yml)
- *   DVFC_METRICFLOW_CACHE — if "1", write compiled SQL to semantic/<metric>.sql
- *   DVFC_METRICFLOW_SKIP  — if "1", skip live invoke (fixtures only)
+ *   DVFC_METRICFLOW_BIN, override binary (default: auto-detect mf / dbt)
+ *   DVFC_METRICFLOW_MODE, mf | dbt-sl | auto (default auto)
+ *   DVFC_DBT_PROJECT, dbt project root (else walk parents for dbt_project.yml)
+ *   DVFC_METRICFLOW_CACHE, if "1", write compiled SQL to semantic/<metric>.sql
+ *   DVFC_METRICFLOW_SKIP, if "1", skip live invoke (fixtures only)
  */
 
 import { access, mkdir, readFile, writeFile } from 'fs/promises';

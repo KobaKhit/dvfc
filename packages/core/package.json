@@ -22,7 +22,7 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "clean": "rm -rf dist",
-    "test": "pnpm build && node --test test/*.test.js"
+    "test": "pnpm build && node --experimental-strip-types --test test/**/*.test.ts"
   },
   "dependencies": {
     "glob": "^10.3.10",

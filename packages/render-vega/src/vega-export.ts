@@ -26,15 +26,216 @@ export function chartToVegaLiteBuiltin(
   chart: ChartSpec,
   values: Record<string, unknown>[]
 ): Record<string, unknown> {
+  const width = chart.width ?? 520;
+  const height = chart.height ?? 300;
+  const base = {
+    $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
+    title: chart.title,
+    data: { values },
+    width,
+    height,
+    background: 'transparent',
+    config: {
+      view: { stroke: null },
+      axis: {
+        labelColor: '#607078',
+        titleColor: '#24343c',
+        gridColor: '#e7edef',
+        domainColor: '#c5d0d4',
+        tickColor: '#c5d0d4',
+        labelFont: 'Inter, system-ui, sans-serif',
+        titleFont: 'Inter, system-ui, sans-serif',
+      },
+      title: {
+        color: '#13242c',
+        font: 'Inter, system-ui, sans-serif',
+        fontSize: 16,
+        anchor: 'start',
+      },
+      range: {
+        category: [
+          '#0b7f6e',
+          '#36a18f',
+          '#2f6f94',
+          '#7a86c2',
+          '#c47a1a',
+          '#e1ad56',
+          '#724f91',
+          '#cc6b72',
+        ],
+      },
+    },
+  };
+
+  const x = chart.encoding?.x;
+  const y = chart.encoding?.y;
+  const color = chart.encoding?.color;
+
+  if ((chart.type === 'pie' || chart.type === 'donut') && x && y) {
+    return {
+      ...base,
+      mark: {
+        type: 'arc',
+        innerRadius: chart.type === 'donut' ? 72 : 0,
+        outerRadius: 124,
+        cornerRadius: 4,
+        padAngle: 0.02,
+      },
+      encoding: {
+        theta: {
+          field: y.field,
+          type: 'quantitative',
+          aggregate: y.aggregate ?? 'sum',
+          stack: true,
+        },
+        color: {
+          field: x.field,
+          type: channelType(x) ?? 'nominal',
+          title: x.label,
+        },
+        tooltip: [
+          { field: x.field, type: channelType(x) ?? 'nominal', title: x.label },
+          {
+            field: y.field,
+            type: 'quantitative',
+            aggregate: y.aggregate ?? 'sum',
+            title: y.label,
+            format: ',.2f',
+          },
+        ],
+      },
+    };
+  }
+
+  if (chart.type === 'histogram' && x) {
+    return {
+      ...base,
+      mark: { type: 'bar', cornerRadiusTopLeft: 3, cornerRadiusTopRight: 3 },
+      encoding: {
+        x: {
+          field: x.field,
+          type: 'quantitative',
+          bin: { maxbins: 18 },
+          title: x.label,
+        },
+        y: {
+          aggregate: 'count',
+          type: 'quantitative',
+          title: y?.label ?? 'Observations',
+        },
+        color: { value: '#0b7f6e' },
+        tooltip: [{ aggregate: 'count', type: 'quantitative', title: 'Observations' }],
+      },
+    };
+  }
+
+  if (chart.type === 'density' && x) {
+    return {
+      ...base,
+      transform: [{ density: x.field, as: [x.field, 'density'] }],
+      mark: {
+        type: 'area',
+        interpolate: 'monotone',
+        line: { color: '#0b7f6e', strokeWidth: 2.5 },
+        color: {
+          x1: 1,
+          y1: 1,
+          x2: 1,
+          y2: 0,
+          gradient: 'linear',
+          stops: [
+            { offset: 0, color: '#0b7f6e22' },
+            { offset: 1, color: '#0b7f6ecc' },
+          ],
+        },
+      },
+      encoding: {
+        x: { field: x.field, type: 'quantitative', title: x.label },
+        y: { field: 'density', type: 'quantitative', title: y?.label ?? 'Density' },
+        tooltip: [
+          { field: x.field, type: 'quantitative', format: ',.2f' },
+          { field: 'density', type: 'quantitative', format: '.4f' },
+        ],
+      },
+    };
+  }
+
+  if (chart.type === 'boxplot' && x && y) {
+    return {
+      ...base,
+      mark: {
+        type: 'boxplot',
+        extent: 'min-max',
+        size: 34,
+        median: { color: '#c47a1a', strokeWidth: 2 },
+        box: { fill: '#36a18f', opacity: 0.75 },
+      },
+      encoding: {
+        x: { field: x.field, type: channelType(x) ?? 'nominal', title: x.label },
+        y: { field: y.field, type: 'quantitative', title: y.label },
+        color:
+          color && typeof color !== 'string'
+            ? { field: color.field, type: channelType(color) ?? 'nominal' }
+            : undefined,
+      },
+    };
+  }
+
+  if (chart.type === 'heatmap' && x && y) {
+    const colorChannel =
+      color && typeof color !== 'string'
+        ? {
+            field: color.field,
+            type: channelType(color) ?? 'quantitative',
+            aggregate: color.aggregate ?? 'mean',
+            title: color.label,
+            scale: { scheme: 'teals' },
+          }
+        : { aggregate: 'count', type: 'quantitative', scale: { scheme: 'teals' } };
+    return {
+      ...base,
+      mark: { type: 'rect', cornerRadius: 3, stroke: '#ffffff', strokeWidth: 2 },
+      encoding: {
+        x: { field: x.field, type: channelType(x) ?? 'nominal', title: x.label },
+        y: { field: y.field, type: channelType(y) ?? 'nominal', title: y.label },
+        color: colorChannel,
+        tooltip: [
+          { field: x.field, type: channelType(x) ?? 'nominal', title: x.label },
+          { field: y.field, type: channelType(y) ?? 'nominal', title: y.label },
+          colorChannel,
+        ],
+      },
+    };
+  }
+
   const mark =
     chart.type === 'line'
-      ? { type: 'line', point: true }
+      ? {
+          type: 'line',
+          point: { filled: true, size: 52 },
+          strokeWidth: 3,
+          interpolate: 'monotone',
+        }
       : chart.type === 'area'
-        ? 'area'
+        ? {
+            type: 'area',
+            line: { color: '#0b7f6e', strokeWidth: 2.5 },
+            color: {
+              x1: 1,
+              y1: 1,
+              x2: 1,
+              y2: 0,
+              gradient: 'linear',
+              stops: [
+                { offset: 0, color: '#0b7f6e22' },
+                { offset: 1, color: '#0b7f6eaa' },
+              ],
+            },
+          }
         : chart.type === 'scatter'
-          ? 'point'
+          ? { type: 'point', filled: true, size: 90, opacity: 0.78 }
           : chart.type === 'bar'
-            ? 'bar'
+            ? { type: 'bar', cornerRadiusEnd: 5 }
             : chart.type === 'number'
               ? 'text'
               : 'point';
@@ -67,10 +268,14 @@ export function chartToVegaLiteBuiltin(
 
   if (chart.type === 'number' && chart.encoding?.y) {
     return {
-      $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
-      title: chart.title,
-      data: { values },
-      mark: { type: 'text', fontSize: 28 },
+      ...base,
+      mark: {
+        type: 'text',
+        fontSize: 56,
+        fontWeight: 700,
+        color: '#0b7f6e',
+        font: 'Inter, system-ui, sans-serif',
+      },
       encoding: {
         text: {
           field: chart.encoding.y.field,
@@ -78,19 +283,15 @@ export function chartToVegaLiteBuiltin(
           type: 'quantitative',
         },
       },
-      width: chart.width ?? 200,
-      height: chart.height ?? 80,
+      width: chart.width ?? 320,
+      height: chart.height ?? 120,
     };
   }
 
   return {
-    $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
-    title: chart.title,
-    data: { values },
+    ...base,
     mark,
     encoding,
-    width: chart.width ?? 400,
-    height: chart.height ?? 240,
   };
 }
 

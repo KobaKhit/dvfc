@@ -151,7 +151,7 @@ export async function resolveDataRef(
         };
       }
       const path = ref.path!;
-      // Remote URL — no local copy; DuckDB/Mosaic can read http(s) when available
+      // Remote URL, no local copy; DuckDB/Mosaic can read http(s) when available
       if (/^https?:\/\//i.test(path)) {
         return {
           id,

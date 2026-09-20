@@ -1,0 +1,11 @@
+id: boxplot_demo
+type: boxplot
+title: Boxplot
+data:
+  type: data
+  path: ../charts/sales_daily.csv
+encoding:
+  x: { field: region, type: nominal }
+  y: { field: sales, type: quantitative }
+width: 360
+height: 200

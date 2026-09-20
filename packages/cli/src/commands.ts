@@ -698,7 +698,7 @@ export async function build(specPath: string, options: BuildOptions = {}): Promi
           }
         }
       } catch (err) {
-        // Assets already resolved by normalize — allow build if CSVs are present
+        // Assets already resolved by normalize, allow build if CSVs are present
         const missingAssets = spec.data.filter(
           (ds) =>
             ds.type === 'dbt' &&
@@ -859,6 +859,6 @@ export async function printChartTypes(): Promise<void> {
     console.log(`  ${t.id.padEnd(12)} ${(t.label ?? '').padEnd(16)} ${caps}`);
   }
   console.log(
-    `\n${types.length} types (add plugins via dvfc.config.js chartTypes — see docs/ARCHITECTURE.md)\n`
+    `\n${types.length} types (add plugins via dvfc.config.js chartTypes, see docs/ARCHITECTURE.md)\n`
   );
 }

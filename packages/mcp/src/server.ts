@@ -228,7 +228,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'compose_board',
-        description: 'Alias of compose_dash — compose a *.dash.yaml from chart IDs or display keys.',
+        description: 'Alias of compose_dash, compose a *.dash.yaml from chart IDs or display keys.',
         inputSchema: {
           type: 'object',
           properties: {

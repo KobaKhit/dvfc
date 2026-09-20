@@ -12,7 +12,7 @@ import type {
   DataSource,
 } from './types.js';
 
-/** Connector kinds — not a metric language */
+/** Connector kinds, not a metric language */
 export type DataRefType = 'dbt_metric' | 'dbt' | 'sql' | 'data';
 
 export interface DataRefDbtMetric {

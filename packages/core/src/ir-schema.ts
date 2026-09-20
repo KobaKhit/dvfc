@@ -206,6 +206,7 @@ export const DashIRSchema = {
         colors: { type: 'array', items: { type: 'string' } },
         fontFamily: { type: 'string' },
         backgroundColor: { type: 'string' },
+        chartBorders: { type: 'boolean' },
       },
     },
   },

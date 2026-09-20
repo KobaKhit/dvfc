@@ -1,5 +1,5 @@
 /**
- * @dvfc/render-vega — Vega-Lite SVG / PNG / html-static export
+ * @dvfc/render-vega, Vega-Lite SVG / PNG / html-static export
  */
 export {
   chartToVegaLite,

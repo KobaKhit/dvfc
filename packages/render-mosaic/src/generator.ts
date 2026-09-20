@@ -865,6 +865,16 @@ export function generateHTML(ctx: GeneratorContext): string {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${spec.meta.title}</title>
   <style>
+    :root {
+      color-scheme: light;
+      --ink: #102129;
+      --muted: #607078;
+      --line: #dfe7ea;
+      --paper: #f4f7f8;
+      --teal: #0b7f6e;
+      --teal-soft: rgba(11, 127, 110, 0.1);
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -873,50 +883,85 @@ export function generateHTML(ctx: GeneratorContext): string {
 
     body {
       font-family: ${spec.theme?.fontFamily || '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'};
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: var(--ink);
+      background:
+        radial-gradient(900px 460px at 8% -10%, rgba(11, 127, 110, 0.13), transparent 56%),
+        linear-gradient(180deg, #f8fafb 0%, #eef3f4 100%);
       min-height: 100vh;
-      padding: 2rem;
+      padding: clamp(0.75rem, 2.5vw, 2rem);
+      -webkit-font-smoothing: antialiased;
     }
 
     .container {
       max-width: 1400px;
       margin: 0 auto;
       background: ${spec.theme?.backgroundColor || 'white'};
-      border-radius: 12px;
-      padding: 2rem;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      border: 1px solid rgba(16, 33, 41, 0.09);
+      border-radius: 18px;
+      padding: clamp(1rem, 2.5vw, 2rem);
+      box-shadow: 0 24px 70px rgba(16, 33, 41, 0.1);
     }
 
     h1 {
-      color: #2d3748;
-      margin-bottom: 0.5rem;
-      font-size: 2rem;
+      color: var(--ink);
+      margin-bottom: 0.35rem;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      letter-spacing: -0.04em;
+      line-height: 1.05;
     }
 
     .subtitle {
-      color: #718096;
-      margin-bottom: 1.5rem;
-      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+      font-size: 0.96rem;
     }
 
     #status {
-      padding: 1rem;
-      background: #edf2f7;
-      border-left: 4px solid #4299e1;
-      margin-bottom: 2rem;
-      border-radius: 4px;
-      color: #2d3748;
-      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      padding: 0.4rem 0.65rem;
+      background: var(--teal-soft);
+      border: 1px solid rgba(11, 127, 110, 0.16);
+      margin-bottom: 1.2rem;
+      border-radius: 999px;
+      color: #066357;
+      font-size: 0.78rem;
+      font-weight: 650;
     }
 
     .chart-container {
-      margin-bottom: 2rem;
+      min-width: 0;
+      overflow: hidden;
+      margin: 0;
+      padding: ${spec.theme?.chartBorders ? '1rem' : '0'};
+      border: ${spec.theme?.chartBorders ? '1px solid var(--line)' : '0'};
+      border-radius: ${spec.theme?.chartBorders ? '13px' : '0'};
+      background: ${spec.theme?.chartBorders ? '#fff' : 'transparent'};
+      box-shadow: ${spec.theme?.chartBorders ? '0 7px 22px rgba(16, 33, 41, 0.045)' : 'none'};
+      ${spec.theme?.chartBorders
+        ? 'transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;'
+        : ''}
+    }
+
+    ${spec.theme?.chartBorders
+      ? `.chart-container:hover {
+      transform: translateY(-2px);
+      border-color: rgba(11, 127, 110, 0.28);
+      box-shadow: 0 13px 30px rgba(16, 33, 41, 0.08);
+    }`
+      : ''}
+
+    .chart-container > h3 {
+      font-size: 0.9rem !important;
+      letter-spacing: -0.01em;
+      color: var(--ink) !important;
+      margin-bottom: 0.6rem !important;
     }
 
     ${spec.layout?.type === 'grid' ? `
     .charts-grid {
       display: grid;
-      grid-template-columns: repeat(${spec.layout.columns || 2}, 1fr);
+      grid-template-columns: repeat(${spec.layout.columns || 2}, minmax(0, 1fr));
       gap: ${spec.layout.gap || 24}px;
     }
     
@@ -939,31 +984,82 @@ export function generateHTML(ctx: GeneratorContext): string {
     ` : ''}
 
     .info-box {
-      background: #f7fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 6px;
-      padding: 1rem;
-      margin-bottom: 2rem;
+      background: linear-gradient(120deg, var(--teal-soft), rgba(47, 111, 148, 0.07));
+      border: 1px solid rgba(11, 127, 110, 0.15);
+      border-radius: 11px;
+      padding: 0.8rem 1rem;
+      margin-bottom: 1rem;
     }
 
     .info-box h3 {
-      color: #2d3748;
-      margin-bottom: 0.5rem;
-      font-size: 1.1rem;
+      color: var(--ink);
+      margin-bottom: 0.2rem;
+      font-size: 0.88rem;
     }
 
     .info-box p {
-      color: #4a5568;
-      line-height: 1.6;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.82rem;
     }
 
     footer {
-      margin-top: 3rem;
-      padding-top: 2rem;
-      border-top: 2px solid #e2e8f0;
-      color: #718096;
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
       text-align: center;
-      font-size: 0.9rem;
+      font-size: 0.78rem;
+    }
+
+    footer a {
+      color: var(--teal);
+    }
+
+    body.is-embedded {
+      padding: 0;
+      background: #fff;
+    }
+
+    body.is-embedded .container {
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      padding: 0.85rem;
+    }
+
+    body.is-embedded h1 {
+      font-size: 1.3rem;
+    }
+
+    body.is-embedded .subtitle {
+      margin-bottom: 0.65rem;
+      font-size: 0.8rem;
+    }
+
+    body.is-embedded #status {
+      margin-bottom: 0.65rem;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.68rem;
+    }
+
+    body.is-embedded .info-box,
+    body.is-embedded #status,
+    body.is-embedded footer {
+      display: none;
+    }
+
+    body.is-embedded .chart-container {
+      padding: ${spec.theme?.chartBorders ? '0.65rem' : '0'};
+    }
+
+    body.is-embedded .charts-grid,
+    body.is-embedded .charts-flex {
+      gap: 0.65rem;
+    }
+
+    body.is-embedded .charts-grid {
+      grid-template-columns: repeat(${spec.layout?.columns || 2}, minmax(0, 1fr));
     }
 
     @media (max-width: 768px) {
@@ -998,10 +1094,19 @@ ${spec.charts.map(chart => `      <div id="chart-${chart.id}" class="chart-conta
     </div>
 
     <footer>
-      <p>Built with <a href="https://idl.uw.edu/mosaic/" target="_blank">UW Mosaic</a> + Data Viz Factory</p>
+      <p>Generated by <strong>dvfc</strong> · Powered by <a href="https://idl.uw.edu/mosaic/" target="_blank">UW Mosaic</a></p>
     </footer>
   </div>
 
+  <script>
+    if (new URLSearchParams(location.search).get('embed') === '1') {
+      document.body.classList.add('is-embedded');
+      const grid = document.querySelector('.charts-grid');
+      if (grid) {
+        grid.style.gridTemplateColumns = 'repeat(${spec.layout?.columns || 2}, minmax(0, 1fr))';
+      }
+    }
+  </script>
   <script type="module" src="/main.ts"></script>
 </body>
 </html>`;

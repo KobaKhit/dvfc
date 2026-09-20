@@ -1,7 +1,7 @@
 id: revenue_metric
 type: line
 title: Revenue (dbt_metric fixture)
-description: Uses compiled MetricFlow SQL under semantic/ — not a dvfc metric DSL
+description: Uses compiled MetricFlow SQL under semantic/, not a dvfc metric DSL
 data:
   type: dbt_metric
   metric: total_revenue

@@ -8,14 +8,14 @@
 
 ## Guiding principles
 
-1. **Ship vertical slices** — each phase leaves `validate` / `preview` / `build` working.  
-2. **Don’t break examples** — migrate with aliases; rename publicly when IR is stable.  
-3. **Chart plugins early enough** — avoid hard-coding types into the generator forever.  
-4. **No metric DSL** — spend integration budget on dbt semantic → SQL, not a new language.
+1. **Ship vertical slices**, each phase leaves `validate` / `preview` / `build` working.  
+2. **Don’t break examples**, migrate with aliases; rename publicly when IR is stable.  
+3. **Chart plugins early enough**, avoid hard-coding types into the generator forever.  
+4. **No metric DSL**, spend integration budget on dbt semantic → SQL, not a new language.
 
 ---
 
-## Phase 0 — Spec freeze & docs (now)
+## Phase 0, Spec freeze & docs (now)
 
 **Outcome:** Shared written contract for implementation.
 
@@ -28,7 +28,7 @@
 
 ---
 
-## Phase 1 — IR + parse (YAML / TOML / JSON)
+## Phase 1, IR + parse (YAML / TOML / JSON)
 
 **Outcome:** One parser path for chart and dash specs (YAML / TOML / JSON).
 
@@ -37,7 +37,7 @@
 | Types | `ChartIR`, `DashIR`, `DataRef` (`dbt_metric` \| `dbt` \| `sql` \| `data`) in `@dvfc/core` |
 | Schema | JSON Schema export; AJV validate via CLI |
 | Parse | YAML + JSON + TOML (`smol-toml`) |
-| Compat | *(removed)* — `board.yaml` / legacy board IR no longer accepted; dashes only |
+| Compat | *(removed)*, `board.yaml` / legacy board IR no longer accepted; dashes only |
 | Tests | Fixtures in `packages/core/test` + example `*.chart.yaml` / `*.dash.yaml` |
 
 **Status:** ✅ Landed in `@dvfc/core` + CLI `validate` / `charts types`
@@ -46,7 +46,7 @@
 
 ---
 
-## Phase 2 — Chart type registry (extensibility foundation)
+## Phase 2, Chart type registry (extensibility foundation)
 
 **Outcome:** Built-ins registered as plugins; generator no longer is a giant switch forever.
 
@@ -56,7 +56,7 @@
 | Built-ins | Metadata registered for line/bar/area/… (`registerBuiltinChartTypes`) |
 | Loader | `loadChartTypeModules` + example plugin fixture |
 | CLI | `dvfc charts types` lists ids + capabilities |
-| Docs | ARCHITECTURE §7 — full Mosaic/Vega render move still open |
+| Docs | ARCHITECTURE §7, full Mosaic/Vega render move still open |
 
 **Status:** ✅ Registry + builtins + CLI list; Mosaic generator checks `renderMosaic` plugin hook (`@dvfc/render-mosaic`); Vega export checks `renderVegaLite` / `capabilities.vegaLite` (`@dvfc/render-vega`)
 
@@ -64,7 +64,7 @@
 
 ---
 
-## Phase 3 — Resolve layer (connectors)
+## Phase 3, Resolve layer (connectors)
 
 **Outcome:** Charts bind to resolved relations before render.
 
@@ -81,7 +81,7 @@
 
 ---
 
-## Phase 4 — Dash compose & discovery retarget
+## Phase 4, Dash compose & discovery retarget
 
 **Outcome:** Chart atom + dash composition are the product verbs.
 
@@ -100,7 +100,7 @@
 
 ---
 
-## Phase 5 — Mosaic renderer (dash HTML) on new IR
+## Phase 5, Mosaic renderer (dash HTML) on new IR
 
 **Outcome:** Interactive HTML builds from Dash IR only.
 
@@ -117,7 +117,7 @@
 
 ---
 
-## Phase 6 — Vega-Lite export (SVG / PNG)
+## Phase 6, Vega-Lite export (SVG / PNG)
 
 **Outcome:** Minimum portable artifacts from a chart spec.
 
@@ -125,7 +125,7 @@
 |------|--------|
 | `@dvfc/render-vega` | ChartIR → VL spec |
 | Built-ins | Implement `renderVegaLite` for core types (line, bar, area, scatter, …) |
-| CLI | `--format svg\|png` on chart (dash → zip of charts or “primary chart” policy — document choice) |
+| CLI | `--format svg\|png` on chart (dash → zip of charts or “primary chart” policy, document choice) |
 | Plugins | Types without VL renderer error clearly |
 | CI | Golden SVG tests for fixtures |
 
@@ -135,7 +135,7 @@
 
 ---
 
-## Phase 7 — Python SDK
+## Phase 7, Python SDK
 
 **Outcome:** First-class Python authoring/export without teaching Node.
 
@@ -152,7 +152,7 @@
 
 ---
 
-## Phase 8 — Polish, migrate, publish
+## Phase 8, Polish, migrate, publish
 
 | Task | Detail |
 |------|--------|
@@ -182,11 +182,11 @@ Compose (4) can start as soon as IR exists; Mosaic split (5) unblocks HTML confi
 
 | Milestone | User-visible win |
 |-----------|------------------|
-| **M1 — Chart atom** | Author/validate `*.chart.yaml`; list types; plugins load |
-| **M2 — Dash** | Author dash with inline + refs; auto-coordination preview |
-| **M3 — Portable** | SVG + PNG from chart; Python `build(..., format="svg")` |
-| **M4 — dbt semantic** | `dbt_metric` fixtures + live `mf` / `dbt sl` invoke — **complete** |
-| **M5 — Clean break** | No `board.yaml` in docs/examples; site + MCP dash paths — **complete** |
+| **M1, Chart atom** | Author/validate `*.chart.yaml`; list types; plugins load |
+| **M2, Dash** | Author dash with inline + refs; auto-coordination preview |
+| **M3, Portable** | SVG + PNG from chart; Python `build(..., format="svg")` |
+| **M4, dbt semantic** | `dbt_metric` fixtures + live `mf` / `dbt sl` invoke, **complete** |
+| **M5, Clean break** | No `board.yaml` in docs/examples; site + MCP dash paths, **complete** |
 
 ---
 
@@ -208,7 +208,7 @@ Compose (4) can start as soon as IR exists; Mosaic split (5) unblocks HTML confi
 **Remaining (optional / deferred):**
 
 - Warehouse/runtime adapters beyond file-based dbt (SQLMesh/Bruin live query, CLI `--adapter` auto-detect)
-- Observable Framework **emit** spike (`dvfc emit framework`) — non-core
+- Observable Framework **emit** spike (`dvfc emit framework`), non-core
 - npm / PyPI publish
 
 **Landed in hygiene pass:** `composeBoard` removed (use `composeDash`); Mosaic/Vega builtins attach via `renderMosaic` / `renderVegaLite`; `html-static` format; `dvfc.config.js` + `applyDvfcConfig`; golden SVG hash fixtures; discovery `dashPath` (boardPath alias).
@@ -219,5 +219,5 @@ Compose (4) can start as soon as IR exists; Mosaic split (5) unblocks HTML confi
 
 1. **Dash → SVG/PNG:** **`--chart <id>` required** when building svg/png from a dash (no zip-all default).  
 2. **Config file name:** **`dvfc.config.js`** primary; optional TOML later if needed.  
-3. **dbt_metric MVP:** **Fixtures first, then live MetricFlow** — both paths implemented (`compileDbtMetricSql` / `mf` + `dbt sl`).  
-4. **Package layout:** **`@dvfc/render-mosaic` and `@dvfc/render-vega` split** — landed in Phase 5–6.
+3. **dbt_metric MVP:** **Fixtures first, then live MetricFlow**, both paths implemented (`compileDbtMetricSql` / `mf` + `dbt sl`).  
+4. **Package layout:** **`@dvfc/render-mosaic` and `@dvfc/render-vega` split**, landed in Phase 5–6.

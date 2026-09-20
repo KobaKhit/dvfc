@@ -1,0 +1,11 @@
+id: donut_demo
+type: donut
+title: Donut
+data:
+  type: data
+  path: ../dbt-jaffle/dbt-stub/customer_orders.csv
+encoding:
+  x: { field: order_status, type: nominal }
+  y: { field: amount, type: quantitative, aggregate: sum }
+width: 360
+height: 200

@@ -68,7 +68,7 @@ test('resolveChartRef handles display keys', async () => {
   const ref = await resolveChartRef(projectRoot, 'dbt-jaffle__daily_revenue');
   
   assert.strictEqual(ref.chartId, 'daily_revenue');
-  assert.ok(ref.boardPath.includes('dbt-jaffle'));
+  assert.ok((ref.dashPath ?? ref.boardPath)?.includes('dbt-jaffle'));
 });
 
 test('resolveChartRef handles unambiguous plain IDs', async () => {

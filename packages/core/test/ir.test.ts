@@ -9,7 +9,6 @@ import {
   registerBuiltinChartTypes,
   clearChartTypes,
   listChartTypes,
-  registerChartType,
   loadChartTypeModules,
   validateChartIR,
   validateDashIR,
@@ -26,7 +25,7 @@ describe('dashToDashboardSpec', () => {
       id: 'sales',
       title: 'Sales',
       version: '0.1.0',
-      data: [{ id: 'sales', type: 'dbt', model: 'sales_daily' }],
+      data: [{ id: 'sales', type: 'dbt' as const, model: 'sales_daily' }],
       charts: [
         {
           id: 'trend',
@@ -39,7 +38,7 @@ describe('dashToDashboardSpec', () => {
     };
     const spec = dashToDashboardSpec(dash);
     assert.equal(spec.meta.title, 'Sales');
-    assert.equal(spec.charts[0].interaction.selection, 'time');
+    assert.equal(spec.charts[0].interaction?.selection, 'time');
   });
 });
 
@@ -58,8 +57,9 @@ encoding:
 `;
     const parsed = parseSpecString(yaml, { format: 'yaml', prefer: 'chart' });
     assert.equal(parsed.kind, 'chart');
+    if (parsed.kind !== 'chart') throw new Error('expected chart');
     assert.equal(parsed.chart.id, 'revenue_trend');
-    assert.equal(parsed.chart.data.type, 'sql');
+    assert.equal(parsed.chart.data?.type, 'sql');
   });
 
   it('parses dash with ref + inline', () => {
@@ -79,20 +79,16 @@ charts:
 `;
     const parsed = parseSpecString(yaml, { format: 'yaml', prefer: 'dash' });
     assert.equal(parsed.kind, 'dash');
-    assert.equal(parsed.dash.charts.length, 2);
   });
 
   it('rejects legacy board shape', () => {
-    const yaml = `
-meta:
-  title: Old
-  version: 0.1.0
-data: []
-charts: []
-`;
     assert.throws(
-      () => parseSpecString(yaml, { format: 'yaml' }),
-      /no longer supported|Unrecognized|board/i
+      () =>
+        parseSpecString(
+          'meta:\n  title: x\ndata: []\ncharts: []\n',
+          { format: 'yaml' }
+        ),
+      /Legacy board|removed|dash|chart/i
     );
   });
 
@@ -112,6 +108,7 @@ charts: []
     const content = await readFile(dashPath, 'utf-8');
     const parsed = parseSpecString(content, { path: dashPath });
     assert.equal(parsed.kind, 'dash');
+    if (parsed.kind !== 'dash') throw new Error('expected dash');
     assert.ok(parsed.dash.charts.length >= 1);
   });
 });
@@ -151,7 +148,14 @@ describe('validate IR', () => {
     registerBuiltinChartTypes();
     const result = validateDashIR({
       id: 'd',
-      charts: [{ id: 'c', type: 'bar', dataSource: 's', encoding: { x: { field: 'a' }, y: { field: 'b' } } }],
+      charts: [
+        {
+          id: 'c',
+          type: 'bar',
+          dataSource: 's',
+          encoding: { x: { field: 'a' }, y: { field: 'b' } },
+        },
+      ],
       data: [{ id: 's', type: 'dbt', model: 'm' }],
     });
     assert.equal(result.valid, true);

@@ -579,7 +579,7 @@ export async function build(specPath, options = {}) {
                 }
             }
             catch (err) {
-                // Assets already resolved by normalize — allow build if CSVs are present
+                // Assets already resolved by normalize, allow build if CSVs are present
                 const missingAssets = spec.data.filter((ds) => ds.type === 'dbt' &&
                     !assets.some((a) => a.destName === `${ds.id}.csv`));
                 if (missingAssets.length > 0) {
@@ -715,5 +715,5 @@ export async function printChartTypes() {
             .join(', ');
         console.log(`  ${t.id.padEnd(12)} ${(t.label ?? '').padEnd(16)} ${caps}`);
     }
-    console.log(`\n${types.length} types (add plugins via dvfc.config.js chartTypes — see docs/ARCHITECTURE.md)\n`);
+    console.log(`\n${types.length} types (add plugins via dvfc.config.js chartTypes, see docs/ARCHITECTURE.md)\n`);
 }

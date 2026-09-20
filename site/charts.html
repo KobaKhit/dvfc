@@ -3,196 +3,178 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chart Types — dvfc</title>
-  <meta name="description" content="Interactive chart types supported by dvfc: line, bar, area, scatter, pie, heatmap, and more.">
-  <link rel="stylesheet" href="/dvfc/style.css">
+  <title>Chart gallery | dvfc</title>
+  <meta name="description" content="Every dvfc chart type rendered from a real exoplanet dataset.">
+  <link rel="stylesheet" href="/dvfc/style.css?v=20260920b">
 </head>
 <body>
   <div class="site">
     <nav class="nav" aria-label="Primary">
-      <div class="wrap nav-inner">
-        <a class="brand" href="/dvfc/">dv<em>fc</em></a>
-        <ul class="nav-links">
-          <li><a href="/dvfc/#language">Language</a></li>
-          <li><a href="/dvfc/#gallery">Gallery</a></li>
-          <li><a href="/dvfc/charts.html" aria-current="page">Charts</a></li>
-          <li><a href="https://github.com/KobaKhit/dvfc" target="_blank" rel="noopener">GitHub</a></li>
-          <li><a class="btn btn-primary btn-sm" href="/dvfc/#try">Try live</a></li>
-        </ul>
-      </div>
-    </nav>
-
-    <header class="page-hero">
+    <div class="wrap nav-inner">
+      <a class="brand" href="/dvfc/">dv<em>fc</em></a>
+      <ul class="nav-links">
+        <li><a href="/dvfc/#how">How it works</a></li>
+        <li><a href="/dvfc/#gallery">Examples</a></li>
+        <li><a href="/dvfc/charts.html">Chart types</a></li>
+        <li><a href="https://github.com/KobaKhit/dvfc" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a class="btn btn-primary btn-sm" href="/dvfc/#demo">Live demo</a></li>
+      </ul>
+    </div>
+  </nav>
+    <header class="catalog-hero">
       <div class="wrap">
-        <h1>Chart types</h1>
-        <p>Atomic <code>*.chart.yaml</code> specs and dash inline charts — declarative encodings that compile to Mosaic or Vega-Lite (SVG/PNG).</p>
+        <p class="section-kicker">13 chart types, one spec format</p>
+        <h1>Every chart type, built from one real dataset.</h1>
+        <p>The previews below are SVG files exported by dvfc from a catalog of 43 confirmed exoplanets. Open any chart to see it at full size next to the YAML that produced it.</p>
+        <div class="catalog-orbit" aria-hidden="true"><i></i><i></i><i></i></div>
       </div>
     </header>
-
     <main class="wrap">
-      <div class="chart-grid">
-        <article class="chart-tile">
-          <div class="chart-glyph" aria-hidden="true">
-            <svg viewBox="0 0 120 60" fill="none">
-              <path d="M8 48 C28 44 36 18 58 22 C80 26 86 40 112 12" stroke="#0b7f6e" stroke-width="3" stroke-linecap="round"/>
-              <circle cx="58" cy="22" r="3.5" fill="#c47a1a"/>
-            </svg>
-          </div>
-          <h3>Line</h3>
-          <p>Time series with brush selection</p>
-          <span class="tag">crossfilter</span>
-        </article>
-
-        <article class="chart-tile">
-          <div class="chart-glyph" aria-hidden="true">
-            <svg viewBox="0 0 120 60" fill="none">
-              <rect x="14" y="28" width="14" height="24" rx="2" fill="#0b7f6e"/>
-              <rect x="38" y="16" width="14" height="36" rx="2" fill="#2f6f94"/>
-              <rect x="62" y="22" width="14" height="30" rx="2" fill="#0b7f6e"/>
-              <rect x="86" y="10" width="14" height="42" rx="2" fill="#066357"/>
-            </svg>
-          </div>
-          <h3>Bar</h3>
-          <p>Categorical aggregates, filterable</p>
-          <span class="tag">aggregated</span>
-        </article>
-
-        <article class="chart-tile">
-          <div class="chart-glyph" aria-hidden="true">
-            <svg viewBox="0 0 120 60" fill="none">
-              <path d="M8 48 L28 34 L52 40 L78 18 L112 28 L112 52 L8 52 Z" fill="rgba(11,127,110,0.28)" stroke="#0b7f6e" stroke-width="2"/>
-            </svg>
-          </div>
-          <h3>Area</h3>
-          <p>Stacked or single series fills</p>
-          <span class="tag">temporal</span>
-        </article>
-
-        <article class="chart-tile">
-          <div class="chart-glyph" aria-hidden="true">
-            <svg viewBox="0 0 120 60" fill="none">
-              <circle cx="28" cy="36" r="4" fill="#0b7f6e"/>
-              <circle cx="46" cy="22" r="3.5" fill="#2f6f94"/>
-              <circle cx="64" cy="40" r="5" fill="#066357"/>
-              <circle cx="82" cy="18" r="3" fill="#c47a1a"/>
-              <circle cx="98" cy="32" r="4" fill="#0b7f6e"/>
-            </svg>
-          </div>
-          <h3>Scatter</h3>
-          <p>Point clouds and correlations</p>
-          <span class="tag">correlation</span>
-        </article>
-
-        <article class="chart-tile">
-          <div class="chart-glyph" aria-hidden="true">
-            <svg viewBox="0 0 120 60">
-              <path d="M60 10 A22 22 0 1 1 38 48" fill="#0b7f6e"/>
-              <path d="M60 10 A22 22 0 0 1 96 34 L60 32 Z" fill="#2f6f94"/>
-              <path d="M96 34 A22 22 0 0 1 38 48 L60 32 Z" fill="#c47a1a"/>
-            </svg>
-          </div>
-          <h3>Pie / Donut</h3>
-          <p>Part-to-whole with percentages</p>
-          <span class="tag">composition</span>
-        </article>
-
-        <article class="chart-tile">
-          <div class="chart-glyph" aria-hidden="true">
-            <svg viewBox="0 0 120 60">
-              <rect x="18" y="12" width="16" height="14" fill="#0b7f6e" opacity="0.35"/>
-              <rect x="38" y="12" width="16" height="14" fill="#0b7f6e" opacity="0.7"/>
-              <rect x="58" y="12" width="16" height="14" fill="#066357"/>
-              <rect x="78" y="12" width="16" height="14" fill="#0b7f6e" opacity="0.5"/>
-              <rect x="18" y="30" width="16" height="14" fill="#2f6f94" opacity="0.55"/>
-              <rect x="38" y="30" width="16" height="14" fill="#0b7f6e"/>
-              <rect x="58" y="30" width="16" height="14" fill="#2f6f94" opacity="0.35"/>
-              <rect x="78" y="30" width="16" height="14" fill="#c47a1a" opacity="0.7"/>
-            </svg>
-          </div>
-          <h3>Heatmap</h3>
-          <p>2D density and matrix views</p>
-          <span class="tag">density</span>
-        </article>
-
-        <article class="chart-tile">
-          <div class="chart-glyph" aria-hidden="true">
-            <svg viewBox="0 0 120 60" fill="none">
-              <path d="M20 44 C28 44 30 18 40 18 C50 18 52 36 62 36 C72 36 74 12 84 12 C94 12 96 28 104 28" stroke="#0b7f6e" stroke-width="8" stroke-linecap="round" opacity="0.35"/>
-              <path d="M20 44 C28 44 30 18 40 18 C50 18 52 36 62 36 C72 36 74 12 84 12 C94 12 96 28 104 28" stroke="#066357" stroke-width="2.5" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <h3>Histogram / Density</h3>
-          <p>Distributions and KDE curves</p>
-          <span class="tag">distribution</span>
-        </article>
-
-        <article class="chart-tile">
-          <div class="chart-glyph" aria-hidden="true">
-            <svg viewBox="0 0 120 60" fill="none">
-              <line x1="40" y1="12" x2="40" y2="48" stroke="#2f6f94" stroke-width="2"/>
-              <rect x="28" y="22" width="24" height="18" rx="2" fill="rgba(11,127,110,0.25)" stroke="#0b7f6e" stroke-width="2"/>
-              <line x1="28" y1="31" x2="52" y2="31" stroke="#c47a1a" stroke-width="2"/>
-            </svg>
-          </div>
-          <h3>Boxplot</h3>
-          <p>Statistical five-number summary</p>
-          <span class="tag">stats</span>
-        </article>
-
-        <article class="chart-tile">
-          <div class="chart-glyph" aria-hidden="true">
-            <svg viewBox="0 0 120 60" fill="none">
-              <text x="20" y="38" font-family="Bricolage Grotesque, sans-serif" font-size="28" font-weight="700" fill="#0b7f6e">42k</text>
-              <path d="M86 36 L96 24 L108 30" stroke="#c47a1a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <h3>Number (KPI)</h3>
-          <p>Single metric emphasis</p>
-          <span class="tag">summary</span>
-        </article>
-
-        <article class="chart-tile">
-          <div class="chart-glyph" aria-hidden="true">
-            <svg viewBox="0 0 120 60" fill="none">
-              <rect x="18" y="14" width="84" height="8" rx="2" fill="#0b7f6e" opacity="0.25"/>
-              <rect x="18" y="26" width="84" height="8" rx="2" fill="#0b7f6e" opacity="0.4"/>
-              <rect x="18" y="38" width="84" height="8" rx="2" fill="#0b7f6e" opacity="0.55"/>
-            </svg>
-          </div>
-          <h3>Table</h3>
-          <p>Compact data grid (100 rows)</p>
-          <span class="tag">detail</span>
-        </article>
-
-        <article class="chart-tile">
-          <div class="chart-glyph" aria-hidden="true">
-            <svg viewBox="0 0 120 60" fill="none">
-              <rect x="22" y="16" width="76" height="6" rx="2" fill="#2f6f94" opacity="0.45"/>
-              <rect x="22" y="28" width="62" height="4" rx="2" fill="#0b7f6e" opacity="0.35"/>
-              <rect x="22" y="38" width="70" height="4" rx="2" fill="#0b7f6e" opacity="0.25"/>
-            </svg>
-          </div>
-          <h3>Text</h3>
-          <p>Narrative Markdown blocks</p>
-          <span class="tag">content</span>
-        </article>
+      <div class="catalog-filter" aria-label="Chart categories">
+        <span>All 13</span><span>Time</span><span>Comparison</span><span>Distribution</span><span>Composition</span><span>Detail</span>
       </div>
-
-      <div class="cta-band">
-        <div>
-          <h2>See them coordinated</h2>
-          <p>Open the live board and brush a time series — linked charts update instantly.</p>
+      <div class="chart-catalog"><a class="chart-catalog-card reveal" href="/dvfc/charts/line/" style="--card-accent:#0b7f6e;--delay:0ms">
+        <div class="chart-catalog-visual">
+          <img src="/dvfc/assets/previews/chart-line.svg" alt="Line example" loading="lazy">
+          <span class="chart-catalog-index">01</span>
         </div>
-        <a class="btn btn-primary" href="/dvfc/#try">Try the live board</a>
-      </div>
+        <div class="chart-catalog-meta">
+          <div><span>Change over time</span><h2>Line</h2></div>
+          <span class="catalog-arrow">↗</span>
+        </div>
+        <p>Trace three decades of exoplanet discoveries with a continuous temporal signal.</p>
+      </a><a class="chart-catalog-card reveal" href="/dvfc/charts/bar/" style="--card-accent:#2f6f94;--delay:35ms">
+        <div class="chart-catalog-visual">
+          <img src="/dvfc/assets/previews/chart-bar.svg" alt="Bar example" loading="lazy">
+          <span class="chart-catalog-index">02</span>
+        </div>
+        <div class="chart-catalog-meta">
+          <div><span>Compare categories</span><h2>Bar</h2></div>
+          <span class="catalog-arrow">↗</span>
+        </div>
+        <p>Rank the techniques astronomers use to detect worlds orbiting other stars.</p>
+      </a><a class="chart-catalog-card reveal" href="/dvfc/charts/area/" style="--card-accent:#0b7f6e;--delay:70ms">
+        <div class="chart-catalog-visual">
+          <img src="/dvfc/assets/previews/chart-area.svg" alt="Area example" loading="lazy">
+          <span class="chart-catalog-index">03</span>
+        </div>
+        <div class="chart-catalog-meta">
+          <div><span>Magnitude over time</span><h2>Area</h2></div>
+          <span class="catalog-arrow">↗</span>
+        </div>
+        <p>See the growing habitability signal as new generations of surveys come online.</p>
+      </a><a class="chart-catalog-card reveal" href="/dvfc/charts/scatter/" style="--card-accent:#724f91;--delay:105ms">
+        <div class="chart-catalog-visual">
+          <img src="/dvfc/assets/previews/chart-scatter.svg" alt="Scatter example" loading="lazy">
+          <span class="chart-catalog-index">04</span>
+        </div>
+        <div class="chart-catalog-meta">
+          <div><span>Find relationships</span><h2>Scatter</h2></div>
+          <span class="catalog-arrow">↗</span>
+        </div>
+        <p>Compare planetary temperature and size, colored by the mission behind each discovery.</p>
+      </a><a class="chart-catalog-card reveal" href="/dvfc/charts/pie/" style="--card-accent:#c47a1a;--delay:140ms">
+        <div class="chart-catalog-visual">
+          <img src="/dvfc/assets/previews/chart-pie.svg" alt="Pie example" loading="lazy">
+          <span class="chart-catalog-index">05</span>
+        </div>
+        <div class="chart-catalog-meta">
+          <div><span>Share of a whole</span><h2>Pie</h2></div>
+          <span class="catalog-arrow">↗</span>
+        </div>
+        <p>Show how the discovery catalog divides across observation techniques.</p>
+      </a><a class="chart-catalog-card reveal" href="/dvfc/charts/donut/" style="--card-accent:#cc6b72;--delay:175ms">
+        <div class="chart-catalog-visual">
+          <img src="/dvfc/assets/previews/chart-donut.svg" alt="Donut example" loading="lazy">
+          <span class="chart-catalog-index">06</span>
+        </div>
+        <div class="chart-catalog-meta">
+          <div><span>Portfolio mix</span><h2>Donut</h2></div>
+          <span class="catalog-arrow">↗</span>
+        </div>
+        <p>Compare the missions and observatories contributing to the atlas.</p>
+      </a><a class="chart-catalog-card reveal" href="/dvfc/charts/histogram/" style="--card-accent:#0b7f6e;--delay:210ms">
+        <div class="chart-catalog-visual">
+          <img src="/dvfc/assets/previews/chart-histogram.svg" alt="Histogram example" loading="lazy">
+          <span class="chart-catalog-index">07</span>
+        </div>
+        <div class="chart-catalog-meta">
+          <div><span>Frequency distribution</span><h2>Histogram</h2></div>
+          <span class="catalog-arrow">↗</span>
+        </div>
+        <p>Bin equilibrium temperatures to reveal the climates represented in the catalog.</p>
+      </a><a class="chart-catalog-card reveal" href="/dvfc/charts/density/" style="--card-accent:#36a18f;--delay:245ms">
+        <div class="chart-catalog-visual">
+          <img src="/dvfc/assets/previews/chart-density.svg" alt="Density example" loading="lazy">
+          <span class="chart-catalog-index">08</span>
+        </div>
+        <div class="chart-catalog-meta">
+          <div><span>Distribution shape</span><h2>Density</h2></div>
+          <span class="catalog-arrow">↗</span>
+        </div>
+        <p>Smooth the radius distribution to reveal the dominant scales of discovered worlds.</p>
+      </a><a class="chart-catalog-card reveal" href="/dvfc/charts/heatmap/" style="--card-accent:#2f6f94;--delay:280ms">
+        <div class="chart-catalog-visual">
+          <img src="/dvfc/assets/previews/chart-heatmap.svg" alt="Heatmap example" loading="lazy">
+          <span class="chart-catalog-index">09</span>
+        </div>
+        <div class="chart-catalog-meta">
+          <div><span>Two-dimensional pattern</span><h2>Heatmap</h2></div>
+          <span class="catalog-arrow">↗</span>
+        </div>
+        <p>Map constellations against discovery methods to expose where the catalog clusters.</p>
+      </a><a class="chart-catalog-card reveal" href="/dvfc/charts/boxplot/" style="--card-accent:#7a86c2;--delay:315ms">
+        <div class="chart-catalog-visual">
+          <img src="/dvfc/assets/previews/chart-boxplot.svg" alt="Boxplot example" loading="lazy">
+          <span class="chart-catalog-index">10</span>
+        </div>
+        <div class="chart-catalog-meta">
+          <div><span>Compare distributions</span><h2>Boxplot</h2></div>
+          <span class="catalog-arrow">↗</span>
+        </div>
+        <p>Contrast planet-size distributions across the major discovery techniques.</p>
+      </a><a class="chart-catalog-card reveal" href="/dvfc/charts/number/" style="--card-accent:#0b7f6e;--delay:350ms">
+        <div class="chart-catalog-visual">
+          <img src="/dvfc/assets/previews/chart-number.svg" alt="Number example" loading="lazy">
+          <span class="chart-catalog-index">11</span>
+        </div>
+        <div class="chart-catalog-meta">
+          <div><span>Single KPI</span><h2>Number</h2></div>
+          <span class="catalog-arrow">↗</span>
+        </div>
+        <p>Give one important measure the space and hierarchy it deserves.</p>
+      </a><a class="chart-catalog-card reveal" href="/dvfc/charts/table/" style="--card-accent:#2f6f94;--delay:385ms">
+        <div class="chart-catalog-visual">
+          <div class="mini-table"><i></i><i></i><i></i><i></i></div>
+          <span class="chart-catalog-index">12</span>
+        </div>
+        <div class="chart-catalog-meta">
+          <div><span>Inspect the details</span><h2>Table</h2></div>
+          <span class="catalog-arrow">↗</span>
+        </div>
+        <p>Rank promising nearby worlds while preserving exact values and identifiers.</p>
+      </a><a class="chart-catalog-card reveal" href="/dvfc/charts/text/" style="--card-accent:#c47a1a;--delay:420ms">
+        <div class="chart-catalog-visual">
+          <div class="mini-note"><b>Field note</b><span></span><span></span><span></span></div>
+          <span class="chart-catalog-index">13</span>
+        </div>
+        <div class="chart-catalog-meta">
+          <div><span>Explain what matters</span><h2>Text</h2></div>
+          <span class="catalog-arrow">↗</span>
+        </div>
+        <p>Place interpretation beside the evidence so a dashboard says what the numbers mean.</p>
+      </a></div>
+      <section class="cta-band catalog-cta">
+        <div><h2>See them linked together</h2><p>The live demo uses the same dataset with brushing across four charts.</p></div>
+        <a class="btn btn-primary" href="/dvfc/examples/showcase/">Open the live demo</a>
+      </section>
     </main>
-
-    <footer class="footer">
-      <div class="wrap footer-bottom" style="margin-top:0;padding-top:0;border:0">
-        <p>Built with <a href="https://idl.uw.edu/mosaic/" target="_blank" rel="noopener">UW Mosaic</a></p>
-        <p><a href="https://github.com/KobaKhit/dvfc" target="_blank" rel="noopener">GitHub</a></p>
-      </div>
-    </footer>
   </div>
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add('is-visible'));
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+  </script>
 </body>
 </html>

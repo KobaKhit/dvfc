@@ -88,7 +88,7 @@ def _compile_via_python_api(
     Best-effort in-process MetricFlow. Returns None if API unavailable.
     """
     try:
-        # dbt-metricflow / metricflow layouts vary by version — try common entry points
+        # dbt-metricflow / metricflow layouts vary by version, try common entry points
         try:
             from metricflow.engine.metricflow_engine import (  # type: ignore
                 MetricFlowEngine,

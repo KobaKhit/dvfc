@@ -184,6 +184,9 @@ export declare const DashboardSpecSchema: {
                 readonly backgroundColor: {
                     readonly type: "string";
                 };
+                readonly chartBorders: {
+                    readonly type: "boolean";
+                };
             };
         };
     };
