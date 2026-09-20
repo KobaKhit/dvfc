@@ -1,49 +1,65 @@
 # dbt semantic metrics (`dbt_metric`)
 
-dvfc does **not** define a metric DSL. Semantic metrics come from **dbt / MetricFlow**; dvfc binds charts to compiled SQL via the `dbt_metric` data connector.
+dvfc does **not** define a metric DSL. Semantic metrics come from **dbt / MetricFlow**; charts bind via `data.type: dbt_metric`.
 
 ## Chart data shape
 
 ```yaml
 id: revenue_metric
 type: line
-title: Revenue (dbt_metric fixture)
+title: Revenue
 data:
   type: dbt_metric
   metric: total_revenue
+  group_by: [metric_time]   # optional; default metric_time
+  # where: "..."            # optional MetricFlow where
 encoding:
   x: { field: date, type: temporal }
   y: { field: revenue, type: quantitative, aggregate: sum }
 ```
 
-Resolution looks up metric SQL (live MetricFlow compile when configured, or a **checked-in fixture** for CI and offline use).
+## Resolution order
 
-## Fixture workflow (recommended for examples)
+1. **Fixture SQL** (CI / offline): `semantic/<metric>.sql` or `metrics/<metric>.sql` next to the chart, under the project root, or under `dbt-stub/semantic/`.
+2. **Live MetricFlow invoke** when no fixture exists:
+   - **dbt Core / OSS:** `mf query --metrics <m> --group-by … --explain`
+   - **dbt platform:** `dbt sl query --metrics <m> --group-by … --compile`
 
-1. **Compile metric SQL** in your dbt project (MetricFlow / semantic layer), or hand-author SQL that matches the metric grain.
-2. **Save SQL** next to the chart under a `semantic/` directory:
+```bash
+# Ensure semantic manifest exists
+dbt parse
 
-   ```
-   examples/charts/
-   ├── revenue_metric.chart.yaml
-   └── semantic/
-       └── total_revenue.sql
-   ```
+# Smoke the same SQL dvfc will request
+mf query --metrics total_revenue --group-by metric_time --explain
+```
 
-3. **Name the file** after the metric id referenced in the chart (`metric: total_revenue` → `semantic/total_revenue.sql`).
+### Environment
 
-4. **Validate and build**:
+| Var | Meaning |
+|-----|---------|
+| `DVFC_METRICFLOW_BIN` | Binary override (`mf`, `dbt`, or a wrapper script) |
+| `DVFC_METRICFLOW_MODE` | `mf` \| `dbt-sl` \| `auto` (default) |
+| `DVFC_DBT_PROJECT` | dbt project root (else walk parents for `dbt_project.yml`) |
+| `DVFC_METRICFLOW_CACHE` | `1` → write compiled SQL to `semantic/<metric>.sql` |
+| `DVFC_METRICFLOW_SKIP` | `1` → fixtures only (no live CLI) |
 
-   ```bash
-   pnpm exec dvfc validate examples/charts/revenue_metric.chart.yaml
-   pnpm exec dvfc build examples/charts/revenue_metric.chart.yaml --format svg
-   ```
+API: `compileDbtMetricSql` / `invokeMetricFlow` in `@dvfc/resolve` (and `@dvfc/core`).
 
-The resolver in `@dvfc/core` / `@dvfc/resolve` loads fixture SQL when live semantic compilation is unavailable. Errors are path-aware (`metric X not found`, grain mismatch).
+## Fixture workflow
 
-## dbt model connector (contrast)
+```
+examples/charts/
+├── revenue_metric.chart.yaml
+└── semantic/
+    └── total_revenue.sql
+```
 
-Dashboard-style examples often use **`type: dbt`** with `model:` pointing at stub CSV-backed models in `dbt-stub/`:
+```bash
+pnpm exec dvfc validate examples/charts/revenue_metric.chart.yaml
+pnpm exec dvfc build examples/charts/revenue_metric.chart.yaml --format svg
+```
+
+## Contrast: `dbt` model connector
 
 ```yaml
 data:
@@ -52,24 +68,10 @@ data:
     model: sales_daily
 ```
 
-Use **`dbt_metric`** when the grain and measure definitions live in the semantic layer; use **`dbt`** for table-shaped models.
-
-## Dash-level data
-
-Dash files can declare shared `data:` entries; inline charts reference them with `dataSource:`. Atomic charts embed `data:` on the chart root (see `revenue_metric.chart.yaml`).
-
-## Python SDK
-
-```python
-from dvfc import DataVizFactoryClient
-
-client = DataVizFactoryClient()
-client.validate("examples/charts/revenue_metric.chart.yaml")
-client.build("examples/charts/revenue_metric.chart.yaml", format="svg")
-```
+Use **`dbt_metric`** for semantic measures; **`dbt`** for table-shaped models / stub CSVs.
 
 ## Further reading
 
 - [ADR 001 — No metric language](./adr/001-no-metric-language.md)
-- [dbt-integration.md](./dbt-integration.md)
-- [ARCHITECTURE.md](./ARCHITECTURE.md) — `DataRef` connectors
+- [dbt MetricFlow commands](https://docs.getdbt.com/docs/build/metricflow-commands)
+- [ARCHITECTURE.md](./ARCHITECTURE.md)

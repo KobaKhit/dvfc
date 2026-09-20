@@ -19,13 +19,12 @@ pnpm exec dvfc charts types
 pnpm exec dvfc build examples/charts/revenue_trend.chart.yaml --format svg
 ```
 
-## Full dashboard examples (dash + legacy board)
+## Full dashboard examples (Dash IR)
 
-Each folder has a **canonical `*.dash.yaml`** and a deprecated **`board.yaml`** (compat alias).
+Each folder has a canonical **`*.dash.yaml`**.
 
 ### 1. Sales & Flights Dashboard
 **Dash:** `examples/sales-board/sales.dash.yaml`  
-**Legacy:** `examples/sales-board/board.yaml` (deprecated)  
 **Charts:** 6 (3 sales, 3 flights)
 
 ```bash
@@ -36,7 +35,6 @@ pnpm exec dvfc preview examples/sales-board/sales.dash.yaml
 
 ### 2. Web Analytics Dashboard
 **Dash:** `examples/web-analytics/web-analytics.dash.yaml`  
-**Legacy:** `examples/web-analytics/board.yaml` (deprecated)  
 **Charts:** 6 (3 traffic, 3 conversions)
 
 ```bash
@@ -47,7 +45,6 @@ pnpm exec dvfc preview examples/web-analytics/web-analytics.dash.yaml
 
 ### 3. dbt Jaffle Shop
 **Dash:** `examples/dbt-jaffle/jaffle.dash.yaml`  
-**Legacy:** `examples/dbt-jaffle/board.yaml` (deprecated)  
 **Charts:** 4 (revenue trends, payment methods, customers, status)
 
 ```bash
@@ -58,7 +55,6 @@ pnpm exec dvfc preview examples/dbt-jaffle/jaffle.dash.yaml
 
 ### 4. Revenue Analysis with Insights
 **Dash:** `examples/revenue-analysis/revenue-analysis.dash.yaml`  
-**Legacy:** `examples/revenue-analysis/board.yaml` (deprecated)  
 **Charts:** 7 (3 narrative text blocks, 4 analytical charts)
 
 Demonstrates analysis overlays, `type: text` charts, and shareable filter state.
@@ -99,7 +95,6 @@ pnpm exec dvfc normalize examples/sales-board/sales.dash.yaml
 ```
 examples/<name>/
 ├── <name>.dash.yaml     # Dash IR (canonical)
-├── board.yaml           # Legacy alias (deprecated)
 ├── README.md            # Example-specific docs
 └── dbt-stub/
     ├── manifest.json

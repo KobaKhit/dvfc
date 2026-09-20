@@ -1,6 +1,6 @@
 # dvfc: Charts, dashes, and coordinated analytics
 
-**Skill for authoring `*.chart.yaml` atoms and `*.dash.yaml` dashboards with native Mosaic crossfiltering. Legacy `board.yaml` is a deprecated compat alias.**
+**Skill for authoring `*.chart.yaml` atoms and `*.dash.yaml` dashboards with native Mosaic crossfiltering (Dash IR only).**
 
 ## When to Use This Skill
 
@@ -26,7 +26,7 @@ dvfc transforms declarative chart and dash YAML into interactive HTML (and SVG/P
 Use the `dvfc-mcp` server for:
 
 ### 1. validate_dashboard_spec
-Validate a chart, dash, or legacy board spec (JSON Schema + semantic checks)
+Validate a chart or dash spec (JSON Schema + semantic checks)
 ```json
 {
   "specPath": "examples/sales-board/sales.dash.yaml"
@@ -55,7 +55,7 @@ List dbt models from manifest.json
 Add a new chart to dashboard
 ```json
 {
-  "specPath": "board.yaml",
+  "specPath": "examples/sales-board/sales.dash.yaml",
   "chart": {
     "id": "revenue_trend",
     "type": "line",
@@ -76,7 +76,7 @@ Add a new chart to dashboard
 Update existing chart
 ```json
 {
-  "specPath": "board.yaml",
+  "specPath": "examples/sales-board/sales.dash.yaml",
   "chartId": "revenue_trend",
   "updates": {
     "title": "Monthly Revenue Trend",
@@ -89,7 +89,7 @@ Update existing chart
 Find charts in dashboard
 ```json
 {
-  "specPath": "board.yaml",
+  "specPath": "examples/sales-board/sales.dash.yaml",
   "query": {
     "type": "line",
     "dataSource": "sales"
@@ -101,7 +101,7 @@ Find charts in dashboard
 Show how charts are linked
 ```json
 {
-  "specPath": "board.yaml"
+  "specPath": "examples/sales-board/sales.dash.yaml"
 }
 ```
 
@@ -109,7 +109,7 @@ Show how charts are linked
 Wire up chart coordination
 ```json
 {
-  "specPath": "board.yaml",
+  "specPath": "examples/sales-board/sales.dash.yaml",
   "plan": {
     "brushChart": "revenue_trend",
     "selectionName": "dateBrush",
@@ -149,9 +149,6 @@ charts:
     interaction:
       filterBy: dateBrush
 ```
-
-### Legacy board (compat)
-Same charts under `meta:` + `charts:` in `board.yaml` — use dash IR for new files.
 
 ### CLI parity
 `dvfc dash compose`, `dvfc charts extract`, `dvfc normalize`, `dvfc charts types`
@@ -265,7 +262,7 @@ Use `build_dashboard` tool
 
 ### Issue: dbt model not found
 **Cause:** Missing manifest.json or CSV file
-**Fix:** Place manifest.json and CSVs in `dbt-stub/` directory next to board.yaml
+**Fix:** Place manifest.json and CSVs in `dbt-stub/` directory next to the dash YAML
 
 ## Tips
 
@@ -288,7 +285,7 @@ dvfc now supports cross-project chart discovery and composition!
 ### Key Concepts
 
 - **Project-scoped**: Charts in `*.chart.yaml` and/or inline in dashes
-- **Display keys**: `dashName__chartId` (legacy board names still work)
+- **Display keys**: `dashName__chartId`
 - **Context**: Get/render preserve data sources, theme, layout
 - **Disambiguation**: Ambiguous IDs return candidate list
 
@@ -302,7 +299,7 @@ Find charts across the project with scoring:
 {
   "query": "revenue",
   "projectRoot": "/workspace",
-  "boardPath": "examples/sales-board/board.yaml",  // optional
+  "boardPath": "examples/sales-board/sales.dash.yaml",  // optional dash path
   "all": false  // default: top 10 results
 }
 ```
@@ -315,7 +312,7 @@ Get chart with full board context:
 
 ```json
 {
-  "boardPath": "examples/dbt-jaffle/board.yaml",
+  "boardPath": "examples/dbt-jaffle/jaffle.dash.yaml",
   "chartId": "daily_revenue"
 }
 ```
@@ -332,13 +329,13 @@ List all charts in project or board:
 ```json
 {
   "projectRoot": "/workspace",
-  "boardPath": "examples/sales-board/board.yaml"  // optional
+  "boardPath": "examples/sales-board/sales.dash.yaml"  // optional
 }
 ```
 
 #### compose_dash / compose_board
 
-Compose a dash (or legacy board YAML) from chart IDs:
+Compose a dash from chart IDs:
 
 ```json
 {
@@ -364,13 +361,13 @@ Build single chart with board context:
 
 ```json
 {
-  "boardPath": "examples/sales-board/board.yaml",
+  "boardPath": "examples/sales-board/sales.dash.yaml",
   "chartId": "daily_sales",
   "outDir": "dist"
 }
 ```
 
-Builds HTML with only the specified chart, preserving dash/board context.
+Builds HTML with only the specified chart, preserving dash context.
 
 #### extract_charts / list_chart_types / normalize_spec
 

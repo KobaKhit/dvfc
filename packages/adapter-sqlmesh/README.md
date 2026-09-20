@@ -113,10 +113,10 @@ The dvfc CLI will auto-detect SQLMesh projects and use this adapter:
 
 ```bash
 # Auto-detect from sqlmesh/ directory
-dvfc build board.yaml --adapter sqlmesh
+dvfc build *.dash.yaml --adapter sqlmesh
 
 # Or specify context path
-dvfc build board.yaml --sqlmesh-context sqlmesh/context.yaml
+dvfc build *.dash.yaml --sqlmesh-context sqlmesh/context.yaml
 ```
 
 *(CLI integration coming soon)*

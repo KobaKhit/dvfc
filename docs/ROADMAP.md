@@ -75,7 +75,7 @@
 | `dbt_metric` (MVP) | Integrate MetricFlow compile **or** read prebuilt semantic SQL/artifacts; document required dbt version |
 | Errors | Path-aware: “metric X not found”, “grain mismatch” |
 
-**Status:** ✅ `resolveDataRef` + `findDbtStubDir` in `@dvfc/core`; public package `@dvfc/resolve`; `dbt_metric` via compiled SQL fixtures (`examples/charts/semantic/`)
+**Status:** ✅ `resolveDataRef` + MetricFlow invoke (`compileDbtMetricSql` / `mf` + `dbt sl`); fixtures first, then live CLI; `@dvfc/resolve` re-exports
 
 **Exit:** Resolved IR available to Mosaic generator; semantic metric path works on at least one example (can be stubbed SQL if MF wiring is partial, but API shape final).
 
@@ -162,7 +162,7 @@
 | Optional | `dvfc emit framework` spike (non-blocking) |
 | Optional | Parquet / remote URL connectors |
 
-**Status:** ✅ Example `*.dash.yaml` siblings + `examples/charts` / `examples/dashes`; README + MCP + skill retarget; `docs/add-chart-type.md`, `docs/dbt-metrics.md`; legacy `board.yaml` deprecated with compat; Parquet + http(s) URL in `data` connector; `@dvfc/render-mosaic` / `@dvfc/render-vega` packages
+**Status:** ✅ All gallery examples on `*.dash.yaml`; `board.yaml` removed from examples/docs; README + MCP + skill dash-only; `docs/add-chart-type.md`, `docs/dbt-metrics.md`; Parquet + http(s) URL in `data` connector; `@dvfc/render-mosaic` / `@dvfc/render-vega` packages
 
 ---
 
@@ -185,8 +185,8 @@ Compose (4) can start as soon as IR exists; Mosaic split (5) unblocks HTML confi
 | **M1 — Chart atom** | Author/validate `*.chart.yaml`; list types; plugins load |
 | **M2 — Dash** | Author dash with inline + refs; auto-coordination preview |
 | **M3 — Portable** | SVG + PNG from chart; Python `build(..., format="svg")` |
-| **M4 — dbt semantic** | Real `dbt_metric` against a sample dbt project |
-| **M5 — Clean break** | No “board” in docs/examples; site + MCP updated — **in progress** (dash-first docs; board compat remains) |
+| **M4 — dbt semantic** | `dbt_metric` fixtures + live `mf` / `dbt sl` invoke — **complete** |
+| **M5 — Clean break** | No `board.yaml` in docs/examples; site + MCP dash paths — **complete** |
 
 ---
 
@@ -196,7 +196,7 @@ Compose (4) can start as soon as IR exists; Mosaic split (5) unblocks HTML confi
 |------|------------|
 | MetricFlow / semantic API churn | Stable Chart `data.type: dbt_metric` shape; isolate in `@dvfc/resolve` |
 | Dual renderer drift (Mosaic vs VL) | Shared encoding IR; per-type capability flags; golden tests |
-| Big-bang rewrite | Adapter from `board.yaml`; phase Mosaic last among IR steps |
+| Big-bang rewrite | Phased IR + dash migration; Mosaic on Dash IR before public doc break |
 | Plugin security | Load only configured paths; no arbitrary remote code in default CI |
 
 ---
@@ -205,7 +205,7 @@ Compose (4) can start as soon as IR exists; Mosaic split (5) unblocks HTML confi
 
 1. Add `ChartSpec` / `DashSpec` / `DataRef` to `@dvfc/core` + JSON Schema.  
 2. Introduce chart type registry; wrap existing `line`/`bar` as modules.  
-3. Compat layer: load current `examples/*/board.yaml` as dashes.  
+3. Gallery examples on `*.dash.yaml` (legacy board removed from tree).  
 4. Spike `renderVegaLite` for `line` + `bar` → SVG.  
 5. Spike `dbt_metric` resolve against one MetricFlow-enabled fixture (or documented compile step).
 

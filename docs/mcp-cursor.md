@@ -6,7 +6,7 @@ This document explains how to use the `@dvfc/mcp` server with Cursor IDE to enab
 
 The Model Context Protocol (MCP) server exposes `dvfc` functionality to AI agents, allowing them to:
 
-- Validate chart (`*.chart.yaml`), dash (`*.dash.yaml`), and legacy board specs
+- Validate chart (`*.chart.yaml`) and dash (`*.dash.yaml`) specs
 - Build HTML, SVG, or PNG from specs
 - List dbt models from a manifest
 - Create, update, and search charts
@@ -236,7 +236,7 @@ Use these prompts in Cursor to verify the MCP server:
 ### ✅ 1. Validate a Dashboard
 
 ```
-Use dvfc MCP to validate examples/sales-board/board.yaml
+Use dvfc MCP to validate examples/sales-board/sales.dash.yaml
 ```
 
 Expected: Validation passes with schema and semantic checks.
@@ -252,7 +252,7 @@ Expected: Returns 1 mart model (`customer_orders`) and 3 seeds.
 ### ✅ 3. Explain Coordination
 
 ```
-Use dvfc MCP to explain coordination in examples/sales-board/board.yaml
+Use dvfc MCP to explain coordination in examples/sales-board/sales.dash.yaml
 ```
 
 Expected: Shows brush selections and which charts are filtered by each selection.
@@ -260,7 +260,7 @@ Expected: Shows brush selections and which charts are filtered by each selection
 ### ✅ 4. Create a Chart
 
 ```
-Use dvfc MCP to add a new bar chart to examples/sales-board/board.yaml:
+Use dvfc MCP to add a new bar chart to examples/sales-board/sales.dash.yaml:
 - id: new_chart
 - dataSource: sales_daily
 - x: product, y: revenue (sum)
@@ -271,7 +271,7 @@ Expected: Chart added to YAML file.
 ### ✅ 5. Build Dashboard
 
 ```
-Use dvfc MCP to build examples/sales-board/board.yaml to dist/test
+Use dvfc MCP to build examples/sales-board/sales.dash.yaml to dist/test
 ```
 
 Expected: Static HTML dashboard built successfully.
@@ -279,7 +279,7 @@ Expected: Static HTML dashboard built successfully.
 ### ✅ 6. Search Charts
 
 ```
-Use dvfc MCP to search for all charts with type "line" in examples/sales-board/board.yaml
+Use dvfc MCP to search for all charts with type "line" in examples/sales-board/sales.dash.yaml
 ```
 
 Expected: Returns matching chart specs.
@@ -291,7 +291,7 @@ Use dvfc MCP to wire a filter from chart "daily_sales" (selection: "dateBrush")
 to filter charts ["revenue_by_region", "top_products"]
 ```
 
-Expected: `board.yaml` updated with brush and filterBy interactions.
+Expected: `sales.dash.yaml` updated with brush and filterBy interactions.
 
 ### ✅ 8. Update Chart
 
@@ -312,7 +312,7 @@ Expected: Returns multiple hits from different boards (dbt-jaffle, web-analytics
 ### ✅ 10. Get Chart
 
 ```
-Use dvfc MCP to get chart metadata for "daily_revenue" from examples/dbt-jaffle/board.yaml
+Use dvfc MCP to get chart metadata for "daily_revenue" from examples/dbt-jaffle/jaffle.dash.yaml
 ```
 
 Expected: Returns full chart spec with board context (data sources, theme, layout).
@@ -320,7 +320,7 @@ Expected: Returns full chart spec with board context (data sources, theme, layou
 ### ✅ 11. List Charts
 
 ```
-Use dvfc MCP to list all charts in examples/sales-board/board.yaml
+Use dvfc MCP to list all charts in examples/sales-board/sales.dash.yaml
 ```
 
 Expected: Returns all charts in the board with display keys.
@@ -339,7 +339,7 @@ Expected: Returns composed board YAML with both charts and merged data sources.
 ### ✅ 13. Render Chart
 
 ```
-Use dvfc MCP to render only the "daily_revenue" chart from examples/dbt-jaffle/board.yaml
+Use dvfc MCP to render only the "daily_revenue" chart from examples/dbt-jaffle/jaffle.dash.yaml
 ```
 
 Expected: Builds HTML with single chart while preserving board context.

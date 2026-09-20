@@ -1,4 +1,4 @@
-# Dash IR (canonical). Legacy board.yaml is deprecated; use this file for validate/preview/build.
+# Dash IR (canonical). Use this file for validate, preview, and build.
 
 id: revenue-analysis
 title: Revenue Analysis with Insights

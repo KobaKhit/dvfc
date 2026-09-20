@@ -8,7 +8,7 @@ This example demonstrates a complete working dashboard with Mosaic crossfilterin
 ✅ **Time-based crossfiltering** via Mosaic selections  
 ✅ **dbt integration** with manifest.json and ref() lookups  
 ✅ **Static HTML export** that works offline with DuckDB-WASM  
-✅ **Dashboard spec** (board.yaml) showing declarative configuration
+✅ **Dashboard spec** (*.dash.yaml) showing declarative configuration
 
 ## Quick Start
 
@@ -50,7 +50,7 @@ pnpm preview
 
 ## Files
 
-- `board.yaml` - Dashboard specification (shows target format for v0.1)
+- `*.dash.yaml` - Dashboard specification (shows target format for v0.1)
 - `src/main.ts` - Current Mosaic implementation (manual)
 - `src/index.html` - HTML entry point
 - `dbt-stub/manifest.json` - Fake dbt manifest
@@ -66,7 +66,7 @@ Data comes from dbt-style models referenced in the manifest:
 ## Architecture
 
 ```
-board.yaml
+*.dash.yaml
     ↓
 (Future: CLI renders to Mosaic code)
     ↓
@@ -76,7 +76,7 @@ Interactive dashboard with crossfiltering
 ```
 
 **Current state:** Manual Mosaic code in `src/main.ts`  
-**v0.1 goal:** CLI reads `board.yaml` and generates the Mosaic code automatically
+**v0.1 goal:** CLI reads `*.dash.yaml` and generates the Mosaic code automatically
 
 ## Technologies
 

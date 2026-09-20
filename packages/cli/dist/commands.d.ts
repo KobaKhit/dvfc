@@ -9,7 +9,7 @@ export interface InitOptions {
     outFile?: string;
 }
 /**
- * Init command - scaffold a new dashboard from dbt manifest
+ * Init command - scaffold a new dash from dbt manifest
  */
 export declare function init(options?: InitOptions): Promise<void>;
 export interface PreviewOptions {
@@ -32,7 +32,7 @@ export interface ExportPdfOptions {
  */
 export declare function exportPdf(specPath: string, options?: ExportPdfOptions): Promise<void>;
 /**
- * Validate command - chart, dash, or legacy board
+ * Validate command - chart or dash
  */
 export declare function validate(specPath: string): Promise<boolean>;
 /**

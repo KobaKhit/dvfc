@@ -54,10 +54,10 @@ git checkout -b fix/issue-description
 pnpm test
 
 # Validate examples
-dvfc validate examples/sales-board/board.yaml
+dvfc validate examples/sales-board/sales.dash.yaml
 
 # Build example
-dvfc build examples/sales-board/board.yaml -o /tmp/test-build
+dvfc build examples/sales-board/sales.dash.yaml -o /tmp/test-build
 
 # Full dogfood suite
 pnpm dogfood
@@ -180,7 +180,7 @@ packages/charts/test/*.test.js
 scripts/dogfood.sh
 
 # Example validation
-dvfc validate examples/*/board.yaml
+dvfc validate examples/*/*.dash.yaml
 ```
 
 ## Bug Reports
@@ -191,7 +191,7 @@ When reporting bugs, include:
 2. **Steps to Reproduce**: Minimal example
 3. **Environment**: OS, Node version, pnpm version
 4. **Error Messages**: Full stack traces
-5. **board.yaml**: If applicable, a minimal board spec
+5. ***.dash.yaml**: If applicable, a minimal board spec
 
 ## Feature Requests
 

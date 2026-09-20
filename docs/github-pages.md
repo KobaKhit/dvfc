@@ -23,7 +23,7 @@ The GitHub Actions workflow (`.github/workflows/pages.yml`) runs on every push t
 1. **Install dependencies**: `pnpm install` + `pnpm build`
 2. **Build examples**: For each example, runs:
    ```bash
-   node packages/cli/dist/cli.js build examples/<name>/board.yaml \
+   node packages/cli/dist/cli.js build examples/<name>/*.dash.yaml \
      -o site/examples/<name> \
      --base /dvfc/
    ```
@@ -74,7 +74,7 @@ The `scripts/build-site.sh` script builds the entire GitHub Pages site:
 ```
 
 This script:
-1. Builds each example via CLI: `dvfc build <board.yaml> -o site/examples/<name> --base /dvfc/examples/<name>/`
+1. Builds each example via CLI: `dvfc build <*.dash.yaml> -o site/examples/<name> --base /dvfc/examples/<name>/`
 2. Copies marketing pages from `site-src/` (index.html, charts.html)
 3. Verifies no hardcoded `/dbt-stub/` paths exist
 4. Confirms all examples have `data/` directories with CSV files
@@ -149,7 +149,7 @@ pnpm build
 ./scripts/build-site.sh  # (if you create one)
 
 # Or manually:
-node packages/cli/dist/cli.js build examples/sales-board/board.yaml -o site/examples/sales-board --base /dvfc/
+node packages/cli/dist/cli.js build examples/sales-board/sales.dash.yaml -o site/examples/sales-board --base /dvfc/
 # ... repeat for other examples
 
 # Preview locally with base path
@@ -255,7 +255,7 @@ The workflow runs on every push to `main` and can be triggered manually via `wor
 
 ## Adding a New Example
 
-1. Create `examples/<name>/board.yaml`
+1. Create `examples/<name>/*.dash.yaml`
 2. Create `examples/<name>/dbt-stub/` with CSV files
 3. Add the example name to `scripts/build-site.sh` in the `examples` array
 4. Update `site-src/index.html` to link to the new example

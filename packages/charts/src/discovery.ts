@@ -42,7 +42,7 @@ export function parseDisplayKey(displayKey: string): { boardName: string; chartI
  */
 async function loadSpec(filePath: string): Promise<DashboardSpec> {
   const content = await readFile(filePath, 'utf-8');
-  const { interpretSpec, boardToDash, listInlineCharts, isDashChartRef } = await import('@dvfc/core');
+  const { interpretSpec, listInlineCharts, isDashChartRef } = await import('@dvfc/core');
   const { parse: parseYAML } = await import('yaml');
 
   let raw: unknown;
@@ -53,7 +53,6 @@ async function loadSpec(filePath: string): Promise<DashboardSpec> {
   }
 
   const parsed = interpretSpec(raw, { path: filePath });
-  if (parsed.kind === 'board') return parsed.board;
   if (parsed.kind === 'chart') {
     return {
       meta: { title: parsed.chart.title || parsed.chart.id, version: '0.1.0' },
@@ -111,10 +110,10 @@ async function loadSpec(filePath: string): Promise<DashboardSpec> {
 export async function searchCharts(options: SearchOptions): Promise<ChartHit[]> {
   const { projectRoot, query, boardPath, all = false, caseSensitive = false } = options;
   
-  // Find all board / dash / chart files
-  const pattern = boardPath 
-    ? boardPath 
-    : '**/{board,dashboard,*.board,*.dashboard,*.dash,*.chart}.{yaml,yml,json}';
+  // Find all dash / chart files
+  const pattern = boardPath
+    ? boardPath
+    : '**/{*.dash,*.chart}.{yaml,yml,json}';
   
   const files = await glob(pattern, {
     cwd: projectRoot,
@@ -122,23 +121,7 @@ export async function searchCharts(options: SearchOptions): Promise<ChartHit[]> 
     ignore: ['node_modules/**', 'dist/**', '.git/**']
   });
 
-  // Prefer *.dash.yaml over deprecated board.yaml in the same directory
-  const dashDirs = new Set(
-    files.filter((f) => /\.dash\.(yaml|yml|json)$/i.test(f)).map((f) => dirname(f))
-  );
-  const filteredFiles = files.filter((f) => {
-    const base = basename(f).toLowerCase();
-    const isLegacyBoard =
-      base === 'board.yaml' ||
-      base === 'board.yml' ||
-      base === 'board.json' ||
-      base === 'dashboard.yaml' ||
-      base === 'dashboard.yml';
-    if (isLegacyBoard && dashDirs.has(dirname(f))) {
-      return false;
-    }
-    return true;
-  });
+  const filteredFiles = files;
   
   const hits: ChartHit[] = [];
   const searchQuery = caseSensitive ? query : query.toLowerCase();

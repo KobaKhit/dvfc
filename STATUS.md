@@ -14,14 +14,14 @@
 
 | Feature | Status | Command |
 |---------|--------|---------|
-| **Validate specs** | ✅ Working | `dvfc validate board.yaml` |
-| **Preview with hot reload** | ✅ Working | `dvfc preview board.yaml` |
-| **Build static HTML** | ✅ Working | `dvfc build board.yaml` |
-| **Build single chart** | ✅ Working | `dvfc build board.yaml --chart id` |
+| **Validate specs** | ✅ Working | `dvfc validate *.dash.yaml` |
+| **Preview with hot reload** | ✅ Working | `dvfc preview *.dash.yaml` |
+| **Build static HTML** | ✅ Working | `dvfc build *.dash.yaml` |
+| **Build single chart** | ✅ Working | `dvfc build *.dash.yaml --chart id` |
 | **Init from dbt** | ✅ Working | `dvfc init --from-dbt` |
-| **Export to PDF** | ✅ Working | `dvfc export-pdf board.yaml` |
+| **Export to PDF** | ✅ Working | `dvfc export-pdf *.dash.yaml` |
 | **Search charts** | ✅ Working | `dvfc charts search query` |
-| **Get chart metadata** | ✅ Working | `dvfc charts get board.yaml id` |
+| **Get chart metadata** | ✅ Working | `dvfc charts get *.dash.yaml id` |
 | **List charts** | ✅ Working | `dvfc charts list [--board path]` |
 | **Compose boards** | ✅ Working | `dvfc charts compose --charts id,id` |
 | **MCP server** | ✅ Working | `pnpm mcp` (13 tools) |
@@ -92,7 +92,7 @@ pnpm build
 ### 2. Validate a Dashboard (5 seconds)
 
 ```bash
-pnpm exec dvfc validate examples/sales-board/board.yaml
+pnpm exec dvfc validate examples/sales-board/sales.dash.yaml
 ```
 
 **Output:**
@@ -106,7 +106,7 @@ pnpm exec dvfc validate examples/sales-board/board.yaml
 ### 3. Preview with Hot Reload (10 seconds)
 
 ```bash
-pnpm exec dvfc preview examples/sales-board/board.yaml
+pnpm exec dvfc preview examples/sales-board/sales.dash.yaml
 ```
 
 **Opens:** http://localhost:3000  
@@ -118,7 +118,7 @@ pnpm exec dvfc preview examples/sales-board/board.yaml
 ### 4. Build Static HTML (5 seconds)
 
 ```bash
-pnpm exec dvfc build examples/sales-board/board.yaml --out-dir dist
+pnpm exec dvfc build examples/sales-board/sales.dash.yaml --out-dir dist
 ```
 
 **Output:** `dist/index.html` (self-contained, ~696KB)
@@ -136,10 +136,10 @@ pnpm exec dvfc build examples/sales-board/board.yaml --out-dir dist
 
 ```bash
 # Preview
-pnpm exec dvfc preview examples/sales-board/board.yaml
+pnpm exec dvfc preview examples/sales-board/sales.dash.yaml
 
 # Build
-pnpm exec dvfc build examples/sales-board/board.yaml --out-dir dist/sales
+pnpm exec dvfc build examples/sales-board/sales.dash.yaml --out-dir dist/sales
 ```
 
 ### Example 2: Web Analytics Dashboard
@@ -149,10 +149,10 @@ pnpm exec dvfc build examples/sales-board/board.yaml --out-dir dist/sales
 
 ```bash
 # Preview
-pnpm exec dvfc preview examples/web-analytics/board.yaml
+pnpm exec dvfc preview examples/web-analytics/web-analytics.dash.yaml
 
 # Build
-pnpm exec dvfc build examples/web-analytics/board.yaml --out-dir dist/web
+pnpm exec dvfc build examples/web-analytics/web-analytics.dash.yaml --out-dir dist/web
 ```
 
 ### Example 3: dbt Jaffle Shop
@@ -162,13 +162,13 @@ pnpm exec dvfc build examples/web-analytics/board.yaml --out-dir dist/web
 
 ```bash
 # Validate
-pnpm exec dvfc validate examples/dbt-jaffle/board.yaml
+pnpm exec dvfc validate examples/dbt-jaffle/jaffle.dash.yaml
 
 # Preview
-pnpm exec dvfc preview examples/dbt-jaffle/board.yaml
+pnpm exec dvfc preview examples/dbt-jaffle/jaffle.dash.yaml
 
 # Build
-pnpm exec dvfc build examples/dbt-jaffle/board.yaml --out-dir dist/jaffle
+pnpm exec dvfc build examples/dbt-jaffle/jaffle.dash.yaml --out-dir dist/jaffle
 
 # Generate from dbt
 cd examples/dbt-jaffle
@@ -208,7 +208,7 @@ dvfc init [--from-dbt] [--manifest-path <path>] [-o <file>]
 **Example:**
 ```bash
 cd my-dbt-project
-dvfc init --from-dbt --manifest-path target/manifest.json -o board.yaml
+dvfc init --from-dbt --manifest-path target/manifest.json -o *.dash.yaml
 ```
 
 ### Preview
@@ -247,12 +247,12 @@ dvfc export-pdf <spec.yaml> [-o dashboard.pdf] [--no-browser]
 **Automated (with Playwright):**
 ```bash
 npm install -D playwright
-dvfc export-pdf board.yaml -o report.pdf
+dvfc export-pdf *.dash.yaml -o report.pdf
 ```
 
 **Manual (browser print):**
 ```bash
-dvfc export-pdf board.yaml --no-browser
+dvfc export-pdf *.dash.yaml --no-browser
 # Follow printed instructions
 ```
 
@@ -413,11 +413,11 @@ Find, inspect, and compose charts across dvfc dashboards.
 dvfc charts search revenue
 
 # Get chart metadata
-dvfc charts get examples/dbt-jaffle/board.yaml daily_revenue --format json
+dvfc charts get examples/dbt-jaffle/jaffle.dash.yaml daily_revenue --format json
 
 # List all charts
 dvfc charts list
-dvfc charts list --board examples/sales-board/board.yaml
+dvfc charts list --board examples/sales-board/sales.dash.yaml
 
 # Compose from multiple boards
 dvfc charts compose \
@@ -426,7 +426,7 @@ dvfc charts compose \
   -o composed.yaml
 
 # Build single chart
-dvfc build examples/sales-board/board.yaml --chart daily_sales -o dist-single
+dvfc build examples/sales-board/sales.dash.yaml --chart daily_sales -o dist-single
 ```
 
 ### Disambiguation
@@ -553,7 +553,7 @@ dvfc/
 ### Data Flow
 
 ```
-board.yaml
+*.dash.yaml
     ↓
 CLI validate (JSON Schema + semantic)
     ↓
@@ -619,15 +619,15 @@ charts:
 ### Validate Examples
 
 ```bash
-pnpm exec dvfc validate examples/sales-board/board.yaml
-pnpm exec dvfc validate examples/web-analytics/board.yaml
+pnpm exec dvfc validate examples/sales-board/sales.dash.yaml
+pnpm exec dvfc validate examples/web-analytics/web-analytics.dash.yaml
 ```
 
 ### Build Examples
 
 ```bash
-pnpm exec dvfc build examples/sales-board/board.yaml --out-dir test-sales
-pnpm exec dvfc build examples/web-analytics/board.yaml --out-dir test-web
+pnpm exec dvfc build examples/sales-board/sales.dash.yaml --out-dir test-sales
+pnpm exec dvfc build examples/web-analytics/web-analytics.dash.yaml --out-dir test-web
 ```
 
 ### Test MCP Server
@@ -647,10 +647,10 @@ node packages/mcp/dist/server.js
 pnpm exec dvfc charts search revenue
 
 # List charts in board
-pnpm exec dvfc charts list --board examples/dbt-jaffle/board.yaml
+pnpm exec dvfc charts list --board examples/dbt-jaffle/jaffle.dash.yaml
 
 # Get chart metadata
-pnpm exec dvfc charts get examples/dbt-jaffle/board.yaml daily_revenue
+pnpm exec dvfc charts get examples/dbt-jaffle/jaffle.dash.yaml daily_revenue
 
 # Compose board from charts
 pnpm exec dvfc charts compose \
@@ -658,7 +658,7 @@ pnpm exec dvfc charts compose \
   -o test-composed.yaml
 
 # Build single chart
-pnpm exec dvfc build examples/dbt-jaffle/board.yaml \
+pnpm exec dvfc build examples/dbt-jaffle/jaffle.dash.yaml \
   --chart daily_revenue -o test-single
 ```
 
@@ -705,7 +705,7 @@ pnpm test
 ### Validation Errors
 
 **Issue:** "dbt model not found"  
-**Fix:** Ensure `dbt-stub/manifest.json` and CSVs exist next to board.yaml
+**Fix:** Ensure `dbt-stub/manifest.json` and CSVs exist next to *.dash.yaml
 
 **Issue:** "Selection not found"  
 **Fix:** Check that `selection: "name"` matches `filterBy: "name"`

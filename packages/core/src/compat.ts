@@ -1,17 +1,11 @@
 /**
- * Legacy board.yaml → DashIR adapter
+ * Internal Mosaic runtime shape helpers.
+ * DashboardSpec remains the normalized Mosaic generator input (not a user-facing "board" file).
  */
 
 import type { DashboardSpec, ChartSpec } from './types.js';
 import type { ChartIR, DashIR } from './ir.js';
 import { isDashChartRef } from './ir.js';
-
-export interface BoardToDashOptions {
-  /** Dash id (default: derived from meta.title slug or "board") */
-  id?: string;
-  /** Enable auto coordination when any brush selections exist */
-  autoCoordination?: boolean;
-}
 
 function slugify(input: string): string {
   return (
@@ -23,52 +17,6 @@ function slugify(input: string): string {
   );
 }
 
-function legacyChartToIR(chart: ChartSpec): ChartIR {
-  const interaction = chart.interaction
-    ? {
-        ...chart.interaction,
-        publishes: chart.interaction.selection ?? undefined,
-      }
-    : undefined;
-
-  return {
-    id: chart.id,
-    type: chart.type,
-    title: chart.title,
-    dataSource: chart.dataSource,
-    encoding: chart.encoding,
-    content: chart.content,
-    interaction,
-    overlays: chart.overlays,
-    width: chart.width,
-    height: chart.height,
-  };
-}
-
-/**
- * Convert a v0.5 DashboardSpec (board) into a DashIR with inline charts.
- */
-export function boardToDash(board: DashboardSpec, options: BoardToDashOptions = {}): DashIR {
-  const id =
-    options.id ?? (board.meta?.title ? slugify(String(board.meta.title)) : 'board');
-
-  const hasSelections = board.charts.some((c) => c.interaction?.selection);
-  const auto = options.autoCoordination ?? hasSelections;
-
-  return {
-    id,
-    title: board.meta?.title,
-    description: board.meta?.description,
-    version: board.meta?.version,
-    meta: { ...board.meta },
-    data: board.data,
-    charts: board.charts.map(legacyChartToIR),
-    layout: board.layout,
-    theme: board.theme,
-    coordination: auto ? { auto: true } : undefined,
-  };
-}
-
 /**
  * Flatten dash chart entries that are inline ChartIR (refs left unresolved).
  */
@@ -77,15 +25,14 @@ export function listInlineCharts(dash: DashIR): ChartIR[] {
 }
 
 /**
- * Convert a DashIR with only inline legacy-style charts (dataSource + dash.data)
- * back to DashboardSpec for the current Mosaic generator.
- * Throws if the dash uses chart refs or connector `data` bindings.
+ * Convert a DashIR with only inline charts (dataSource + dash.data)
+ * to DashboardSpec for the Mosaic generator.
  */
-export function dashToBoard(dash: DashIR): DashboardSpec {
+export function dashToDashboardSpec(dash: DashIR): DashboardSpec {
   const refs = dash.charts.filter((c) => isDashChartRef(c));
   if (refs.length > 0) {
     throw new Error(
-      `Dash '${dash.id}' has chart refs; resolve/compose before Mosaic preview/build (Phase 4+)`
+      `Dash '${dash.id}' has chart refs; resolve them before Mosaic preview/build`
     );
   }
 
@@ -93,12 +40,12 @@ export function dashToBoard(dash: DashIR): DashboardSpec {
   for (const c of inline) {
     if (c.data && !c.dataSource) {
       throw new Error(
-        `Chart '${c.id}' uses data connector; Mosaic preview still expects dataSource + dash.data (Phase 3+)`
+        `Chart '${c.id}' uses data connector; normalize connectors before Mosaic path`
       );
     }
     if (c.type === 'text') continue;
     if (!c.dataSource) {
-      throw new Error(`Chart '${c.id}' missing dataSource for legacy Mosaic path`);
+      throw new Error(`Chart '${c.id}' missing dataSource for Mosaic path`);
     }
   }
 
@@ -131,4 +78,12 @@ export function dashToBoard(dash: DashIR): DashboardSpec {
     layout: dash.layout,
     theme: dash.theme,
   };
+}
+
+/** @deprecated Use dashToDashboardSpec */
+export const dashToBoard = dashToDashboardSpec;
+
+/** Suggest a dash id from a title */
+export function suggestDashId(title: string): string {
+  return slugify(title);
 }

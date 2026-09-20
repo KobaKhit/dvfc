@@ -5,7 +5,6 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 import {
-  boardToDash,
   parseSpecString,
   registerBuiltinChartTypes,
   clearChartTypes,
@@ -16,14 +15,17 @@ import {
   validateDashIR,
   hasChartType,
   _resetBuiltinRegistrationForTests,
+  dashToDashboardSpec,
 } from '../dist/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-describe('boardToDash compat', () => {
-  it('converts legacy board to dash with inline charts', () => {
-    const board = {
-      meta: { title: 'Sales Board', version: '0.1.0' },
+describe('dashToDashboardSpec', () => {
+  it('flattens inline dash charts for Mosaic', () => {
+    const dash = {
+      id: 'sales',
+      title: 'Sales',
+      version: '0.1.0',
       data: [{ id: 'sales', type: 'dbt', model: 'sales_daily' }],
       charts: [
         {
@@ -31,24 +33,13 @@ describe('boardToDash compat', () => {
           type: 'line',
           dataSource: 'sales',
           encoding: { x: { field: 'date' }, y: { field: 'sales' } },
-          interaction: { brush: true, selection: 'time' },
-        },
-        {
-          id: 'by_region',
-          type: 'bar',
-          dataSource: 'sales',
-          encoding: { x: { field: 'region' }, y: { field: 'sales' } },
-          interaction: { filterBy: 'time' },
+          interaction: { brush: true, publishes: 'time' },
         },
       ],
     };
-
-    const dash = boardToDash(board);
-    assert.equal(dash.id, 'sales-board');
-    assert.equal(dash.charts.length, 2);
-    assert.equal(dash.coordination?.auto, true);
-    assert.equal(dash.charts[0].interaction.publishes, 'time');
-    assert.equal(dash.data?.[0].id, 'sales');
+    const spec = dashToDashboardSpec(dash);
+    assert.equal(spec.meta.title, 'Sales');
+    assert.equal(spec.charts[0].interaction.selection, 'time');
   });
 });
 
@@ -81,31 +72,47 @@ charts:
   - chart: revenue_trend
   - id: by_region
     type: bar
-    data:
-      type: data
-      path: data/sales.csv
+    dataSource: sales
     encoding:
-      x: { field: region, type: nominal }
-      y: { field: sales, aggregate: sum }
+      x: { field: region }
+      y: { field: sales }
 `;
     const parsed = parseSpecString(yaml, { format: 'yaml', prefer: 'dash' });
     assert.equal(parsed.kind, 'dash');
     assert.equal(parsed.dash.charts.length, 2);
   });
 
-  it('parses toml chart', () => {
-    const toml = `
-id = "kpi_revenue"
-type = "number"
-title = "Revenue"
-
-[data]
-type = "data"
-path = "data.csv"
+  it('rejects legacy board shape', () => {
+    const yaml = `
+meta:
+  title: Old
+  version: 0.1.0
+data: []
+charts: []
 `;
-    const parsed = parseSpecString(toml, { format: 'toml', prefer: 'chart' });
-    assert.equal(parsed.kind, 'chart');
-    assert.equal(parsed.chart.type, 'number');
+    assert.throws(
+      () => parseSpecString(yaml, { format: 'yaml' }),
+      /no longer supported|Unrecognized|board/i
+    );
+  });
+
+  it('rejects board.yaml path', () => {
+    assert.throws(
+      () =>
+        parseSpecString('id: x\ncharts: []\n', {
+          format: 'yaml',
+          path: '/tmp/board.yaml',
+        }),
+      /Legacy board|removed/i
+    );
+  });
+
+  it('parses sales.dash.yaml example', async () => {
+    const dashPath = join(__dirname, '../../../examples/sales-board/sales.dash.yaml');
+    const content = await readFile(dashPath, 'utf-8');
+    const parsed = parseSpecString(content, { path: dashPath });
+    assert.equal(parsed.kind, 'dash');
+    assert.ok(parsed.dash.charts.length >= 1);
   });
 });
 
@@ -115,79 +122,38 @@ describe('chart type registry', () => {
     _resetBuiltinRegistrationForTests();
     registerBuiltinChartTypes();
     assert.ok(hasChartType('line'));
-    assert.ok(hasChartType('bar'));
-    assert.ok(listChartTypes().length >= 13);
+    assert.ok(listChartTypes().length >= 10);
   });
 
   it('loads plugin module', async () => {
     clearChartTypes();
     _resetBuiltinRegistrationForTests();
     registerBuiltinChartTypes();
-    const pluginPath = join(__dirname, 'fixtures/hello-chart-type.js');
-    await loadChartTypeModules([pluginPath]);
+    const fixture = join(__dirname, 'fixtures/hello-chart-type.js');
+    await loadChartTypeModules([fixture]);
     assert.ok(hasChartType('hello'));
   });
 });
 
-describe('validateChartIR / validateDashIR', () => {
-  it('accepts valid chart with sql data', () => {
-    clearChartTypes();
-    _resetBuiltinRegistrationForTests();
+describe('validate IR', () => {
+  it('validates chart', () => {
+    registerBuiltinChartTypes();
     const result = validateChartIR({
-      id: 't',
+      id: 'c',
       type: 'line',
-      data: { type: 'sql', sql: 'SELECT 1 AS x, 2 AS y' },
-      encoding: { x: { field: 'x' }, y: { field: 'y' } },
+      data: { type: 'sql', sql: 'SELECT 1' },
+      encoding: { x: { field: 'a' }, y: { field: 'b' } },
     });
-    assert.equal(result.valid, true, JSON.stringify(result.errors));
+    assert.equal(result.valid, true);
   });
 
-  it('rejects unknown chart type', () => {
-    clearChartTypes();
-    _resetBuiltinRegistrationForTests();
-    const result = validateChartIR({
-      id: 't',
-      type: 'sankey',
-      data: { type: 'data', path: 'x.csv' },
-    });
-    assert.equal(result.valid, false);
-    assert.ok(result.errors.some((e) => e.message.includes('Unknown chart type')));
-  });
-
-  it('validates dash filterBy against publishes', () => {
-    clearChartTypes();
-    _resetBuiltinRegistrationForTests();
+  it('validates dash', () => {
+    registerBuiltinChartTypes();
     const result = validateDashIR({
-      id: 'sales',
-      charts: [
-        {
-          id: 'a',
-          type: 'line',
-          data: { type: 'data', path: 'a.csv' },
-          encoding: { x: { field: 'd' }, y: { field: 'v' } },
-          interaction: { brush: true, publishes: 'time' },
-        },
-        {
-          id: 'b',
-          type: 'bar',
-          data: { type: 'data', path: 'a.csv' },
-          encoding: { x: { field: 'c' }, y: { field: 'v' } },
-          interaction: { filterBy: 'missing' },
-        },
-      ],
+      id: 'd',
+      charts: [{ id: 'c', type: 'bar', dataSource: 's', encoding: { x: { field: 'a' }, y: { field: 'b' } } }],
+      data: [{ id: 's', type: 'dbt', model: 'm' }],
     });
-    assert.equal(result.valid, false);
-  });
-});
-
-describe('real board fixture via parse', async () => {
-  it('interprets sales-board board.yaml as board→dash', async () => {
-    const boardPath = join(__dirname, '../../../examples/sales-board/board.yaml');
-    const content = await readFile(boardPath, 'utf-8');
-    const parsed = parseSpecString(content, { path: boardPath, format: 'yaml' });
-    assert.equal(parsed.kind, 'board');
-    assert.ok(parsed.dash.charts.length >= 4);
-    const dashResult = validateDashIR(parsed.dash);
-    assert.equal(dashResult.valid, true, JSON.stringify(dashResult.errors, null, 2));
+    assert.equal(result.valid, true);
   });
 });

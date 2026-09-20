@@ -56,8 +56,7 @@ jobs:
         node packages/cli/dist/cli.js validate examples/sales-board/sales.dash.yaml
         node packages/cli/dist/cli.js validate examples/web-analytics/web-analytics.dash.yaml
         node packages/cli/dist/cli.js validate examples/dbt-jaffle/jaffle.dash.yaml
-        # Legacy board still accepted (deprecated)
-        node packages/cli/dist/cli.js validate examples/sales-board/board.yaml
+        node packages/cli/dist/cli.js validate examples/revenue-analysis/revenue-analysis.dash.yaml
 
     - name: Test chart discovery + compose
       run: |

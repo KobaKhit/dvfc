@@ -10,7 +10,6 @@ import {
   searchCharts,
   getChart,
   listCharts,
-  composeBoard,
   resolveChartRef,
   composeDash,
   extractChartsFromDash,
@@ -155,61 +154,38 @@ export interface ComposeOptions {
 }
 
 /**
- * Compose ephemeral board from chart IDs
+ * Compose dash from chart IDs (charts compose → dash IR)
  */
 export async function composeCommand(options: ComposeOptions): Promise<void> {
   const projectRoot = process.cwd();
-  
-  const chartIds = options.charts.split(',').map(s => s.trim());
-  
-  console.log(`🎨 Composing board from ${chartIds.length} chart(s)...\n`);
-  
-  // Resolve chart references
-  const chartRefs = [];
+  const chartIds = options.charts.split(',').map((s) => s.trim());
+  console.log(`🎨 Composing dash from ${chartIds.length} chart(s)...\n`);
+
   for (const id of chartIds) {
     try {
       const ref = await resolveChartRef(projectRoot, id);
       console.log(`✓ Resolved ${id} → ${ref.displayKey}`);
-      chartRefs.push(ref);
     } catch (error) {
-      console.error(`✗ Failed to resolve ${id}:`, error instanceof Error ? error.message : String(error));
+      console.error(
+        `✗ Failed to resolve ${id}:`,
+        error instanceof Error ? error.message : String(error)
+      );
       process.exit(1);
     }
   }
-  
-  console.log();
-  
-  // Compose board
-  const spec = await composeBoard(projectRoot, {
-    charts: chartRefs,
-    metric: options.metric,
-    title: options.title,
-    description: options.description
-  });
-  
-  const outFile = options.outFile || 'composed-board.yaml';
-  await writeFile(outFile, stringifyYAML(spec));
-  
-  console.log(`✅ Composed board saved to: ${outFile}`);
 
-  // Also write modern dash form
-  const dashOut = outFile.replace(/board\.yaml$/, 'dash.yaml').replace(/\.yaml$/, '.dash.yaml');
-  try {
-    const { outPath } = await composeDash(projectRoot, {
-      chartIds,
-      title: options.title,
-      description: options.description,
-      outFile: dashOut.endsWith('.dash.yaml') ? dashOut : `${dashOut.replace(/\.yaml$/, '')}.dash.yaml`,
-    });
-    console.log(`✅ Composed dash saved to: ${outPath}`);
-  } catch (e) {
-    console.warn('⚠️  Dash compose skipped:', e instanceof Error ? e.message : e);
-  }
-  
+  const outFile = options.outFile || 'composed.dash.yaml';
+  const { outPath } = await composeDash(projectRoot, {
+    chartIds,
+    title: options.title,
+    description: options.description,
+    outFile,
+  });
+  console.log(`\n✅ Wrote ${outPath}`);
   console.log(`\nNext steps:`);
-  console.log(`  dvfc validate ${outFile}`);
-  console.log(`  dvfc preview ${outFile}`);
-  console.log(`  dvfc build ${outFile}\n`);
+  console.log(`  dvfc validate ${outPath}`);
+  console.log(`  dvfc preview ${outPath}`);
+  console.log(`  dvfc build ${outPath}\n`);
 }
 
 export async function composeDashCommand(options: ComposeOptions): Promise<void> {

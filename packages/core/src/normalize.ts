@@ -29,7 +29,7 @@ export interface ResolvedRelation {
 export interface NormalizeResult {
   spec: DashboardSpec;
   assets: FileAsset[];
-  kind: 'chart' | 'dash' | 'board';
+  kind: 'chart' | 'dash';
 }
 
 export interface NormalizeOptions {
@@ -208,22 +208,13 @@ export async function resolveDataRef(
       };
     }
     case 'dbt_metric': {
-      const candidates = [
-        join(opts.specDir, 'semantic', `${ref.metric}.sql`),
-        join(opts.specDir, 'metrics', `${ref.metric}.sql`),
-        join(opts.projectRoot ?? opts.specDir, 'semantic', `${ref.metric}.sql`),
-        join(dbtStub, 'semantic', `${ref.metric}.sql`),
-      ];
-      for (const p of candidates) {
-        if (await fileExists(p)) {
-          const sql = await readFile(p, 'utf-8');
-          return resolveDataRef({ type: 'sql', sql }, id, opts);
-        }
-      }
-      throw new Error(
-        `dbt_metric '${ref.metric}' not resolved. Export compiled SQL to semantic/${ref.metric}.sql ` +
-          `(dvfc does not invent a metric language — use dbt semantic layer / MetricFlow).`
-      );
+      const { compileDbtMetricSql } = await import('./metricflow.js');
+      const { sql } = await compileDbtMetricSql(ref, {
+        specDir: opts.specDir,
+        projectRoot: opts.projectRoot,
+        dbtStubDir: dbtStub,
+      });
+      return resolveDataRef({ type: 'sql', sql }, id, opts);
     }
     default:
       throw new Error(`Unknown data ref type`);
@@ -326,22 +317,6 @@ export async function normalizeToDashboard(
   const projectRoot = opts.projectRoot ?? opts.specDir;
   const assets: FileAsset[] = [];
   const dataAcc = new Map<string, ResolvedRelation>();
-
-  if (parsed.kind === 'board') {
-    // Legacy: collect dbt csv assets
-    for (const ds of parsed.board.data) {
-      if (ds.type === 'dbt' && ds.model) {
-        const absPath = join(opts.dbtStubDir ?? join(opts.specDir, 'dbt-stub'), `${ds.model}.csv`);
-        if (await fileExists(absPath)) {
-          assets.push({ absPath, destName: `${ds.id}.csv` });
-        }
-      } else if ((ds.type === 'csv' || ds.type === 'parquet') && ds.path) {
-        const absPath = resolvePath(opts.specDir, ds.path);
-        assets.push({ absPath, destName: `${ds.id}${extname(ds.path) || '.csv'}` });
-      }
-    }
-    return { spec: parsed.board, assets, kind: 'board' };
-  }
 
   if (parsed.kind === 'chart') {
     const chartOpts = { ...opts, specDir: opts.path ? dirname(opts.path) : opts.specDir };
@@ -479,5 +454,5 @@ export async function normalizeFile(
   });
 }
 
-/** Re-export for callers that only need legacy conversion without connectors */
-export { dashToBoard as legacyDashToBoard } from './compat.js';
+/** Re-export for callers that need dash → Mosaic DashboardSpec */
+export { dashToDashboardSpec as legacyDashToBoard } from './compat.js';

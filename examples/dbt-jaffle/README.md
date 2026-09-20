@@ -18,7 +18,7 @@ my-dbt-project/
 │   └── dashboard_data/            # Optional: exported CSVs for viz
 │       └── customer_orders.csv
 └── dvfc/                          # Dashboard configs
-    ├── board.yaml                 # Your dashboard spec
+    ├── *.dash.yaml                 # Your dashboard spec
     └── dbt-stub/                  # Symlink or copy
         ├── manifest.json          # → ../target/manifest.json
         └── *.csv                  # → ../seeds/dashboard_data/
@@ -30,7 +30,7 @@ my-dbt-project/
 
 ```
 dbt-jaffle/
-├── board.yaml          # Dashboard spec
+├── *.dash.yaml          # Dashboard spec
 └── dbt-stub/
     ├── manifest.json   # Real dbt manifest (simplified)
     └── customer_orders.csv  # Exported mart data
@@ -47,9 +47,9 @@ dbt-jaffle/
 
 ```bash
 # From repo root
-dvfc validate examples/dbt-jaffle/board.yaml
-dvfc preview examples/dbt-jaffle/board.yaml
-dvfc build examples/dbt-jaffle/board.yaml -o dist/jaffle
+dvfc validate examples/dbt-jaffle/jaffle.dash.yaml
+dvfc preview examples/dbt-jaffle/jaffle.dash.yaml
+dvfc build examples/dbt-jaffle/jaffle.dash.yaml -o dist/jaffle
 ```
 
 ## Testing init from dbt
@@ -60,8 +60,8 @@ This example can be regenerated using:
 cd examples/dbt-jaffle
 dvfc init --from-dbt -o board-generated.yaml
 
-# Compare with existing board.yaml
-diff board.yaml board-generated.yaml
+# Compare with existing *.dash.yaml
+diff *.dash.yaml board-generated.yaml
 ```
 
 The `init --from-dbt` command:
@@ -86,8 +86,8 @@ ln -s ../seeds/dashboard_data/*.csv dvfc/dbt-stub/
 
 # Generate dashboard
 cd dvfc
-dvfc init --from-dbt -o board.yaml
-dvfc preview board.yaml
+dvfc init --from-dbt -o *.dash.yaml
+dvfc preview *.dash.yaml
 ```
 
 ### Option B: Copy (for stable/versioned dashboards)
@@ -101,7 +101,7 @@ cp target/manifest.json dvfc/dbt-stub/
 cp seeds/dashboard_data/*.csv dvfc/dbt-stub/
 
 cd dvfc
-dvfc init --from-dbt -o board.yaml
+dvfc init --from-dbt -o *.dash.yaml
 ```
 
 ## Exporting Data from dbt

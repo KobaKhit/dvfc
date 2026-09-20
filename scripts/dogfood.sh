@@ -25,35 +25,35 @@ $CLI charts search revenue | head -20
 echo
 
 echo "List charts in dbt-jaffle..."
-$CLI charts list --board examples/dbt-jaffle/board.yaml | head -15
+$CLI charts list --board examples/dbt-jaffle/jaffle.dash.yaml | head -15
 echo
 
 echo "Get chart metadata..."
-$CLI charts get examples/dbt-jaffle/board.yaml daily_revenue --format json | head -10
+$CLI charts get examples/dbt-jaffle/jaffle.dash.yaml daily_revenue --format json | head -10
 echo
 
 echo -e "${GREEN}✓ Chart discovery${NC}"
 echo
 
-echo -e "${BLUE}2. Compose Board${NC}"
+echo -e "${BLUE}2. Compose Dash${NC}"
 echo "----------------"
 
-echo "Composing from multiple boards..."
+echo "Composing from multiple dashes..."
 $CLI charts compose \
   --charts dbt-jaffle__daily_revenue,web-analytics__daily_revenue \
   --title "Revenue Comparison (Dogfood Test)" \
   -o /tmp/dogfood-composed.yaml
 
-echo "✓ Composed board created (skipping validation - cross-board data refs)"
+echo "✓ Composed dash created (skipping validation - cross-dash data refs)"
 echo
 
-echo -e "${GREEN}✓ Compose board${NC}"
+echo -e "${GREEN}✓ Compose dash${NC}"
 echo
 
 echo -e "${BLUE}3. Validate Examples${NC}"
 echo "--------------------"
 
-for example in examples/sales-board/board.yaml examples/web-analytics/board.yaml examples/dbt-jaffle/board.yaml; do
+for example in examples/sales-board/sales.dash.yaml examples/web-analytics/web-analytics.dash.yaml examples/dbt-jaffle/jaffle.dash.yaml; do
   echo "Validating $example..."
   $CLI validate $example
 done
@@ -65,11 +65,11 @@ echo -e "${BLUE}4. Build Examples${NC}"
 echo "-----------------"
 
 echo "Building sales-board..."
-$CLI build examples/sales-board/board.yaml -o /tmp/dogfood-dist-sales
+$CLI build examples/sales-board/sales.dash.yaml -o /tmp/dogfood-dist-sales
 echo
 
 echo "Building single chart..."
-$CLI build examples/dbt-jaffle/board.yaml --chart daily_revenue -o /tmp/dogfood-dist-single
+$CLI build examples/dbt-jaffle/jaffle.dash.yaml --chart daily_revenue -o /tmp/dogfood-dist-single
 echo
 
 echo -e "${GREEN}✓ Build examples${NC}"
@@ -83,17 +83,17 @@ echo "Testing dbt-jaffle example..."
 echo "  Init from dbt manifest..."
 (cd examples/dbt-jaffle && node ../../packages/cli/dist/cli.js init --from-dbt -o /tmp/dogfood-dbt-init.yaml)
 
-echo "  Validate generated board..."
+echo "  Validate generated dash..."
 $CLI validate /tmp/dogfood-dbt-init.yaml | head -3
 
 echo "  Chart discovery on dbt project..."
-$CLI charts list --board examples/dbt-jaffle/board.yaml | head -8
+$CLI charts list --board examples/dbt-jaffle/jaffle.dash.yaml | head -8
 
 echo "  Search for specific charts..."
 $CLI charts search "revenue" | head -8
 
 echo "  Get chart metadata..."
-$CLI charts get examples/dbt-jaffle/board.yaml daily_revenue --format json | head -5
+$CLI charts get examples/dbt-jaffle/jaffle.dash.yaml daily_revenue --format json | head -5
 
 echo "  Compose from dbt charts..."
 $CLI charts compose \
@@ -102,7 +102,7 @@ $CLI charts compose \
   -o /tmp/dogfood-dbt-composed.yaml
 
 echo "  Build dbt dashboard..."
-$CLI build examples/dbt-jaffle/board.yaml -o /tmp/dogfood-dbt-dist >/dev/null 2>&1
+$CLI build examples/dbt-jaffle/jaffle.dash.yaml -o /tmp/dogfood-dbt-dist >/dev/null 2>&1
 test -f /tmp/dogfood-dbt-dist/index.html && echo "  ✓ dbt build successful"
 
 echo -e "${GREEN}✓ dbt integration (full workflow)${NC}"

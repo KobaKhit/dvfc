@@ -1,9 +1,7 @@
 /**
  * @dvfc/resolve
  *
- * Public connector API. Implementation currently lives in @dvfc/core (normalize);
- * this package is the stable import path for resolve-layer consumers and
- * future MetricFlow / remote adapters.
+ * Public connector API: DataRef resolve + MetricFlow compile for dbt_metric.
  */
 
 export {
@@ -13,10 +11,16 @@ export {
   findDbtModelCsv,
   normalizeToDashboard,
   normalizeFile,
+  compileDbtMetricSql,
+  invokeMetricFlow,
+  findMetricFixtureSql,
+  extractSqlFromMetricFlowOutput,
+  findDbtProjectRoot,
   type FileAsset,
   type ResolvedRelation,
   type NormalizeOptions,
   type NormalizeResult,
+  type MetricFlowCompileOptions,
 } from '@dvfc/core';
 
 export type {

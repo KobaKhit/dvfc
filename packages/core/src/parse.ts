@@ -1,31 +1,46 @@
 /**
- * Parse chart/dash/board specs from YAML, TOML, or JSON
+ * Parse chart/dash specs from YAML, TOML, or JSON.
+ * Legacy board.yaml is not supported — use *.dash.yaml.
  */
 
 import { parse as parseYAML } from 'yaml';
 import { parse as parseTOML } from 'smol-toml';
 import { basename, extname } from 'path';
-import type { DashboardSpec } from './types.js';
 import type { ChartIR, DashIR, SpecKind } from './ir.js';
 import { isChartIR, isDashIR } from './ir.js';
 import { isDashboardSpec } from './types.js';
-import { boardToDash } from './compat.js';
 
 export type ParsedSpec =
   | { kind: 'chart'; chart: ChartIR; raw: unknown }
-  | { kind: 'dash'; dash: DashIR; raw: unknown }
-  | { kind: 'board'; board: DashboardSpec; dash: DashIR; raw: unknown };
+  | { kind: 'dash'; dash: DashIR; raw: unknown };
 
 export function detectKindFromPath(filePath: string): SpecKind | 'unknown' {
   const base = basename(filePath).toLowerCase();
-  if (base.endsWith('.chart.yaml') || base.endsWith('.chart.yml') || base.endsWith('.chart.json') || base.endsWith('.chart.toml')) {
+  if (
+    base.endsWith('.chart.yaml') ||
+    base.endsWith('.chart.yml') ||
+    base.endsWith('.chart.json') ||
+    base.endsWith('.chart.toml')
+  ) {
     return 'chart';
   }
-  if (base.endsWith('.dash.yaml') || base.endsWith('.dash.yml') || base.endsWith('.dash.json') || base.endsWith('.dash.toml')) {
+  if (
+    base.endsWith('.dash.yaml') ||
+    base.endsWith('.dash.yml') ||
+    base.endsWith('.dash.json') ||
+    base.endsWith('.dash.toml')
+  ) {
     return 'dash';
   }
-  if (base === 'board.yaml' || base === 'board.yml' || base === 'board.json' || base.includes('board.')) {
-    return 'board';
+  if (
+    base === 'board.yaml' ||
+    base === 'board.yml' ||
+    base === 'board.json' ||
+    /\.board\.(yaml|yml|json|toml)$/.test(base)
+  ) {
+    throw new Error(
+      `Legacy board files are removed (${base}). Rename to *.dash.yaml (Dash IR). See docs/ARCHITECTURE.md.`
+    );
   }
   return 'unknown';
 }
@@ -48,7 +63,6 @@ export function formatFromPath(filePath: string): 'yaml' | 'toml' | 'json' {
   if (ext === '.toml') return 'toml';
   if (ext === '.json') return 'json';
   if (ext === '.yaml' || ext === '.yml') return 'yaml';
-  // *.chart.yaml → ext is .yaml
   throw new Error(`Cannot determine format from path: ${filePath}`);
 }
 
@@ -56,9 +70,12 @@ export function formatFromPath(filePath: string): 'yaml' | 'toml' | 'json' {
  * Infer kind from object shape when filename is ambiguous
  */
 export function detectKindFromObject(obj: unknown): SpecKind | 'unknown' {
-  if (isDashboardSpec(obj)) return 'board';
   if (isDashIR(obj)) return 'dash';
   if (isChartIR(obj)) return 'chart';
+  if (isDashboardSpec(obj)) {
+    // meta+data+charts without dash id → old board shape
+    return 'unknown';
+  }
   return 'unknown';
 }
 
@@ -69,6 +86,7 @@ export function interpretSpec(
   raw: unknown,
   opts: { path?: string; prefer?: SpecKind } = {}
 ): ParsedSpec {
+  // Path check may throw for board.* filenames
   const fromPath = opts.path ? detectKindFromPath(opts.path) : 'unknown';
   const fromObj = detectKindFromObject(raw);
   const kind = opts.prefer ?? (fromPath !== 'unknown' ? fromPath : fromObj);
@@ -87,32 +105,13 @@ export function interpretSpec(
     return { kind: 'dash', dash: raw, raw };
   }
 
-  if (kind === 'board' || isDashboardSpec(raw)) {
-    if (!isDashboardSpec(raw)) {
-      throw new Error('File declared as board but invalid DashboardSpec shape');
-    }
-    const idGuess =
-      opts.path != null
-        ? basename(opts.path).replace(/\.(yaml|yml|json|toml)$/i, '') || 'board'
-        : 'board';
-    // Prefer parent folder name for examples/sales-board/board.yaml
-    let dashId = idGuess;
-    if (opts.path) {
-      const parts = opts.path.replace(/\\/g, '/').split('/');
-      const boardIdx = parts.findIndex((p) => p === 'board.yaml' || p === 'board.yml' || p === 'board.json');
-      if (boardIdx > 0) {
-        dashId = parts[boardIdx - 1] || dashId;
-      }
-    }
-    return {
-      kind: 'board',
-      board: raw,
-      dash: boardToDash(raw, { id: dashId === 'board' ? 'legacy-board' : dashId }),
-      raw,
-    };
+  if (isDashboardSpec(raw) && !isDashIR(raw)) {
+    throw new Error(
+      'Legacy board shape (meta + charts without dash `id`) is no longer supported. ' +
+        'Convert to *.dash.yaml with top-level `id` and `charts`. See docs/ARCHITECTURE.md.'
+    );
   }
 
-  // Fallback heuristics
   if (isDashIR(raw)) {
     return { kind: 'dash', dash: raw, raw };
   }
@@ -120,9 +119,7 @@ export function interpretSpec(
     return { kind: 'chart', chart: raw, raw };
   }
 
-  throw new Error(
-    'Unrecognized spec: expected chart (id+type), dash (id+charts), or legacy board (meta+data+charts)'
-  );
+  throw new Error('Unrecognized spec: expected chart (id+type) or dash (id+charts)');
 }
 
 export function parseSpecString(

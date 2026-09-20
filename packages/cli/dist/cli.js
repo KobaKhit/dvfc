@@ -27,7 +27,7 @@ program
 });
 program
     .command('normalize')
-    .description('Normalize chart/dash/board IR to Mosaic DashboardSpec YAML')
+    .description('Normalize chart/dash IR to Mosaic DashboardSpec YAML')
     .argument('<spec>', 'Path to chart, dash, or board spec')
     .option('-o, --out-file <file>', 'Write normalized YAML to file (default: stdout)')
     .action(async (spec, options) => {
@@ -86,7 +86,7 @@ program
     .description('Initialize a new dashboard project')
     .option('--from-dbt', 'Scaffold from dbt manifest.json')
     .option('--manifest-path <path>', 'Path to dbt manifest.json', 'dbt-stub/manifest.json')
-    .option('-o, --out-file <file>', 'Output file', 'board.yaml')
+    .option('-o, --out-file <file>', 'Output file', 'dashboard.dash.yaml')
     .action(async (options) => {
     try {
         await init({
@@ -163,12 +163,12 @@ chartsCmd
 });
 chartsCmd
     .command('compose')
-    .description('Compose ephemeral board from chart IDs')
+    .description('Compose a *.dash.yaml from chart IDs (alias of dash compose)')
     .option('--charts <ids>', 'Comma-separated chart IDs or display keys (required)')
     .option('--metric <name>', 'Optional metric name')
-    .option('--title <title>', 'Board title')
-    .option('--description <desc>', 'Board description')
-    .option('-o, --out-file <file>', 'Output file', 'composed-board.yaml')
+    .option('--title <title>', 'Dash title')
+    .option('--description <desc>', 'Description')
+    .option('-o, --out-file <file>', 'Output file', 'composed.dash.yaml')
     .action(async (options) => {
     if (!options.charts) {
         console.error('Error: --charts option is required');
@@ -184,8 +184,8 @@ chartsCmd
 });
 chartsCmd
     .command('extract')
-    .description('Extract inline charts from a dash/board into *.chart.yaml files')
-    .argument('<dash>', 'Path to dash or board YAML')
+    .description('Extract inline charts from a dash into *.chart.yaml files')
+    .argument('<dash>', 'Path to *.dash.yaml')
     .option('-o, --out-dir <dir>', 'Output directory', 'charts')
     .action(async (dash, options) => {
     try {

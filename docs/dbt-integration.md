@@ -30,7 +30,7 @@ ls -lh target/manifest.json
 # From your dbt project root
 dvfc init --from-dbt \
   --manifest-path target/manifest.json \
-  -o board.yaml
+  -o *.dash.yaml
 ```
 
 This will:
@@ -85,7 +85,7 @@ my-dbt-project/
 │   ├── customers.csv            # Your exported data
 │   ├── orders.csv
 │   └── revenue_summary.csv
-├── board.yaml                   # Your dashboard spec
+├── *.dash.yaml                   # Your dashboard spec
 └── dbt_project.yml              # Your dbt project file
 ```
 
@@ -98,7 +98,7 @@ cp path/to/exported/*.csv dbt-stub/
 
 ### 5. Edit Generated Dashboard
 
-The generated `board.yaml` is a starting point. Customize it:
+The generated `*.dash.yaml` is a starting point. Customize it:
 
 ```yaml
 meta:
@@ -130,22 +130,22 @@ charts:
 
 ```bash
 # Validate
-dvfc validate board.yaml
+dvfc validate *.dash.yaml
 
 # Preview with hot reload
-dvfc preview board.yaml
+dvfc preview *.dash.yaml
 
 # Build static HTML
-dvfc build board.yaml -o dist
+dvfc build *.dash.yaml -o dist
 ```
 
 ## manifest.json Location
 
-dvfc looks for `dbt-stub/manifest.json` relative to your `board.yaml` by default.
+dvfc looks for `dbt-stub/manifest.json` relative to your `*.dash.yaml` by default.
 
 **Custom location:**
-- Edit your board.yaml path if needed
-- dvfc CLI assumes `dbt-stub/` in the same directory as board.yaml
+- Edit your *.dash.yaml path if needed
+- dvfc CLI assumes `dbt-stub/` in the same directory as *.dash.yaml
 - For now, you need to copy manifest and CSVs to this location
 
 **Future:** Direct `--manifest-path` and `--data-dir` flags on build/preview commands.
@@ -158,14 +158,14 @@ dvfc looks for `dbt-stub/manifest.json` relative to your `board.yaml` by default
 # Generate from marts only
 dvfc init --from-dbt \
   --manifest-path target/manifest.json \
-  -o marts-board.yaml
+  -o marts-*.dash.yaml
 
 # dvfc auto-detects models in marts/ schema
 ```
 
 ### Pattern 2: Specific Models Dashboard
 
-Manually edit board.yaml to reference specific models:
+Manually edit *.dash.yaml to reference specific models:
 
 ```yaml
 data:
@@ -196,7 +196,7 @@ dbt show --select my_model --limit 1000 > /tmp/my_model.json
 jq -r '...' /tmp/my_model.json > dbt-stub/my_model.csv
 
 # Terminal 3: Preview dashboard
-dvfc preview board.yaml
+dvfc preview *.dash.yaml
 ```
 
 ## Refreshing Data
@@ -215,19 +215,19 @@ cp new-exports/*.csv dbt-stub/
 
 # 4. If schema changed, regenerate board
 dvfc init --from-dbt -o board-new.yaml
-# Merge changes into your existing board.yaml
+# Merge changes into your existing *.dash.yaml
 ```
 
 ## Troubleshooting
 
 ### "dbt manifest not found"
 
-dvfc expects `dbt-stub/manifest.json` next to your `board.yaml`.
+dvfc expects `dbt-stub/manifest.json` next to your `*.dash.yaml`.
 
 ```bash
 # Check paths
 ls -la dbt-stub/manifest.json
-ls -la board.yaml
+ls -la *.dash.yaml
 
 # They should be in the same directory
 ```
@@ -238,11 +238,11 @@ The model exists in manifest but CSV file is missing.
 
 ```bash
 # Check model name matches
-cat board.yaml | grep "model:"
+cat *.dash.yaml | grep "model:"
 ls dbt-stub/*.csv
 
 # Ensure model name matches CSV filename
-# board.yaml: model: revenue_summary
+# *.dash.yaml: model: revenue_summary
 # File: dbt-stub/revenue_summary.csv
 ```
 
@@ -267,7 +267,7 @@ cp target/manifest.json path/to/dvfc/dbt-stub/
 
 ## Best Practices
 
-1. **Version control**: Commit board.yaml, not dbt-stub/ (data is transient)
+1. **Version control**: Commit *.dash.yaml, not dbt-stub/ (data is transient)
 2. **Data freshness**: Document when CSVs were exported
 3. **Sample data**: Use `LIMIT 10000` for faster dashboards
 4. **Model selection**: Focus on mart/analytics models, not raw staging

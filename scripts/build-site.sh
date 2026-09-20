@@ -30,15 +30,13 @@ examples=(
 )
 
 for example in "${examples[@]}"; do
-  board_file="examples/$example/board.yaml"
   spec_file=""
   for f in examples/$example/*.dash.yaml; do
     if [ -f "$f" ]; then spec_file="$f"; break; fi
   done
-  if [ -z "$spec_file" ] && [ -f "$board_file" ]; then spec_file="$board_file"; fi
 
   if [ -z "$spec_file" ]; then
-    echo "⚠️  Skipping $example (no *.dash.yaml or board.yaml)"
+    echo "⚠️  Skipping $example (no *.dash.yaml)"
     continue
   fi
   

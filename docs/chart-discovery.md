@@ -5,7 +5,7 @@ Chart discovery enables finding, inspecting, and composing charts across dvfc pr
 ## Overview
 
 **Design principles:**
-- Charts live in `*.chart.yaml` files and/or inline inside `*.dash.yaml` (legacy `board.yaml` still indexed)
+- Charts live in `*.chart.yaml` files and/or inline inside `*.dash.yaml`
 - Stable key: `spec path + chart id`
 - Display key format: `{dashOrBoardName}__{chartId}` (gradual move to `dashId/chartId`)
 - All operations preserve dash/board context (data sources, theme, layout)
@@ -39,14 +39,14 @@ Found 5 chart(s):
    Chart ID: revenue_by_source
    Type: bar
    Title: Revenue by Traffic Source
-   Board: examples/web-analytics/board.yaml
+   Dash: examples/web-analytics/web-analytics.dash.yaml
    Score: 80
 
 📊 dbt-jaffle__revenue_by_method
    Chart ID: revenue_by_method
    Type: bar
    Title: Revenue by Payment Method
-   Board: examples/dbt-jaffle/board.yaml
+   Dash: examples/dbt-jaffle/jaffle.dash.yaml
    Score: 80
 ```
 
@@ -56,10 +56,10 @@ Get full chart specification with board context:
 
 ```bash
 # Get chart (JSON format)
-dvfc charts get examples/dbt-jaffle/board.yaml daily_revenue
+dvfc charts get examples/dbt-jaffle/jaffle.dash.yaml daily_revenue
 
 # YAML format
-dvfc charts get examples/dbt-jaffle/board.yaml daily_revenue --format yaml
+dvfc charts get examples/dbt-jaffle/jaffle.dash.yaml daily_revenue --format yaml
 ```
 
 **Returns:**
@@ -76,7 +76,7 @@ List all charts in project or specific board:
 dvfc charts list
 
 # List charts in specific board
-dvfc charts list --board examples/sales-board/board.yaml
+dvfc charts list --board examples/sales-board/sales.dash.yaml
 
 # JSON output
 dvfc charts list --json
@@ -116,10 +116,10 @@ Build a single chart while preserving board context:
 
 ```bash
 # Build specific chart from board
-dvfc build examples/sales-board/board.yaml --chart daily_sales -o dist-single
+dvfc build examples/sales-board/sales.dash.yaml --chart daily_sales -o dist-single
 
 # Regular build (all charts)
-dvfc build examples/sales-board/board.yaml -o dist
+dvfc build examples/sales-board/sales.dash.yaml -o dist
 ```
 
 **Preserves:**
@@ -152,7 +152,7 @@ Get chart with board context:
 
 ```json
 {
-  "boardPath": "examples/dbt-jaffle/board.yaml",
+  "boardPath": "examples/dbt-jaffle/jaffle.dash.yaml",
   "chartId": "daily_revenue"
 }
 ```
@@ -166,7 +166,7 @@ List all charts:
 ```json
 {
   "projectRoot": "/path/to/project",
-  "boardPath": "examples/sales-board/board.yaml"  // optional
+  "boardPath": "examples/sales-board/sales.dash.yaml"  // optional
 }
 ```
 
@@ -193,7 +193,7 @@ Build single chart:
 
 ```json
 {
-  "boardPath": "examples/sales-board/board.yaml",
+  "boardPath": "examples/sales-board/sales.dash.yaml",
   "chartId": "daily_sales",
   "outDir": "dist"
 }
@@ -309,7 +309,7 @@ dvfc build revenue-comparison.yaml
 
 ```bash
 # Build just the daily revenue chart from dbt-jaffle
-dvfc build examples/dbt-jaffle/board.yaml \
+dvfc build examples/dbt-jaffle/jaffle.dash.yaml \
   --chart daily_revenue \
   -o dist-revenue-only
 ```

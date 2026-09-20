@@ -46,7 +46,7 @@ test('searchCharts scores exact ID matches highest', async () => {
 });
 
 test('getChart returns chart with context', async () => {
-  const boardPath = join(projectRoot, 'examples/dbt-jaffle/board.yaml');
+  const boardPath = join(projectRoot, 'examples/dbt-jaffle/jaffle.dash.yaml');
   const resource = await getChart(boardPath, 'daily_revenue');
   
   assert.strictEqual(resource.chart.id, 'daily_revenue');
@@ -56,7 +56,7 @@ test('getChart returns chart with context', async () => {
 });
 
 test('getChart throws on missing chart', async () => {
-  const boardPath = join(projectRoot, 'examples/dbt-jaffle/board.yaml');
+  const boardPath = join(projectRoot, 'examples/dbt-jaffle/jaffle.dash.yaml');
   
   await assert.rejects(
     async () => await getChart(boardPath, 'nonexistent'),
@@ -85,7 +85,7 @@ test('resolveChartRef throws on ambiguous IDs', async () => {
 });
 
 test('makeDisplayKey formats correctly', () => {
-  const key = makeDisplayKey('examples/sales-board/board.yaml', 'daily_sales');
+  const key = makeDisplayKey('examples/sales-board/sales.dash.yaml', 'daily_sales');
   assert.strictEqual(key, 'sales-board__daily_sales');
 });
 

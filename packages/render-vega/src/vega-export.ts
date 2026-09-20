@@ -204,7 +204,7 @@ export async function exportStatic(
 
   for (const a of assets) {
     const dest = join(stageDir, a.destName);
-    await cp(a.absPath, dest);
+    await cp(a.absPath, dest, { dereference: true, force: true });
     const base = a.destName.replace(/\.[^.]+$/, '');
     assetMap.set(base, dest);
   }

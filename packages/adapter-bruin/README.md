@@ -116,10 +116,10 @@ The dvfc CLI will auto-detect Bruin projects and use this adapter:
 
 ```bash
 # Auto-detect from pipeline.yml
-dvfc build board.yaml --adapter bruin
+dvfc build *.dash.yaml --adapter bruin
 
 # Or specify pipeline path
-dvfc build board.yaml --bruin-pipeline pipeline.yml
+dvfc build *.dash.yaml --bruin-pipeline pipeline.yml
 ```
 
 *(CLI integration coming soon)*

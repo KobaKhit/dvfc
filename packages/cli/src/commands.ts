@@ -11,7 +11,7 @@ import type { DbtManifest } from '@dvfc/dbt-adapter';
 import { createDbtResolver } from '@dvfc/dbt-adapter';
 import {
   parseSpecString,
-  dashToBoard,
+  dashToDashboardSpec,
   registerBuiltinChartTypes,
   listChartTypes,
   normalizeFile,
@@ -34,11 +34,54 @@ export interface InitOptions {
   outFile?: string;
 }
 
+function slugDashId(title: string): string {
+  return (
+    title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '')
+      .slice(0, 64) || 'dashboard'
+  );
+}
+
+/** Convert internal DashboardSpec scaffolding → Dash IR YAML */
+function toDashYaml(spec: DashboardSpec): string {
+  return stringifyYAML({
+    id: slugDashId(spec.meta.title || 'dashboard'),
+    title: spec.meta.title,
+    description: spec.meta.description,
+    version: spec.meta.version || '0.1.0',
+    coordination: { auto: true },
+    data: spec.data,
+    charts: spec.charts.map((c) => ({
+      id: c.id,
+      type: c.type,
+      dataSource: c.dataSource,
+      title: c.title,
+      encoding: c.encoding,
+      content: c.content,
+      interaction: c.interaction
+        ? {
+            brush: c.interaction.brush,
+            brushAxis: c.interaction.brushAxis,
+            publishes: c.interaction.selection,
+            filterBy: c.interaction.filterBy,
+          }
+        : undefined,
+      overlays: c.overlays,
+      width: c.width,
+      height: c.height,
+    })),
+    layout: spec.layout,
+    theme: spec.theme,
+  });
+}
+
 /**
- * Init command - scaffold a new dashboard from dbt manifest
+ * Init command - scaffold a new dash from dbt manifest
  */
 export async function init(options: InitOptions = {}): Promise<void> {
-  const outFile = options.outFile || 'board.yaml';
+  const outFile = options.outFile || 'dashboard.dash.yaml';
   
   if (options.fromDbt) {
     console.log(`📋 Scaffolding dashboard from dbt manifest\n`);
@@ -171,8 +214,7 @@ export async function init(options: InitOptions = {}): Promise<void> {
         }
       });
       
-      // Write spec
-      await writeFile(outFile, stringifyYAML(spec));
+      await writeFile(outFile, toDashYaml(spec));
       
       console.log(`\n✅ Created ${outFile}`);
       console.log(`\nNext steps:`);
@@ -189,7 +231,7 @@ export async function init(options: InitOptions = {}): Promise<void> {
     }
   } else {
     // Basic init without dbt
-    console.log(`📋 Creating basic dashboard template\n`);
+    console.log(`📋 Creating basic dash template\n`);
     
     const spec: DashboardSpec = {
       meta: {
@@ -239,7 +281,7 @@ export async function init(options: InitOptions = {}): Promise<void> {
       ]
     };
     
-    await writeFile(outFile, stringifyYAML(spec));
+    await writeFile(outFile, toDashYaml(spec));
     
     console.log(`✅ Created ${outFile}`);
     console.log(`\nNext steps:`);
@@ -338,7 +380,7 @@ export async function exportPdf(specPath: string, options: ExportPdfOptions = {}
 }
 
 /**
- * Validate command - chart, dash, or legacy board
+ * Validate command - chart or dash
  */
 export async function validate(specPath: string): Promise<boolean> {
   console.log(`🔍 Validating: ${specPath}\n`);
@@ -362,74 +404,44 @@ export async function validate(specPath: string): Promise<boolean> {
       const result = validateDashWithReport(parsed.dash);
       console.log(result.report);
       if (!result.valid) return false;
+
+      // Optional: verify dbt models when dash declares shared dbt data
+      const dashData = parsed.dash.data ?? [];
+      const hasDbtModels = dashData.some((ds) => ds.type === 'dbt');
+      if (hasDbtModels) {
+        const specDir = dirname(resolvePath(specPath));
+        const dbtDataDir =
+          (await findDbtStubDir({
+            specDir,
+            projectRoot: process.cwd(),
+          })) ?? join(specDir, 'dbt-stub');
+        const dbtManifestPath = join(dbtDataDir, 'manifest.json');
+        try {
+          const manifestData = JSON.parse(await readFile(dbtManifestPath, 'utf-8')) as DbtManifest;
+          const resolver = await createDbtResolver(manifestData, { dataDir: dbtDataDir });
+          console.log(`✓ dbt manifest found (${dbtDataDir})`);
+          for (const dataSource of dashData) {
+            if (dataSource.type === 'dbt' && dataSource.model) {
+              try {
+                const path = resolver.ref(dataSource.model);
+                console.log(`✓ dbt model '${dataSource.model}' → ${path}`);
+              } catch {
+                console.log(`❌ dbt model '${dataSource.model}' not found in manifest`);
+                return false;
+              }
+            }
+          }
+        } catch {
+          console.log(`⚠️  dbt manifest not found at ${dbtManifestPath} (CSV stubs may still resolve)`);
+        }
+      }
+
       console.log('\n✅ All validation checks passed!\n');
       return true;
     }
 
-    // Legacy board
-    console.log('Kind: board (legacy → also checked as dash)\n');
-    console.warn(
-      '⚠️  board.yaml is deprecated. Prefer *.dash.yaml (see docs/ARCHITECTURE.md). Compat remains until M5.\n'
-    );
-    const spec = parsed.board;
-    const schemaResult = validateWithReport(spec);
-    console.log(schemaResult.report);
-    if (!schemaResult.valid) return false;
-
-    const semanticResult = validateSemantics(spec);
-    if (!semanticResult.valid) {
-      console.log('\n⚠️  Semantic validation failed:\n');
-      semanticResult.errors.forEach((err, i) => {
-        console.log(`${i + 1}. Path: ${err.path}`);
-        console.log(`   ${err.message}\n`);
-      });
-      return false;
-    }
-
-    const dashResult = validateDashWithReport(parsed.dash);
-    if (!dashResult.valid) {
-      console.log('\nDash IR (from board) checks:\n');
-      console.log(dashResult.report);
-      return false;
-    }
-    console.log('✓ Dash IR compat OK');
-
-    const specDir = dirname(resolvePath(specPath));
-    const hasDbtModels = spec.data.some((ds) => ds.type === 'dbt');
-
-    if (hasDbtModels) {
-      const dbtDataDir =
-        (await findDbtStubDir({
-          specDir,
-          projectRoot: process.cwd(),
-        })) ?? join(specDir, 'dbt-stub');
-      const dbtManifestPath = join(dbtDataDir, 'manifest.json');
-
-      try {
-        const manifestData = JSON.parse(await readFile(dbtManifestPath, 'utf-8')) as DbtManifest;
-        const resolver = await createDbtResolver(manifestData, { dataDir: dbtDataDir });
-
-        console.log(`✓ dbt manifest found (${dbtDataDir})`);
-
-        for (const dataSource of spec.data) {
-          if (dataSource.type === 'dbt' && dataSource.model) {
-            try {
-              const path = resolver.ref(dataSource.model);
-              console.log(`✓ dbt model '${dataSource.model}' → ${path}`);
-            } catch {
-              console.log(`❌ dbt model '${dataSource.model}' not found in manifest`);
-              return false;
-            }
-          }
-        }
-      } catch {
-        console.log(`❌ dbt manifest not found at ${dbtManifestPath}`);
-        return false;
-      }
-    }
-
-    console.log('\n✅ All validation checks passed!\n');
-    return true;
+    console.error('Unrecognized spec kind');
+    return false;
   } catch (error) {
     console.error('\n❌ Validation failed:', error instanceof Error ? error.message : String(error));
     return false;

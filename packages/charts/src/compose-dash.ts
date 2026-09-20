@@ -6,7 +6,7 @@ import { readFile, writeFile, mkdir } from 'fs/promises';
 import { join, dirname, resolve as resolvePath } from 'path';
 import { stringify as stringifyYAML, parse as parseYAML } from 'yaml';
 import type { ChartIR, DashIR } from '@dvfc/core';
-import { interpretSpec, isDashChartRef, boardToDash } from '@dvfc/core';
+import { interpretSpec, isDashChartRef } from '@dvfc/core';
 import { searchCharts } from './discovery.js';
 
 export interface ComposeDashOptions {
@@ -64,7 +64,7 @@ export async function composeDash(
 }
 
 /**
- * Extract inline charts from a dash/board into *.chart.yaml files
+ * Extract inline charts from a dash into *.chart.yaml files
  */
 export async function extractChartsFromDash(
   dashPath: string,
@@ -73,30 +73,22 @@ export async function extractChartsFromDash(
   const abs = resolvePath(dashPath);
   const content = await readFile(abs, 'utf-8');
   const parsed = interpretSpec(parseYAML(content), { path: abs });
-  const dash =
-    parsed.kind === 'board'
-      ? boardToDash(parsed.board)
-      : parsed.kind === 'dash'
-        ? parsed.dash
-        : null;
-  if (!dash) {
-    throw new Error('extract requires a dash or legacy board');
+  if (parsed.kind !== 'dash') {
+    throw new Error('extract requires a *.dash.yaml file');
   }
+  const dash = parsed.dash;
 
   await mkdir(outDir, { recursive: true });
   const written: string[] = [];
-  const remaining: DashIR['charts'] = [];
 
   for (const entry of dash.charts) {
     if (isDashChartRef(entry)) {
-      remaining.push(entry);
       continue;
     }
     const chart: ChartIR = { ...entry };
     const file = join(outDir, `${chart.id}.chart.yaml`);
     await writeFile(file, stringifyYAML(chart));
     written.push(file);
-    remaining.push({ chart: chart.id });
   }
 
   return written;

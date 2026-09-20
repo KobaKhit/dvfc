@@ -64,7 +64,7 @@ from pathlib import Path
 client = Data Viz FactoryClient()
 
 # Load existing spec
-spec_path = Path("examples/sales-board/board.yaml")
+spec_path = Path("examples/sales-board/sales.dash.yaml")
 
 # Validate
 if client.validate(spec_path):

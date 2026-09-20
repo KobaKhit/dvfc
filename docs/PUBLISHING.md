@@ -61,7 +61,7 @@ pnpm test
 pnpm dogfood
 
 # Validate all examples
-for ex in examples/*/board.yaml; do
+for ex in examples/*/*.dash.yaml; do
   node packages/cli/dist/cli.js validate "$ex"
 done
 ```

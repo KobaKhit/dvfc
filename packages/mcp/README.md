@@ -55,7 +55,7 @@ In Cursor AI chat, you can now use tools like:
 ### validate_dashboard_spec
 ```typescript
 {
-  specPath: string  // Path to board.yaml
+  specPath: string  // Path to *.dash.yaml or *.chart.yaml
 }
 ```
 Validates JSON Schema, semantic rules, and dbt references.
@@ -181,7 +181,7 @@ node dist/server.js
 ### Tool errors
 - Ensure you've run `pnpm build` in packages/mcp
 - Check that paths are relative to workspace root
-- Verify board.yaml is valid
+- Verify the dash or chart YAML path is valid
 
 ## Resources
 

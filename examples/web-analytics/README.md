@@ -25,13 +25,13 @@ A comprehensive web analytics dashboard tracking page views, traffic sources, an
 cd /workspace
 
 # Validate the spec
-pnpm exec dvfc validate examples/web-analytics/board.yaml
+pnpm exec dvfc validate examples/web-analytics/web-analytics.dash.yaml
 
 # Preview with hot reload
-pnpm exec dvfc preview examples/web-analytics/board.yaml
+pnpm exec dvfc preview examples/web-analytics/web-analytics.dash.yaml
 
 # Build static HTML
-pnpm exec dvfc build examples/web-analytics/board.yaml --out-dir dist/web-analytics
+pnpm exec dvfc build examples/web-analytics/web-analytics.dash.yaml --out-dir dist/web-analytics
 ```
 
 ## Data Sources
@@ -49,7 +49,7 @@ Uses dbt-style models:
 
 ## Customization
 
-Edit `board.yaml` to:
+Edit `*.dash.yaml` to:
 - Add more metrics (ROI, cost per conversion)
 - Change chart types (add number KPIs)
 - Adjust layout (grid vs flex)

@@ -20,7 +20,6 @@ import {
   searchCharts,
   getChart,
   listCharts,
-  composeBoard,
   resolveChartRef,
   composeDash,
   extractChartsFromDash,
@@ -47,7 +46,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
     tools: [
       {
         name: 'validate_dashboard_spec',
-        description: 'Validate a chart (*.chart.yaml), dash (*.dash.yaml), or legacy board (board.yaml) spec. Checks JSON Schema, semantic rules, and dbt model references.',
+        description: 'Validate a chart (*.chart.yaml) or dash (*.dash.yaml) spec. Checks JSON Schema, semantic rules, and dbt model references.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -61,7 +60,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'build_dashboard',
-        description: 'Build from a chart, dash, or legacy board spec. HTML dashboard (Mosaic) by default; use format svg|png for atomic chart export via Vega-Lite.',
+        description: 'Build from a chart or dash spec. HTML (Mosaic) by default; use format svg|png for atomic chart export via Vega-Lite.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -282,7 +281,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'compose_board',
-        description: 'Compose an ephemeral board from chart IDs. Supports display keys (boardName__chartId) or plain chart IDs. Resolves ambiguous IDs or returns error with candidates. Returns composed board spec.',
+        description: 'Alias of compose_dash — compose a *.dash.yaml from chart IDs or display keys.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -295,17 +294,17 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               items: { type: 'string' },
               description: 'Chart IDs or display keys (e.g., ["daily_revenue", "sales-board__top_products"])'
             },
-            metric: {
-              type: 'string',
-              description: 'Optional metric name (stub for now)'
-            },
             title: {
               type: 'string',
-              description: 'Title for composed board'
+              description: 'Title for composed dash'
             },
             description: {
               type: 'string',
-              description: 'Description for composed board'
+              description: 'Description for composed dash'
+            },
+            outFile: {
+              type: 'string',
+              description: 'Output path (default: composed.dash.yaml)'
             }
           },
           required: ['chartIds']
@@ -319,7 +318,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           properties: {
             boardPath: {
               type: 'string',
-              description: 'Path to dash or legacy board file'
+              description: 'Path to *.dash.yaml file'
             },
             chartId: {
               type: 'string',
@@ -335,7 +334,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'compose_dash',
-        description: 'Compose a *.dash.yaml from chart ids or display keys (dashId/chartId or legacy boardName__chartId). Alias of modern dash composition; compose_board remains for legacy board YAML output.',
+        description: 'Compose a *.dash.yaml from chart ids or display keys (dashId__chartId).',
         inputSchema: {
           type: 'object',
           properties: {
@@ -354,7 +353,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'extract_charts',
-        description: 'Extract inline charts from a dash or legacy board into *.chart.yaml files (dvfc charts extract).',
+        description: 'Extract inline charts from a dash into *.chart.yaml files (dvfc charts extract).',
         inputSchema: {
           type: 'object',
           properties: {
@@ -723,36 +722,26 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
       }
 
-      case 'compose_board': {
-        const { projectRoot, chartIds, metric, title, description } = args as {
+      case 'compose_board':
+      case 'compose_dash': {
+        const { projectRoot, chartIds, title, description, outFile } = args as {
           projectRoot?: string;
           chartIds: string[];
-          metric?: string;
           title?: string;
           description?: string;
+          outFile?: string;
         };
-        
         const root = projectRoot || process.cwd();
-        
-        // Resolve chart references
-        const chartRefs = [];
-        for (const id of chartIds) {
-          const ref = await resolveChartRef(root, id);
-          chartRefs.push(ref);
-        }
-        
-        // Compose board
-        const spec = await composeBoard(root, {
-          charts: chartRefs,
-          metric,
+        const { dash, outPath } = await composeDash(root, {
+          chartIds,
           title,
-          description
+          description,
+          outFile: outFile || 'composed.dash.yaml',
         });
-        
         return {
           content: [{
             type: 'text' as const,
-            text: `✅ Composed board from ${chartIds.length} charts:\n\n${stringifyYAML(spec)}`
+            text: `✅ Composed dash → ${outPath}\n\n${stringifyYAML(dash)}`
           }]
         };
       }
@@ -774,29 +763,6 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           content: [{
             type: 'text' as const,
             text: `✅ Built chart '${chartId}' to ${outDir || 'dist'}/index.html`
-          }]
-        };
-      }
-
-      case 'compose_dash': {
-        const { projectRoot, chartIds, title, description, outFile } = args as {
-          projectRoot?: string;
-          chartIds: string[];
-          title?: string;
-          description?: string;
-          outFile?: string;
-        };
-        const root = projectRoot || process.cwd();
-        const { dash, outPath } = await composeDash(root, {
-          chartIds,
-          title,
-          description,
-          outFile,
-        });
-        return {
-          content: [{
-            type: 'text' as const,
-            text: `✅ Composed dash → ${outPath}\n\n${stringifyYAML(dash)}`
           }]
         };
       }

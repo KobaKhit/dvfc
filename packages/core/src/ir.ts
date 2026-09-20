@@ -136,7 +136,7 @@ export interface DashIR {
   theme?: ThemeConfig;
 }
 
-export type SpecKind = 'chart' | 'dash' | 'board';
+export type SpecKind = 'chart' | 'dash';
 
 export function isDashChartRef(entry: DashChartEntry): entry is DashChartRef {
   return (

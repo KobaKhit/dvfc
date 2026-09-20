@@ -2,7 +2,7 @@
 
 **Status:** Target architecture (implementation roadmap in [ROADMAP.md](./ROADMAP.md))  
 **Last updated:** 2026-09-20  
-**Supersedes (directionally):** board-centric model in `STATUS.md` / current `board.yaml` examples — those remain the v0.5 runtime until migration phases land.
+**Supersedes (directionally):** board-centric model in `STATUS.md` — examples and docs are **Dash IR** only (`*.dash.yaml`).
 
 ---
 
@@ -43,8 +43,6 @@ dbt semantic metrics / models     sql | files | tables
 |-------|-----|
 | board, view (as product noun) | **dash** |
 | dvfc metric DSL | **dbt metric / semantic** references |
-
-Legacy `board.yaml` is an alias during migration → treated as a dash.
 
 ---
 
@@ -318,13 +316,9 @@ Update `.cursor/skills/dvfc` to chart + dash vocabulary (retire “board” in s
 
 ---
 
-## 11. Migration from v0.5 `board.yaml`
+## 11. Migration from v0.5 `board.yaml` (complete)
 
-1. Treat `board.yaml` as **Dash IR** (charts already inline).  
-2. Alias CLI: `board` commands → `dash` with deprecation warnings.  
-3. Optional codemod: `dvfc migrate board.yaml` → `*.dash.yaml` + extract shared charts.  
-4. Update examples, site, docs, MCP names in a dedicated phase (see roadmap).  
-5. Keep HTML Mosaic path working throughout — do not big-bang rewrite generators.
+Legacy **`board.yaml`** is removed from examples and product docs. Author **`*.dash.yaml`** and atomic **`*.chart.yaml`** only. The CLI may still accept legacy board-shaped files via an internal compat adapter for older repos; new work should not use them.
 
 ---
 

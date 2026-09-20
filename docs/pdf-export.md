@@ -12,7 +12,7 @@ dvfc provides **three ways** to generate PDFs, in order of recommendation:
 
 ```bash
 # Build optimized HTML
-dvfc build board.yaml -o dist
+dvfc build *.dash.yaml -o dist
 
 # Open in browser and print
 open dist/index.html
@@ -35,7 +35,7 @@ npm install -D playwright
 npx playwright install chromium
 
 # Automated export
-dvfc export-pdf board.yaml -o dashboard.pdf
+dvfc export-pdf *.dash.yaml -o dashboard.pdf
 ```
 
 **Advantages:**
@@ -55,7 +55,7 @@ Typst is a modern typesetting system (alternative to LaTeX):
 
 ```bash
 # Build dashboard HTML
-dvfc build board.yaml -o dist
+dvfc build *.dash.yaml -o dist
 
 # Create Typst document
 cat > report.typ << 'EOF'
@@ -107,14 +107,14 @@ Options:
 
 ```bash
 # Automated (requires Playwright)
-dvfc export-pdf board.yaml -o report.pdf
+dvfc export-pdf *.dash.yaml -o report.pdf
 
 # Manual flow (no Playwright needed)
-dvfc export-pdf board.yaml --no-browser
+dvfc export-pdf *.dash.yaml --no-browser
 # → Prints instructions for browser print
 
 # Just build HTML, print yourself
-dvfc build board.yaml -o dist
+dvfc build *.dash.yaml -o dist
 open dist/index.html
 ```
 
@@ -200,13 +200,13 @@ The Python SDK also supports PDF export via the CLI:
 from dvfc import DataVizFactoryClient
 
 client = DataVizFactoryClient()
-spec = client.load("board.yaml")
+spec = client.load("*.dash.yaml")
 
 # Build HTML
 html_path = client.build(spec, out_dir="dist")
 
 # Then use dvfc CLI for PDF
-# dvfc export-pdf board.yaml -o report.pdf
+# dvfc export-pdf *.dash.yaml -o report.pdf
 
 # Or open dist/index.html in browser and print manually
 print(f"Open {html_path} and use File > Print > Save as PDF")
@@ -243,7 +243,7 @@ Run: `npx playwright install chromium`
 Individual charts can be exported as SVG for inclusion in other documents:
 
 ```bash
-dvfc export-svg board.yaml --chart daily_sales -o chart.svg
+dvfc export-svg *.dash.yaml --chart daily_sales -o chart.svg
 ```
 
 *(Not yet implemented)*

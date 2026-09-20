@@ -7,7 +7,7 @@
 
 **Build interactive analytics from declarative YAML** — atomic `*.chart.yaml` specs and composed `*.dash.yaml` dashboards → Powered by [Mosaic](https://idl.uw.edu/mosaic/) + dbt
 
-Define charts and dashes in YAML, get native crossfiltering and in-browser SQL. No backend required. Legacy `board.yaml` still loads via compat but is **deprecated**.
+Define charts and dashes in YAML, get native crossfiltering and in-browser SQL. No backend required.
 
 ---
 
@@ -85,7 +85,7 @@ See [examples/README.md](./examples/README.md) — start with `examples/charts/`
 
 ## 🛠️ CLI Commands
 
-Works on `*.chart.yaml`, `*.dash.yaml`, and legacy `board.yaml`.
+Works on `*.chart.yaml` and `*.dash.yaml`.
 
 ### Validate
 ```bash
@@ -162,8 +162,6 @@ charts:
     interaction:
       filterBy: time
 ```
-
-Legacy **board.yaml** (`meta` + inline charts) still validates and previews via the compat adapter; prefer dash IR for new work.
 
 ---
 
