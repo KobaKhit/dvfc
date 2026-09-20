@@ -17,3 +17,4 @@ export * from './builtins.js';
 export * from './validate-ir.js';
 export * from './normalize.js';
 export * from './metricflow.js';
+export * from './config.js';

@@ -4,5 +4,8 @@
 export {
   generateMainScript,
   generateHTML,
+  generateChart,
+  generateChartBuiltin,
+  attachBuiltinMosaicRenderers,
   type GeneratorContext,
 } from './generator.js';

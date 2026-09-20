@@ -13,8 +13,7 @@
 
     body {
       font-family: system-ui, -apple-system, sans-serif;
-      background: #0f0f0f;
-      color: #e4e4e7;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
       padding: 2rem;
     }
@@ -22,32 +21,31 @@
     .container {
       max-width: 1400px;
       margin: 0 auto;
-      background: #1a1a1a;
-      border-radius: 8px;
+      background: white;
+      border-radius: 12px;
       padding: 2rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
     }
 
     h1 {
-      color: #f4f4f5;
+      color: #2d3748;
       margin-bottom: 0.5rem;
       font-size: 2rem;
-      font-weight: 600;
     }
 
     .subtitle {
-      color: #a1a1aa;
+      color: #718096;
       margin-bottom: 1.5rem;
       font-size: 1rem;
     }
 
     #status {
       padding: 1rem;
-      background: #27272a;
-      border-left: 4px solid #3b82f6;
+      background: #edf2f7;
+      border-left: 4px solid #4299e1;
       margin-bottom: 2rem;
       border-radius: 4px;
-      color: #e4e4e7;
+      color: #2d3748;
       font-weight: 500;
     }
 
@@ -70,40 +68,31 @@
     
 
     .info-box {
-      background: #27272a;
-      border: 1px solid #3f3f46;
+      background: #f7fafc;
+      border: 1px solid #e2e8f0;
       border-radius: 6px;
       padding: 1rem;
       margin-bottom: 2rem;
     }
 
     .info-box h3 {
-      color: #f4f4f5;
+      color: #2d3748;
       margin-bottom: 0.5rem;
       font-size: 1.1rem;
     }
 
     .info-box p {
-      color: #a1a1aa;
+      color: #4a5568;
       line-height: 1.6;
     }
 
     footer {
       margin-top: 3rem;
       padding-top: 2rem;
-      border-top: 2px solid #27272a;
-      color: #71717a;
+      border-top: 2px solid #e2e8f0;
+      color: #718096;
       text-align: center;
       font-size: 0.9rem;
-    }
-
-    footer a {
-      color: #a1a1aa;
-      text-decoration: underline;
-    }
-
-    footer a:hover {
-      color: #e4e4e7;
     }
 
     @media (max-width: 768px) {
@@ -116,7 +105,7 @@
       }
     }
   </style>
-  <script type="module" crossorigin src="/dvfc/examples/revenue-analysis/assets/index-Cn5w0Lcj.js"></script>
+  <script type="module" crossorigin src="/dvfc/examples/revenue-analysis/assets/index-CpVV65i9.js"></script>
 </head>
 <body>
   <div class="container">
@@ -135,12 +124,12 @@
     </div>
 
     <div class="charts-grid">
-      <div id="chart-intro_text" class="chart-container"><h3 style="margin-bottom: 1rem; color: #f4f4f5;">📊 Revenue Analysis Q1 2024</h3></div>
-      <div id="chart-revenue_trend" class="chart-container"><h3 style="margin-bottom: 1rem; color: #f4f4f5;">Daily Revenue with Analysis Overlays</h3></div>
+      <div id="chart-intro_text" class="chart-container"><h3 style="margin-bottom: 1rem; color: #2d3748;">📊 Revenue Analysis Q1 2024</h3></div>
+      <div id="chart-revenue_trend" class="chart-container"><h3 style="margin-bottom: 1rem; color: #2d3748;">Daily Revenue with Analysis Overlays</h3></div>
       <div id="chart-insight_text" class="chart-container"></div>
-      <div id="chart-profit_analysis" class="chart-container"><h3 style="margin-bottom: 1rem; color: #f4f4f5;">Profit Trend (with Mean & 5-Day MA)</h3></div>
-      <div id="chart-regional_breakdown" class="chart-container"><h3 style="margin-bottom: 1rem; color: #f4f4f5;">Revenue by Region</h3></div>
-      <div id="chart-cost_analysis" class="chart-container"><h3 style="margin-bottom: 1rem; color: #f4f4f5;">Cost Trend (with Median Reference)</h3></div>
+      <div id="chart-profit_analysis" class="chart-container"><h3 style="margin-bottom: 1rem; color: #2d3748;">Profit Trend (with Mean & 5-Day MA)</h3></div>
+      <div id="chart-regional_breakdown" class="chart-container"><h3 style="margin-bottom: 1rem; color: #2d3748;">Revenue by Region</h3></div>
+      <div id="chart-cost_analysis" class="chart-container"><h3 style="margin-bottom: 1rem; color: #2d3748;">Cost Trend (with Median Reference)</h3></div>
       <div id="chart-summary_text" class="chart-container"></div>
     </div>
 

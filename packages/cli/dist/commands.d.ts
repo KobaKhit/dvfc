@@ -21,7 +21,7 @@ export interface BuildOptions {
     minify?: boolean;
     chartId?: string;
     base?: string;
-    format?: 'html' | 'svg' | 'png';
+    format?: 'html' | 'svg' | 'png' | 'html-static';
 }
 export interface ExportPdfOptions {
     outFile?: string;
@@ -54,5 +54,5 @@ export declare function loadNormalized(path: string): Promise<NormalizeResult>;
 export declare function normalizeCommand(specPath: string, options?: {
     outFile?: string;
 }): Promise<void>;
-/** List registered chart types (builtins + any loaded plugins) */
-export declare function printChartTypes(): void;
+/** List registered chart types (builtins + plugins from dvfc.config) */
+export declare function printChartTypes(): Promise<void>;

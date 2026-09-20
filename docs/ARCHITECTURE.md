@@ -318,7 +318,7 @@ Update `.cursor/skills/dvfc` to chart + dash vocabulary (retire “board” in s
 
 ## 11. Migration from v0.5 `board.yaml` (complete)
 
-Legacy **`board.yaml`** is removed from examples and product docs. Author **`*.dash.yaml`** and atomic **`*.chart.yaml`** only. The CLI may still accept legacy board-shaped files via an internal compat adapter for older repos; new work should not use them.
+Legacy **`board.yaml`** and board-shaped specs are **removed** from examples, product docs, and the CLI. Author **`*.dash.yaml`** and atomic **`*.chart.yaml`** only. There is no board compat adapter; migrate older repos to dash IR before upgrading.
 
 ---
 
@@ -333,12 +333,12 @@ Legacy **`board.yaml`** is removed from examples and product docs. Author **`*.d
 
 ## 13. Success criteria
 
-- [ ] Chart is the reusable, searchable, exportable atom (svg/png/html)  
-- [ ] Dash composes refs + inline charts with optional auto-coordination  
-- [ ] Data via `dbt_metric` | `dbt` | `sql` | `data` without a metric DSL  
-- [ ] New chart types via plugin registration  
-- [ ] Python SDK can validate + build chart and dash  
-- [ ] Agents use the same schemas as humans  
+- [x] Chart is the reusable, searchable, exportable atom (svg/png/html)  
+- [x] Dash composes refs + inline charts with optional auto-coordination  
+- [x] Data via `dbt_metric` | `dbt` | `sql` | `data` without a metric DSL  
+- [x] New chart types via plugin registration  
+- [x] Python SDK can validate + build chart and dash  
+- [x] Agents use the same schemas as humans  
 
 ---
 
@@ -346,5 +346,5 @@ Legacy **`board.yaml`** is removed from examples and product docs. Author **`*.d
 
 - [ROADMAP.md](./ROADMAP.md) — phased implementation plan  
 - [dbt-integration.md](./dbt-integration.md) — current model resolver (to extend)  
-- [chart-discovery.md](./chart-discovery.md) — current compose/search (to retarget at chart/dash)  
+- [chart-discovery.md](./chart-discovery.md) — search, get, list, `composeDash`, and dash-scoped addressability  
 - Root `VERDICT.md` — Mosaic GO for interactive path (still valid for HTML renderer)

@@ -6,7 +6,7 @@ import { join, dirname, resolve as resolvePath } from 'path';
 import { stringify as stringifyYAML } from 'yaml';
 import { watch } from 'chokidar';
 import { createDbtResolver } from '@dvfc/dbt-adapter';
-import { parseSpecString, registerBuiltinChartTypes, listChartTypes, normalizeFile, findDbtStubDir, } from '@dvfc/core';
+import { parseSpecString, registerBuiltinChartTypes, listChartTypes, normalizeFile, findDbtStubDir, applyDvfcConfig, } from '@dvfc/core';
 import { generateMainScript, generateHTML } from './generator.js';
 import { build as viteBuild, createServer as createViteServer } from 'vite';
 import { validateChartWithReport, validateDashWithReport, } from './validator.js';
@@ -503,20 +503,22 @@ async function generatePreviewFiles(specPath, tempDir) {
  * Build command - generate static HTML from dashboard spec
  */
 export async function build(specPath, options = {}) {
+    await applyDvfcConfig(process.cwd());
     const format = options.format || 'html';
     const outDir = options.outDir || 'dist';
-    if (format === 'svg' || format === 'png') {
+    if (format === 'svg' || format === 'png' || format === 'html-static') {
         const { exportStatic } = await import('./vega-export.js');
-        // Policy: dash/board multi-chart → require --chart <id>
+        // Policy: dash multi-chart → require --chart <id>
         const normalized = await normalizeFile(specPath, process.cwd());
         if (normalized.spec.charts.length !== 1 && !options.chartId) {
-            throw new Error(`Static ${format} export from a dash/board requires --chart <id> ` +
-                `(found ${normalized.spec.charts.length} charts). Policy: one chart per svg/png artifact.`);
+            throw new Error(`Static ${format} export from a dash requires --chart <id> ` +
+                `(found ${normalized.spec.charts.length} charts). Policy: one chart per artifact.`);
         }
-        const outFile = options.outDir && !options.outDir.endsWith(`.${format}`)
-            ? join(options.outDir, `${options.chartId || 'chart'}.${format}`)
-            : options.outDir || `chart.${format}`;
-        console.log(`📦 Exporting ${format.toUpperCase()} from: ${specPath}`);
+        const ext = format === 'html-static' ? 'html' : format;
+        const outFile = options.outDir && !options.outDir.endsWith(`.${ext}`)
+            ? join(options.outDir, `${options.chartId || 'chart'}.${ext}`)
+            : options.outDir || `chart.${ext}`;
+        console.log(`📦 Exporting ${format} from: ${specPath}`);
         const path = await exportStatic(specPath, {
             format,
             outFile,
@@ -698,9 +700,9 @@ export async function normalizeCommand(specPath, options = {}) {
         console.log(yaml);
     }
 }
-/** List registered chart types (builtins + any loaded plugins) */
-export function printChartTypes() {
-    registerBuiltinChartTypes();
+/** List registered chart types (builtins + plugins from dvfc.config) */
+export async function printChartTypes() {
+    await applyDvfcConfig(process.cwd());
     const types = listChartTypes();
     console.log('Registered chart types:\n');
     for (const t of types) {
@@ -713,5 +715,5 @@ export function printChartTypes() {
             .join(', ');
         console.log(`  ${t.id.padEnd(12)} ${(t.label ?? '').padEnd(16)} ${caps}`);
     }
-    console.log(`\n${types.length} types (add plugins via loadChartTypeModules / dvfc.config — see docs/ARCHITECTURE.md)\n`);
+    console.log(`\n${types.length} types (add plugins via dvfc.config.js chartTypes — see docs/ARCHITECTURE.md)\n`);
 }

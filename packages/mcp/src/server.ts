@@ -155,72 +155,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'search_charts',
-        description: 'Search for charts in a dashboard by ID, type, or data source. Returns matching chart specs.',
-        inputSchema: {
-          type: 'object',
-          properties: {
-            specPath: {
-              type: 'string',
-              description: 'Path to dashboard spec file'
-            },
-            query: {
-              type: 'object',
-              description: 'Search criteria',
-              properties: {
-                id: { type: 'string' },
-                type: { type: 'string' },
-                dataSource: { type: 'string' }
-              }
-            }
-          },
-          required: ['specPath']
-        }
-      },
-      {
-        name: 'explain_coordination',
-        description: 'Explain how charts in a dashboard are coordinated via selections and filters. Shows which charts are linked and how brushing affects them.',
-        inputSchema: {
-          type: 'object',
-          properties: {
-            specPath: {
-              type: 'string',
-              description: 'Path to dashboard spec file'
-            }
-          },
-          required: ['specPath']
-        }
-      },
-      {
-        name: 'apply_filter_plan',
-        description: 'Apply a filtering coordination plan to a dashboard. Links charts via selections and filterBy interactions. (Stub: defines pattern, actual wiring needs chart updates)',
-        inputSchema: {
-          type: 'object',
-          properties: {
-            specPath: {
-              type: 'string',
-              description: 'Path to dashboard spec file'
-            },
-            plan: {
-              type: 'object',
-              description: 'Filter coordination plan',
-              properties: {
-                brushChart: { type: 'string', description: 'Chart ID that should have brush' },
-                selectionName: { type: 'string', description: 'Name for the selection' },
-                filteredCharts: {
-                  type: 'array',
-                  items: { type: 'string' },
-                  description: 'Chart IDs that should filter by this selection'
-                }
-              },
-              required: ['brushChart', 'selectionName', 'filteredCharts']
-            }
-          },
-          required: ['specPath', 'plan']
-        }
-      },
-      {
-        name: 'search_charts',
-        description: 'Search for charts across the project. Returns chart hits with board path, chart ID, type, title, and display key. Supports --all for all matches or top 10 by default.',
+        description: 'Search for charts across the project. Returns chart hits with dash path, chart ID, type, title, and display key. Supports --all for all matches or top 10 by default.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -232,9 +167,13 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               type: 'string',
               description: 'Project root directory (default: current directory)'
             },
+            dashPath: {
+              type: 'string',
+              description: 'Filter by specific dash path (*.dash.yaml)'
+            },
             boardPath: {
               type: 'string',
-              description: 'Filter by specific board path'
+              description: 'Deprecated alias for dashPath'
             },
             all: {
               type: 'boolean',
@@ -246,25 +185,29 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'get_chart',
-        description: 'Get chart metadata with full board context. Returns chart spec, board path, display key, and context (data sources, theme, layout).',
+        description: 'Get chart metadata with full dash context. Returns chart spec, dash path, display key, and context (data sources, theme, layout).',
         inputSchema: {
           type: 'object',
           properties: {
+            dashPath: {
+              type: 'string',
+              description: 'Path to *.dash.yaml file'
+            },
             boardPath: {
               type: 'string',
-              description: 'Path to board file'
+              description: 'Deprecated alias for dashPath'
             },
             chartId: {
               type: 'string',
-              description: 'Chart ID within the board'
+              description: 'Chart ID within the dash'
             }
           },
-          required: ['boardPath', 'chartId']
+          required: ['chartId']
         }
       },
       {
         name: 'list_charts',
-        description: 'List all charts in project or specific board. Returns all charts with display keys and metadata.',
+        description: 'List all charts in project or specific dash. Returns all charts with display keys and metadata.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -272,9 +215,13 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               type: 'string',
               description: 'Project root directory (default: current directory)'
             },
+            dashPath: {
+              type: 'string',
+              description: 'Filter by specific dash path'
+            },
             boardPath: {
               type: 'string',
-              description: 'Filter by specific board path'
+              description: 'Deprecated alias for dashPath'
             }
           }
         }
@@ -312,13 +259,17 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'render_chart',
-        description: 'Render/build a single chart with dash/board context. Builds HTML with only the specified chart while preserving data sources, theme, and layout.',
+        description: 'Render/build a single chart with dash context. Builds HTML with only the specified chart while preserving data sources, theme, and layout.',
         inputSchema: {
           type: 'object',
           properties: {
-            boardPath: {
+            dashPath: {
               type: 'string',
               description: 'Path to *.dash.yaml file'
+            },
+            boardPath: {
+              type: 'string',
+              description: 'Deprecated alias for dashPath'
             },
             chartId: {
               type: 'string',
@@ -329,7 +280,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
               description: 'Output directory (default: dist)'
             }
           },
-          required: ['boardPath', 'chartId']
+          required: ['chartId']
         }
       },
       {
@@ -357,7 +308,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         inputSchema: {
           type: 'object',
           properties: {
-            dashPath: { type: 'string', description: 'Path to dash or board YAML' },
+            dashPath: { type: 'string', description: 'Path to dash YAML' },
             outDir: { type: 'string', description: 'Output directory (default: charts)' }
           },
           required: ['dashPath']
@@ -373,11 +324,11 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'normalize_spec',
-        description: 'Normalize chart/dash/board IR to legacy Mosaic DashboardSpec YAML (dvfc normalize). Useful for debugging resolution and connectors.',
+        description: 'Normalize chart/dash IR to legacy Mosaic DashboardSpec YAML (dvfc normalize). Useful for debugging resolution and connectors.',
         inputSchema: {
           type: 'object',
           properties: {
-            specPath: { type: 'string', description: 'Path to chart, dash, or board spec' }
+            specPath: { type: 'string', description: 'Path to chart or dash spec' }
           },
           required: ['specPath']
         }
@@ -386,6 +337,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
   };
 });
 
+// Tool handlers
 // Tool handlers
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const { name, arguments: args } = request.params;
@@ -668,9 +620,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       case 'search_charts': {
-        const { query, projectRoot, boardPath, all } = args as {
+        const { query, projectRoot, dashPath, boardPath, all } = args as {
           query: string;
           projectRoot?: string;
+          dashPath?: string;
           boardPath?: string;
           all?: boolean;
         };
@@ -678,7 +631,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const hits = await searchCharts({
           projectRoot: projectRoot || process.cwd(),
           query,
-          boardPath,
+          dashPath: dashPath || boardPath,
           all: all || false
         });
         
@@ -691,12 +644,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       case 'get_chart': {
-        const { boardPath, chartId } = args as {
-          boardPath: string;
+        const { dashPath, boardPath, chartId } = args as {
+          dashPath?: string;
+          boardPath?: string;
           chartId: string;
         };
+        const path = dashPath || boardPath;
+        if (!path) throw new Error('dashPath (or deprecated boardPath) is required');
         
-        const resource = await getChart(boardPath, chartId);
+        const resource = await getChart(path, chartId);
         
         return {
           content: [{
@@ -707,12 +663,13 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       case 'list_charts': {
-        const { projectRoot, boardPath } = args as {
+        const { projectRoot, dashPath, boardPath } = args as {
           projectRoot?: string;
+          dashPath?: string;
           boardPath?: string;
         };
         
-        const charts = await listCharts(projectRoot || process.cwd(), boardPath);
+        const charts = await listCharts(projectRoot || process.cwd(), dashPath || boardPath);
         
         return {
           content: [{
@@ -747,14 +704,16 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       case 'render_chart': {
-        const { boardPath, chartId, outDir } = args as {
-          boardPath: string;
+        const { dashPath, boardPath, chartId, outDir } = args as {
+          dashPath?: string;
+          boardPath?: string;
           chartId: string;
           outDir?: string;
         };
+        const path = dashPath || boardPath;
+        if (!path) throw new Error('dashPath (or deprecated boardPath) is required');
         
-        // Build single chart
-        await build(boardPath, {
+        await build(path, {
           outDir: outDir || 'dist',
           chartId
         });

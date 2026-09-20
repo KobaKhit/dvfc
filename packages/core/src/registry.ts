@@ -18,6 +18,10 @@ export interface ChartRenderContext {
   chart: unknown;
   dataSql?: string;
   tableName?: string;
+  /** Mosaic GeneratorContext when rendering HTML */
+  generatorContext?: unknown;
+  /** Inline data rows for Vega-Lite static export */
+  values?: Record<string, unknown>[];
 }
 
 export interface ChartTypeModule {

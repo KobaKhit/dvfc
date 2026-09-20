@@ -803,9 +803,9 @@ All v0.2 goals achieved:
 
 **Library (@dvfc/charts) ✅**
 - ✅ `searchCharts(projectRoot, query)` → ChartHit[]
-- ✅ `getChart(boardPath, chartId)` → ChartResource
-- ✅ `listCharts(projectRoot, boardPath?)` → ChartHit[]
-- ✅ `composeBoard(projectRoot, {charts})` → DashboardSpec
+- ✅ `getChart(dashPath, chartId)` → ChartResource
+- ✅ `listCharts(projectRoot, dashPath?)` → ChartHit[]
+- ✅ `composeDash(projectRoot, { chartIds, ... })` → dash YAML / `DashIR`
 - ✅ `resolveChartRef(projectRoot, ref)` → ChartRef
 - ✅ Display keys: `boardName__chartId` format
 

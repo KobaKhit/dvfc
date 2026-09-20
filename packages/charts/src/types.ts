@@ -5,14 +5,16 @@
 import type { DashboardSpec, ChartSpec } from '@dvfc/core';
 
 /**
- * Chart reference with board context
+ * Chart reference with dash context
  */
 export interface ChartRef {
-  /** Board path (relative to project root) */
-  boardPath: string;
-  /** Chart ID within the board */
+  /** Path to *.dash.yaml (relative to project root). Prefer over boardPath. */
+  dashPath: string;
+  /** @deprecated Use dashPath */
+  boardPath?: string;
+  /** Chart ID within the dash */
   chartId: string;
-  /** Optional display key: {boardId}__{chartId} */
+  /** Optional display key: {dashId}__{chartId} */
   displayKey?: string;
 }
 
@@ -20,7 +22,9 @@ export interface ChartRef {
  * Chart search hit
  */
 export interface ChartHit {
-  /** Board path (relative to project root) */
+  /** Path to dash/chart file (relative to project root) */
+  dashPath: string;
+  /** @deprecated Use dashPath */
   boardPath: string;
   /** Chart ID */
   chartId: string;
@@ -35,20 +39,22 @@ export interface ChartHit {
 }
 
 /**
- * Resolved chart resource with board context
+ * Resolved chart resource with dash context
  */
 export interface ChartResource {
   /** Chart specification */
   chart: ChartSpec;
-  /** Board path */
+  /** Path to dash file */
+  dashPath: string;
+  /** @deprecated Use dashPath */
   boardPath: string;
   /** Display key */
   displayKey: string;
-  /** Board context (for queries, variables, styles) */
+  /** Dash context (for queries, variables, styles) */
   context: {
-    /** Data sources from the board */
+    /** Data sources from the dash */
     dataSources: DashboardSpec['data'];
-    /** Theme/styles from the board */
+    /** Theme/styles from the dash */
     theme?: DashboardSpec['theme'];
     /** Layout info */
     layout?: DashboardSpec['layout'];
@@ -63,24 +69,12 @@ export interface SearchOptions {
   projectRoot: string;
   /** Search query (matches chart id, title, type, fields) */
   query: string;
-  /** Filter by board path */
+  /** Filter by dash path */
+  dashPath?: string;
+  /** @deprecated Use dashPath */
   boardPath?: string;
   /** Return all matches (default: false, returns max 10) */
   all?: boolean;
   /** Case sensitive search */
   caseSensitive?: boolean;
-}
-
-/**
- * Compose board options
- */
-export interface ComposeOptions {
-  /** Chart references to include */
-  charts: ChartRef[];
-  /** Optional metric name (stub for now) */
-  metric?: string;
-  /** Title for composed board */
-  title?: string;
-  /** Description for composed board */
-  description?: string;
 }

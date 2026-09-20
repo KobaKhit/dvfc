@@ -9,7 +9,7 @@ import * as vega from 'vega';
 import * as vegaLite from 'vega-lite';
 import { Resvg } from '@resvg/resvg-js';
 import type { ChartSpec, DashboardSpec, ChannelEncoding } from '@dvfc/core';
-import { normalizeFile, getChartType, registerBuiltinChartTypes } from '@dvfc/core';
+import { normalizeFile, getChartType, registerBuiltinChartTypes, getBuiltinChartTypeIds, registerChartType } from '@dvfc/core';
 
 function channelType(ch: ChannelEncoding | undefined): string | undefined {
   if (!ch) return undefined;
@@ -22,24 +22,10 @@ function channelType(ch: ChannelEncoding | undefined): string | undefined {
   return undefined;
 }
 
-export function chartToVegaLite(
+export function chartToVegaLiteBuiltin(
   chart: ChartSpec,
   values: Record<string, unknown>[]
 ): Record<string, unknown> {
-  registerBuiltinChartTypes();
-  const plugin = getChartType(chart.type);
-  if (plugin && plugin.capabilities.vegaLite === false) {
-    throw new Error(
-      `Chart type '${chart.type}' does not support Vega-Lite export (svg/png). Use --format html.`
-    );
-  }
-  if (plugin?.renderVegaLite) {
-    const custom = plugin.renderVegaLite({ chart }) as Record<string, unknown> | undefined;
-    if (custom && typeof custom === 'object' && custom.$schema) {
-      return { ...custom, data: { values } };
-    }
-  }
-
   const mark =
     chart.type === 'line'
       ? { type: 'line', point: true }
@@ -108,6 +94,52 @@ export function chartToVegaLite(
   };
 }
 
+export function chartToVegaLite(
+  chart: ChartSpec,
+  values: Record<string, unknown>[]
+): Record<string, unknown> {
+  attachVegaRenderersSync();
+
+  const plugin = getChartType(chart.type);
+  if (plugin && plugin.capabilities.vegaLite === false) {
+    throw new Error(
+      `Chart type '${chart.type}' does not support Vega-Lite export (svg/png). Use --format html.`
+    );
+  }
+  if (plugin?.renderVegaLite) {
+    const custom = plugin.renderVegaLite({ chart, values }) as Record<string, unknown> | undefined;
+    if (custom && typeof custom === 'object' && custom.$schema) {
+      return { ...custom, data: { values } };
+    }
+  }
+  return chartToVegaLiteBuiltin(chart, values);
+}
+
+let vegaAttached = false;
+function attachVegaRenderersSync(): void {
+  if (vegaAttached) return;
+  registerBuiltinChartTypes();
+  for (const id of getBuiltinChartTypeIds()) {
+    const existing = getChartType(id);
+    if (!existing) continue;
+    if (existing.capabilities.vegaLite === false) continue;
+    registerChartType({
+      ...existing,
+      renderVegaLite(ctx) {
+        const c = ctx.chart as ChartSpec;
+        const vals = (ctx.values as Record<string, unknown>[] | undefined) ?? [];
+        return chartToVegaLiteBuiltin(c, vals);
+      },
+    });
+  }
+  vegaAttached = true;
+}
+
+/** Public alias for CLI / tests */
+export function attachBuiltinVegaRenderers(): void {
+  attachVegaRenderersSync();
+}
+
 async function loadValuesForChart(
   spec: DashboardSpec,
   chart: ChartSpec,
@@ -163,10 +195,67 @@ export async function renderChartPng(vlSpec: Record<string, unknown>): Promise<B
 }
 
 export interface ExportOptions {
-  format: 'svg' | 'png';
+  format: 'svg' | 'png' | 'html-static';
   outFile?: string;
   chartId?: string;
   projectRoot?: string;
+}
+
+/**
+ * Self-contained HTML page embedding Vega-Lite + CDN vega-embed (no DuckDB-WASM).
+ */
+export function buildHtmlStaticPage(
+  vlSpec: Record<string, unknown>,
+  title?: string
+): string {
+  const pageTitle = title || (typeof vlSpec.title === 'string' ? vlSpec.title : 'Chart');
+  const specJson = JSON.stringify(vlSpec);
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>${escapeHtml(pageTitle)}</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <style>
+    :root { color-scheme: light; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      background: linear-gradient(160deg, #f4f7fb 0%, #e8eef5 50%, #f7fafc 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      box-sizing: border-box;
+    }
+    #vis {
+      background: #fff;
+      padding: 1.5rem;
+      box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="vis"></div>
+  <script type="text/javascript">
+    vegaEmbed('#vis', ${specJson}, { actions: true }).catch(console.error);
+  </script>
+</body>
+</html>
+`;
+}
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 export async function exportStatic(
@@ -197,7 +286,7 @@ export async function exportStatic(
     throw new Error('Cannot export text charts to svg/png');
   }
 
-  const outFile = options.outFile || `${chart.id}.${options.format}`;
+  const outFile = options.outFile || `${chart.id}.${options.format === 'html-static' ? 'html' : options.format}`;
   const stageDir = join(dirname(resolvePath(outFile)), '.dvfc-export-data');
   await mkdir(stageDir, { recursive: true });
   const assetMap = new Map<string, string>();
@@ -222,6 +311,12 @@ export async function exportStatic(
   const vl = chartToVegaLite(chart, values);
 
   await mkdir(dirname(resolvePath(outFile)), { recursive: true });
+
+  if (options.format === 'html-static') {
+    const html = buildHtmlStaticPage(vl, chart.title || chart.id);
+    await writeFile(outFile, html);
+    return outFile;
+  }
 
   if (options.format === 'svg') {
     const svg = await renderChartSvg(vl);

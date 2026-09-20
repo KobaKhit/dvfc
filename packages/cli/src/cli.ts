@@ -70,7 +70,7 @@ program
   .option('-m, --minify', 'Minify output', false)
   .option('--chart <id>', 'Build single chart with board context')
   .option('--base <path>', 'Base public path (e.g. /dvfc/ for GitHub Pages)')
-  .option('-f, --format <format>', 'Output format: html | svg | png', 'html')
+  .option('-f, --format <format>', 'Output format: html | svg | png | html-static', 'html')
   .action(async (spec: string, options) => {
     try {
       await build(spec, {
@@ -113,9 +113,9 @@ const chartsCmd = program
 chartsCmd
   .command('types')
   .description('List registered chart types (built-ins and plugins)')
-  .action(() => {
+  .action(async () => {
     try {
-      printChartTypes();
+      await printChartTypes();
     } catch (error) {
       console.error('Error:', error instanceof Error ? error.message : String(error));
       process.exit(1);

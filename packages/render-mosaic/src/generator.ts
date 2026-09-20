@@ -4,7 +4,12 @@
  */
 
 import type { DashboardSpec, ChartSpec } from '@dvfc/core';
-import { getChartType } from '@dvfc/core';
+import {
+  getBuiltinChartTypeIds,
+  getChartType,
+  registerBuiltinChartTypes,
+  registerChartType,
+} from '@dvfc/core';
 
 export interface GeneratorContext {
   spec: DashboardSpec;
@@ -13,10 +18,40 @@ export interface GeneratorContext {
   base?: string;
 }
 
+let mosaicRenderersAttached = false;
+
+/** Attach built-in Mosaic renderMosaic implementations onto chart types (idempotent). */
+export function attachBuiltinMosaicRenderers(): void {
+  if (mosaicRenderersAttached) return;
+  registerBuiltinChartTypes();
+  for (const id of getBuiltinChartTypeIds()) {
+    const existing = getChartType(id);
+    if (!existing) continue;
+    registerChartType({
+      ...existing,
+      renderMosaic(ctx) {
+        const chart = ctx.chart as ChartSpec;
+        const gctx = ctx.generatorContext as GeneratorContext | undefined;
+        if (!gctx) {
+          throw new Error(`Mosaic render for '${id}' requires generatorContext`);
+        }
+        return generateChartBuiltin(chart, gctx);
+      },
+    });
+  }
+  mosaicRenderersAttached = true;
+}
+
+/** Test helper */
+export function _resetMosaicRendererAttachmentForTests(): void {
+  mosaicRenderersAttached = false;
+}
+
 /**
  * Generate main.ts code from dashboard spec
  */
 export function generateMainScript(ctx: GeneratorContext): string {
+  attachBuiltinMosaicRenderers();
   const { spec } = ctx;
   
   // Generate unique selection names
@@ -180,18 +215,10 @@ if (document.readyState === 'loading') {
 }
 
 /**
- * Generate code for a single chart
+ * Generate code for a single chart (built-in implementation).
+ * Prefer generateChart() which routes through the chart-type registry.
  */
-function generateChart(chart: ChartSpec, ctx: GeneratorContext): string {
-  // Plugin override: ChartTypeModule.renderMosaic may return vgplot source
-  const plugin = getChartType(chart.type);
-  if (plugin?.renderMosaic) {
-    const out = plugin.renderMosaic({ chart, tableName: chart.dataSource });
-    if (typeof out === 'string' && out.length > 0) {
-      return out;
-    }
-  }
-
+export function generateChartBuiltin(chart: ChartSpec, ctx: GeneratorContext): string {
   const containerId = `chart-${chart.id}`;
   const { encoding, interaction } = chart;
   
@@ -325,6 +352,26 @@ function generateChart(chart: ChartSpec, ctx: GeneratorContext): string {
       container${chart.id}.innerHTML = '<div style="padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;">⚠️ Error rendering chart: ' + (error instanceof Error ? error.message : String(error)) + '</div>';
     }
   }`;
+}
+
+/**
+ * Route chart codegen through the chart-type registry (plugins + builtins).
+ */
+export function generateChart(chart: ChartSpec, ctx: GeneratorContext): string {
+  attachBuiltinMosaicRenderers();
+  const plugin = getChartType(chart.type);
+  if (!plugin?.renderMosaic) {
+    throw new Error(`No Mosaic renderer registered for chart type '${chart.type}'`);
+  }
+  const out = plugin.renderMosaic({
+    chart,
+    tableName: chart.dataSource,
+    generatorContext: ctx,
+  });
+  if (typeof out !== 'string' || out.length === 0) {
+    throw new Error(`Mosaic renderer for '${chart.type}' returned empty output`);
+  }
+  return out;
 }
 
 /**
@@ -808,6 +855,7 @@ function generateDensityChart(chart: ChartSpec, ctx: GeneratorContext): string {
  * Generate index.html from dashboard spec
  */
 export function generateHTML(ctx: GeneratorContext): string {
+  attachBuiltinMosaicRenderers();
   const { spec } = ctx;
   
   return `<!DOCTYPE html>

@@ -6,10 +6,12 @@ Chart discovery enables finding, inspecting, and composing charts across dvfc pr
 
 **Design principles:**
 - Charts live in `*.chart.yaml` files and/or inline inside `*.dash.yaml`
-- Stable key: `spec path + chart id`
-- Display key format: `{dashOrBoardName}__{chartId}` (gradual move to `dashId/chartId`)
-- All operations preserve dash/board context (data sources, theme, layout)
+- Stable key: spec path + chart id
+- Display key format: `{dashName}__{chartId}` (preferred address: `dashId/chartId`)
+- All operations preserve dash context (data sources, theme, layout)
 - Ambiguous lookups return candidates or fail with list
+
+**Path parameter:** prefer **`dashPath`** (path to a `*.dash.yaml`). MCP tools and some CLI flags may still accept **`boardPath`** as a deprecated alias for the same field.
 
 ## CLI Commands
 
@@ -24,7 +26,7 @@ dvfc charts search revenue
 # Return all matches (default: top 10)
 dvfc charts search revenue --all
 
-# Filter by dash or board
+# Filter by dash (--board is deprecated alias for the same flag)
 dvfc charts search revenue --board examples/sales-board/sales.dash.yaml
 
 # JSON output (for scripting/agents)
@@ -52,7 +54,7 @@ Found 5 chart(s):
 
 ### Get Chart Metadata
 
-Get full chart specification with board context:
+Get full chart specification with dash context:
 
 ```bash
 # Get chart (JSON format)
@@ -64,40 +66,40 @@ dvfc charts get examples/dbt-jaffle/jaffle.dash.yaml daily_revenue --format yaml
 
 **Returns:**
 - Chart specification (type, encoding, interaction)
-- Board path and display key
-- Board context (data sources, theme, layout)
+- Dash path and display key
+- Dash context (data sources, theme, layout)
 
 ### List Charts
 
-List all charts in project or specific board:
+List all charts in project or specific dash:
 
 ```bash
 # List all charts in project
 dvfc charts list
 
-# List charts in specific board
+# List charts in specific dash
 dvfc charts list --board examples/sales-board/sales.dash.yaml
 
 # JSON output
 dvfc charts list --json
 ```
 
-### Compose Boards
+### Compose Dashes
 
-Compose ephemeral boards from chart IDs:
+Compose ephemeral dashes from chart IDs (`dvfc dash compose` or alias `dvfc charts compose`):
 
 ```bash
 # Compose from display keys
-dvfc charts compose \
+dvfc dash compose \
   --charts dbt-jaffle__daily_revenue,web-analytics__daily_revenue \
   --title "Revenue Comparison" \
-  -o revenue-comparison.yaml
+  -o revenue-comparison.dash.yaml
 
 # Compose from chart IDs (must be unambiguous)
-dvfc charts compose --charts daily_sales,top_products
+dvfc dash compose --charts daily_sales,top_products
 
-# With metric (stub for now)
-dvfc charts compose \
+# With metric (optional)
+dvfc dash compose \
   --charts sales-board__daily_sales \
   --metric "Total Revenue" \
   --title "Sales Dashboard"
@@ -105,17 +107,17 @@ dvfc charts compose \
 
 **Features:**
 - Resolves chart IDs across project
-- Supports `boardName__chartId` display keys
-- Merges data sources from all boards
-- Preserves theme and layout from first chart's board
+- Supports `dashName__chartId` display keys
+- Merges data sources from referenced dashes
+- Preserves theme and layout from first chart's dash
 - Returns error with candidates if ambiguous
 
 ### Build Single Chart
 
-Build a single chart while preserving board context:
+Build a single chart while preserving dash context:
 
 ```bash
-# Build specific chart from board
+# Build specific chart from dash
 dvfc build examples/sales-board/sales.dash.yaml --chart daily_sales -o dist-single
 
 # Regular build (all charts)
@@ -123,7 +125,7 @@ dvfc build examples/sales-board/sales.dash.yaml -o dist
 ```
 
 **Preserves:**
-- Board queries and data sources
+- Dash queries and data sources
 - Variable bindings
 - Theme and styles
 - Layout context
@@ -144,18 +146,22 @@ Search for charts with scoring:
 }
 ```
 
+Optional filter: `dashPath` (or deprecated `boardPath`).
+
 Returns: Array of `ChartHit` objects with scores.
 
 ### `get_chart`
 
-Get chart with board context:
+Get chart with dash context:
 
 ```json
 {
-  "boardPath": "examples/dbt-jaffle/jaffle.dash.yaml",
+  "dashPath": "examples/dbt-jaffle/jaffle.dash.yaml",
   "chartId": "daily_revenue"
 }
 ```
+
+(`boardPath` is accepted as a deprecated alias for `dashPath`.)
 
 Returns: `ChartResource` with full context.
 
@@ -166,26 +172,26 @@ List all charts:
 ```json
 {
   "projectRoot": "/path/to/project",
-  "boardPath": "examples/sales-board/sales.dash.yaml"  // optional
+  "dashPath": "examples/sales-board/sales.dash.yaml"
 }
 ```
 
 Returns: Array of all charts.
 
-### `compose_board`
+### `compose_dash`
 
-Compose board from chart IDs:
+Compose a dash from chart IDs:
 
 ```json
 {
   "projectRoot": "/path/to/project",
   "chartIds": ["daily_revenue", "sales-board__top_products"],
   "title": "Custom Dashboard",
-  "metric": "Revenue"  // stub
+  "outFile": "composed.dash.yaml"
 }
 ```
 
-Returns: Composed `DashboardSpec`.
+Returns: Composed dash spec / path. **`compose_board`** is a deprecated alias of this tool.
 
 ### `render_chart`
 
@@ -193,13 +199,13 @@ Build single chart:
 
 ```json
 {
-  "boardPath": "examples/sales-board/sales.dash.yaml",
+  "dashPath": "examples/sales-board/sales.dash.yaml",
   "chartId": "daily_sales",
   "outDir": "dist"
 }
 ```
 
-Builds HTML to `dist/index.html`.
+(`boardPath` deprecated alias.) Builds HTML to `dist/index.html`.
 
 ## Agent Workflow
 
@@ -208,24 +214,24 @@ Typical agent loop for chart discovery:
 1. **Search** → Find charts matching criteria
    ```
    search_charts({ query: "revenue" })
-   → Returns multiple hits across boards
+   → Returns multiple hits across dashes
    ```
 
 2. **Get** → Inspect specific chart
    ```
-   get_chart({ boardPath: "...", chartId: "..." })
+   get_chart({ dashPath: "...", chartId: "..." })
    → Returns full spec + context
    ```
 
-3. **Compose** → Build new dashboard
+3. **Compose** → Build new dash
    ```
-   compose_board({ chartIds: [...] })
-   → Returns YAML spec
+   compose_dash({ chartIds: [...] })
+   → Returns dash YAML / path
    ```
 
-4. **Render** → Build single chart or full board
+4. **Render** → Build single chart or full dash
    ```
-   render_chart({ boardPath: "...", chartId: "..." })
+   render_chart({ dashPath: "...", chartId: "..." })
    → Builds HTML
    ```
 
@@ -238,7 +244,7 @@ import {
   searchCharts,
   getChart,
   listCharts,
-  composeBoard,
+  composeDash,
   resolveChartRef,
   makeDisplayKey
 } from '@dvfc/charts';
@@ -250,59 +256,59 @@ const hits = await searchCharts({
   all: false
 });
 
-// Get chart
-const resource = await getChart(boardPath, chartId);
+// Get chart (dashPath = path to *.dash.yaml)
+const resource = await getChart(dashPath, chartId);
 
 // List charts
 const allCharts = await listCharts(projectRoot);
-const boardCharts = await listCharts(projectRoot, boardPath);
+const dashCharts = await listCharts(projectRoot, dashPath);
 
-// Compose board
-const spec = await composeBoard(projectRoot, {
-  charts: [
-    { boardPath: '...', chartId: '...' },
-    { boardPath: '...', chartId: '...' }
-  ],
-  title: 'My Dashboard'
+// Compose dash
+const { dash, outPath } = await composeDash(projectRoot, {
+  chartIds: ['dbt-jaffle__daily_revenue', 'web-analytics__daily_revenue'],
+  title: 'My Dashboard',
+  outFile: 'composed.dash.yaml'
 });
 
 // Resolve chart reference (supports display keys)
 const ref = await resolveChartRef(projectRoot, 'sales-board__daily_sales');
 ```
 
+**Note:** `composeBoard` in older snippets referred to legacy board composition; use **`composeDash`** for dash IR output.
+
 ## Disambiguation
 
 When multiple charts match an ID:
 
 ```bash
-# This fails if "revenue" exists on multiple boards
-$ dvfc charts compose --charts revenue
+# This fails if "revenue" exists on multiple dashes
+$ dvfc dash compose --charts revenue
 
 Error: Ambiguous chart reference 'revenue'. Multiple matches found:
   dbt-jaffle__daily_revenue, web-analytics__daily_revenue
-Use display key format (boardName__chartId) to disambiguate.
+Use display key format (dashName__chartId) to disambiguate.
 
 # Use display key instead
-$ dvfc charts compose --charts dbt-jaffle__daily_revenue
-✅ Composed board saved
+$ dvfc dash compose --charts dbt-jaffle__daily_revenue
+✅ Composed dash saved
 ```
 
 ## Examples
 
-### Multi-board Revenue Analysis
+### Multi-dash revenue analysis
 
 ```bash
 # Find all revenue charts
 dvfc charts search revenue --all
 
-# Compose comparison board
-dvfc charts compose \
+# Compose comparison dash
+dvfc dash compose \
   --charts dbt-jaffle__daily_revenue,web-analytics__daily_revenue \
   --title "Revenue Comparison (dbt vs Analytics)" \
-  -o revenue-comparison.yaml
+  -o revenue-comparison.dash.yaml
 
 # Build it
-dvfc build revenue-comparison.yaml
+dvfc build revenue-comparison.dash.yaml
 ```
 
 ### Extract Single Chart
@@ -321,23 +327,23 @@ dvfc build examples/dbt-jaffle/jaffle.dash.yaml \
    → search_charts({ query: "customer" })
 
 2. Agent: "Get the top customer chart"
-   → get_chart({ boardPath: "...", chartId: "top_customers" })
+   → get_chart({ dashPath: "...", chartId: "top_customers" })
 
 3. Agent: "Add a filter from daily_sales"
-   → compose_board({
+   → compose_dash({
        chartIds: ["daily_sales", "top_customers"]
      })
 
 4. Agent: "Build it"
-   → build_dashboard({ specPath: "composed.yaml" })
+   → build_dashboard({ specPath: "composed.dash.yaml" })
 ```
 
 ## Constraints Met
 
-✅ Charts stay board-scoped (not standalone files)  
-✅ Stable key: board path + chart id  
-✅ Display key: `boardName__chartId`  
-✅ Get/render/build preserve board context  
+✅ Charts addressable from standalone `*.chart.yaml` and inline dash charts  
+✅ Stable key: dash path + chart id  
+✅ Display key: `dashName__chartId`  
+✅ Get/render/build preserve dash context  
 ✅ Ambiguous lookups return candidates
 
 ## See Also

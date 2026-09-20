@@ -30,19 +30,19 @@
 
 ## Phase 1 — IR + parse (YAML / TOML / JSON)
 
-**Outcome:** One parser path; board files still load as dashes.
+**Outcome:** One parser path for chart and dash specs (YAML / TOML / JSON).
 
 | Task | Detail |
 |------|--------|
 | Types | `ChartIR`, `DashIR`, `DataRef` (`dbt_metric` \| `dbt` \| `sql` \| `data`) in `@dvfc/core` |
 | Schema | JSON Schema export; AJV validate via CLI |
 | Parse | YAML + JSON + TOML (`smol-toml`) |
-| Compat | `DashboardSpec` / `board.yaml` → adapter → `DashIR` (inline charts) |
+| Compat | *(removed)* — `board.yaml` / legacy board IR no longer accepted; dashes only |
 | Tests | Fixtures in `packages/core/test` + example `*.chart.yaml` / `*.dash.yaml` |
 
 **Status:** ✅ Landed in `@dvfc/core` + CLI `validate` / `charts types`
 
-**Exit:** `dvfc validate` accepts `*.chart.*` and `*.dash.*` and legacy boards.
+**Exit:** `dvfc validate` accepts `*.chart.*` and `*.dash.*` only.
 
 ---
 
@@ -88,7 +88,7 @@
 | Task | Detail |
 |------|--------|
 | Discovery | Index `*.chart.*` and charts inside `*.dash.*` |
-| Keys | `dashId/chartId` (replace `board__chart` gradually) |
+| Keys | `dashId/chartId` (display keys `dashName__chartId` retained for disambiguation) |
 | `dvfc dash compose` | From chart ids → dash YAML with `coordination.auto` |
 | `dvfc charts extract` | Inline → files |
 | MCP | Rename/add tools; keep temporary aliases |
@@ -102,7 +102,7 @@
 
 ## Phase 5 — Mosaic renderer (dash HTML) on new IR
 
-**Outcome:** Interactive HTML builds from Dash IR (legacy boards still work via adapter).
+**Outcome:** Interactive HTML builds from Dash IR only.
 
 | Task | Detail |
 |------|--------|
@@ -201,21 +201,23 @@ Compose (4) can start as soon as IR exists; Mosaic split (5) unblocks HTML confi
 
 ---
 
-## Immediate next implementation tasks (when you say go)
+## Done / Remaining
 
-1. Add `ChartSpec` / `DashSpec` / `DataRef` to `@dvfc/core` + JSON Schema.  
-2. Introduce chart type registry; wrap existing `line`/`bar` as modules.  
-3. Gallery examples on `*.dash.yaml` (legacy board removed from tree).  
-4. Spike `renderVegaLite` for `line` + `bar` → SVG.  
-5. Spike `dbt_metric` resolve against one MetricFlow-enabled fixture (or documented compile step).
+**Done (Phases 0–8 core):** Chart/dash IR + validate; chart type registry; `@dvfc/resolve` connectors including `dbt_metric`; dash compose/extract and discovery; Mosaic HTML + Vega SVG/PNG; Python SDK; gallery and docs on `*.dash.yaml` only; MCP/skill dash vocabulary.
+
+**Remaining (optional / deferred):**
+
+- Warehouse/runtime adapters beyond file-based dbt (SQLMesh/Bruin live query, CLI `--adapter` auto-detect)
+- Observable Framework **emit** spike (`dvfc emit framework`) — non-core
+- npm / PyPI publish
+
+**Landed in hygiene pass:** `composeBoard` removed (use `composeDash`); Mosaic/Vega builtins attach via `renderMosaic` / `renderVegaLite`; `html-static` format; `dvfc.config.js` + `applyDvfcConfig`; golden SVG hash fixtures; discovery `dashPath` (boardPath alias).
 
 ---
 
-## Open decisions (resolve during Phase 1–3)
+## Resolved decisions (defaults in use)
 
-1. **Dash → SVG/PNG:** export all charts as a directory vs require `--chart id`?  
-2. **Config file name:** `dvfc.config.js` vs `dvfc.toml`?  
-3. **dbt_metric MVP:** live MetricFlow invoke vs checked-in compiled SQL fixtures first?  
-4. **Package layout:** monorepo split `@dvfc/render-*` now vs later?
-
-Defaults if unspecified: (1) `--chart` required for svg/png from dash, (2) `dvfc.config.js` + optional toml, (3) compiled SQL fixtures first then live MF, (4) split render packages when Phase 5 starts.
+1. **Dash → SVG/PNG:** **`--chart <id>` required** when building svg/png from a dash (no zip-all default).  
+2. **Config file name:** **`dvfc.config.js`** primary; optional TOML later if needed.  
+3. **dbt_metric MVP:** **Fixtures first, then live MetricFlow** — both paths implemented (`compileDbtMetricSql` / `mf` + `dbt sl`).  
+4. **Package layout:** **`@dvfc/render-mosaic` and `@dvfc/render-vega` split** — landed in Phase 5–6.

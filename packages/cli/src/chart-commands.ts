@@ -35,7 +35,7 @@ export async function searchChartsCommand(
   const hits = await searchCharts({
     projectRoot,
     query,
-    boardPath: options.board,
+    dashPath: options.board,
     all: options.all || false
   });
   
@@ -54,7 +54,7 @@ export async function searchChartsCommand(
       console.log(`   Chart ID: ${hit.chartId}`);
       console.log(`   Type: ${hit.type}`);
       if (hit.title) console.log(`   Title: ${hit.title}`);
-      console.log(`   Board: ${hit.boardPath}`);
+      console.log(`   Dash: ${hit.dashPath}`);
       if (hit.score) console.log(`   Score: ${hit.score}`);
       console.log();
     }
@@ -70,28 +70,27 @@ export interface GetChartOptions {
 }
 
 /**
- * Get chart metadata with board context
+ * Get chart metadata with dash context
  */
 export async function getChartCommand(
-  board: string,
+  dash: string,
   chartId: string,
   options: GetChartOptions = {}
 ): Promise<void> {
-  const boardPath = resolvePath(process.cwd(), board);
+  const dashPath = resolvePath(process.cwd(), dash);
   
-  console.log(`📊 Getting chart '${chartId}' from '${board}'...\n`);
+  console.log(`📊 Getting chart '${chartId}' from '${dash}'...\n`);
   
-  const resource = await getChart(boardPath, chartId);
+  const resource = await getChart(dashPath, chartId);
   
   const format = options.format || 'json';
   
   if (format === 'json') {
     console.log(JSON.stringify(resource, null, 2));
   } else {
-    // YAML format
     const output = {
       displayKey: resource.displayKey,
-      boardPath: resource.boardPath,
+      dashPath: resource.dashPath,
       chart: resource.chart,
       context: resource.context
     };
@@ -105,12 +104,12 @@ export interface ListChartsOptions {
 }
 
 /**
- * List all charts in project or board
+ * List all charts in project or dash
  */
 export async function listChartsCommand(options: ListChartsOptions = {}): Promise<void> {
   const projectRoot = process.cwd();
   
-  const scope = options.board ? `board '${options.board}'` : 'project';
+  const scope = options.board ? `dash '${options.board}'` : 'project';
   console.log(`📋 Listing charts in ${scope}...\n`);
   
   const hits = await listCharts(projectRoot, options.board);
@@ -125,17 +124,17 @@ export async function listChartsCommand(options: ListChartsOptions = {}): Promis
   } else {
     console.log(`Found ${hits.length} chart(s):\n`);
     
-    // Group by board
-    const byBoard = new Map<string, ChartHit[]>();
+    const byDash = new Map<string, ChartHit[]>();
     for (const hit of hits) {
-      if (!byBoard.has(hit.boardPath)) {
-        byBoard.set(hit.boardPath, []);
+      const key = hit.dashPath || hit.boardPath;
+      if (!byDash.has(key)) {
+        byDash.set(key, []);
       }
-      byBoard.get(hit.boardPath)!.push(hit);
+      byDash.get(key)!.push(hit);
     }
     
-    for (const [boardPath, charts] of byBoard.entries()) {
-      console.log(`📁 ${boardPath}`);
+    for (const [dashPath, charts] of byDash.entries()) {
+      console.log(`📁 ${dashPath}`);
       for (const chart of charts) {
         console.log(`   📊 ${chart.displayKey} (${chart.type})`);
         if (chart.title) console.log(`      ${chart.title}`);
