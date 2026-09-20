@@ -45,7 +45,7 @@ export function resolveConstantColor(
 }
 
 /** Pie/donut slice colors from theme (or navy→sky ramp). */
-export function pieColorExpr(ctx: GeneratorContext, indexExpr: string, lengthExpr: string): string {
+export function pieColorExpr(ctx: GeneratorContext, indexExpr: string, _lengthExpr: string): string {
   const colors = themeColors(ctx.spec.theme);
   const lit = JSON.stringify(colors);
   return `((${lit})[${indexExpr} % ${colors.length}] || \`hsl(\${210 - (${indexExpr} * 28) % 80}, 42%, \${48 - (${indexExpr} % 3) * 6}%)\`)`;
