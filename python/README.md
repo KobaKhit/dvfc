@@ -5,19 +5,25 @@ Interactive HTML (Mosaic) and the full CLI pipeline still use the Node `dvfc` bi
 
 ## Install
 
+Use **[uv](https://docs.astral.sh/uv/)** (preferred):
+
 ```bash
-# From this directory (editable)
-pip install -e .
+# From this directory
+uv sync --extra dev          # create .venv + install editable package
+uv run pytest -q
+uv run dvfc-py --help
 
-# Extras
-pip install -e ".[render]"       # in-process SVG/PNG via vl-convert
-pip install -e ".[metricflow]"   # try in-process MetricFlow APIs
-pip install -e ".[all]"
+# Extras (pick what you need)
+uv sync --extra render       # in-process SVG/PNG via vl-convert
+uv sync --extra metricflow   # try in-process MetricFlow APIs
+uv sync --extra all
 
-# PyPI (when published)
-pip install dvfc
-# or: uv add dvfc
+# Add to another uv project
+uv add dvfc
+# or with extras: uv add "dvfc[render,metricflow]"
 ```
+
+`pip install -e .` still works if you must; prefer `uv` for local and CI.
 
 Requires Python 3.9+.
 
@@ -79,7 +85,7 @@ dvfc-py compile-metric total_revenue --spec-dir examples/charts
 Same resolution order as the Node stack (see `docs/dbt-metrics.md`):
 
 1. `semantic/<metric>.sql` fixtures  
-2. In-process MetricFlow (`pip install dvfc[metricflow]`) when the installed API matches your project  
+2. In-process MetricFlow (`uv add 'dvfc[metricflow]'` / `uv sync --extra metricflow`) when the installed API matches your project  
 3. `mf query --explain` or `dbt sl query --compile`
 
 Env: `DVFC_METRICFLOW_BIN`, `DVFC_METRICFLOW_MODE`, `DVFC_DBT_PROJECT`, `DVFC_METRICFLOW_CACHE`, `DVFC_METRICFLOW_SKIP`.

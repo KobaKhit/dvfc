@@ -25,7 +25,7 @@
 | **List charts** | ✅ Working | `dvfc charts list [--board path]` |
 | **Compose boards** | ✅ Working | `dvfc charts compose --charts id,id` |
 | **MCP server** | ✅ Working | `pnpm mcp` (13 tools) |
-| **Python SDK** | ✅ Working | `pip install -e python/` |
+| **Python SDK** | ✅ Working | `cd python && uv sync --extra dev` |
 
 ### Chart Types
 
@@ -340,7 +340,7 @@ Build and manipulate dvfc dashboards from Python.
 ### Installation
 
 ```bash
-pip install -e python/
+pip install -e python/   # prefer: cd python && uv sync --extra dev
 ```
 
 ### Quick Example

@@ -7,7 +7,8 @@ Thank you for your interest in contributing to Data Viz Factory! This document p
 ### Prerequisites
 
 - Node.js 18+ and pnpm 8+
-- Python 3.8+ (for Python SDK)
+- [uv](https://docs.astral.sh/uv/) (for Python SDK — preferred over pip)
+- Python 3.9+ (for Python SDK)
 - Git
 
 ### Setup
@@ -25,6 +26,9 @@ pnpm run build
 
 # Run tests
 pnpm test
+
+# Python SDK (uv)
+cd python && uv sync --extra dev && uv run pytest -q && cd ..
 
 # Run dogfood script
 pnpm dogfood

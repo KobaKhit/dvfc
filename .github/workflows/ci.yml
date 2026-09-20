@@ -83,10 +83,15 @@ jobs:
         fi
         echo "✓ No node_modules in git"
 
+    - name: Setup uv
+      uses: astral-sh/setup-uv@v4
+      with:
+        enable-cache: true
+
     - name: Python SDK tests
+      working-directory: python
       run: |
-        cd python
-        pip install -e ".[dev]"
-        pytest -q
-        python3 smoke_test.py
-        dvfc-py validate ../examples/charts/revenue_trend.chart.yaml
+        uv sync --extra dev
+        uv run pytest -q
+        uv run python smoke_test.py
+        uv run dvfc-py validate ../examples/charts/revenue_trend.chart.yaml

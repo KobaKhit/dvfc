@@ -148,7 +148,7 @@
 
 **Status:** ✅ `DataVizFactoryClient.build(..., format=)` + validate; `python/smoke_test.py`
 
-**Exit:** `pip install` / `uv add` path mirrors ARCHITECTURE examples.
+**Exit:** `uv add dvfc` / `uv sync` path mirrors ARCHITECTURE examples.
 
 ---
 

@@ -82,7 +82,8 @@ sql, source = compile_dbt_metric("total_revenue", spec_dir=Path("examples/charts
 ```
 
 ```bash
-pip install -e "python/[metricflow,render]"   # optional extras
+uv sync --extra metricflow --extra render   # from python/
+# or: uv add "dvfc[metricflow,render]"
 dvfc-py validate examples/charts/revenue_metric.chart.yaml
 dvfc-py compile-metric total_revenue --spec-dir examples/charts
 ```

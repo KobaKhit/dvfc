@@ -11,8 +11,8 @@ This document explains how to publish Data Viz Factory (dvfc) packages to npm an
 
 ### PyPI Publishing
 - PyPI account
-- API token configured: `~/.pypirc` or `TWINE_PASSWORD` env var
-- `twine` installed: `pip install twine`
+- API token configured: `~/.pypirc` or `UV_PUBLISH_TOKEN` / `TWINE_PASSWORD`
+- Prefer **uv**: `uv build` and `uv publish` (or `uv tool install twine` if you still use twine)
 
 ### GitHub Repository
 - Suggested name: `dvfc/dvfc` or `dvfc/data-viz-factory`
@@ -154,8 +154,10 @@ cd python
 # Clean previous builds
 rm -rf dist/ build/ *.egg-info
 
-# Build wheel and sdist
-python -m build
+# Build wheel and sdist (preferred)
+uv build
+
+# Or: python -m build
 
 # Verify contents
 ls -la dist/
@@ -170,7 +172,9 @@ unzip -l dist/dvfc-*.whl
 python -m twine upload --repository testpypi dist/*
 
 # Test installation
-pip install --index-url https://test.pypi.org/simple/ dvfc
+# Install from TestPyPI
+uv pip install --index-url https://test.pypi.org/simple/ dvfc
+# or: uv add --index https://test.pypi.org/simple/ dvfc
 
 # Verify
 python -c "from dvfc import DataVizFactoryClient; print('OK')"
@@ -189,7 +193,8 @@ open https://pypi.org/project/dvfc/
 ### 4. Test Installation
 
 ```bash
-pip install dvfc
+uv add dvfc
+# or: uv pip install dvfc
 
 python -c "from dvfc import DataVizFactoryClient; print('OK')"
 ```
@@ -273,7 +278,8 @@ Update README.md with actual install commands:
 npm install -g @dvfc/cli
 
 # Python
-pip install dvfc
+uv add dvfc
+# or: uv pip install dvfc
 ```
 
 ### ✅ Announcement
@@ -351,15 +357,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-      - run: pip install build twine
-      - run: cd python && python -m build
-      - run: python -m twine upload python/dist/*
+      - uses: astral-sh/setup-uv@v4
+      - run: cd python && uv build
+      - run: cd python && uv publish
         env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+          UV_PUBLISH_TOKEN: ${{ secrets.PYPI_TOKEN }}
 ```
 
 ---

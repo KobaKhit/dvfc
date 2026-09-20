@@ -1,0 +1,18 @@
+---
+description: Use uv for all Python packaging, installs, tests, and tooling
+globs: python/**/*
+alwaysApply: true
+---
+
+# Python: use uv
+
+For anything Python in this repo (`python/`, SDK, tests, publishing):
+
+- Prefer **uv** over pip/pipx/poetry/venv+pip
+- Local install: `cd python && uv sync --extra dev`
+- Run tools: `uv run pytest`, `uv run dvfc-py`, `uv run python smoke_test.py`
+- Add deps: `uv add …` / extras via `uv sync --extra render` etc.
+- Build/publish: `uv build`, `uv publish`
+- Lockfile: keep `python/uv.lock` committed; refresh with `uv lock`
+
+Do not document or script `pip install` as the primary path unless noting pip as a fallback.
