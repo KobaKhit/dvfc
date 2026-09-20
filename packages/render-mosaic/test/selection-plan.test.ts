@@ -1,9 +1,9 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import type { DashboardSpec } from '@dvfc/core';
-import { buildSelectionPlan } from '../src/selection-plan.js';
-import { generateMainScript } from '../src/generator.js';
-import type { GeneratorContext } from '../src/generator.js';
+import { buildSelectionPlan } from '../dist/selection-plan.js';
+import { generateMainScript } from '../dist/generator.js';
+import type { GeneratorContext } from '../dist/generator.js';
 
 test('multiple publishers on one logical name use crossfilter include composite', () => {
   const spec: DashboardSpec = {
