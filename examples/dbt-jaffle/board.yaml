@@ -1,3 +1,4 @@
+# DEPRECATED: Prefer jaffle.dash.yaml (Dash IR). This legacy board.yaml still loads via compat.
 meta:
   title: "Jaffle Shop Analytics"
   description: "Customer orders and payment analysis from dbt jaffle_shop"

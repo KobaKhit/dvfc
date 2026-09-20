@@ -2,6 +2,7 @@
  * CLI commands for Data Viz Factory
  */
 import type { DashboardSpec } from '@dvfc/core';
+import { type NormalizeResult } from '@dvfc/core';
 export interface InitOptions {
     fromDbt?: boolean;
     manifestPath?: string;
@@ -20,6 +21,7 @@ export interface BuildOptions {
     minify?: boolean;
     chartId?: string;
     base?: string;
+    format?: 'html' | 'svg' | 'png';
 }
 export interface ExportPdfOptions {
     outFile?: string;
@@ -30,7 +32,7 @@ export interface ExportPdfOptions {
  */
 export declare function exportPdf(specPath: string, options?: ExportPdfOptions): Promise<void>;
 /**
- * Validate command - validate dashboard spec
+ * Validate command - chart, dash, or legacy board
  */
 export declare function validate(specPath: string): Promise<boolean>;
 /**
@@ -45,3 +47,12 @@ export declare function build(specPath: string, options?: BuildOptions): Promise
  * Load dashboard spec from YAML or JSON file
  */
 export declare function loadSpec(path: string): Promise<DashboardSpec>;
+export declare function loadNormalized(path: string): Promise<NormalizeResult>;
+/**
+ * Dump normalized DashboardSpec (legacy Mosaic shape) for debugging / adapters
+ */
+export declare function normalizeCommand(specPath: string, options?: {
+    outFile?: string;
+}): Promise<void>;
+/** List registered chart types (builtins + any loaded plugins) */
+export declare function printChartTypes(): void;

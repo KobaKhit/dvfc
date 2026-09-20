@@ -6,12 +6,15 @@ This document explains how to use the `@dvfc/mcp` server with Cursor IDE to enab
 
 The Model Context Protocol (MCP) server exposes `dvfc` functionality to AI agents, allowing them to:
 
-- Validate dashboard specifications
-- Build dashboards from YAML specs
+- Validate chart (`*.chart.yaml`), dash (`*.dash.yaml`), and legacy board specs
+- Build HTML, SVG, or PNG from specs
 - List dbt models from a manifest
 - Create, update, and search charts
 - Explain coordination (crossfilter) relationships
 - Apply filter plans to wire up interactive brushing
+- Compose dashes, extract charts, normalize IR, list chart types (`compose_dash`, `extract_charts`, `normalize_spec`, `list_chart_types`)
+
+Legacy tool names (`validate_dashboard_spec`, `build_dashboard`, `compose_board`) remain aliases for the same workflows.
 
 ## Installation
 

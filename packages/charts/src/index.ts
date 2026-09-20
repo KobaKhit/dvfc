@@ -5,3 +5,4 @@
 
 export * from './types.js';
 export * from './discovery.js';
+export * from './compose-dash.js';

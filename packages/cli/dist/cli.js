@@ -4,8 +4,8 @@
  * Main entry point for command-line interface
  */
 import { Command } from 'commander';
-import { preview, build, validate, init, exportPdf } from './commands.js';
-import { searchChartsCommand, getChartCommand, listChartsCommand, composeCommand } from './chart-commands.js';
+import { preview, build, validate, init, exportPdf, printChartTypes, normalizeCommand } from './commands.js';
+import { searchChartsCommand, getChartCommand, listChartsCommand, composeCommand, composeDashCommand, extractChartsCommand } from './chart-commands.js';
 const program = new Command();
 program
     .name('dvfc')
@@ -19,6 +19,20 @@ program
     try {
         const isValid = await validate(spec);
         process.exit(isValid ? 0 : 1);
+    }
+    catch (error) {
+        console.error('Error:', error instanceof Error ? error.message : String(error));
+        process.exit(1);
+    }
+});
+program
+    .command('normalize')
+    .description('Normalize chart/dash/board IR to Mosaic DashboardSpec YAML')
+    .argument('<spec>', 'Path to chart, dash, or board spec')
+    .option('-o, --out-file <file>', 'Write normalized YAML to file (default: stdout)')
+    .action(async (spec, options) => {
+    try {
+        await normalizeCommand(spec, { outFile: options.outFile });
     }
     catch (error) {
         console.error('Error:', error instanceof Error ? error.message : String(error));
@@ -51,13 +65,15 @@ program
     .option('-m, --minify', 'Minify output', false)
     .option('--chart <id>', 'Build single chart with board context')
     .option('--base <path>', 'Base public path (e.g. /dvfc/ for GitHub Pages)')
+    .option('-f, --format <format>', 'Output format: html | svg | png', 'html')
     .action(async (spec, options) => {
     try {
         await build(spec, {
             outDir: options.outDir,
             minify: options.minify,
             chartId: options.chart,
-            base: options.base
+            base: options.base,
+            format: options.format,
         });
     }
     catch (error) {
@@ -88,6 +104,18 @@ program
 const chartsCmd = program
     .command('charts')
     .description('Chart discovery and management');
+chartsCmd
+    .command('types')
+    .description('List registered chart types (built-ins and plugins)')
+    .action(() => {
+    try {
+        printChartTypes();
+    }
+    catch (error) {
+        console.error('Error:', error instanceof Error ? error.message : String(error));
+        process.exit(1);
+    }
+});
 chartsCmd
     .command('search')
     .description('Search for charts across project')
@@ -148,6 +176,43 @@ chartsCmd
     }
     try {
         await composeCommand(options);
+    }
+    catch (error) {
+        console.error('Error:', error instanceof Error ? error.message : String(error));
+        process.exit(1);
+    }
+});
+chartsCmd
+    .command('extract')
+    .description('Extract inline charts from a dash/board into *.chart.yaml files')
+    .argument('<dash>', 'Path to dash or board YAML')
+    .option('-o, --out-dir <dir>', 'Output directory', 'charts')
+    .action(async (dash, options) => {
+    try {
+        await extractChartsCommand(dash, { outDir: options.outDir });
+    }
+    catch (error) {
+        console.error('Error:', error instanceof Error ? error.message : String(error));
+        process.exit(1);
+    }
+});
+const dashCmd = program
+    .command('dash')
+    .description('Dash composition commands');
+dashCmd
+    .command('compose')
+    .description('Compose a *.dash.yaml from chart ids')
+    .option('--charts <ids>', 'Comma-separated chart IDs (required)')
+    .option('--title <title>', 'Dash title')
+    .option('--description <desc>', 'Description')
+    .option('-o, --out-file <file>', 'Output file', 'composed.dash.yaml')
+    .action(async (options) => {
+    if (!options.charts) {
+        console.error('Error: --charts is required');
+        process.exit(1);
+    }
+    try {
+        await composeDashCommand(options);
     }
     catch (error) {
         console.error('Error:', error instanceof Error ? error.message : String(error));

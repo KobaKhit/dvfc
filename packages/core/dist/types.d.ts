@@ -28,12 +28,12 @@ export interface DataSource {
     /** Unique identifier for this data source */
     id: string;
     /** Type of data source */
-    type: 'dbt' | 'csv' | 'parquet' | 'url';
+    type: 'dbt' | 'csv' | 'parquet' | 'url' | 'sql';
     /** dbt model name (for type: 'dbt') */
     model?: string;
     /** File path or URL (for type: 'csv' | 'parquet' | 'url') */
     path?: string;
-    /** Optional inline SQL transformation */
+    /** Inline SQL (for type: 'sql' or optional transform) */
     sql?: string;
 }
 export type ChartType = 'bar' | 'line' | 'area' | 'scatter' | 'histogram' | 'boxplot' | 'density' | 'heatmap' | 'pie' | 'donut' | 'number' | 'table' | 'text';

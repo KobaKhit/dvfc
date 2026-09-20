@@ -9,9 +9,24 @@ import { watch } from 'chokidar';
 import type { DashboardSpec } from '@dvfc/core';
 import type { DbtManifest } from '@dvfc/dbt-adapter';
 import { createDbtResolver } from '@dvfc/dbt-adapter';
+import {
+  parseSpecString,
+  dashToBoard,
+  registerBuiltinChartTypes,
+  listChartTypes,
+  normalizeFile,
+  findDbtStubDir,
+  type NormalizeResult,
+} from '@dvfc/core';
 import { generateMainScript, generateHTML, type GeneratorContext } from './generator.js';
 import { build as viteBuild, createServer as createViteServer } from 'vite';
-import { validateWithReport, validateSemantics, type ValidationResult } from './validator.js';
+import {
+  validateWithReport,
+  validateSemantics,
+  validateChartWithReport,
+  validateDashWithReport,
+  type ValidationResult,
+} from './validator.js';
 
 export interface InitOptions {
   fromDbt?: boolean;
@@ -244,6 +259,7 @@ export interface BuildOptions {
   minify?: boolean;
   chartId?: string;
   base?: string;
+  format?: 'html' | 'svg' | 'png';
 }
 
 export interface ExportPdfOptions {
@@ -322,69 +338,98 @@ export async function exportPdf(specPath: string, options: ExportPdfOptions = {}
 }
 
 /**
- * Validate command - validate dashboard spec
+ * Validate command - chart, dash, or legacy board
  */
 export async function validate(specPath: string): Promise<boolean> {
   console.log(`🔍 Validating: ${specPath}\n`);
-  
+  registerBuiltinChartTypes();
+
   try {
-    // Load spec
-    const spec = await loadSpec(specPath);
-    
-    // Schema validation
+    const content = await readFile(specPath, 'utf-8');
+    const parsed = parseSpecString(content, { path: specPath });
+
+    if (parsed.kind === 'chart') {
+      console.log('Kind: chart\n');
+      const result = validateChartWithReport(parsed.chart);
+      console.log(result.report);
+      if (!result.valid) return false;
+      console.log('\n✅ All validation checks passed!\n');
+      return true;
+    }
+
+    if (parsed.kind === 'dash') {
+      console.log('Kind: dash\n');
+      const result = validateDashWithReport(parsed.dash);
+      console.log(result.report);
+      if (!result.valid) return false;
+      console.log('\n✅ All validation checks passed!\n');
+      return true;
+    }
+
+    // Legacy board
+    console.log('Kind: board (legacy → also checked as dash)\n');
+    console.warn(
+      '⚠️  board.yaml is deprecated. Prefer *.dash.yaml (see docs/ARCHITECTURE.md). Compat remains until M5.\n'
+    );
+    const spec = parsed.board;
     const schemaResult = validateWithReport(spec);
     console.log(schemaResult.report);
-    
-    if (!schemaResult.valid) {
-      return false;
-    }
-    
-    // Semantic validation
+    if (!schemaResult.valid) return false;
+
     const semanticResult = validateSemantics(spec);
     if (!semanticResult.valid) {
-      console.log('\n⚠️  Semantic validation warnings:\n');
+      console.log('\n⚠️  Semantic validation failed:\n');
       semanticResult.errors.forEach((err, i) => {
         console.log(`${i + 1}. Path: ${err.path}`);
         console.log(`   ${err.message}\n`);
       });
       return false;
     }
-    
-    // Check dbt models if any
+
+    const dashResult = validateDashWithReport(parsed.dash);
+    if (!dashResult.valid) {
+      console.log('\nDash IR (from board) checks:\n');
+      console.log(dashResult.report);
+      return false;
+    }
+    console.log('✓ Dash IR compat OK');
+
     const specDir = dirname(resolvePath(specPath));
-    const hasDbtModels = spec.data.some(ds => ds.type === 'dbt');
-    
+    const hasDbtModels = spec.data.some((ds) => ds.type === 'dbt');
+
     if (hasDbtModels) {
-      const dbtManifestPath = join(specDir, 'dbt-stub', 'manifest.json');
-      const dbtDataDir = join(specDir, 'dbt-stub');
-      
+      const dbtDataDir =
+        (await findDbtStubDir({
+          specDir,
+          projectRoot: process.cwd(),
+        })) ?? join(specDir, 'dbt-stub');
+      const dbtManifestPath = join(dbtDataDir, 'manifest.json');
+
       try {
         const manifestData = JSON.parse(await readFile(dbtManifestPath, 'utf-8')) as DbtManifest;
         const resolver = await createDbtResolver(manifestData, { dataDir: dbtDataDir });
-        
-        console.log('✓ dbt manifest found');
-        
-        // Verify all dbt models exist
+
+        console.log(`✓ dbt manifest found (${dbtDataDir})`);
+
         for (const dataSource of spec.data) {
           if (dataSource.type === 'dbt' && dataSource.model) {
             try {
               const path = resolver.ref(dataSource.model);
               console.log(`✓ dbt model '${dataSource.model}' → ${path}`);
-            } catch (err) {
+            } catch {
               console.log(`❌ dbt model '${dataSource.model}' not found in manifest`);
               return false;
             }
           }
         }
-      } catch (err) {
+      } catch {
         console.log(`❌ dbt manifest not found at ${dbtManifestPath}`);
         return false;
       }
     }
-    
+
     console.log('\n✅ All validation checks passed!\n');
     return true;
-    
   } catch (error) {
     console.error('\n❌ Validation failed:', error instanceof Error ? error.message : String(error));
     return false;
@@ -480,11 +525,31 @@ export async function preview(specPath: string, options: PreviewOptions = {}): P
 }
 
 /**
+ * Install preview/build deps using pnpm (preferred) or npm
+ */
+async function installDeps(cwd: string): Promise<void> {
+  const { exec } = await import('child_process');
+  const { promisify } = await import('util');
+  const execPromise = promisify(exec);
+  const env = {
+    ...process.env,
+    PATH: `/home/koba/.local/share/pnpm:/home/koba/.local/share/pnpm/bin:${process.env.PATH || ''}`,
+  };
+  // Prevent parent pnpm workspace from swallowing this install
+  await writeFile(join(cwd, '.npmrc'), 'ignore-workspace=true\n');
+  try {
+    await execPromise('pnpm install', { cwd, env });
+  } catch {
+    await execPromise('npm install --silent', { cwd, env });
+  }
+}
+
+/**
  * Generate files for preview
  */
 async function generatePreviewFiles(specPath: string, tempDir: string): Promise<void> {
-  const spec = await loadSpec(specPath);
-  const specDir = dirname(resolvePath(specPath));
+  const normalized = await normalizeFile(specPath, process.cwd());
+  const { spec, assets } = normalized;
   
   // Create package.json if it doesn't exist
   const tempPackageJson = {
@@ -503,16 +568,12 @@ async function generatePreviewFiles(specPath: string, tempDir: string): Promise<
   } catch {
     await writeFile(packageJsonPath, JSON.stringify(tempPackageJson, null, 2));
     
-    // Install dependencies
-    const { exec } = await import('child_process');
-    const { promisify } = await import('util');
-    const execPromise = promisify(exec);
-    await execPromise('npm install --silent', { cwd: tempDir });
+    await installDeps(tempDir);
   }
   
   const ctx: GeneratorContext = {
     spec,
-    dataDir: join(specDir, 'dbt-stub'),
+    dataDir: join(tempDir, 'data'),
     outputDir: tempDir,
     base: '/'
   };
@@ -524,13 +585,9 @@ async function generatePreviewFiles(specPath: string, tempDir: string): Promise<
   await writeFile(join(tempDir, 'main.ts'), mainScript);
   await writeFile(join(tempDir, 'index.html'), html);
   
-  // Copy data files
-  for (const dataSource of spec.data) {
-    if (dataSource.type === 'dbt' && dataSource.model) {
-      const srcPath = join(ctx.dataDir, `${dataSource.model}.csv`);
-      const destPath = join(tempDir, 'data', `${dataSource.id}.csv`);
-      await cp(srcPath, destPath);
-    }
+  // Copy resolved assets
+  for (const asset of assets) {
+    await cp(asset.absPath, join(tempDir, 'data', asset.destName));
   }
 }
 
@@ -538,7 +595,33 @@ async function generatePreviewFiles(specPath: string, tempDir: string): Promise<
  * Build command - generate static HTML from dashboard spec
  */
 export async function build(specPath: string, options: BuildOptions = {}): Promise<void> {
+  const format = options.format || 'html';
   const outDir = options.outDir || 'dist';
+
+  if (format === 'svg' || format === 'png') {
+    const { exportStatic } = await import('./vega-export.js');
+    // Policy: dash/board multi-chart → require --chart <id>
+    const normalized = await normalizeFile(specPath, process.cwd());
+    if (normalized.spec.charts.length !== 1 && !options.chartId) {
+      throw new Error(
+        `Static ${format} export from a dash/board requires --chart <id> ` +
+          `(found ${normalized.spec.charts.length} charts). Policy: one chart per svg/png artifact.`
+      );
+    }
+    const outFile =
+      options.outDir && !options.outDir.endsWith(`.${format}`)
+        ? join(options.outDir, `${options.chartId || 'chart'}.${format}`)
+        : options.outDir || `chart.${format}`;
+    console.log(`📦 Exporting ${format.toUpperCase()} from: ${specPath}`);
+    const path = await exportStatic(specPath, {
+      format,
+      outFile,
+      chartId: options.chartId,
+      projectRoot: process.cwd(),
+    });
+    console.log(`\n✅ Wrote ${path}\n`);
+    return;
+  }
   
   console.log(`📦 Building dashboard from: ${specPath}`);
   console.log(`   Output: ${outDir}`);
@@ -551,9 +634,10 @@ export async function build(specPath: string, options: BuildOptions = {}): Promi
       throw new Error('Spec validation failed');
     }
     
-    // Load and parse dashboard spec
-    const spec = await loadSpec(specPath);
-    console.log(`✓ Loaded spec: ${spec.meta.title}`);
+    // Load and normalize dashboard / chart / dash
+    const normalized = await normalizeFile(specPath, process.cwd());
+    let { spec, assets } = normalized;
+    console.log(`✓ Loaded spec: ${spec.meta.title} (${normalized.kind})`);
     
     // If chartId specified, filter to single chart
     if (options.chartId) {
@@ -564,67 +648,66 @@ export async function build(specPath: string, options: BuildOptions = {}): Promi
       
       // Filter data sources to only those used by this chart
       const usedDataSources = new Set([chart.dataSource]);
-      spec.data = spec.data.filter(ds => usedDataSources.has(ds.id));
-      spec.charts = [chart];
+      spec = {
+        ...spec,
+        data: spec.data.filter(ds => usedDataSources.has(ds.id)),
+        charts: [chart],
+      };
+      assets = assets.filter(a =>
+        spec.data.some(ds => a.destName === `${ds.id}.csv` || a.destName.startsWith(ds.id))
+      );
       
       console.log(`✓ Building single chart: ${chart.id} (${chart.type})`);
       if (chart.title) console.log(`  Title: ${chart.title}`);
     }
     
-    // Resolve dbt models if any
+    // Resolve dbt models if any (stub may live next to sibling examples)
     const specDir = dirname(resolvePath(specPath));
-    const dbtManifestPath = join(specDir, 'dbt-stub', 'manifest.json');
-    const dbtDataDir = join(specDir, 'dbt-stub');
-    
-    try {
-      const manifestData = JSON.parse(await readFile(dbtManifestPath, 'utf-8')) as DbtManifest;
-      const resolver = await createDbtResolver(manifestData, { dataDir: dbtDataDir });
-      
-      // Verify all dbt models exist
-      for (const dataSource of spec.data) {
-        if (dataSource.type === 'dbt' && dataSource.model) {
-          try {
+    const dbtDataDir =
+      (await findDbtStubDir({
+        specDir,
+        projectRoot: process.cwd(),
+      })) ?? join(specDir, 'dbt-stub');
+    const dbtManifestPath = join(dbtDataDir, 'manifest.json');
+
+    if (spec.data.some((ds) => ds.type === 'dbt')) {
+      try {
+        const manifestData = JSON.parse(await readFile(dbtManifestPath, 'utf-8')) as DbtManifest;
+        const resolver = await createDbtResolver(manifestData, { dataDir: dbtDataDir });
+
+        for (const dataSource of spec.data) {
+          if (dataSource.type === 'dbt' && dataSource.model) {
             const path = resolver.ref(dataSource.model);
-            
-            // Verify the file actually exists
             await readFile(path, 'utf-8');
             console.log(`✓ Resolved dbt model: ${dataSource.model} → ${path}`);
-          } catch (fileErr) {
-            throw new Error(
-              `dbt model '${dataSource.model}' resolved to ${resolver.ref(dataSource.model)} but file not found.\n` +
-              `  Data source ID: ${dataSource.id}\n` +
-              `  Expected path: ${resolver.ref(dataSource.model)}\n` +
-              `  Tip: Check that the CSV file exists in ${dbtDataDir}/`
-            );
           }
         }
-      }
-    } catch (err) {
-      if (spec.data.some(ds => ds.type === 'dbt')) {
-        if (err instanceof Error && err.message.includes('dbt model')) {
-          throw err; // Re-throw detailed error
-        }
-        throw new Error(
-          `dbt manifest not found at ${dbtManifestPath}\n` +
-          `  Your spec references dbt models but no manifest.json was found.\n` +
-          `  Expected location: ${dbtManifestPath}\n` +
-          `  Tip: Place your dbt manifest.json and CSV files in a 'dbt-stub' directory next to your board.yaml`
+      } catch (err) {
+        // Assets already resolved by normalize — allow build if CSVs are present
+        const missingAssets = spec.data.filter(
+          (ds) =>
+            ds.type === 'dbt' &&
+            !assets.some((a) => a.destName === `${ds.id}.csv`)
         );
+        if (missingAssets.length > 0) {
+          if (err instanceof Error && err.message.includes('dbt model')) {
+            throw err;
+          }
+          throw new Error(
+            `dbt manifest not found at ${dbtManifestPath}\n` +
+              `  Your spec references dbt models but no manifest.json was found.\n` +
+              `  Tip: Place dbt-stub next to the spec or under examples/*/dbt-stub`
+          );
+        }
+        console.log(`✓ Using resolved CSV assets (stub: ${dbtDataDir})`);
       }
     }
     
-    // Create temporary build directory (unique per build to avoid CSV contamination)
-    const tempDir = join(process.cwd(), '.dvfc-build');
-    await mkdir(tempDir, { recursive: true });
-    
-    // Clean data directory to prevent CSV contamination from previous builds
-    const dataDir = join(tempDir, 'data');
-    try {
-      const { rm } = await import('fs/promises');
-      await rm(dataDir, { recursive: true, force: true });
-    } catch {}
-    await mkdir(dataDir, { recursive: true });
-    
+    // Create temporary build directory outside the monorepo (avoid pnpm workspace)
+    const { mkdtemp } = await import('fs/promises');
+    const { tmpdir } = await import('os');
+    const tempDir = await mkdtemp(join(tmpdir(), 'dvfc-build-'));
+    await mkdir(join(tempDir, 'data'), { recursive: true });
     // Create package.json with dependencies
     const tempPackageJson = {
       name: 'dvfc-temp-build',
@@ -642,16 +725,13 @@ export async function build(specPath: string, options: BuildOptions = {}): Promi
     
     // Install dependencies in temp directory
     console.log(`📦 Installing dependencies...`);
-    const { exec } = await import('child_process');
-    const { promisify } = await import('util');
-    const execPromise = promisify(exec);
-    await execPromise('npm install --silent', { cwd: tempDir });
+    await installDeps(tempDir);
     console.log(`✓ Dependencies installed`);
     
     // Generate context
     const ctx: GeneratorContext = {
       spec,
-      dataDir: join(specDir, 'dbt-stub'),
+      dataDir: dbtDataDir,
       outputDir: outDir,
       base: options.base || '/'
     };
@@ -664,14 +744,10 @@ export async function build(specPath: string, options: BuildOptions = {}): Promi
     await writeFile(join(tempDir, 'index.html'), html);
     console.log(`✓ Generated dashboard code`);
     
-    // Copy data files
-    for (const dataSource of spec.data) {
-      if (dataSource.type === 'dbt' && dataSource.model) {
-        const srcPath = join(dbtDataDir, `${dataSource.model}.csv`);
-        const destPath = join(tempDir, 'data', `${dataSource.id}.csv`);
-        await cp(srcPath, destPath);
-        console.log(`✓ Copied data: ${dataSource.id}.csv`);
-      }
+    // Copy resolved assets
+    for (const asset of assets) {
+      await cp(asset.absPath, join(tempDir, 'data', asset.destName));
+      console.log(`✓ Copied data: ${asset.destName}`);
     }
     
     // Create Vite config
@@ -718,13 +794,54 @@ export async function build(specPath: string, options: BuildOptions = {}): Promi
  * Load dashboard spec from YAML or JSON file
  */
 export async function loadSpec(path: string): Promise<DashboardSpec> {
-  const content = await readFile(path, 'utf-8');
-  
-  if (path.endsWith('.yaml') || path.endsWith('.yml')) {
-    return parseYAML(content) as DashboardSpec;
-  } else if (path.endsWith('.json')) {
-    return JSON.parse(content) as DashboardSpec;
+  const { spec } = await normalizeFile(path, process.cwd());
+  return spec;
+}
+
+export async function loadNormalized(path: string): Promise<NormalizeResult> {
+  return normalizeFile(path, process.cwd());
+}
+
+/**
+ * Dump normalized DashboardSpec (legacy Mosaic shape) for debugging / adapters
+ */
+export async function normalizeCommand(
+  specPath: string,
+  options: { outFile?: string } = {}
+): Promise<void> {
+  const result = await normalizeFile(specPath, process.cwd());
+  const yaml = stringifyYAML({
+    kind: result.kind,
+    meta: result.spec.meta,
+    data: result.spec.data,
+    charts: result.spec.charts,
+    layout: result.spec.layout,
+    theme: result.spec.theme,
+    assets: result.assets.map((a) => ({ dest: a.destName, src: a.absPath })),
+  });
+  if (options.outFile) {
+    await mkdir(dirname(resolvePath(options.outFile)), { recursive: true });
+    await writeFile(options.outFile, yaml);
+    console.log(`✅ Wrote normalized dash → ${options.outFile} (${result.kind})`);
   } else {
-    throw new Error('Spec file must be .yaml, .yml, or .json');
+    console.log(yaml);
   }
+}
+
+/** List registered chart types (builtins + any loaded plugins) */
+export function printChartTypes(): void {
+  registerBuiltinChartTypes();
+  const types = listChartTypes();
+  console.log('Registered chart types:\n');
+  for (const t of types) {
+    const caps = [
+      t.capabilities.mosaic ? 'mosaic' : null,
+      t.capabilities.vegaLite ? 'vega-lite' : null,
+      ...(t.capabilities.interaction ?? []),
+    ]
+      .filter(Boolean)
+      .join(', ');
+    console.log(`  ${t.id.padEnd(12)} ${(t.label ?? '').padEnd(16)} ${caps}`);
+  }
+  console.log(`\n${types.length} types (add plugins via loadChartTypeModules / dvfc.config — see docs/ARCHITECTURE.md)\n`);
 }

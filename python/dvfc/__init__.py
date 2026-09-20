@@ -14,6 +14,7 @@ from .spec import (
 )
 from .builder import DashboardBuilder
 from .client import DataVizFactoryClient
+from .ir import Chart, Dash, DataRef, DataRefData, DataRefDbt, DataRefDbtMetric, DataRefSql
 
 __version__ = "0.1.0"
 __all__ = [
@@ -25,4 +26,11 @@ __all__ = [
     "InteractionSpec",
     "DashboardBuilder",
     "DataVizFactoryClient",
+    "Chart",
+    "Dash",
+    "DataRef",
+    "DataRefData",
+    "DataRefDbt",
+    "DataRefDbtMetric",
+    "DataRefSql",
 ]

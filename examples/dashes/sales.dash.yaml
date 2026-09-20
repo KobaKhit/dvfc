@@ -1,0 +1,28 @@
+id: sales
+title: Sales overview
+description: Dash with chart library ref + inline chart
+version: 0.1.0
+coordination:
+  auto: true
+data:
+  - id: sales_daily
+    type: dbt
+    model: sales_daily
+charts:
+  - chart: revenue_trend
+  - id: by_region
+    type: bar
+    title: Sales by region
+    dataSource: sales_daily
+    encoding:
+      x:
+        field: region
+        type: nominal
+      y:
+        field: sales
+        type: quantitative
+        aggregate: sum
+    interaction:
+      filterBy: time
+    width: 600
+    height: 300

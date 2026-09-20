@@ -1,3 +1,4 @@
+# DEPRECATED: Prefer sales.dash.yaml (Dash IR). This legacy board.yaml still loads via compat.
 meta:
   title: "Sales & Flights Analytics"
   description: "Multi-chart dashboard demonstrating Mosaic crossfiltering with dbt models"

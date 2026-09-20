@@ -3,11 +3,11 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![CI](https://img.shields.io/github/actions/workflow/status/KobaKhit/dvfc/ci.yml?branch=main&label=CI)](https://github.com/KobaKhit/dvfc/actions)
 
-**dvfc = Data Viz Factory — Cross-filtered boards for humans and agents**
+**dvfc = Data Viz Factory — Charts, dashes, and crossfiltering for humans and agents**
 
-**Build interactive analytics dashboards from declarative YAML** → Powered by [Mosaic](https://idl.uw.edu/mosaic/) + dbt
+**Build interactive analytics from declarative YAML** — atomic `*.chart.yaml` specs and composed `*.dash.yaml` dashboards → Powered by [Mosaic](https://idl.uw.edu/mosaic/) + dbt
 
-Define dashboards in YAML, get native crossfiltering and in-browser SQL. No backend required.
+Define charts and dashes in YAML, get native crossfiltering and in-browser SQL. No backend required. Legacy `board.yaml` still loads via compat but is **deprecated**.
 
 ---
 
@@ -35,7 +35,7 @@ pnpm install
 pnpm build
 
 # 3. Preview example with hot reload (30 sec)
-pnpm exec dvfc preview examples/sales-board/board.yaml
+pnpm exec dvfc preview examples/sales-board/sales.dash.yaml
 # Opens at http://localhost:3000
 
 # 4. Try crossfiltering! (2 min)
@@ -64,90 +64,106 @@ pnpm exec dvfc preview examples/sales-board/board.yaml
 
 ## 📊 Quick Examples
 
-### Example 1: Sales & Flights
-6-chart dashboard with time-based crossfiltering
+**Chart atom** (portable SVG/PNG):
+
 ```bash
-pnpm exec dvfc preview examples/sales-board/board.yaml
+dvfc validate examples/charts/revenue_trend.chart.yaml
+dvfc build examples/charts/revenue_trend.chart.yaml --format svg
 ```
 
-### Example 2: Web Analytics
-Traffic sources, conversions, and revenue
+**Dash** (canonical gallery examples):
+
 ```bash
-pnpm exec dvfc preview examples/web-analytics/board.yaml
+dvfc preview examples/sales-board/sales.dash.yaml
+dvfc preview examples/web-analytics/web-analytics.dash.yaml
+dvfc preview examples/revenue-analysis/revenue-analysis.dash.yaml
 ```
 
-### Example 3: Revenue Analysis with Overlays
-Analysis overlays (trend, mean, MA) + narrative text blocks
-```bash
-pnpm exec dvfc preview examples/revenue-analysis/board.yaml
-```
-
-See [examples/README.md](./examples/README.md) for full gallery.
+See [examples/README.md](./examples/README.md) — start with `examples/charts/` and `examples/dashes/`.
 
 ---
 
 ## 🛠️ CLI Commands
 
-### Validate a board spec
-```bash
-dvfc validate board.yaml
-```
-- JSON Schema validation
-- Semantic checks (data refs, selections)
-- dbt manifest verification
+Works on `*.chart.yaml`, `*.dash.yaml`, and legacy `board.yaml`.
 
-### Preview with hot reload
+### Validate
 ```bash
-dvfc preview board.yaml --port 3000
+dvfc validate my.dash.yaml
+dvfc validate my.chart.yaml
 ```
-- Vite dev server
-- File watching
-- Auto-reload on changes
 
-### Build static HTML
+### Preview (interactive Mosaic HTML)
 ```bash
-dvfc build board.yaml --out-dir dist
+dvfc preview my.dash.yaml --port 3000
 ```
-- Generates self-contained HTML
-- ~333KB gzipped
-- Works offline with DuckDB-WASM
+
+### Build
+```bash
+dvfc build my.dash.yaml --out-dir dist              # self-contained HTML
+dvfc build my.chart.yaml --format svg               # Vega-Lite → SVG
+dvfc build my.chart.yaml --format png
+```
+
+### Compose, extract, normalize, types
+```bash
+dvfc dash compose --charts id1,id2 -o composed.dash.yaml
+dvfc charts extract my.dash.yaml -o charts/
+dvfc normalize my.dash.yaml                         # Mosaic-ready YAML (debug)
+dvfc charts types                                   # registered chart plugins
+```
+
+### Python SDK
+```python
+from dvfc import DataVizFactoryClient
+client = DataVizFactoryClient()
+client.validate("examples/charts/revenue_trend.chart.yaml")
+client.build("examples/charts/revenue_trend.chart.yaml", format="svg")
+```
+
+See `python/` and [docs/dbt-metrics.md](./docs/dbt-metrics.md) for semantic metrics.
 
 ---
 
-## 📝 Dashboard Spec Format
+## 📝 Spec formats (chart + dash)
+
+**Atomic chart** (`revenue_trend.chart.yaml`):
 
 ```yaml
-meta:
-  title: "My Dashboard"
-  version: "0.1.0"
-
+id: revenue_trend
+type: line
 data:
-  - id: sales
-    type: dbt
-    model: sales_daily
-
-charts:
-  - id: trend
-    type: line
-    dataSource: sales
-    encoding:
-      x: { field: date, type: temporal }
-      y: { field: amount, aggregate: sum }
-    interaction:
-      brush: true
-      selection: dateBrush
-  
-  - id: breakdown
-    type: bar
-    dataSource: sales
-    encoding:
-      x: { field: region, type: nominal }
-      y: { field: amount, aggregate: sum }
-    interaction:
-      filterBy: dateBrush  # Linked to trend!
+  type: sql
+  query: SELECT date, revenue FROM ...
+encoding:
+  x: { field: date, type: temporal }
+  y: { field: revenue, aggregate: sum }
 ```
 
-**That's all it takes!** The CLI generates Mosaic code and bundles everything.
+**Dash** (`sales.dash.yaml`):
+
+```yaml
+id: sales
+title: Sales overview
+coordination:
+  auto: true
+data:
+  - id: sales_daily
+    type: dbt
+    model: sales_daily
+charts:
+  - chart: revenue_trend          # library ref
+  - id: by_region
+    type: bar
+    dataSource: sales_daily
+    encoding:
+      x: { field: region, type: nominal }
+      y: { field: sales, aggregate: sum }
+    interaction:
+      filterBy: time
+```
+
+Legacy **board.yaml** (`meta` + inline charts) still validates and previews via the compat adapter; prefer dash IR for new work.
 
 ---
 
@@ -184,13 +200,19 @@ dvfc/
 │   └── adapter-bruin/     # Bruin pipeline resolver
 ├── python/                # Python SDK
 ├── examples/
-│   ├── sales-board/       # Business analytics
+│   ├── charts/            # Atomic *.chart.yaml (canonical)
+│   ├── dashes/            # Composed *.dash.yaml (canonical)
+│   ├── sales-board/       # Full demo + sales.dash.yaml
 │   ├── web-analytics/     # Traffic + conversions
-│   ├── revenue-analysis/  # Analysis overlays + text charts
-│   └── dbt-jaffle/        # Real dbt project example
+│   ├── revenue-analysis/  # Overlays + text charts
+│   └── dbt-jaffle/        # dbt stub project
 ├── docs/                  # Documentation
+│   ├── ARCHITECTURE.md    # Chart/dash architecture
+│   ├── ROADMAP.md         # Implementation phases
+│   ├── add-chart-type.md  # ChartTypeModule plugins
+│   ├── dbt-metrics.md     # dbt_metric connector
 │   ├── mcp-cursor.md      # MCP setup guide
-│   ├── chart-discovery.md # Chart discovery guide
+│   ├── chart-discovery.md # Chart search & compose
 │   ├── dbt-integration.md # dbt integration guide
 │   ├── pdf-export.md      # PDF export documentation
 │   └── PUBLISHING.md      # Publishing guide
@@ -219,6 +241,8 @@ pnpm example:sales
 
 ## 📖 Key Documentation
 
+- **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - Target architecture (chart → dash, connectors, renderers, plugins)
+- **[docs/ROADMAP.md](./docs/ROADMAP.md)** - Phased implementation plan toward that architecture
 - **[examples/README.md](./examples/README.md)** - Gallery of working dashboards
 - **[STATUS.md](./STATUS.md)** - Feature status and capabilities (v0.5)
 - **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Development guide and workflow
@@ -284,5 +308,5 @@ Apache-2.0
 **Ready to build?** Start with [examples/README.md](./examples/README.md) or run:
 
 ```bash
-pnpm exec dvfc preview examples/sales-board/board.yaml
+pnpm exec dvfc preview examples/sales-board/sales.dash.yaml
 ```

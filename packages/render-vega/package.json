@@ -1,0 +1,32 @@
+{
+  "name": "@dvfc/render-vega",
+  "version": "0.1.0",
+  "description": "Vega-Lite SVG/PNG export for dvfc charts",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "test": "pnpm build && node --test test/*.test.js"
+  },
+  "dependencies": {
+    "@dvfc/core": "workspace:*",
+    "@resvg/resvg-js": "^2.6.2",
+    "csv-parse": "^5.6.0",
+    "vega": "^5.30.0",
+    "vega-lite": "^5.23.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.3"
+  },
+  "license": "Apache-2.0"
+}

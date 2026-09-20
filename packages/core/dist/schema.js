@@ -29,7 +29,7 @@ export const DashboardSpecSchema = {
                     id: { type: 'string' },
                     type: {
                         type: 'string',
-                        enum: ['dbt', 'csv', 'parquet', 'url']
+                        enum: ['dbt', 'csv', 'parquet', 'url', 'sql']
                     },
                     model: { type: 'string' },
                     path: { type: 'string' },

@@ -1,6 +1,6 @@
-# dvfc: Build Coordinated Analytics Dashboards
+# dvfc: Charts, dashes, and coordinated analytics
 
-**Skill for authoring interactive dashboards with native Mosaic crossfiltering**
+**Skill for authoring `*.chart.yaml` atoms and `*.dash.yaml` dashboards with native Mosaic crossfiltering. Legacy `board.yaml` is a deprecated compat alias.**
 
 ## When to Use This Skill
 
@@ -15,7 +15,7 @@ Keywords: dashboard, crossfilter, linked views, coordinated views, analytics, db
 
 ## What dvfc Does
 
-dvfc transforms declarative YAML specs into interactive dashboards:
+dvfc transforms declarative chart and dash YAML into interactive HTML (and SVG/PNG for chart atoms):
 - **Native crossfiltering** via Mosaic coordination engine
 - **In-browser SQL** with DuckDB-WASM (no backend)
 - **dbt integration** with `ref()` resolution
@@ -26,20 +26,20 @@ dvfc transforms declarative YAML specs into interactive dashboards:
 Use the `dvfc-mcp` server for:
 
 ### 1. validate_dashboard_spec
-Validate a dashboard spec (JSON Schema + semantic checks)
+Validate a chart, dash, or legacy board spec (JSON Schema + semantic checks)
 ```json
 {
-  "specPath": "board.yaml"
+  "specPath": "examples/sales-board/sales.dash.yaml"
 }
 ```
 
 ### 2. build_dashboard
-Build static HTML from spec
+Build from spec (HTML dash default; optional `format`: `svg` | `png` for charts)
 ```json
 {
-  "specPath": "board.yaml",
+  "specPath": "examples/charts/revenue_trend.chart.yaml",
   "outDir": "dist",
-  "minify": false
+  "format": "svg"
 }
 ```
 
@@ -118,19 +118,18 @@ Wire up chart coordination
 }
 ```
 
-## Dashboard Spec Format
+## Spec formats
 
-### Minimal Example
+### Dash (preferred)
 ```yaml
-meta:
-  title: "Sales Dashboard"
-  version: "0.1.0"
-
+id: sales
+title: Sales Dashboard
+coordination:
+  auto: true
 data:
   - id: sales
     type: dbt
     model: sales_daily
-
 charts:
   - id: trend
     type: line
@@ -140,8 +139,7 @@ charts:
       y: { field: amount, aggregate: sum }
     interaction:
       brush: true
-      selection: dateBrush
-
+      publishes: dateBrush
   - id: breakdown
     type: bar
     dataSource: sales
@@ -151,6 +149,12 @@ charts:
     interaction:
       filterBy: dateBrush
 ```
+
+### Legacy board (compat)
+Same charts under `meta:` + `charts:` in `board.yaml` — use dash IR for new files.
+
+### CLI parity
+`dvfc dash compose`, `dvfc charts extract`, `dvfc normalize`, `dvfc charts types`
 
 ## Chart Types
 
@@ -274,8 +278,8 @@ Use `build_dashboard` tool
 ## Examples
 
 See working examples:
-- `examples/sales-board/board.yaml` - Business analytics
-- `examples/web-analytics/board.yaml` - Web traffic
+- `examples/charts/` and `examples/dashes/` — canonical IR
+- `examples/sales-board/sales.dash.yaml` — full gallery demo
 
 ## Chart Discovery (NEW)
 
@@ -283,9 +287,9 @@ dvfc now supports cross-project chart discovery and composition!
 
 ### Key Concepts
 
-- **Board-scoped**: Charts live in boards, not standalone files
-- **Display keys**: `boardName__chartId` for unambiguous reference
-- **Board context**: Get/render operations preserve queries, variables, styles
+- **Project-scoped**: Charts in `*.chart.yaml` and/or inline in dashes
+- **Display keys**: `dashName__chartId` (legacy board names still work)
+- **Context**: Get/render preserve data sources, theme, layout
 - **Disambiguation**: Ambiguous IDs return candidate list
 
 ### New MCP Tools
@@ -332,9 +336,9 @@ List all charts in project or board:
 }
 ```
 
-#### compose_board
+#### compose_dash / compose_board
 
-Compose ephemeral board from chart IDs:
+Compose a dash (or legacy board YAML) from chart IDs:
 
 ```json
 {
@@ -366,7 +370,11 @@ Build single chart with board context:
 }
 ```
 
-Builds HTML with only the specified chart, preserving board queries/styles.
+Builds HTML with only the specified chart, preserving dash/board context.
+
+#### extract_charts / list_chart_types / normalize_spec
+
+Match CLI: extract inline charts to files, list `ChartTypeModule` plugins, dump normalized Mosaic YAML.
 
 ### Agent Workflow Pattern
 

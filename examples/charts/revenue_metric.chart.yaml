@@ -1,0 +1,17 @@
+id: revenue_metric
+type: line
+title: Revenue (dbt_metric fixture)
+description: Uses compiled MetricFlow SQL under semantic/ — not a dvfc metric DSL
+data:
+  type: dbt_metric
+  metric: total_revenue
+encoding:
+  x:
+    field: date
+    type: temporal
+  y:
+    field: revenue
+    type: quantitative
+    aggregate: sum
+width: 600
+height: 250

@@ -2,7 +2,7 @@
   "name": "@dvfc/monorepo",
   "version": "0.1.0",
   "private": true,
-  "description": "Data Viz Factory - Cross-filtered boards for humans and agents",
+  "description": "Data Viz Factory - chart/dash compiler with Mosaic + Vega export",
   "type": "module",
   "scripts": {
     "build": "pnpm -r --filter='!@dvfc/example-*' build",
@@ -10,7 +10,7 @@
     "clean": "pnpm -r --parallel clean && rm -rf dist node_modules",
     "mcp": "node packages/mcp/dist/server.js",
     "dogfood": "./scripts/dogfood.sh",
-    "test": "pnpm -r --filter='@dvfc/charts' test",
+    "test": "pnpm -r --filter='@dvfc/charts' --filter='@dvfc/core' --filter='@dvfc/resolve' --filter='@dvfc/render-vega' test",
     "example:sales": "pnpm --filter @dvfc/example-sales-board dev",
     "example:build": "pnpm --filter @dvfc/example-sales-board build",
     "example:preview": "pnpm --filter @dvfc/example-sales-board preview"

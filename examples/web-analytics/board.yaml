@@ -1,3 +1,4 @@
+# DEPRECATED: Prefer web-analytics.dash.yaml (Dash IR). This legacy board.yaml still loads via compat.
 meta:
   title: "Web Analytics Dashboard"
   description: "Track page views, traffic sources, and conversion metrics"

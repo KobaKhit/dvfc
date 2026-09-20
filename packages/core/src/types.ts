@@ -39,7 +39,7 @@ export interface DataSource {
   id: string;
   
   /** Type of data source */
-  type: 'dbt' | 'csv' | 'parquet' | 'url';
+  type: 'dbt' | 'csv' | 'parquet' | 'url' | 'sql';
   
   /** dbt model name (for type: 'dbt') */
   model?: string;
@@ -47,7 +47,7 @@ export interface DataSource {
   /** File path or URL (for type: 'csv' | 'parquet' | 'url') */
   path?: string;
   
-  /** Optional inline SQL transformation */
+  /** Inline SQL (for type: 'sql' or optional transform) */
   sql?: string;
 }
 

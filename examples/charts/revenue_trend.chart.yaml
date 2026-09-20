@@ -1,0 +1,23 @@
+id: revenue_trend
+type: line
+title: Daily revenue
+description: Atomic chart using a data file connector
+data:
+  type: data
+  path: ../sales-board/dbt-stub/sales_daily.csv
+encoding:
+  x:
+    field: date
+    type: temporal
+    label: Date
+  y:
+    field: sales
+    type: quantitative
+    aggregate: sum
+    label: Sales
+interaction:
+  brush: true
+  brushAxis: x
+  publishes: time
+width: 600
+height: 250

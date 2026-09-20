@@ -42,27 +42,39 @@ jobs:
     - name: Build packages
       run: pnpm run build
 
-    - name: Run tests
+    - name: Run unit tests
       run: |
-        cd packages/charts
-        pnpm test
+        pnpm --filter @dvfc/core test
+        pnpm --filter @dvfc/charts test
+        pnpm --filter @dvfc/resolve test
+        pnpm --filter @dvfc/render-vega test
 
-    - name: Validate examples
+    - name: Validate chart/dash examples
       run: |
+        node packages/cli/dist/cli.js validate examples/charts/revenue_trend.chart.yaml
+        node packages/cli/dist/cli.js validate examples/dashes/sales.dash.yaml
+        node packages/cli/dist/cli.js validate examples/sales-board/sales.dash.yaml
+        node packages/cli/dist/cli.js validate examples/web-analytics/web-analytics.dash.yaml
+        node packages/cli/dist/cli.js validate examples/dbt-jaffle/jaffle.dash.yaml
+        # Legacy board still accepted (deprecated)
         node packages/cli/dist/cli.js validate examples/sales-board/board.yaml
-        node packages/cli/dist/cli.js validate examples/web-analytics/board.yaml
-        node packages/cli/dist/cli.js validate examples/dbt-jaffle/board.yaml
 
-    - name: Test chart discovery
+    - name: Test chart discovery + compose
       run: |
+        node packages/cli/dist/cli.js charts types
         node packages/cli/dist/cli.js charts search revenue
         node packages/cli/dist/cli.js charts list
-        node packages/cli/dist/cli.js charts get examples/dbt-jaffle/board.yaml daily_revenue --format json
+        node packages/cli/dist/cli.js dash compose --charts revenue_trend -o /tmp/ci-composed.dash.yaml
+        node packages/cli/dist/cli.js validate /tmp/ci-composed.dash.yaml
 
-    - name: Test build
+    - name: Test HTML + SVG/PNG builds
       run: |
-        node packages/cli/dist/cli.js build examples/dbt-jaffle/board.yaml -o dist-test
-        test -f dist-test/index.html
+        node packages/cli/dist/cli.js build examples/charts/revenue_trend.chart.yaml -o /tmp/ci-chart-html --format html
+        test -f /tmp/ci-chart-html/index.html
+        node packages/cli/dist/cli.js build examples/charts/revenue_trend.chart.yaml -o /tmp/ci-chart.svg --format svg
+        test -f /tmp/ci-chart.svg
+        node packages/cli/dist/cli.js build examples/sales-board/sales.dash.yaml -o /tmp/ci-dash-html --format html
+        test -f /tmp/ci-dash-html/index.html
 
     - name: Check for node_modules in git
       run: |
@@ -76,4 +88,5 @@ jobs:
       run: |
         cd python
         pip install -e .
-        python3 -c "from dvfc import DashboardBuilder; print('✓ Python SDK imports')"
+        python3 -c "from dvfc import DashboardBuilder, Chart, Dash, DataVizFactoryClient; print('✓ Python SDK imports')"
+        python3 smoke_test.py

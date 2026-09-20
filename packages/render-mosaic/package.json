@@ -1,0 +1,27 @@
+{
+  "name": "@dvfc/render-mosaic",
+  "version": "0.1.0",
+  "description": "Mosaic / vgplot HTML code generator for dvfc dashes",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@dvfc/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.3"
+  },
+  "license": "Apache-2.0"
+}

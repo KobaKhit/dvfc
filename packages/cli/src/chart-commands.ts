@@ -11,7 +11,9 @@ import {
   getChart,
   listCharts,
   composeBoard,
-  resolveChartRef
+  resolveChartRef,
+  composeDash,
+  extractChartsFromDash,
 } from '@dvfc/charts';
 
 export interface SearchChartsOptions {
@@ -189,8 +191,52 @@ export async function composeCommand(options: ComposeOptions): Promise<void> {
   await writeFile(outFile, stringifyYAML(spec));
   
   console.log(`✅ Composed board saved to: ${outFile}`);
+
+  // Also write modern dash form
+  const dashOut = outFile.replace(/board\.yaml$/, 'dash.yaml').replace(/\.yaml$/, '.dash.yaml');
+  try {
+    const { outPath } = await composeDash(projectRoot, {
+      chartIds,
+      title: options.title,
+      description: options.description,
+      outFile: dashOut.endsWith('.dash.yaml') ? dashOut : `${dashOut.replace(/\.yaml$/, '')}.dash.yaml`,
+    });
+    console.log(`✅ Composed dash saved to: ${outPath}`);
+  } catch (e) {
+    console.warn('⚠️  Dash compose skipped:', e instanceof Error ? e.message : e);
+  }
+  
   console.log(`\nNext steps:`);
   console.log(`  dvfc validate ${outFile}`);
   console.log(`  dvfc preview ${outFile}`);
   console.log(`  dvfc build ${outFile}\n`);
+}
+
+export async function composeDashCommand(options: ComposeOptions): Promise<void> {
+  const projectRoot = process.cwd();
+  const chartIds = options.charts.split(',').map((s) => s.trim());
+  console.log(`🎨 Composing dash from ${chartIds.length} chart(s)...\n`);
+  const { outPath } = await composeDash(projectRoot, {
+    chartIds,
+    title: options.title,
+    description: options.description,
+    outFile: options.outFile || 'composed.dash.yaml',
+  });
+  console.log(`✅ Wrote ${outPath}`);
+  console.log(`\nNext: dvfc validate ${outPath}\n`);
+}
+
+export async function extractChartsCommand(
+  dashPath: string,
+  options: { outDir?: string } = {}
+): Promise<void> {
+  const outDir = options.outDir || 'charts';
+  console.log(`📤 Extracting inline charts from ${dashPath} → ${outDir}/\n`);
+  const written = await extractChartsFromDash(dashPath, outDir);
+  if (written.length === 0) {
+    console.log('No inline charts to extract (refs only).');
+    return;
+  }
+  for (const f of written) console.log(`✓ ${f}`);
+  console.log(`\n✅ Extracted ${written.length} chart(s)\n`);
 }

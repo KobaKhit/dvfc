@@ -31,9 +31,14 @@ examples=(
 
 for example in "${examples[@]}"; do
   board_file="examples/$example/board.yaml"
-  
-  if [ ! -f "$board_file" ]; then
-    echo "⚠️  Skipping $example (no board.yaml)"
+  spec_file=""
+  for f in examples/$example/*.dash.yaml; do
+    if [ -f "$f" ]; then spec_file="$f"; break; fi
+  done
+  if [ -z "$spec_file" ] && [ -f "$board_file" ]; then spec_file="$board_file"; fi
+
+  if [ -z "$spec_file" ]; then
+    echo "⚠️  Skipping $example (no *.dash.yaml or board.yaml)"
     continue
   fi
   
@@ -44,7 +49,7 @@ for example in "${examples[@]}"; do
   rm -rf .dvfc-build
   
   echo "  Building $example → $out_dir"
-  $CLI build "$board_file" -o "$out_dir" --base "$base_path"
+  $CLI build "$spec_file" -o "$out_dir" --base "$base_path"
   
   # Verify data directory exists
   if [ ! -d "$out_dir/data" ]; then

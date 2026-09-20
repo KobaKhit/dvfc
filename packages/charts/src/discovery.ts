@@ -3,7 +3,6 @@
  */
 
 import { readFile } from 'fs/promises';
-import { parse as parseYAML } from 'yaml';
 import { glob } from 'glob';
 import { relative, basename, dirname, extname } from 'path';
 import type { DashboardSpec } from '@dvfc/core';
@@ -43,13 +42,67 @@ export function parseDisplayKey(displayKey: string): { boardName: string; chartI
  */
 async function loadSpec(filePath: string): Promise<DashboardSpec> {
   const content = await readFile(filePath, 'utf-8');
-  
-  // Try YAML first, fall back to JSON
+  const { interpretSpec, boardToDash, listInlineCharts, isDashChartRef } = await import('@dvfc/core');
+  const { parse: parseYAML } = await import('yaml');
+
+  let raw: unknown;
   try {
-    return parseYAML(content) as DashboardSpec;
+    raw = parseYAML(content);
   } catch {
-    return JSON.parse(content) as DashboardSpec;
+    raw = JSON.parse(content);
   }
+
+  const parsed = interpretSpec(raw, { path: filePath });
+  if (parsed.kind === 'board') return parsed.board;
+  if (parsed.kind === 'chart') {
+    return {
+      meta: { title: parsed.chart.title || parsed.chart.id, version: '0.1.0' },
+      data: [],
+      charts: [
+        {
+          id: parsed.chart.id,
+          type: parsed.chart.type as DashboardSpec['charts'][0]['type'],
+          title: parsed.chart.title,
+          dataSource: parsed.chart.dataSource,
+          encoding: parsed.chart.encoding,
+          content: parsed.chart.content,
+          interaction: parsed.chart.interaction,
+          overlays: parsed.chart.overlays,
+          width: parsed.chart.width,
+          height: parsed.chart.height,
+        },
+      ],
+    };
+  }
+  // dash — only inline charts for discovery listing
+  const inline = listInlineCharts(parsed.dash);
+  const refs = parsed.dash.charts.filter((c) => isDashChartRef(c));
+  return {
+    meta: {
+      title: parsed.dash.title || parsed.dash.id,
+      version: parsed.dash.version || '0.1.0',
+    },
+    data: parsed.dash.data || [],
+    charts: [
+      ...inline.map((c) => ({
+        id: c.id,
+        type: c.type as DashboardSpec['charts'][0]['type'],
+        title: c.title,
+        dataSource: c.dataSource,
+        encoding: c.encoding,
+        content: c.content,
+        interaction: c.interaction,
+        overlays: c.overlays,
+        width: c.width,
+        height: c.height,
+      })),
+      ...refs.map((r) => ({
+        id: r.id || r.chart,
+        type: 'line' as const,
+        title: r.title || r.chart,
+      })),
+    ],
+  };
 }
 
 /**
@@ -58,21 +111,39 @@ async function loadSpec(filePath: string): Promise<DashboardSpec> {
 export async function searchCharts(options: SearchOptions): Promise<ChartHit[]> {
   const { projectRoot, query, boardPath, all = false, caseSensitive = false } = options;
   
-  // Find all board files
+  // Find all board / dash / chart files
   const pattern = boardPath 
     ? boardPath 
-    : '**/{board,dashboard,*.board,*.dashboard}.{yaml,yml,json}';
+    : '**/{board,dashboard,*.board,*.dashboard,*.dash,*.chart}.{yaml,yml,json}';
   
   const files = await glob(pattern, {
     cwd: projectRoot,
     absolute: false,
     ignore: ['node_modules/**', 'dist/**', '.git/**']
   });
+
+  // Prefer *.dash.yaml over deprecated board.yaml in the same directory
+  const dashDirs = new Set(
+    files.filter((f) => /\.dash\.(yaml|yml|json)$/i.test(f)).map((f) => dirname(f))
+  );
+  const filteredFiles = files.filter((f) => {
+    const base = basename(f).toLowerCase();
+    const isLegacyBoard =
+      base === 'board.yaml' ||
+      base === 'board.yml' ||
+      base === 'board.json' ||
+      base === 'dashboard.yaml' ||
+      base === 'dashboard.yml';
+    if (isLegacyBoard && dashDirs.has(dirname(f))) {
+      return false;
+    }
+    return true;
+  });
   
   const hits: ChartHit[] = [];
   const searchQuery = caseSensitive ? query : query.toLowerCase();
   
-  for (const file of files) {
+  for (const file of filteredFiles) {
     try {
       const spec = await loadSpec(`${projectRoot}/${file}`);
       

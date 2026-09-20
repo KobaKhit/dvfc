@@ -1,132 +1,126 @@
 # Examples Gallery
 
-Interactive dashboard examples demonstrating dvfc capabilities.
+Interactive chart and dash examples demonstrating dvfc capabilities.
 
-## Available Examples
+## Canonical new-style examples
+
+Start here for the chart/dash IR model ([docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md)):
+
+| Path | Kind |
+|------|------|
+| `examples/charts/revenue_trend.chart.yaml` | Atomic chart (`sql` data) |
+| `examples/charts/revenue_metric.chart.yaml` | Atomic chart (`dbt_metric` fixture) |
+| `examples/dashes/sales.dash.yaml` | Dash with chart ref + inline chart |
+
+```bash
+pnpm exec dvfc validate examples/charts/revenue_trend.chart.yaml
+pnpm exec dvfc validate examples/dashes/sales.dash.yaml
+pnpm exec dvfc charts types
+pnpm exec dvfc build examples/charts/revenue_trend.chart.yaml --format svg
+```
+
+## Full dashboard examples (dash + legacy board)
+
+Each folder has a **canonical `*.dash.yaml`** and a deprecated **`board.yaml`** (compat alias).
 
 ### 1. Sales & Flights Dashboard
-**Path:** `examples/sales-board/`  
-**Domain:** Business analytics  
+**Dash:** `examples/sales-board/sales.dash.yaml`  
+**Legacy:** `examples/sales-board/board.yaml` (deprecated)  
 **Charts:** 6 (3 sales, 3 flights)
 
-**Features:**
-- Multi-section coordinated dashboard
-- Sales analytics with region and product breakdown
-- Flight operations with delay analysis
-- Time-based brushing and filtering
-
-**Quick start:**
 ```bash
-pnpm exec dvfc preview examples/sales-board/board.yaml
+pnpm exec dvfc preview examples/sales-board/sales.dash.yaml
 ```
 
 ---
 
 ### 2. Web Analytics Dashboard
-**Path:** `examples/web-analytics/`  
-**Domain:** Web traffic & conversions  
+**Dash:** `examples/web-analytics/web-analytics.dash.yaml`  
+**Legacy:** `examples/web-analytics/board.yaml` (deprecated)  
 **Charts:** 6 (3 traffic, 3 conversions)
 
-**Features:**
-- Page view tracking and bounce rate analysis
-- Revenue and conversion metrics by source
-- Dual filtering sections (traffic + conversions)
-- Flex layout with responsive design
-
-**Quick start:**
 ```bash
-pnpm exec dvfc preview examples/web-analytics/board.yaml
+pnpm exec dvfc preview examples/web-analytics/web-analytics.dash.yaml
 ```
 
 ---
 
 ### 3. dbt Jaffle Shop
-**Path:** `examples/dbt-jaffle/`  
-**Domain:** E-commerce order analytics  
+**Dash:** `examples/dbt-jaffle/jaffle.dash.yaml`  
+**Legacy:** `examples/dbt-jaffle/board.yaml` (deprecated)  
 **Charts:** 4 (revenue trends, payment methods, customers, status)
 
-**Features:**
-- Real dbt project structure with manifest
-- Customer order analytics
-- Revenue and payment method breakdown
-- Order status distribution
-
-**Quick start:**
 ```bash
-pnpm exec dvfc preview examples/dbt-jaffle/board.yaml
+pnpm exec dvfc preview examples/dbt-jaffle/jaffle.dash.yaml
 ```
 
 ---
 
 ### 4. Revenue Analysis with Insights
-**Path:** `examples/revenue-analysis/`  
-**Domain:** Financial performance with analysis overlays  
+**Dash:** `examples/revenue-analysis/revenue-analysis.dash.yaml`  
+**Legacy:** `examples/revenue-analysis/board.yaml` (deprecated)  
 **Charts:** 7 (3 narrative text blocks, 4 analytical charts)
 
-**Features:**
-- **Analysis overlays**: Mean, median, linear trend, moving averages (5-day, 7-day)
-- **Narrative text blocks**: Executive summary, insights, methodology
-- Revenue, profit, and cost trend analysis
-- Regional performance breakdown
-- Grid layout with mixed content types
+Demonstrates analysis overlays, `type: text` charts, and shareable filter state.
 
-**Demonstrates:**
-- `overlays` field: multiple analysis layers per chart
-- `type: text` charts: Markdown → HTML rendering
-- Shareable filter state: URL encodes brush selections
-- Complex dashboard with narrative + data
-
-**Quick start:**
 ```bash
-pnpm exec dvfc preview examples/revenue-analysis/board.yaml
+pnpm exec dvfc preview examples/revenue-analysis/revenue-analysis.dash.yaml
 ```
 
 ---
 
 ## Common Commands
 
-### Validate a board
+### Validate
 ```bash
-pnpm exec dvfc validate examples/<example>/board.yaml
+pnpm exec dvfc validate examples/<example>/<name>.dash.yaml
+pnpm exec dvfc validate examples/charts/revenue_trend.chart.yaml
 ```
 
 ### Preview with hot reload
 ```bash
-pnpm exec dvfc preview examples/<example>/board.yaml
+pnpm exec dvfc preview examples/<example>/<name>.dash.yaml
 ```
 
 ### Build static HTML
 ```bash
-pnpm exec dvfc build examples/<example>/board.yaml --out-dir dist/<example>
+pnpm exec dvfc build examples/<example>/<name>.dash.yaml --out-dir dist/<example>
+```
+
+### Compose / extract
+```bash
+pnpm exec dvfc dash compose --charts revenue_trend,by_region -o my.dash.yaml
+pnpm exec dvfc charts extract examples/sales-board/sales.dash.yaml -o charts/
+pnpm exec dvfc normalize examples/sales-board/sales.dash.yaml
 ```
 
 ## Example Structure
 
-Each example follows this structure:
 ```
 examples/<name>/
-├── board.yaml           # Dashboard specification
+├── <name>.dash.yaml     # Dash IR (canonical)
+├── board.yaml           # Legacy alias (deprecated)
 ├── README.md            # Example-specific docs
 └── dbt-stub/
-    ├── manifest.json    # dbt manifest
-    └── *.csv            # Data files
+    ├── manifest.json
+    └── *.csv
 ```
 
 ## Creating Your Own
 
-1. Copy an existing example as a template
-2. Update `board.yaml` with your data sources and charts
-3. Add your CSV files to `dbt-stub/`
-4. Update `dbt-stub/manifest.json` with your models
-5. Validate and preview
+1. Copy `examples/charts/` or `examples/dashes/` as a template, or copy a full example folder.
+2. Author `*.chart.yaml` atoms and/or a `*.dash.yaml` with `coordination.auto`.
+3. Add CSV files and update `dbt-stub/manifest.json` if using dbt connectors.
+4. Validate and preview:
 
 ```bash
-pnpm exec dvfc validate your-board.yaml
-pnpm exec dvfc preview your-board.yaml
+pnpm exec dvfc validate my.dash.yaml
+pnpm exec dvfc preview my.dash.yaml
 ```
 
 ## Learn More
 
-- [Main README](../README.md) - Full documentation
-- [VERDICT.md](../VERDICT.md) - Architecture decisions
-- [Mosaic Docs](https://idl.uw.edu/mosaic/) - Visualization library
+- [Main README](../README.md)
+- [docs/add-chart-type.md](../docs/add-chart-type.md)
+- [docs/dbt-metrics.md](../docs/dbt-metrics.md)
+- [Mosaic Docs](https://idl.uw.edu/mosaic/)

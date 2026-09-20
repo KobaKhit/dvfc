@@ -14,9 +14,18 @@ import {
 import { readFile, writeFile } from 'fs/promises';
 import { parse as parseYAML, stringify as stringifyYAML } from 'yaml';
 import type { DashboardSpec, ChartSpec } from '@dvfc/core';
-import { validateWithReport, validateSemantics, validate, build } from '@dvfc/cli';
-import { createDbtResolver, type DbtManifest } from '@dvfc/dbt-adapter';
-import { searchCharts, getChart, listCharts, composeBoard, resolveChartRef } from '@dvfc/charts';
+import { validate, build, loadNormalized } from '@dvfc/cli';
+import type { DbtManifest } from '@dvfc/dbt-adapter';
+import {
+  searchCharts,
+  getChart,
+  listCharts,
+  composeBoard,
+  resolveChartRef,
+  composeDash,
+  extractChartsFromDash,
+} from '@dvfc/charts';
+import { registerBuiltinChartTypes, listChartTypes } from '@dvfc/core';
 import { dirname, join } from 'path';
 
 // Create MCP server
@@ -38,13 +47,13 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
     tools: [
       {
         name: 'validate_dashboard_spec',
-        description: 'Validate a dashboard specification file (YAML or JSON). Checks JSON Schema, semantic rules, and dbt model references. Returns detailed validation report with path-aware errors.',
+        description: 'Validate a chart (*.chart.yaml), dash (*.dash.yaml), or legacy board (board.yaml) spec. Checks JSON Schema, semantic rules, and dbt model references.',
         inputSchema: {
           type: 'object',
           properties: {
             specPath: {
               type: 'string',
-              description: 'Path to dashboard spec file (board.yaml or board.json)'
+              description: 'Path to chart, dash, or board spec (YAML or JSON)'
             }
           },
           required: ['specPath']
@@ -52,13 +61,18 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'build_dashboard',
-        description: 'Build a static HTML dashboard from a spec file. Generates Mosaic code, bundles with Vite, and outputs self-contained HTML with crossfiltering. Returns path to built HTML.',
+        description: 'Build from a chart, dash, or legacy board spec. HTML dashboard (Mosaic) by default; use format svg|png for atomic chart export via Vega-Lite.',
         inputSchema: {
           type: 'object',
           properties: {
             specPath: {
               type: 'string',
-              description: 'Path to dashboard spec file'
+              description: 'Path to chart, dash, or board spec'
+            },
+            format: {
+              type: 'string',
+              enum: ['html', 'svg', 'png'],
+              description: 'Output format (default: html; svg/png for single chart specs)'
             },
             outDir: {
               type: 'string',
@@ -94,7 +108,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
           properties: {
             specPath: {
               type: 'string',
-              description: 'Path to dashboard spec file'
+              description: 'Path to chart, dash, or board spec'
             },
             chart: {
               type: 'object',
@@ -299,13 +313,13 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'render_chart',
-        description: 'Render/build a single chart with board context. Builds HTML with only the specified chart while preserving board queries, variables, and styles.',
+        description: 'Render/build a single chart with dash/board context. Builds HTML with only the specified chart while preserving data sources, theme, and layout.',
         inputSchema: {
           type: 'object',
           properties: {
             boardPath: {
               type: 'string',
-              description: 'Path to board file'
+              description: 'Path to dash or legacy board file'
             },
             chartId: {
               type: 'string',
@@ -317,6 +331,56 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             }
           },
           required: ['boardPath', 'chartId']
+        }
+      },
+      {
+        name: 'compose_dash',
+        description: 'Compose a *.dash.yaml from chart ids or display keys (dashId/chartId or legacy boardName__chartId). Alias of modern dash composition; compose_board remains for legacy board YAML output.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            projectRoot: { type: 'string', description: 'Project root (default: cwd)' },
+            chartIds: {
+              type: 'array',
+              items: { type: 'string' },
+              description: 'Chart ids or display keys'
+            },
+            title: { type: 'string' },
+            description: { type: 'string' },
+            outFile: { type: 'string', description: 'Output path (default: composed.dash.yaml)' }
+          },
+          required: ['chartIds']
+        }
+      },
+      {
+        name: 'extract_charts',
+        description: 'Extract inline charts from a dash or legacy board into *.chart.yaml files (dvfc charts extract).',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            dashPath: { type: 'string', description: 'Path to dash or board YAML' },
+            outDir: { type: 'string', description: 'Output directory (default: charts)' }
+          },
+          required: ['dashPath']
+        }
+      },
+      {
+        name: 'list_chart_types',
+        description: 'List registered chart type plugins (built-ins + loaded modules). Same as dvfc charts types.',
+        inputSchema: {
+          type: 'object',
+          properties: {}
+        }
+      },
+      {
+        name: 'normalize_spec',
+        description: 'Normalize chart/dash/board IR to legacy Mosaic DashboardSpec YAML (dvfc normalize). Useful for debugging resolution and connectors.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            specPath: { type: 'string', description: 'Path to chart, dash, or board spec' }
+          },
+          required: ['specPath']
         }
       }
     ]
@@ -344,13 +408,14 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       }
 
       case 'build_dashboard': {
-        const { specPath, outDir, minify } = args as {
+        const { specPath, outDir, minify, format } = args as {
           specPath: string;
           outDir?: string;
           minify?: boolean;
+          format?: 'html' | 'svg' | 'png';
         };
         
-        await build(specPath, { outDir, minify });
+        await build(specPath, { outDir, minify, format: format ?? 'html' });
         
         return {
           content: [{
@@ -710,6 +775,78 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             type: 'text' as const,
             text: `✅ Built chart '${chartId}' to ${outDir || 'dist'}/index.html`
           }]
+        };
+      }
+
+      case 'compose_dash': {
+        const { projectRoot, chartIds, title, description, outFile } = args as {
+          projectRoot?: string;
+          chartIds: string[];
+          title?: string;
+          description?: string;
+          outFile?: string;
+        };
+        const root = projectRoot || process.cwd();
+        const { dash, outPath } = await composeDash(root, {
+          chartIds,
+          title,
+          description,
+          outFile,
+        });
+        return {
+          content: [{
+            type: 'text' as const,
+            text: `✅ Composed dash → ${outPath}\n\n${stringifyYAML(dash)}`
+          }]
+        };
+      }
+
+      case 'extract_charts': {
+        const { dashPath, outDir } = args as { dashPath: string; outDir?: string };
+        const written = await extractChartsFromDash(dashPath, outDir || 'charts');
+        return {
+          content: [{
+            type: 'text' as const,
+            text: written.length
+              ? `✅ Extracted ${written.length} chart(s):\n${written.join('\n')}`
+              : 'No inline charts to extract (refs only).'
+          }]
+        };
+      }
+
+      case 'list_chart_types': {
+        registerBuiltinChartTypes();
+        const types = listChartTypes();
+        const lines = types.map((t) => {
+          const caps = [
+            t.capabilities.mosaic ? 'mosaic' : null,
+            t.capabilities.vegaLite ? 'vega-lite' : null,
+            ...(t.capabilities.interaction ?? []),
+          ].filter(Boolean).join(', ');
+          return `${t.id}\t${t.label ?? ''}\t${caps}`;
+        });
+        return {
+          content: [{
+            type: 'text' as const,
+            text: `${types.length} chart type(s):\n\n${lines.join('\n')}`
+          }]
+        };
+      }
+
+      case 'normalize_spec': {
+        const { specPath } = args as { specPath: string };
+        const result = await loadNormalized(specPath);
+        const body = stringifyYAML({
+          kind: result.kind,
+          meta: result.spec.meta,
+          data: result.spec.data,
+          charts: result.spec.charts,
+          layout: result.spec.layout,
+          theme: result.spec.theme,
+          assets: result.assets.map((a) => ({ dest: a.destName, src: a.absPath })),
+        });
+        return {
+          content: [{ type: 'text' as const, text: body }]
         };
       }
 

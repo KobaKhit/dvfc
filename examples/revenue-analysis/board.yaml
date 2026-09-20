@@ -1,3 +1,4 @@
+# DEPRECATED: Prefer revenue-analysis.dash.yaml (Dash IR). This legacy board.yaml still loads via compat.
 meta:
   title: "Revenue Analysis with Insights"
   description: "Demonstrating analysis overlays (trend, mean, moving average) and narrative text blocks"

@@ -1,0 +1,149 @@
+# Dash IR (canonical). Legacy board.yaml is deprecated; use this file for validate/preview/build.
+
+id: web-analytics
+title: Web Analytics Dashboard
+description: Track page views, traffic sources, and conversion metrics
+version: 0.1.0
+meta:
+  title: Web Analytics Dashboard
+  description: Track page views, traffic sources, and conversion metrics
+  version: 0.1.0
+data:
+  - id: page_views
+    type: dbt
+    model: page_views
+  - id: conversions
+    type: dbt
+    model: conversions
+charts:
+  - id: daily_views
+    type: line
+    title: Daily Page Views
+    dataSource: page_views
+    encoding:
+      x:
+        field: date
+        type: temporal
+        label: Date (brush to filter)
+      y:
+        field: views
+        type: quantitative
+        aggregate: sum
+        label: Total Views
+    interaction:
+      brush: true
+      brushAxis: x
+      selection: dateBrush
+      publishes: dateBrush
+    width: 700
+    height: 250
+  - id: views_by_page
+    type: bar
+    title: Views by Page
+    dataSource: page_views
+    encoding:
+      x:
+        field: page
+        type: nominal
+        label: Page
+      y:
+        field: views
+        type: quantitative
+        aggregate: sum
+        label: Total Views
+      color: steelblue
+    interaction:
+      filterBy: dateBrush
+    width: 700
+    height: 300
+  - id: bounce_rate
+    type: bar
+    title: Average Bounce Rate by Page
+    dataSource: page_views
+    encoding:
+      x:
+        field: page
+        type: nominal
+        label: Page
+      y:
+        field: bounce_rate
+        type: quantitative
+        aggregate: avg
+        label: Avg Bounce Rate
+      color: crimson
+    interaction:
+      filterBy: dateBrush
+    width: 700
+    height: 300
+  - id: daily_revenue
+    type: line
+    title: Daily Revenue
+    dataSource: conversions
+    encoding:
+      x:
+        field: date
+        type: temporal
+        label: Date (brush to filter)
+      y:
+        field: revenue
+        type: quantitative
+        aggregate: sum
+        label: Total Revenue ($)
+    interaction:
+      brush: true
+      brushAxis: x
+      selection: revenueBrush
+      publishes: revenueBrush
+    width: 700
+    height: 250
+  - id: revenue_by_source
+    type: bar
+    title: Revenue by Traffic Source
+    dataSource: conversions
+    encoding:
+      x:
+        field: source
+        type: nominal
+        label: Source
+      y:
+        field: revenue
+        type: quantitative
+        aggregate: sum
+        label: Total Revenue ($)
+      color: darkorange
+    interaction:
+      filterBy: revenueBrush
+    width: 700
+    height: 300
+  - id: conversion_rate
+    type: bar
+    title: Conversions by Source
+    dataSource: conversions
+    encoding:
+      x:
+        field: source
+        type: nominal
+        label: Source
+      y:
+        field: conversions
+        type: quantitative
+        aggregate: sum
+        label: Total Conversions
+      color: mediumseagreen
+    interaction:
+      filterBy: revenueBrush
+    width: 700
+    height: 300
+layout:
+  type: flex
+  gap: 24
+theme:
+  colors:
+    - steelblue
+    - crimson
+    - darkorange
+    - mediumseagreen
+  fontFamily: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif
+  backgroundColor: white
+coordination:
+  auto: true

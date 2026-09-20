@@ -1,14 +1,14 @@
 # Chart Discovery & Addressability
 
-Chart discovery enables finding, inspecting, and composing charts across dvfc dashboards.
+Chart discovery enables finding, inspecting, and composing charts across dvfc projects.
 
 ## Overview
 
 **Design principles:**
-- Charts are board-scoped (not standalone files)
-- Stable key: `board path + chart id`
-- Display key format: `{boardName}__{chartId}`
-- All operations preserve board context (queries, variables, styles)
+- Charts live in `*.chart.yaml` files and/or inline inside `*.dash.yaml` (legacy `board.yaml` still indexed)
+- Stable key: `spec path + chart id`
+- Display key format: `{dashOrBoardName}__{chartId}` (gradual move to `dashId/chartId`)
+- All operations preserve dash/board context (data sources, theme, layout)
 - Ambiguous lookups return candidates or fail with list
 
 ## CLI Commands
@@ -24,8 +24,8 @@ dvfc charts search revenue
 # Return all matches (default: top 10)
 dvfc charts search revenue --all
 
-# Filter by board
-dvfc charts search revenue --board examples/sales-board/board.yaml
+# Filter by dash or board
+dvfc charts search revenue --board examples/sales-board/sales.dash.yaml
 
 # JSON output (for scripting/agents)
 dvfc charts search revenue --json

@@ -38,7 +38,7 @@ export declare const DashboardSpecSchema: {
                     };
                     readonly type: {
                         readonly type: "string";
-                        readonly enum: readonly ["dbt", "csv", "parquet", "url"];
+                        readonly enum: readonly ["dbt", "csv", "parquet", "url", "sql"];
                     };
                     readonly model: {
                         readonly type: "string";
