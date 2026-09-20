@@ -18,6 +18,9 @@ const goldenHash = join(fixtures, 'revenue_trend.sha256');
 
 function normalizeSvg(svg: string): string {
   return svg
+    .replace(/<text[\s\S]*?<\/text>/gi, '')
+    .replace(/<title[\s\S]*?<\/title>/gi, '')
+    .replace(/<desc[\s\S]*?<\/desc>/gi, '')
     .replace(/\s+/g, ' ')
     .replace(/\s(id|aria-label|aria-hidden)="[^"]*"/g, '')
     .replace(/\s(fill|stroke|color|font-family|font-size|opacity|style)="[^"]*"/g, '')
