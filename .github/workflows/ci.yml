@@ -40,22 +40,37 @@ jobs:
       run: pnpm install
 
     - name: Build packages
+      # Adapters live under experiments/; @dvfc/resolve removed — not in pnpm-workspace.yaml
       run: pnpm run build
+
+    - name: Verify schemas present and in sync
+      run: |
+        test -f packages/core/schema/chart.json
+        test -f python/dvfc/schema/chart.json
+        diff -q packages/core/schema/chart.json python/dvfc/schema/chart.json
+        diff -q packages/core/schema/dash.json python/dvfc/schema/dash.json
+        diff -q packages/core/schema/dashboard-spec.json python/dvfc/schema/dashboard-spec.json
+
+    - name: Lint
+      run: pnpm run lint
 
     - name: Run unit tests
       run: |
         pnpm --filter @dvfc/core test
         pnpm --filter @dvfc/charts test
-        pnpm --filter @dvfc/resolve test
         pnpm --filter @dvfc/render-vega test
+        pnpm --filter @dvfc/build test
+        pnpm --filter @dvfc/render-mosaic test
+        pnpm --filter @dvfc/mcp test
 
     - name: Validate chart/dash examples
       run: |
         node packages/cli/dist/cli.js validate examples/charts/revenue_trend.chart.yaml
         node packages/cli/dist/cli.js validate examples/dashes/sales.dash.yaml
-        node packages/cli/dist/cli.js validate examples/sales-board/sales.dash.yaml
+        node packages/cli/dist/cli.js validate examples/sales-dash/sales.dash.yaml
         node packages/cli/dist/cli.js validate examples/web-analytics/web-analytics.dash.yaml
         node packages/cli/dist/cli.js validate examples/dbt-jaffle/jaffle.dash.yaml
+        node packages/cli/dist/cli.js validate examples/dbt-jaffle/pie.dash.yaml
         node packages/cli/dist/cli.js validate examples/revenue-analysis/revenue-analysis.dash.yaml
 
     - name: Test chart discovery + compose
@@ -63,8 +78,10 @@ jobs:
         node packages/cli/dist/cli.js charts types
         node packages/cli/dist/cli.js charts search revenue
         node packages/cli/dist/cli.js charts list
-        node packages/cli/dist/cli.js dash compose --charts revenue_trend -o /tmp/ci-composed.dash.yaml
+        node packages/cli/dist/cli.js dash compose --charts charts__revenue_trend -o /tmp/ci-composed.dash.yaml
         node packages/cli/dist/cli.js validate /tmp/ci-composed.dash.yaml
+        node packages/cli/dist/cli.js normalize /tmp/ci-composed.dash.yaml > /tmp/ci-composed.normalized.yaml
+        test -s /tmp/ci-composed.normalized.yaml
 
     - name: Test HTML + SVG/PNG builds
       run: |
@@ -72,7 +89,7 @@ jobs:
         test -f /tmp/ci-chart-html/index.html
         node packages/cli/dist/cli.js build examples/charts/revenue_trend.chart.yaml -o /tmp/ci-chart.svg --format svg
         test -f /tmp/ci-chart.svg
-        node packages/cli/dist/cli.js build examples/sales-board/sales.dash.yaml -o /tmp/ci-dash-html --format html
+        node packages/cli/dist/cli.js build examples/sales-dash/sales.dash.yaml -o /tmp/ci-dash-html --format html
         test -f /tmp/ci-dash-html/index.html
 
     - name: Check for node_modules in git
@@ -93,5 +110,6 @@ jobs:
       run: |
         uv sync --extra dev
         uv run pytest -q
+        uv run mypy dvfc --ignore-missing-imports
         uv run python smoke_test.py
         uv run dvfc-py validate ../examples/charts/revenue_trend.chart.yaml

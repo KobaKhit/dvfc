@@ -35,7 +35,7 @@ from dvfc import ChartBuilder, ChartType, DashBuilder, validate, save_spec, comp
 chart = (
     ChartBuilder("revenue_trend", ChartType.LINE)
     .title("Daily revenue")
-    .data_file("../sales-board/dbt-stub/sales_daily.csv")
+    .data_file("../sales-dash/dbt-stub/sales_daily.csv")  # path relative to your chart file
     .x("date", type="temporal")
     .y("sales", type="quantitative", aggregate="sum")
     .brush("x", "time")
@@ -55,7 +55,7 @@ print(source, sql[:80])
 from pathlib import Path
 from dvfc import load_dash, DataVizFactoryClient
 
-dash = load_dash(Path("examples/sales-board/sales.dash.yaml"))
+dash = load_dash(Path("examples/sales-dash/sales.dash.yaml"))
 client = DataVizFactoryClient()
 assert client.validate(dash)  # native by default
 
@@ -100,6 +100,11 @@ chart = ChartBuilder("c", ChartType.BAR).data_file("x.csv").x("region").y("sales
 svg = render_svg(chart, [{"region": "East", "sales": 10}])
 ```
 
-## Legacy `DashboardBuilder`
+## Legacy board-shaped specs
 
-Still available for older fluent board-shaped specs; prefer `ChartBuilder` / `DashBuilder` for new code.
+- Prefer **`ChartBuilder`** / **`DashBuilder`** and Chart/Dash IR for all new work.
+- **`DashboardSpec`** and **`DashboardBuilder`** remain in `dvfc.spec` / `dvfc.builder` for older fluent board YAML; they are not exported from `dvfc` top-level. Import explicitly only when migrating legacy specs:
+
+```python
+from dvfc.builder import DashboardBuilder  # emits DeprecationWarning
+```

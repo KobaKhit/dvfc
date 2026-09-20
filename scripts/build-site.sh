@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 #
 # Build GitHub Pages site at /dvfc/ base path
-# Uses dvfc CLI for interactive examples + SVG chart thumbnails
+# Uses dvfc CLI for interactive examples; chart pages emit SVG thumbnails.
 #
 
 set -euo pipefail
 
-echo "🌐 Building GitHub Pages Site"
-echo "=============================="
+export NODE_NO_WARNINGS=1
+
+echo "Building GitHub Pages Site"
+echo "=========================="
 echo
 
 BASE_URL="/dvfc"
@@ -15,15 +17,14 @@ SITE_DIR="site"
 CLI="node packages/cli/dist/cli.js"
 PREVIEWS="$SITE_DIR/assets/previews"
 
-# Clean previous build
 rm -rf "$SITE_DIR"
 mkdir -p "$SITE_DIR" "$PREVIEWS"
 
-echo "📦 Building interactive examples..."
+echo "Building interactive examples..."
 echo
 
 examples=(
-  "sales-board"
+  "sales-dash"
   "web-analytics"
   "dbt-jaffle"
   "revenue-analysis"
@@ -36,7 +37,7 @@ for example in "${examples[@]}"; do
   done
 
   if [ -z "$spec_file" ]; then
-    echo "⚠️  Skipping $example (no *.dash.yaml)"
+    echo "  Skipping $example (no *.dash.yaml)"
     continue
   fi
 
@@ -49,11 +50,11 @@ for example in "${examples[@]}"; do
   $CLI build "$spec_file" -o "$out_dir" --base "$base_path"
 
   if [ ! -d "$out_dir/data" ]; then
-    echo "  ❌ ERROR: $out_dir/data not created"
+    echo "  ERROR: $out_dir/data not created"
     exit 1
   fi
 
-  echo "  ✓ $example built with data/"
+  echo "  OK $example"
 done
 
 echo "  Building compact landing showcase → $SITE_DIR/examples/showcase"
@@ -61,13 +62,22 @@ rm -rf .dvfc-build
 $CLI build examples/site-gallery/showcase.dash.yaml \
   -o "$SITE_DIR/examples/showcase" \
   --base "$BASE_URL/examples/showcase/" >/dev/null
-echo "  ✓ showcase built with data/"
+echo "  OK showcase"
+
+echo "  Building dc.js static showcase → $SITE_DIR/examples/showcase-dc"
+rm -rf .dvfc-build
+mkdir -p "$SITE_DIR/examples/showcase-dc"
+$CLI build examples/site-gallery/showcase.dash.yaml \
+  -o "$SITE_DIR/examples/showcase-dc/index.html" \
+  --format html-dc-static >/dev/null
+# Staging CSV dir is only for the exporter; data is inlined in the HTML
+rm -rf "$SITE_DIR/examples/showcase-dc/.dvfc-dc-data"
+echo "  OK showcase-dc"
 
 echo
-echo "📈 Exporting real chart SVG thumbnails (dvfc → Vega-Lite)..."
+echo "Exporting gallery SVG thumbnails..."
 echo
 
-# Gallery cards, one representative chart from each live dash
 gallery_export() {
   local name="$1" spec="$2" chart="$3"
   local out="$PREVIEWS/gallery-${name}.svg"
@@ -75,34 +85,14 @@ gallery_export() {
   $CLI build "$spec" -f svg --chart "$chart" -o "$out" >/dev/null
 }
 
-gallery_export sales-board examples/sales-board/sales.dash.yaml sales_trend
+gallery_export sales-dash examples/sales-dash/sales.dash.yaml sales_trend
 gallery_export web-analytics examples/web-analytics/web-analytics.dash.yaml daily_views
 gallery_export dbt-jaffle examples/dbt-jaffle/jaffle.dash.yaml daily_revenue
 gallery_export revenue-analysis examples/revenue-analysis/revenue-analysis.dash.yaml revenue_trend
-
-# Chart catalog, all exports share the curated exoplanet dataset
-catalog_export() {
-  local slug="$1" chart="$2"
-  local out="$PREVIEWS/chart-${slug}.svg"
-  echo "  Chart page $slug ← --chart $chart"
-  $CLI build examples/site-gallery/cosmic-atlas.dash.yaml \
-    -f svg --chart "$chart" -o "$out" >/dev/null
-}
-
-catalog_export line discovery_timeline
-catalog_export bar discovery_methods
-catalog_export area habitable_momentum
-catalog_export scatter world_scatter
-catalog_export pie method_share
-catalog_export donut mission_mix
-catalog_export histogram temperature_histogram
-catalog_export density radius_density
-catalog_export heatmap constellation_heatmap
-catalog_export boxplot radius_boxplot
-catalog_export number world_count
+gallery_export showcase-dc examples/site-gallery/showcase.dash.yaml discovery_timeline
 
 echo
-echo "📄 Creating site pages..."
+echo "Creating site pages (including catalog SVG exports)..."
 echo
 
 cp site-src/index.html "$SITE_DIR/"
@@ -116,19 +106,26 @@ node --experimental-strip-types scripts/build-chart-pages.ts
 touch "$SITE_DIR/.nojekyll"
 
 echo
-echo "✅ Site built successfully!"
+echo "Building documentation (MkDocs)..."
+echo
+chmod +x scripts/build-docs.sh
+./scripts/build-docs.sh
+
+echo
+echo "Site built successfully!"
 echo "   Output: $SITE_DIR/"
 echo "   Base path: $BASE_URL"
+echo "   Docs: $SITE_DIR/docs/"
 echo "   Previews: $(ls "$PREVIEWS"/*.svg 2>/dev/null | wc -l) SVGs"
 echo "   Chart pages: $(find "$SITE_DIR/charts" -mindepth 1 -maxdepth 1 -type d | wc -l)"
 echo
 echo "Verification:"
-if grep -r "/dbt-stub/" "$SITE_DIR" --include='*.html' --include='*.js' -l 2>/dev/null | grep -v assets; then
-  echo "❌ ERROR: Found /dbt-stub/ paths!"
+if grep -r "/dbt-stub/" "$SITE_DIR" --include='*.html' --include='*.js' -l 2>/dev/null | grep -v assets | grep -v '/docs/'; then
+  echo "ERROR: Found /dbt-stub/ paths!"
   exit 1
 fi
-echo "✓ No /dbt-stub/ paths in HTML/JS"
-echo "✓ Data directories:"
+echo "OK No /dbt-stub/ paths in HTML/JS"
+echo "OK Data directories:"
 find "$SITE_DIR" -type d -name "data" | while read -r dir; do
   csv_count=$(find "$dir" -name "*.csv" | wc -l)
   echo "  $dir ($csv_count CSV files)"

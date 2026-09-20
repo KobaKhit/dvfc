@@ -9,17 +9,21 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class ChartType(str, Enum):
-    """Supported chart types"""
+    """Built-in chart types (plugins may use arbitrary string ids)."""
 
     LINE = "line"
     BAR = "bar"
     SCATTER = "scatter"
     AREA = "area"
+    HISTOGRAM = "histogram"
+    BOXPLOT = "boxplot"
+    DENSITY = "density"
     HEATMAP = "heatmap"
     PIE = "pie"
     DONUT = "donut"
     NUMBER = "number"
     TABLE = "table"
+    TEXT = "text"
 
 
 class DataSourceType(str, Enum):
@@ -28,6 +32,8 @@ class DataSourceType(str, Enum):
     DBT = "dbt"
     CSV = "csv"
     PARQUET = "parquet"
+    URL = "url"
+    SQL = "sql"
 
 
 class EncodingType(str, Enum):
@@ -62,7 +68,10 @@ class InteractionSpec(BaseModel):
     """Chart interaction specification"""
 
     brush: Optional[bool] = None
-    brushAxis: Optional[Literal["x", "y"]] = None
+    brushAxis: Optional[Literal["x", "y", "xy"]] = None
+    select: Optional[Union[bool, Literal["auto", "x", "y", "xy"]]] = None
+    # Prefer `publishes`; `selection` is the legacy alias kept for compat.
+    publishes: Optional[str] = None
     selection: Optional[str] = None
     filterBy: Optional[str] = None
 
@@ -97,7 +106,8 @@ class DataSource(BaseModel):
     id: str
     type: DataSourceType
     model: Optional[str] = None  # for dbt
-    path: Optional[str] = None  # for csv/parquet
+    path: Optional[str] = None  # for csv/parquet/url
+    sql: Optional[str] = None  # for sql
 
 
 class MetaSpec(BaseModel):
@@ -109,17 +119,20 @@ class MetaSpec(BaseModel):
 
 
 class LayoutSpec(BaseModel):
-    """Layout configuration"""
+    """Layout configuration (matches LayoutConfig in TS)"""
 
-    type: Optional[Literal["flex", "grid"]] = "flex"
+    type: Optional[Literal["flex", "grid", "stack"]] = "flex"
+    columns: Optional[int] = None
     gap: Optional[int] = 16
 
 
 class ThemeSpec(BaseModel):
-    """Theme configuration"""
+    """Theme configuration (matches ThemeConfig in TS)"""
 
     colors: Optional[List[str]] = None
     fontFamily: Optional[str] = None
+    backgroundColor: Optional[str] = None
+    chartBorders: Optional[bool] = None
 
 
 class DashboardSpec(BaseModel):

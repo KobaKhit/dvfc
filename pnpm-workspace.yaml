@@ -1,3 +1,14 @@
 packages:
-  - 'packages/*'
+  # Active packages only — adapter spikes live under experiments/ (not workspace members)
+  - 'packages/core'
+  - 'packages/charts'
+  - 'packages/build'
+  - 'packages/cli'
+  - 'packages/mcp'
+  - 'packages/adapter-dbt'
+  - 'packages/render-mosaic'
+  - 'packages/render-vega'
+  - 'packages/render-dc'
   - 'examples/*'
+allowBuilds:
+  '@biomejs/biome': true

@@ -4,6 +4,7 @@ node_modules/
 
 # Python / uv
 .venv/
+.venv-docs/
 python/.venv/
 **/__pycache__/
 *.egg-info/
@@ -59,6 +60,15 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 *.egg
-build/
+# setuptools local build dir (not packages/build)
+/build/
+python/build/
 dist-python/
 packages/render-vega/test/out/
+
+# Generated GitHub Pages site (built in CI via scripts/build-site.sh)
+site/
+.dvfc-preview/
+**/.dvfc-export-data/
+**/dist-dc/
+bun.lock

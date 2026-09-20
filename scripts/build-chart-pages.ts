@@ -1,11 +1,10 @@
 /**
  * Generate the chart gallery and one editorial page per built-in chart example.
- *
- * The SVGs are produced by dvfc itself in scripts/build-site.sh. This script only
- * assembles the website pages around those artifacts.
+ * Also exports catalog SVG thumbnails via the dvfc CLI (Vega-Lite).
  */
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { spawn } from 'node:child_process';
 import { parseSpecString } from '../packages/core/dist/index.js';
 
 type ChartEntry = {
@@ -244,7 +243,7 @@ function sharedHead(title: string, description: string): string {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${escapeHtml(title)} | dvfc</title>
   <meta name="description" content="${escapeHtml(description)}">
-  <link rel="stylesheet" href="/dvfc/style.css?v=20260920b">`;
+  <link rel="stylesheet" href="/dvfc/style.css?v=20260920e">`;
 }
 
 function extractChartYaml(source: string, chartId: string): string {
@@ -407,6 +406,39 @@ function galleryPage(): string {
 </html>`;
 }
 
+async function exportCatalogSvgs(previewsDir: string): Promise<void> {
+  await mkdir(previewsDir, { recursive: true });
+  const cli = join(root, 'packages/cli/dist/cli.js');
+  const dash = join(root, 'examples/site-gallery/cosmic-atlas.dash.yaml');
+  for (const example of examples) {
+    if (!example.svg || !example.chartId) continue;
+    const out = join(previewsDir, example.svg);
+    await new Promise<void>((resolve, reject) => {
+      const child = spawn(
+        process.execPath,
+        [cli, 'build', dash, '-f', 'svg', '--chart', example.chartId, '-o', out],
+        {
+          cwd: root,
+          env: { ...process.env, NODE_NO_WARNINGS: '1' },
+          stdio: ['ignore', 'pipe', 'pipe'],
+        }
+      );
+      let err = '';
+      child.stderr.on('data', (d) => {
+        err += String(d);
+      });
+      child.on('close', (code) => {
+        if (code === 0) {
+          console.log(`  Chart SVG ${example.slug} ← ${example.chartId}`);
+          resolve();
+        } else {
+          reject(new Error(`SVG export failed for ${example.slug}: ${err || code}`));
+        }
+      });
+    });
+  }
+}
+
 async function main(): Promise<void> {
   const dashSource = await readFile(dashPath, 'utf-8');
   const parsed = parseSpecString(dashSource, { path: dashPath });
@@ -414,6 +446,10 @@ async function main(): Promise<void> {
   const dash = parsed.dash as { charts: ChartEntry[] };
   const csv = await readFile(dataPath, 'utf-8');
   const byId = new Map(dash.charts.map((chart) => [chart.id, chart]));
+
+  const previewsDir = join(siteDir, 'assets/previews');
+  console.log('Exporting catalog chart SVGs...');
+  await exportCatalogSvgs(previewsDir);
 
   await writeFile(join(siteDir, 'charts.html'), galleryPage());
   for (let i = 0; i < examples.length; i++) {
@@ -427,7 +463,7 @@ async function main(): Promise<void> {
       chartPage(example, chart, i, csv, extractChartYaml(dashSource, example.chartId))
     );
   }
-  console.log(`✓ Generated ${examples.length} chart example pages`);
+  console.log(`Generated ${examples.length} chart example pages`);
 }
 
 await main();

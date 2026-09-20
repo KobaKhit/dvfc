@@ -1,16 +1,11 @@
-/**
- * Chart discovery and management commands
- */
 
-import { readFile, writeFile } from 'fs/promises';
 import { resolve as resolvePath } from 'path';
 import { stringify as stringifyYAML } from 'yaml';
-import type { ChartHit, ChartResource } from '@dvfc/charts';
+import type { ChartHit, } from '@dvfc/charts';
 import {
   searchCharts,
   getChart,
   listCharts,
-  resolveChartRef,
   composeDash,
   extractChartsFromDash,
 } from '@dvfc/charts';
@@ -18,7 +13,8 @@ import {
 export interface SearchChartsOptions {
   all?: boolean;
   json?: boolean;
-  board?: string;
+  /** Filter by dash path */
+  dash?: string;
 }
 
 /**
@@ -30,12 +26,12 @@ export async function searchChartsCommand(
 ): Promise<void> {
   const projectRoot = process.cwd();
   
-  console.log(`🔍 Searching for charts matching "${query}"...\n`);
+  console.log(`Searching for charts matching "${query}"...\n`);
   
   const hits = await searchCharts({
     projectRoot,
     query,
-    dashPath: options.board,
+    dashPath: options.dash,
     all: options.all || false
   });
   
@@ -99,7 +95,7 @@ export async function getChartCommand(
 }
 
 export interface ListChartsOptions {
-  board?: string;
+  dash?: string;
   json?: boolean;
 }
 
@@ -108,11 +104,12 @@ export interface ListChartsOptions {
  */
 export async function listChartsCommand(options: ListChartsOptions = {}): Promise<void> {
   const projectRoot = process.cwd();
+  const dashPath = options.dash;
   
-  const scope = options.board ? `dash '${options.board}'` : 'project';
-  console.log(`📋 Listing charts in ${scope}...\n`);
+  const scope = dashPath ? `dash '${dashPath}'` : 'project';
+  console.log(`Listing charts in ${scope}...\n`);
   
-  const hits = await listCharts(projectRoot, options.board);
+  const hits = await listCharts(projectRoot, dashPath);
   
   if (hits.length === 0) {
     console.log('No charts found.');
@@ -126,7 +123,7 @@ export async function listChartsCommand(options: ListChartsOptions = {}): Promis
     
     const byDash = new Map<string, ChartHit[]>();
     for (const hit of hits) {
-      const key = hit.dashPath || hit.boardPath;
+      const key = hit.dashPath;
       if (!byDash.has(key)) {
         byDash.set(key, []);
       }
@@ -146,32 +143,19 @@ export async function listChartsCommand(options: ListChartsOptions = {}): Promis
 
 export interface ComposeOptions {
   charts: string;
-  metric?: string;
   title?: string;
   description?: string;
   outFile?: string;
 }
 
 /**
- * Compose dash from chart IDs (charts compose → dash IR)
+ * Compose dash from chart IDs (charts compose → dash IR).
+ * Resolution errors come from composeDash (single discovery pass).
  */
 export async function composeCommand(options: ComposeOptions): Promise<void> {
   const projectRoot = process.cwd();
-  const chartIds = options.charts.split(',').map((s) => s.trim());
+  const chartIds = options.charts.split(',').map((s) => s.trim()).filter(Boolean);
   console.log(`🎨 Composing dash from ${chartIds.length} chart(s)...\n`);
-
-  for (const id of chartIds) {
-    try {
-      const ref = await resolveChartRef(projectRoot, id);
-      console.log(`✓ Resolved ${id} → ${ref.displayKey}`);
-    } catch (error) {
-      console.error(
-        `✗ Failed to resolve ${id}:`,
-        error instanceof Error ? error.message : String(error)
-      );
-      process.exit(1);
-    }
-  }
 
   const outFile = options.outFile || 'composed.dash.yaml';
   const { outPath } = await composeDash(projectRoot, {
@@ -185,20 +169,6 @@ export async function composeCommand(options: ComposeOptions): Promise<void> {
   console.log(`  dvfc validate ${outPath}`);
   console.log(`  dvfc preview ${outPath}`);
   console.log(`  dvfc build ${outPath}\n`);
-}
-
-export async function composeDashCommand(options: ComposeOptions): Promise<void> {
-  const projectRoot = process.cwd();
-  const chartIds = options.charts.split(',').map((s) => s.trim());
-  console.log(`🎨 Composing dash from ${chartIds.length} chart(s)...\n`);
-  const { outPath } = await composeDash(projectRoot, {
-    chartIds,
-    title: options.title,
-    description: options.description,
-    outFile: options.outFile || 'composed.dash.yaml',
-  });
-  console.log(`✅ Wrote ${outPath}`);
-  console.log(`\nNext: dvfc validate ${outPath}\n`);
 }
 
 export async function extractChartsCommand(

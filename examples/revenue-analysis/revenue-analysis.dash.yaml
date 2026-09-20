@@ -1,15 +1,13 @@
-# Dash IR (canonical). Use this file for validate, preview, and build.
+# Dash IR — Revenue analysis with overlays, KPI, scatter, donut, heatmap, and narrative text.
 
 id: revenue-analysis
 title: Revenue Analysis with Insights
-description: Demonstrating analysis overlays (trend, mean, moving average) and
-  narrative text blocks
-version: 0.3.1
+description: Overlays, narrative text, KPI, scatter, donut, and heatmap on daily revenue metrics
+version: 0.4.0
 meta:
   title: Revenue Analysis with Insights
-  description: Demonstrating analysis overlays (trend, mean, moving average) and
-    narrative text blocks
-  version: 0.3.1
+  description: Overlays, narrative text, KPI, scatter, donut, and heatmap on daily revenue metrics
+  version: 0.4.0
 data:
   - id: daily_metrics
     type: dbt
@@ -17,152 +15,276 @@ data:
 charts:
   - id: intro_text
     type: text
-    title: 📊 Revenue Analysis Q1 2024
+    title: Revenue analysis Q1
     content: >
-      ## Executive Summary
+      ## Executive summary
 
 
-      This dashboard analyzes **Q1 2024 revenue performance** with advanced
-      overlays showing trends and moving averages.
+      This dashboard analyzes **Q1 revenue performance** with analysis overlays,
+      crossfiltered views, and a mix of chart types.
 
 
-      **Key Features:**
+      **Overlays on the trend:**
 
-      - Red dashed line = Average revenue
+      - Red dashed line = average revenue
 
-      - Blue dotted line = Linear trend
+      - Blue dotted line = linear trend
 
       - Purple line = 7-day moving average
 
 
-      *Click and drag on charts to filter by date range.*
+      Brush the revenue area chart to filter every other view.
+  - id: revenue_kpi
+    type: number
+    title: Total revenue
+    dataSource: daily_metrics
+    encoding:
+      y:
+        field: revenue
+        type: quantitative
+        aggregate: sum
+        label: Revenue
+    interaction:
+      filterBy: dateBrush
+    width: 280
+    height: 160
+
+  - id: profit_kpi
+    type: number
+    title: Total profit
+    dataSource: daily_metrics
+    encoding:
+      y:
+        field: profit
+        type: quantitative
+        aggregate: sum
+        label: Profit
+    interaction:
+      filterBy: dateBrush
+    width: 280
+    height: 160
+
   - id: revenue_trend
-    type: line
-    title: Daily Revenue with Analysis Overlays
+    type: area
+    title: Daily revenue with analysis overlays
     dataSource: daily_metrics
     encoding:
       x:
         field: date
         type: temporal
+        label: Date
       y:
         field: revenue
         type: quantitative
+        label: Revenue
     interaction:
       brush: true
+      brushAxis: x
       selection: dateBrush
       publishes: dateBrush
     overlays:
       - type: mean
         color: "#e53e3e"
-        label: Average Revenue
+        label: Average revenue
       - type: trend
         color: "#3182ce"
-        label: Linear Trend
+        label: Linear trend
       - type: moving_average
         window: 7
         color: "#805ad5"
-        label: 7-Day MA
+        label: 7-day MA
     width: 800
     height: 300
+
   - id: insight_text
     type: text
     content: >
-      ### Key Insights
+      ### Key insights
 
 
-      Revenue shows a **strong upward trend** throughout Q1, with the 7-day
-      moving average smoothing daily volatility.
-
-      The linear trend line indicates consistent growth of approximately
-      **$150-200 per day**.
+      Revenue shows a **strong upward trend** through the quarter, with the
+      7-day moving average smoothing daily volatility.
 
 
-      February performance exceeded the Q1 average, with peak revenue of
-      **$21,200** on Feb 29.
+      Brush a date range to update KPIs, regional mix, and the cost–revenue
+      scatter in lockstep.
   - id: profit_analysis
     type: line
-    title: Profit Trend (with Mean & 5-Day MA)
+    title: Profit trend (mean and 5-day MA)
     dataSource: daily_metrics
     encoding:
       x:
         field: date
         type: temporal
+        label: Date
       y:
         field: profit
         type: quantitative
+        label: Profit
     interaction:
       brush: true
+      brushAxis: x
       selection: dateBrush
       filterBy: dateBrush
       publishes: dateBrush
     overlays:
       - type: mean
         color: "#48bb78"
-        label: Avg Profit
+        label: Avg profit
       - type: moving_average
         window: 5
         color: "#ed8936"
-        label: 5-Day MA
+        label: 5-day MA
     width: 800
     height: 250
-  - id: regional_breakdown
-    type: bar
-    title: Revenue by Region
+
+  - id: region_mix
+    type: donut
+    title: Revenue by region
     dataSource: daily_metrics
     encoding:
       x:
         field: region
         type: nominal
+        label: Region
       y:
         field: revenue
+        type: quantitative
         aggregate: sum
+        label: Revenue
+    interaction:
+      filterBy: dateBrush
+      publishes: dateBrush
+      select: auto
+    width: 360
+    height: 300
+
+  - id: regional_breakdown
+    type: bar
+    title: Revenue by region
+    dataSource: daily_metrics
+    encoding:
+      x:
+        field: region
+        type: nominal
+        label: Region
+      y:
+        field: revenue
+        type: quantitative
+        aggregate: sum
+        label: Revenue
       color:
         field: region
+        type: nominal
     interaction:
       filterBy: dateBrush
     width: 400
-    height: 250
+    height: 260
+
+  - id: cost_vs_revenue
+    type: scatter
+    title: Cost vs revenue
+    dataSource: daily_metrics
+    encoding:
+      x:
+        field: cost
+        type: quantitative
+        label: Cost
+      y:
+        field: revenue
+        type: quantitative
+        label: Revenue
+      color:
+        field: region
+        type: nominal
+    interaction:
+      filterBy: dateBrush
+    width: 420
+    height: 280
+
+  - id: region_date_heatmap
+    type: heatmap
+    title: Region × date revenue
+    dataSource: daily_metrics
+    encoding:
+      x:
+        field: region
+        type: nominal
+        label: Region
+      y:
+        field: date
+        type: temporal
+        label: Date
+      color:
+        field: revenue
+        type: quantitative
+        aggregate: sum
+        label: Revenue
+    interaction:
+      filterBy: dateBrush
+    width: 520
+    height: 320
+
+  - id: revenue_histogram
+    type: histogram
+    title: Daily revenue distribution
+    dataSource: daily_metrics
+    encoding:
+      x:
+        field: revenue
+        type: quantitative
+        label: Revenue
+    interaction:
+      filterBy: dateBrush
+    width: 420
+    height: 260
+
   - id: cost_analysis
     type: line
-    title: Cost Trend (with Median Reference)
+    title: Cost trend (median reference)
     dataSource: daily_metrics
     encoding:
       x:
         field: date
         type: temporal
+        label: Date
       y:
         field: cost
         type: quantitative
+        label: Cost
     interaction:
       filterBy: dateBrush
     overlays:
       - type: median
         color: "#ed64a6"
-        label: Median Cost
+        label: Median cost
     width: 400
     height: 250
+
   - id: summary_text
     type: text
     content: |
       ### Methodology
 
       **Overlays explained:**
-      - *Mean* (horizontal line) = average value across all data points
+      - *Mean* (horizontal line) = average across points in the filtered range
       - *Median* (horizontal line) = middle value when sorted
       - *Trend* (diagonal line) = linear regression best fit
-      - *Moving Average* (smooth line) = rolling average over N days
+      - *Moving average* (smooth line) = rolling average over N days
 
-      Overlays update dynamically when you filter the data by brushing charts.
+      Overlays and KPIs update when you brush charts.
 layout:
   type: grid
   columns: 2
   gap: 24
 theme:
   colors:
-    - "#4299e1"
-    - "#48bb78"
-    - "#ed8936"
-    - "#805ad5"
-  fontFamily: system-ui, -apple-system, sans-serif
+    - "#1e3a5f"
+    - "#7ba3c9"
+    - "#a89b8c"
+    - "#4a7c9b"
+  fontFamily: system-ui, -apple-system, "Segoe UI", sans-serif
+  backgroundColor: white
+  chartBorders: true
 coordination:
   auto: true

@@ -46,8 +46,8 @@ test('searchCharts scores exact ID matches highest', async () => {
 });
 
 test('getChart returns chart with context', async () => {
-  const boardPath = join(projectRoot, 'examples/dbt-jaffle/jaffle.dash.yaml');
-  const resource = await getChart(boardPath, 'daily_revenue');
+  const dashPath = join(projectRoot, 'examples/dbt-jaffle/jaffle.dash.yaml');
+  const resource = await getChart(dashPath, 'daily_revenue');
   
   assert.strictEqual(resource.chart.id, 'daily_revenue');
   assert.strictEqual(resource.chart.type, 'line');
@@ -56,10 +56,10 @@ test('getChart returns chart with context', async () => {
 });
 
 test('getChart throws on missing chart', async () => {
-  const boardPath = join(projectRoot, 'examples/dbt-jaffle/jaffle.dash.yaml');
+  const dashPath = join(projectRoot, 'examples/dbt-jaffle/jaffle.dash.yaml');
   
   await assert.rejects(
-    async () => await getChart(boardPath, 'nonexistent'),
+    async () => await getChart(dashPath, 'nonexistent'),
     /not found/
   );
 });
@@ -68,7 +68,7 @@ test('resolveChartRef handles display keys', async () => {
   const ref = await resolveChartRef(projectRoot, 'dbt-jaffle__daily_revenue');
   
   assert.strictEqual(ref.chartId, 'daily_revenue');
-  assert.ok((ref.dashPath ?? ref.boardPath)?.includes('dbt-jaffle'));
+  assert.ok(ref.dashPath?.includes('dbt-jaffle'));
 });
 
 test('resolveChartRef handles unambiguous plain IDs', async () => {
@@ -85,18 +85,31 @@ test('resolveChartRef throws on ambiguous IDs', async () => {
 });
 
 test('makeDisplayKey formats correctly', () => {
-  const key = makeDisplayKey('examples/sales-board/sales.dash.yaml', 'daily_sales');
-  assert.strictEqual(key, 'sales-board__daily_sales');
+  const key = makeDisplayKey('examples/sales-dash/sales.dash.yaml', 'daily_sales');
+  assert.strictEqual(key, 'sales-dash__daily_sales');
 });
 
 test('parseDisplayKey extracts components', () => {
-  const parsed = parseDisplayKey('sales-board__daily_sales');
+  const parsed = parseDisplayKey('sales-dash__daily_sales');
   assert.ok(parsed);
-  assert.strictEqual(parsed.boardName, 'sales-board');
+  assert.strictEqual(parsed.dashName, 'sales-dash');
   assert.strictEqual(parsed.chartId, 'daily_sales');
 });
 
 test('parseDisplayKey returns null for invalid format', () => {
   const parsed = parseDisplayKey('invalid');
   assert.strictEqual(parsed, null);
+});
+
+test('path refs keep stable displayKey chart ids', async () => {
+  const hits = await searchCharts({
+    projectRoot,
+    query: 'solo',
+    all: true,
+  });
+  // If a dash uses preferential path refs, discovery should still expose chart stem ids
+  for (const h of hits) {
+    assert.ok(!h.chartId.includes('/'), `chartId should not be a path: ${h.chartId}`);
+    assert.ok(!h.displayKey.includes('/'), `displayKey should stay stable: ${h.displayKey}`);
+  }
 });

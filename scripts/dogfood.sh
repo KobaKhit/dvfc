@@ -25,7 +25,7 @@ $CLI charts search revenue | head -20
 echo
 
 echo "List charts in dbt-jaffle..."
-$CLI charts list --board examples/dbt-jaffle/jaffle.dash.yaml | head -15
+$CLI charts list --dash examples/dbt-jaffle/jaffle.dash.yaml | head -15
 echo
 
 echo "Get chart metadata..."
@@ -53,7 +53,7 @@ echo
 echo -e "${BLUE}3. Validate Examples${NC}"
 echo "--------------------"
 
-for example in examples/sales-board/sales.dash.yaml examples/web-analytics/web-analytics.dash.yaml examples/dbt-jaffle/jaffle.dash.yaml; do
+for example in examples/sales-dash/sales.dash.yaml examples/web-analytics/web-analytics.dash.yaml examples/dbt-jaffle/jaffle.dash.yaml; do
   echo "Validating $example..."
   $CLI validate $example
 done
@@ -64,8 +64,8 @@ echo
 echo -e "${BLUE}4. Build Examples${NC}"
 echo "-----------------"
 
-echo "Building sales-board..."
-$CLI build examples/sales-board/sales.dash.yaml -o /tmp/dogfood-dist-sales
+echo "Building sales-dash..."
+$CLI build examples/sales-dash/sales.dash.yaml -o /tmp/dogfood-dist-sales
 echo
 
 echo "Building single chart..."
@@ -87,7 +87,7 @@ echo "  Validate generated dash..."
 $CLI validate /tmp/dogfood-dbt-init.yaml | head -3
 
 echo "  Chart discovery on dbt project..."
-$CLI charts list --board examples/dbt-jaffle/jaffle.dash.yaml | head -8
+$CLI charts list --dash examples/dbt-jaffle/jaffle.dash.yaml | head -8
 
 echo "  Search for specific charts..."
 $CLI charts search "revenue" | head -8

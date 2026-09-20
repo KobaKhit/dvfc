@@ -70,12 +70,12 @@
 
 | Task | Detail |
 |------|--------|
-| `data` / `sql` / `dbt` model | Port existing dbt-adapter behavior into `@dvfc/resolve` |
+| `data` / `sql` / `dbt` model | Port existing adapter-dbt behavior into `@dvfc/core` |
 | Grain checks | Multi-measure alignment validation |
 | `dbt_metric` (MVP) | Integrate MetricFlow compile **or** read prebuilt semantic SQL/artifacts; document required dbt version |
 | Errors | Path-aware: “metric X not found”, “grain mismatch” |
 
-**Status:** ✅ `resolveDataRef` + MetricFlow invoke (`compileDbtMetricSql` / `mf` + `dbt sl`); fixtures first, then live CLI; `@dvfc/resolve` re-exports
+**Status:** ✅ `resolveDataRef` + MetricFlow invoke (`compileDbtMetricSql` / `mf` + `dbt sl`); fixtures first, then live CLI; `@dvfc/core`
 
 **Exit:** Resolved IR available to Mosaic generator; semantic metric path works on at least one example (can be stubbed SQL if MF wiring is partial, but API shape final).
 
@@ -194,7 +194,7 @@ Compose (4) can start as soon as IR exists; Mosaic split (5) unblocks HTML confi
 
 | Risk | Mitigation |
 |------|------------|
-| MetricFlow / semantic API churn | Stable Chart `data.type: dbt_metric` shape; isolate in `@dvfc/resolve` |
+| MetricFlow / semantic API churn | Stable Chart `data.type: dbt_metric` shape; isolate in `@dvfc/core` |
 | Dual renderer drift (Mosaic vs VL) | Shared encoding IR; per-type capability flags; golden tests |
 | Big-bang rewrite | Phased IR + dash migration; Mosaic on Dash IR before public doc break |
 | Plugin security | Load only configured paths; no arbitrary remote code in default CI |
@@ -203,15 +203,15 @@ Compose (4) can start as soon as IR exists; Mosaic split (5) unblocks HTML confi
 
 ## Done / Remaining
 
-**Done (Phases 0–8 core):** Chart/dash IR + validate; chart type registry; `@dvfc/resolve` connectors including `dbt_metric`; dash compose/extract and discovery; Mosaic HTML + Vega SVG/PNG; Python SDK; gallery and docs on `*.dash.yaml` only; MCP/skill dash vocabulary.
+**Done (Phases 0–8 core):** Chart/dash IR + validate; chart type registry; `@dvfc/core` connectors including `dbt_metric`; dash compose/extract and discovery; Mosaic HTML + Vega SVG/PNG; Python SDK; gallery and docs on `*.dash.yaml` only; MCP/skill dash vocabulary.
 
 **Remaining (optional / deferred):**
 
-- Warehouse/runtime adapters beyond file-based dbt (SQLMesh/Bruin live query, CLI `--adapter` auto-detect)
+- Warehouse/runtime adapters beyond file-based dbt (SQLMesh/Bruin live query, CLI `--adapter` auto-detect). Note: `experiments/adapter-bruin` and `experiments/adapter-sqlmesh` are out-of-workspace spikes (see `experiments/README.md`). The old `@dvfc/resolve` package was removed; history in `docs/history/resolve-package.md`.
 - Observable Framework **emit** spike (`dvfc emit framework`), non-core
-- npm / PyPI publish
+- npm / PyPI publish — **0.5.0** is staged in CHANGELOG; publish when credentials are available (see `docs/PUBLISHING.md`)
 
-**Landed in hygiene pass:** `composeBoard` removed (use `composeDash`); Mosaic/Vega builtins attach via `renderMosaic` / `renderVegaLite`; `html-static` format; `dvfc.config.js` + `applyDvfcConfig`; golden SVG hash fixtures; discovery `dashPath` (boardPath alias).
+**Landed in hygiene pass:** `composeBoard` removed (use `composeDash`); Mosaic/Vega builtins attach via `renderMosaic` / `renderVegaLite`; `html-static` format; `dvfc.config.js` + `applyDvfcConfig`; golden SVG hash fixtures; discovery `dashPath` only (board aliases removed).
 
 ---
 

@@ -11,7 +11,7 @@ Chart discovery enables finding, inspecting, and composing charts across dvfc pr
 - All operations preserve dash context (data sources, theme, layout)
 - Ambiguous lookups return candidates or fail with list
 
-**Path parameter:** prefer **`dashPath`** (path to a `*.dash.yaml`). MCP tools and some CLI flags may still accept **`boardPath`** as a deprecated alias for the same field.
+**Path parameter:** **`dashPath`** (path to a `*.dash.yaml`). Legacy `boardPath` / `--board` aliases were removed; use `dashPath` / `--dash`.
 
 ## CLI Commands
 
@@ -26,8 +26,8 @@ dvfc charts search revenue
 # Return all matches (default: top 10)
 dvfc charts search revenue --all
 
-# Filter by dash (--board is deprecated alias for the same flag)
-dvfc charts search revenue --board examples/sales-board/sales.dash.yaml
+# Filter by dash
+dvfc charts search revenue --dash examples/sales-dash/sales.dash.yaml
 
 # JSON output (for scripting/agents)
 dvfc charts search revenue --json
@@ -78,7 +78,7 @@ List all charts in project or specific dash:
 dvfc charts list
 
 # List charts in specific dash
-dvfc charts list --board examples/sales-board/sales.dash.yaml
+dvfc charts list --dash examples/sales-dash/sales.dash.yaml
 
 # JSON output
 dvfc charts list --json
@@ -100,7 +100,7 @@ dvfc dash compose --charts daily_sales,top_products
 
 # With metric (optional)
 dvfc dash compose \
-  --charts sales-board__daily_sales \
+  --charts sales-dash__daily_sales \
   --metric "Total Revenue" \
   --title "Sales Dashboard"
 ```
@@ -118,10 +118,10 @@ Build a single chart while preserving dash context:
 
 ```bash
 # Build specific chart from dash
-dvfc build examples/sales-board/sales.dash.yaml --chart daily_sales -o dist-single
+dvfc build examples/sales-dash/sales.dash.yaml --chart daily_sales -o dist-single
 
 # Regular build (all charts)
-dvfc build examples/sales-board/sales.dash.yaml -o dist
+dvfc build examples/sales-dash/sales.dash.yaml -o dist
 ```
 
 **Preserves:**
@@ -146,7 +146,7 @@ Search for charts with scoring:
 }
 ```
 
-Optional filter: `dashPath` (or deprecated `boardPath`).
+Optional filter: `dashPath`.
 
 Returns: Array of `ChartHit` objects with scores.
 
@@ -161,8 +161,6 @@ Get chart with dash context:
 }
 ```
 
-(`boardPath` is accepted as a deprecated alias for `dashPath`.)
-
 Returns: `ChartResource` with full context.
 
 ### `list_charts`
@@ -172,7 +170,7 @@ List all charts:
 ```json
 {
   "projectRoot": "/path/to/project",
-  "dashPath": "examples/sales-board/sales.dash.yaml"
+  "dashPath": "examples/sales-dash/sales.dash.yaml"
 }
 ```
 
@@ -185,13 +183,13 @@ Compose a dash from chart IDs:
 ```json
 {
   "projectRoot": "/path/to/project",
-  "chartIds": ["daily_revenue", "sales-board__top_products"],
+  "chartIds": ["daily_revenue", "sales-dash__top_products"],
   "title": "Custom Dashboard",
   "outFile": "composed.dash.yaml"
 }
 ```
 
-Returns: Composed dash spec / path. **`compose_board`** is a deprecated alias of this tool.
+Returns: Composed dash spec / path.
 
 ### `render_chart`
 
@@ -199,13 +197,13 @@ Build single chart:
 
 ```json
 {
-  "dashPath": "examples/sales-board/sales.dash.yaml",
+  "dashPath": "examples/sales-dash/sales.dash.yaml",
   "chartId": "daily_sales",
   "outDir": "dist"
 }
 ```
 
-(`boardPath` deprecated alias.) Builds HTML to `dist/index.html`.
+Builds HTML to `dist/index.html`.
 
 ## Agent Workflow
 
@@ -271,10 +269,8 @@ const { dash, outPath } = await composeDash(projectRoot, {
 });
 
 // Resolve chart reference (supports display keys)
-const ref = await resolveChartRef(projectRoot, 'sales-board__daily_sales');
+const ref = await resolveChartRef(projectRoot, 'sales-dash__daily_sales');
 ```
-
-**Note:** `composeBoard` in older snippets referred to legacy board composition; use **`composeDash`** for dash IR output.
 
 ## Disambiguation
 

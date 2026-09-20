@@ -1,0 +1,100 @@
+site_name: dvfc Docs
+site_description: Charts and dashes from YAML — Mosaic, Vega-Lite, and dc.js renderers
+site_url: https://kobakhit.github.io/dvfc/docs/
+site_author: dvfc contributors
+repo_url: https://github.com/KobaKhit/dvfc
+repo_name: KobaKhit/dvfc
+copyright: Copyright &copy; dvfc contributors · Apache-2.0
+docs_dir: docs
+site_dir: site/docs
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: IBM Plex Sans
+    code: IBM Plex Mono
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.tabs.link
+    - toc.follow
+  icon:
+    repo: fontawesome/brands/github
+
+plugins:
+  - search
+  - tags
+
+exclude_docs: |
+  history/**
+  adr/**
+  _overrides/**
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.snippets
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/KobaKhit/dvfc
+  generator: false
+
+nav:
+  - Overview: index.md
+  - Quickstart: quickstart.md
+  - Guide:
+      - Charts: guide/charts.md
+      - Dashes: guide/dashes.md
+      - Interaction: guide/interaction.md
+      - Data sources: guide/data-sources.md
+      - Renderers: guide/renderers.md
+      - CLI: guide/cli.md
+      - MCP & agents: guide/mcp.md
+      - Examples: guide/examples.md
+  - Integrations:
+      - dbt models: dbt-integration.md
+      - dbt metrics: dbt-metrics.md
+      - Chart discovery: chart-discovery.md
+      - Cursor MCP setup: mcp-cursor.md
+  - Reference:
+      - Architecture: ARCHITECTURE.md
+      - Add a chart type: add-chart-type.md
+      - GitHub Pages: github-pages.md
+      - PDF export: pdf-export.md
+      - Publishing: PUBLISHING.md
+      - Roadmap: ROADMAP.md
+  - Marketing site: https://kobakhit.github.io/dvfc/

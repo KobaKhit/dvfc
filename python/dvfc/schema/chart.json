@@ -1,0 +1,408 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://dvfc.dev/schema/chart.json",
+  "title": "ChartIR",
+  "description": "dvfc atomic chart specification",
+  "type": "object",
+  "required": [
+    "id",
+    "type"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "data": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "dbt_metric",
+            "dbt",
+            "sql",
+            "data"
+          ]
+        },
+        "metric": {
+          "type": "string"
+        },
+        "group_by": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "where": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "sql": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "table": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "dataSource": {
+      "type": "string"
+    },
+    "encoding": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "object",
+          "required": [
+            "field"
+          ],
+          "properties": {
+            "field": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "quantitative",
+                "temporal",
+                "nominal",
+                "ordinal"
+              ]
+            },
+            "aggregate": {
+              "type": "string",
+              "enum": [
+                "sum",
+                "avg",
+                "count",
+                "min",
+                "max",
+                "median"
+              ]
+            },
+            "label": {
+              "type": "string"
+            },
+            "bins": {
+              "type": "number"
+            },
+            "sql": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
+        },
+        "y": {
+          "type": "object",
+          "required": [
+            "field"
+          ],
+          "properties": {
+            "field": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "quantitative",
+                "temporal",
+                "nominal",
+                "ordinal"
+              ]
+            },
+            "aggregate": {
+              "type": "string",
+              "enum": [
+                "sum",
+                "avg",
+                "count",
+                "min",
+                "max",
+                "median"
+              ]
+            },
+            "label": {
+              "type": "string"
+            },
+            "bins": {
+              "type": "number"
+            },
+            "sql": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
+        },
+        "color": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": [
+                "field"
+              ],
+              "properties": {
+                "field": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "quantitative",
+                    "temporal",
+                    "nominal",
+                    "ordinal"
+                  ]
+                },
+                "aggregate": {
+                  "type": "string",
+                  "enum": [
+                    "sum",
+                    "avg",
+                    "count",
+                    "min",
+                    "max",
+                    "median"
+                  ]
+                },
+                "label": {
+                  "type": "string"
+                },
+                "bins": {
+                  "type": "number"
+                },
+                "sql": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "size": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": [
+                "field"
+              ],
+              "properties": {
+                "field": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "quantitative",
+                    "temporal",
+                    "nominal",
+                    "ordinal"
+                  ]
+                },
+                "aggregate": {
+                  "type": "string",
+                  "enum": [
+                    "sum",
+                    "avg",
+                    "count",
+                    "min",
+                    "max",
+                    "median"
+                  ]
+                },
+                "label": {
+                  "type": "string"
+                },
+                "bins": {
+                  "type": "number"
+                },
+                "sql": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            },
+            {
+              "type": "number"
+            }
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "content": {
+      "type": "string"
+    },
+    "measures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "field": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "dbt_metric",
+                  "dbt",
+                  "sql",
+                  "data"
+                ]
+              },
+              "metric": {
+                "type": "string"
+              },
+              "group_by": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "where": {
+                "type": "string"
+              },
+              "model": {
+                "type": "string"
+              },
+              "sql": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "table": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "interaction": {
+      "type": "object",
+      "properties": {
+        "brush": {
+          "type": "boolean"
+        },
+        "brushAxis": {
+          "type": "string",
+          "enum": [
+            "x",
+            "y",
+            "xy"
+          ]
+        },
+        "select": {
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string",
+              "enum": [
+                "auto",
+                "x",
+                "y",
+                "xy"
+              ]
+            }
+          ]
+        },
+        "selection": {
+          "type": "string"
+        },
+        "publishes": {
+          "type": "string"
+        },
+        "filterBy": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "overlays": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "mean",
+              "median",
+              "trend",
+              "moving_average"
+            ]
+          },
+          "field": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "window": {
+            "type": "number",
+            "minimum": 2
+          }
+        }
+      }
+    },
+    "width": {
+      "type": "number",
+      "minimum": 0
+    },
+    "height": {
+      "type": "number",
+      "minimum": 0
+    },
+    "options": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

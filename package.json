@@ -10,11 +10,14 @@
     "clean": "pnpm -r --parallel clean && rm -rf dist node_modules",
     "mcp": "node packages/mcp/dist/server.js",
     "dogfood": "./scripts/dogfood.sh",
-    "test": "pnpm -r --filter='@dvfc/charts' --filter='@dvfc/core' --filter='@dvfc/resolve' --filter='@dvfc/render-vega' test",
-    "example:sales": "pnpm --filter @dvfc/example-sales-board dev",
-    "example:build": "pnpm --filter @dvfc/example-sales-board build",
-    "example:preview": "pnpm --filter @dvfc/example-sales-board preview",
-    "test:coverage": "node --experimental-strip-types --experimental-test-coverage --test-coverage-exclude='**/test/**' --test packages/core/test/**/*.test.ts packages/charts/test/**/*.test.ts packages/resolve/test/**/*.test.ts packages/render-vega/test/**/*.test.ts"
+    "docs:build": "./scripts/build-docs.sh",
+    "docs:serve": "bash -c 'source .venv-docs/bin/activate 2>/dev/null || ./scripts/build-docs.sh >/dev/null; source .venv-docs/bin/activate; mkdocs serve'",
+    "test": "pnpm -r --filter='@dvfc/charts' --filter='@dvfc/core' --filter='@dvfc/render-vega' --filter='@dvfc/build' --filter='@dvfc/render-mosaic' --filter='@dvfc/render-dc' --filter='@dvfc/mcp' test",
+    "example:sales": "pnpm exec dvfc preview examples/sales-dash/sales.dash.yaml",
+    "example:build": "pnpm exec dvfc build examples/sales-dash/sales.dash.yaml -o dist/sales --format html",
+    "example:preview": "pnpm exec dvfc preview examples/sales-dash/sales.dash.yaml",
+    "test:coverage": "node --experimental-strip-types --experimental-test-coverage --test-coverage-exclude='**/test/**' --test packages/core/test/**/*.test.ts packages/charts/test/**/*.test.ts packages/render-vega/test/**/*.test.ts packages/build/test/**/*.test.ts packages/render-mosaic/test/**/*.test.ts",
+    "lint": "biome check packages/*/src scripts --diagnostic-level=error"
   },
   "keywords": [
     "dashboard",
@@ -37,5 +40,20 @@
   "engines": {
     "node": ">=18.0.0",
     "pnpm": ">=8.0.0"
-  }
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4"
+  },
+  "workspaces": [
+    "packages/core",
+    "packages/charts",
+    "packages/build",
+    "packages/cli",
+    "packages/mcp",
+    "packages/adapter-dbt",
+    "packages/render-mosaic",
+    "packages/render-vega",
+    "packages/render-dc",
+    "examples/*"
+  ]
 }

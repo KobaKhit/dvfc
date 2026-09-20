@@ -4,7 +4,7 @@ title: Daily revenue
 description: Atomic chart using a data file connector
 data:
   type: data
-  path: ../sales-board/dbt-stub/sales_daily.csv
+  path: ../sales-dash/dbt-stub/sales_daily.csv
 encoding:
   x:
     field: date

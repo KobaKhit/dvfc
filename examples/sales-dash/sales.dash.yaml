@@ -1,0 +1,280 @@
+# Dash IR — Sales & Flights gallery demo
+# Mix of area, KPI, pie, heatmap, scatter, boxplot, bar, and table with crossfiltering.
+
+id: sales-dash
+title: Sales & Flights Analytics
+description: Crossfiltered sales and flights dash using area, KPI, pie, heatmap, scatter, histogram, and table charts
+version: 0.2.0
+meta:
+  title: Sales & Flights Analytics
+  description: Crossfiltered sales and flights dash using area, KPI, pie, heatmap, scatter, histogram, and table charts
+  version: 0.2.0
+data:
+  - id: sales_daily
+    type: dbt
+    model: sales_daily
+  - id: flights_summary
+    type: dbt
+    model: flights_summary
+charts:
+  - id: sales_kpi
+    type: number
+    title: Total sales
+    dataSource: sales_daily
+    encoding:
+      y:
+        field: sales
+        type: quantitative
+        aggregate: sum
+        label: Total sales ($)
+    interaction:
+      filterBy: salesBrush
+    width: 280
+    height: 160
+
+  - id: sales_trend
+    type: area
+    title: Daily sales (brush to filter)
+    dataSource: sales_daily
+    encoding:
+      x:
+        field: date
+        type: temporal
+        label: Date
+      y:
+        field: sales
+        type: quantitative
+        aggregate: sum
+        label: Daily sales ($)
+    interaction:
+      brush: true
+      brushAxis: x
+      publishes: salesBrush
+      filterBy: salesBrush
+    width: 640
+    height: 240
+
+  - id: sales_by_region
+    type: bar
+    title: Sales by region
+    dataSource: sales_daily
+    encoding:
+      x:
+        field: region
+        type: nominal
+        label: Region
+      y:
+        field: sales
+        type: quantitative
+        aggregate: sum
+        label: Total sales ($)
+    interaction:
+      publishes: salesBrush
+      select: auto
+      filterBy: salesBrush
+    width: 420
+    height: 260
+
+  - id: product_mix
+    type: pie
+    title: Product mix
+    dataSource: sales_daily
+    encoding:
+      x:
+        field: product
+        type: nominal
+        label: Product
+      y:
+        field: sales
+        type: quantitative
+        aggregate: sum
+        label: Sales ($)
+    interaction:
+      filterBy: salesBrush
+      publishes: salesBrush
+      select: auto
+    width: 360
+    height: 280
+
+  - id: region_product_heatmap
+    type: heatmap
+    title: Region × product sales
+    dataSource: sales_daily
+    encoding:
+      x:
+        field: region
+        type: nominal
+        label: Region
+      y:
+        field: product
+        type: nominal
+        label: Product
+      color:
+        field: sales
+        type: quantitative
+        aggregate: sum
+        label: Sales
+    interaction:
+      publishes: salesBrush
+      select: auto
+      filterBy: salesBrush
+    width: 480
+    height: 280
+
+  - id: units_vs_sales
+    type: scatter
+    title: Units vs sales
+    dataSource: sales_daily
+    encoding:
+      x:
+        field: units
+        type: quantitative
+        label: Units sold
+      y:
+        field: sales
+        type: quantitative
+        label: Sales ($)
+      color:
+        field: region
+        type: nominal
+    interaction:
+      publishes: salesBrush
+      select: auto
+      filterBy: salesBrush
+    width: 420
+    height: 280
+
+  - id: passenger_trend
+    type: area
+    title: Daily passengers (brush to filter)
+    dataSource: flights_summary
+    encoding:
+      x:
+        field: date
+        type: temporal
+        label: Date
+      y:
+        field: passengers
+        type: quantitative
+        aggregate: sum
+        label: Passengers
+    interaction:
+      brush: true
+      brushAxis: x
+      publishes: flightsBrush
+      filterBy: flightsBrush
+    width: 640
+    height: 240
+
+  - id: delay_vs_passengers
+    type: scatter
+    title: Passengers vs delay
+    dataSource: flights_summary
+    encoding:
+      x:
+        field: passengers
+        type: quantitative
+        label: Passengers
+      y:
+        field: delay_minutes
+        type: quantitative
+        label: Delay (minutes)
+      color:
+        field: origin
+        type: nominal
+    interaction:
+      publishes: flightsBrush
+      select: auto
+      filterBy: flightsBrush
+    width: 420
+    height: 280
+
+  - id: delay_histogram
+    type: histogram
+    title: Delay minutes distribution
+    dataSource: flights_summary
+    encoding:
+      x:
+        field: delay_minutes
+        type: quantitative
+        label: Delay (minutes)
+    interaction:
+      filterBy: flightsBrush
+    width: 420
+    height: 280
+
+  - id: avg_delay_by_origin
+    type: bar
+    title: Average delay by origin
+    dataSource: flights_summary
+    encoding:
+      x:
+        field: origin
+        type: nominal
+        label: Origin airport
+      y:
+        field: delay_minutes
+        type: quantitative
+        aggregate: avg
+        label: Avg delay (minutes)
+    interaction:
+      publishes: flightsBrush
+      select: auto
+      filterBy: flightsBrush
+    width: 420
+    height: 260
+
+  - id: flights_by_origin
+    type: bar
+    title: Flights by origin
+    dataSource: flights_summary
+    encoding:
+      x:
+        field: origin
+        type: nominal
+        label: Origin airport
+      y:
+        field: flights
+        type: quantitative
+        aggregate: sum
+        label: Total flights
+    interaction:
+      publishes: flightsBrush
+      select: auto
+      filterBy: flightsBrush
+    width: 420
+    height: 260
+
+  - id: route_table
+    type: table
+    title: Route summary
+    dataSource: flights_summary
+    encoding:
+      x:
+        field: origin
+        type: nominal
+        label: Origin
+      y:
+        field: passengers
+        type: quantitative
+        aggregate: sum
+        label: Passengers
+    interaction:
+      filterBy: flightsBrush
+    width: 640
+    height: 280
+
+layout:
+  type: flex
+  gap: 20
+theme:
+  colors:
+    - "#1e3a5f"
+    - "#7ba3c9"
+    - "#a89b8c"
+    - "#4a7c9b"
+  fontFamily: system-ui, -apple-system, "Segoe UI", sans-serif
+  backgroundColor: white
+  chartBorders: true
+coordination:
+  auto: true

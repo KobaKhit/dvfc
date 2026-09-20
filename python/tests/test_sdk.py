@@ -10,6 +10,7 @@ from dvfc import (
     DashBuilder,
     compile_dbt_metric,
     load_chart,
+    load_dash,
     save_spec,
     validate,
 )
@@ -33,6 +34,9 @@ def test_chart_builder_and_native_validate():
     )
     result = validate(chart)
     assert result.valid, result.errors
+    assert chart.interaction is not None
+    assert chart.interaction.publishes == "time"
+    assert chart.interaction.selection == "time"
 
 
 def test_dash_builder():
@@ -49,7 +53,17 @@ def test_dash_builder():
 def test_load_example_chart():
     chart = load_chart(ROOT / "examples/charts/revenue_trend.chart.yaml")
     assert chart.id == "revenue_trend"
+    assert chart.interaction is not None
+    assert chart.interaction.publishes == "time"
     assert validate(chart).valid
+
+
+def test_load_revenue_analysis_dash():
+    dash = load_dash(ROOT / "examples/revenue-analysis/revenue-analysis.dash.yaml")
+    assert dash.id == "revenue-analysis"
+    assert any(
+        getattr(c, "type", None) == "text" for c in dash.charts if not hasattr(c, "chart")
+    )
 
 
 def test_save_roundtrip(tmp_path: Path):

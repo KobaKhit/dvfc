@@ -1,0 +1,2 @@
+# MkDocs Material for dvfc documentation site
+mkdocs-material>=9.5.0,<10

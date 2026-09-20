@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Literal, Optional, Union
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from .spec import ChartType, Encoding, InteractionSpec
+from .spec import Encoding, InteractionSpec, LayoutSpec, ThemeSpec
 
 
 class DataRefDbtMetric(BaseModel):
@@ -48,7 +48,8 @@ class Chart(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     id: str
-    type: ChartType
+    # Built-ins use ChartType values; plugins may supply any registered id string.
+    type: str
     title: Optional[str] = None
     description: Optional[str] = None
     data: Optional[DataRef] = None
@@ -59,6 +60,8 @@ class Chart(BaseModel):
     interaction: Optional[InteractionSpec] = None
     width: Optional[int] = None
     height: Optional[int] = None
+    # Extra options for plugin chart types (matches ChartIR.options)
+    options: Optional[Dict[str, Any]] = None
 
 
 class DashChartRef(BaseModel):
@@ -76,12 +79,28 @@ class DashDataSource(BaseModel):
     url: Optional[str] = None
 
 
+class DashCoordinationSelection(BaseModel):
+    source: str
+    axis: Optional[Literal["x", "y", "xy"]] = None
+
+
 class DashCoordination(BaseModel):
     auto: Optional[bool] = True
+    selections: Optional[Dict[str, DashCoordinationSelection]] = None
+
+
+class DashMeta(BaseModel):
+    """Optional dash metadata (matches DashMeta in TS)."""
+
+    model_config = ConfigDict(extra="allow")
+
+    title: Optional[str] = None
+    description: Optional[str] = None
+    version: Optional[str] = None
 
 
 class Dash(BaseModel):
-    """Dash composition document (*.dash.yaml)."""
+    """Dash composition document (*.dash.yaml). Matches DashIR in TS."""
 
     model_config = ConfigDict(populate_by_name=True)
 
@@ -89,9 +108,13 @@ class Dash(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
     version: Optional[str] = "0.1.0"
+    meta: Optional[DashMeta] = None
     coordination: Optional[DashCoordination] = None
     data: Optional[List[DashDataSource]] = None
     charts: List[Union[DashChartRef, Chart]] = Field(default_factory=list)
+    layout: Optional[LayoutSpec] = None
+    theme: Optional[ThemeSpec] = None
+
 
 def chart_to_dict(chart: Chart) -> Dict[str, Any]:
     return chart.model_dump(by_alias=True, exclude_none=True, mode="json")

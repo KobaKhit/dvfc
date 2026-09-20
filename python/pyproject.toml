@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dvfc"
-version = "0.2.0"
+version = "0.3.0"
 description = "Python SDK for dvfc, author Chart/Dash IR, validate natively, compile dbt metrics, build via Mosaic CLI"
 readme = "README.md"
 requires-python = ">=3.9"
@@ -38,6 +38,7 @@ classifiers = [
 dependencies = [
     "pyyaml>=6.0",
     "pydantic>=2.0",
+    "jsonschema>=4.0",
 ]
 
 [project.optional-dependencies]
@@ -77,14 +78,14 @@ where = ["."]
 include = ["dvfc*"]
 
 [tool.setuptools.package-data]
-dvfc = ["py.typed"]
+dvfc = ["py.typed", "schema/*.json"]
 
 [tool.black]
 line-length = 100
 target-version = ['py39']
 
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.10"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true

@@ -1,15 +1,12 @@
 /**
- * Fix isDashChartRef - a ref has `chart` string and typically no `type`.
- * Inline charts have `type`. An object with both shouldn't happen.
- */
-
-/**
  * @dvfc/core
  * Core types, IR (chart/dash), schemas, parse, registry
  */
 
 export * from './types.js';
 export * from './schema.js';
+export * from './schema-shared.js';
+export * from './zod-schema.js';
 export * from './ir.js';
 export * from './ir-schema.js';
 export * from './compat.js';

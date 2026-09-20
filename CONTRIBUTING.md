@@ -58,10 +58,10 @@ git checkout -b fix/issue-description
 pnpm test
 
 # Validate examples
-dvfc validate examples/sales-board/sales.dash.yaml
+dvfc validate examples/sales-dash/sales.dash.yaml
 
 # Build example
-dvfc build examples/sales-board/sales.dash.yaml -o /tmp/test-build
+dvfc build examples/sales-dash/sales.dash.yaml -o /tmp/test-build
 
 # Full dogfood suite
 pnpm dogfood
@@ -122,9 +122,9 @@ dvfc/
 │   ├── core/          # Core types and schemas
 │   ├── cli/           # CLI tool (dvfc binary)
 │   ├── charts/        # Chart discovery
-│   ├── dbt-adapter/   # dbt integration
+│   ├── adapter-dbt/   # dbt integration
 │   ├── mcp/           # MCP server
-│   └── adapter-*/     # SQLMesh, Bruin adapters
+│   └── adapter-*/     # Experimental (excluded from pnpm workspace)
 ├── python/            # Python SDK
 ├── examples/          # Example dashboards
 ├── docs/              # Documentation

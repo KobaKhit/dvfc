@@ -1,13 +1,14 @@
-# Dash IR (canonical). Use this file for validate, preview, and build.
+# Dash IR — Web analytics gallery demo
+# Area, KPI, donut, scatter, density, heatmap, and bar with date-brush coordination.
 
 id: web-analytics
 title: Web Analytics Dashboard
-description: Track page views, traffic sources, and conversion metrics
-version: 0.1.0
+description: Traffic and conversion analytics with area, KPI, donut, scatter, density, and heatmap charts
+version: 0.2.0
 meta:
   title: Web Analytics Dashboard
-  description: Track page views, traffic sources, and conversion metrics
-  version: 0.1.0
+  description: Traffic and conversion analytics with area, KPI, donut, scatter, density, and heatmap charts
+  version: 0.2.0
 data:
   - id: page_views
     type: dbt
@@ -16,30 +17,46 @@ data:
     type: dbt
     model: conversions
 charts:
+  - id: views_kpi
+    type: number
+    title: Total page views
+    dataSource: page_views
+    encoding:
+      y:
+        field: views
+        type: quantitative
+        aggregate: sum
+        label: Views
+    interaction:
+      filterBy: dateBrush
+    width: 280
+    height: 160
+
   - id: daily_views
-    type: line
-    title: Daily Page Views
+    type: area
+    title: Daily page views (brush to filter)
     dataSource: page_views
     encoding:
       x:
         field: date
         type: temporal
-        label: Date (brush to filter)
+        label: Date
       y:
         field: views
         type: quantitative
         aggregate: sum
-        label: Total Views
+        label: Views
     interaction:
       brush: true
       brushAxis: x
-      selection: dateBrush
       publishes: dateBrush
-    width: 700
-    height: 250
+      filterBy: dateBrush
+    width: 640
+    height: 240
+
   - id: views_by_page
     type: bar
-    title: Views by Page
+    title: Views by page
     dataSource: page_views
     encoding:
       x:
@@ -50,15 +67,58 @@ charts:
         field: views
         type: quantitative
         aggregate: sum
-        label: Total Views
-      color: steelblue
+        label: Total views
+    interaction:
+      publishes: dateBrush
+      select: auto
+      filterBy: dateBrush
+    width: 420
+    height: 280
+
+  - id: bounce_scatter
+    type: scatter
+    title: Bounce rate vs session duration
+    dataSource: page_views
+    encoding:
+      x:
+        field: avg_duration
+        type: quantitative
+        label: Avg duration (s)
+      y:
+        field: bounce_rate
+        type: quantitative
+        label: Bounce rate
+      color:
+        field: page
+        type: nominal
+    interaction:
+      publishes: dateBrush
+      select: auto
+      filterBy: dateBrush
+    width: 420
+    height: 280
+
+  - id: duration_density
+    type: density
+    title: Session duration density
+    dataSource: page_views
+    encoding:
+      x:
+        field: avg_duration
+        type: quantitative
+        label: Avg duration (s)
+      y:
+        field: density
+        type: quantitative
+        label: Density
     interaction:
       filterBy: dateBrush
-    width: 700
-    height: 300
-  - id: bounce_rate
-    type: bar
-    title: Average Bounce Rate by Page
+    width: 420
+    height: 260
+
+  - id: page_session_heatmap
+    type: heatmap
+    title: Page × sessions intensity
     dataSource: page_views
     encoding:
       x:
@@ -66,39 +126,61 @@ charts:
         type: nominal
         label: Page
       y:
-        field: bounce_rate
+        field: date
+        type: temporal
+        label: Date
+      color:
+        field: sessions
         type: quantitative
-        aggregate: avg
-        label: Avg Bounce Rate
-      color: crimson
+        aggregate: sum
+        label: Sessions
     interaction:
+      publishes: dateBrush
+      select: auto
       filterBy: dateBrush
-    width: 700
+    width: 520
     height: 300
+
+  - id: revenue_kpi
+    type: number
+    title: Total revenue
+    dataSource: conversions
+    encoding:
+      y:
+        field: revenue
+        type: quantitative
+        aggregate: sum
+        label: Revenue ($)
+    interaction:
+      filterBy: revenueBrush
+    width: 280
+    height: 160
+
   - id: daily_revenue
-    type: line
-    title: Daily Revenue
+    type: area
+    title: Daily revenue (brush to filter)
     dataSource: conversions
     encoding:
       x:
         field: date
         type: temporal
-        label: Date (brush to filter)
+        label: Date
       y:
         field: revenue
         type: quantitative
         aggregate: sum
-        label: Total Revenue ($)
+        label: Revenue ($)
     interaction:
       brush: true
       brushAxis: x
-      selection: revenueBrush
       publishes: revenueBrush
-    width: 700
-    height: 250
-  - id: revenue_by_source
-    type: bar
-    title: Revenue by Traffic Source
+      filterBy: revenueBrush
+    width: 640
+    height: 240
+
+  - id: source_mix
+    type: donut
+    title: Revenue by traffic source
     dataSource: conversions
     encoding:
       x:
@@ -109,15 +191,40 @@ charts:
         field: revenue
         type: quantitative
         aggregate: sum
-        label: Total Revenue ($)
-      color: darkorange
+        label: Revenue ($)
     interaction:
       filterBy: revenueBrush
-    width: 700
+      publishes: revenueBrush
+      select: auto
+    width: 360
     height: 300
-  - id: conversion_rate
+
+  - id: cost_vs_revenue
+    type: scatter
+    title: Cost vs revenue by source
+    dataSource: conversions
+    encoding:
+      x:
+        field: cost
+        type: quantitative
+        label: Cost ($)
+      y:
+        field: revenue
+        type: quantitative
+        label: Revenue ($)
+      color:
+        field: source
+        type: nominal
+    interaction:
+      publishes: revenueBrush
+      select: auto
+      filterBy: revenueBrush
+    width: 420
+    height: 280
+
+  - id: conversions_by_source
     type: bar
-    title: Conversions by Source
+    title: Conversions by source
     dataSource: conversions
     encoding:
       x:
@@ -128,22 +235,25 @@ charts:
         field: conversions
         type: quantitative
         aggregate: sum
-        label: Total Conversions
-      color: mediumseagreen
+        label: Conversions
     interaction:
+      publishes: revenueBrush
+      select: auto
       filterBy: revenueBrush
-    width: 700
-    height: 300
+    width: 420
+    height: 260
+
 layout:
   type: flex
-  gap: 24
+  gap: 20
 theme:
   colors:
-    - steelblue
-    - crimson
-    - darkorange
-    - mediumseagreen
-  fontFamily: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif
+    - "#1e3a5f"
+    - "#7ba3c9"
+    - "#a89b8c"
+    - "#4a7c9b"
+  fontFamily: system-ui, -apple-system, "Segoe UI", sans-serif
   backgroundColor: white
+  chartBorders: true
 coordination:
   auto: true

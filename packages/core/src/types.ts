@@ -1,6 +1,6 @@
 /**
  * Core types for Data Viz Factory dashboard specifications
- * Defines the structure of YAML/JSON board configurations
+ * DashboardSpec is the normalized Mosaic runtime shape (not a user-facing file format).
  */
 
 export interface DashboardSpec {
@@ -165,15 +165,26 @@ export interface ChannelEncoding {
 }
 
 export interface InteractionConfig {
-  /** Enable brushing for crossfiltering */
+  /** Enable brushing for crossfiltering (interval brush on continuous axes) */
   brush?: boolean;
-  
+
   /** Brush axis ('x' | 'y' | 'xy') */
   brushAxis?: 'x' | 'y' | 'xy';
-  
+
+  /**
+   * Click / tile / point selection that publishes into `selection` / `publishes`.
+   * - true | 'auto': infer from chart type (bar→toggleX, heatmap→toggle xy, scatter→region)
+   * - 'x' | 'y' | 'xy': force toggle channels
+   * - false: disable click selection even when publishing
+   */
+  select?: boolean | 'auto' | 'x' | 'y' | 'xy';
+
   /** Selection name for coordination */
   selection?: string;
-  
+
+  /** Preferred alias for selection when this chart publishes a brush/selection */
+  publishes?: string;
+
   /** Filter by selection from another chart */
   filterBy?: string;
 }

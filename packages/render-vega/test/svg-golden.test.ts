@@ -20,6 +20,7 @@ function normalizeSvg(svg: string): string {
   return svg
     .replace(/\s+/g, ' ')
     .replace(/\s(id|aria-label|aria-hidden)="[^"]*"/g, '')
+    .replace(/\s(fill|stroke|color|font-family|font-size|opacity|style)="[^"]*"/g, '')
     .replace(/<!--[\s\S]*?-->/g, '')
     .trim();
 }

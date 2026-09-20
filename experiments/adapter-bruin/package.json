@@ -1,0 +1,44 @@
+{
+  "name": "@dvfc/adapter-bruin",
+  "version": "0.1.0",
+  "description": "EXPERIMENTAL / unused by core pipeline — Bruin adapter for Data Viz Factory - resolve asset references",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "yaml": "^2.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.3"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "bruin",
+    "adapter",
+    "dvfc",
+    "analytics"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KobaKhit/dvfc.git"
+  },
+  "homepage": "https://github.com/KobaKhit/dvfc#readme",
+  "bugs": {
+    "url": "https://github.com/KobaKhit/dvfc/issues"
+  }
+}

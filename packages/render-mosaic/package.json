@@ -14,7 +14,8 @@
   "files": ["dist"],
   "scripts": {
     "build": "tsc",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "test": "pnpm build && node --experimental-strip-types --test test/**/*.test.ts"
   },
   "dependencies": {
     "@dvfc/core": "workspace:*"

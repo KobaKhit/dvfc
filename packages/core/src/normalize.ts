@@ -8,7 +8,8 @@ import { dirname, join, resolve as resolvePath, basename, extname } from 'path';
 import { glob } from 'glob';
 import { parse as parseYAML } from 'yaml';
 import type { DashboardSpec, DataSource, ChartSpec } from './types.js';
-import type { ChartIR, DashIR, DataRef } from './ir.js';
+import type { ChartIR, DataRef } from './ir.js';
+import { interactionToRuntime } from './compat.js';
 import { isDashChartRef } from './ir.js';
 import { interpretSpec } from './parse.js';
 
@@ -54,22 +55,32 @@ async function fileExists(p: string): Promise<boolean> {
  * Locate a dbt-stub directory (manifest.json + model CSVs).
  * Searches next to the spec, project root, and common example layouts.
  */
+function dbtStubCandidates(opts: {
+  specDir: string;
+  projectRoot?: string;
+  dbtStubDir?: string;
+}): string[] {
+  const root = opts.projectRoot ?? opts.specDir;
+  return [
+    opts.dbtStubDir,
+    join(opts.specDir, 'dbt-stub'),
+    join(root, 'dbt-stub'),
+    join(opts.specDir, '../sales-dash/dbt-stub'),
+    join(opts.specDir, '../dbt-jaffle/dbt-stub'),
+    join(opts.specDir, '../dbt-stub'),
+    join(root, 'examples/sales-dash/dbt-stub'),
+    join(root, 'examples/revenue-analysis/dbt-stub'),
+    join(root, 'examples/dbt-jaffle/dbt-stub'),
+    join(root, 'examples/web-analytics/dbt-stub'),
+  ].filter((c): c is string => Boolean(c));
+}
+
 export async function findDbtStubDir(opts: {
   specDir: string;
   projectRoot?: string;
   dbtStubDir?: string;
 }): Promise<string | null> {
-  const root = opts.projectRoot ?? opts.specDir;
-  const candidates = [
-    opts.dbtStubDir,
-    join(opts.specDir, 'dbt-stub'),
-    join(root, 'dbt-stub'),
-    join(opts.specDir, '../sales-board/dbt-stub'),
-    join(opts.specDir, '../dbt-stub'),
-    join(root, 'examples/sales-board/dbt-stub'),
-    join(root, 'examples/revenue-analysis/dbt-stub'),
-    join(root, 'examples/dbt-jaffle/dbt-stub'),
-  ].filter((c): c is string => Boolean(c));
+  const candidates = dbtStubCandidates(opts);
 
   for (const c of candidates) {
     if (await fileExists(join(c, 'manifest.json'))) return c;
@@ -80,22 +91,16 @@ export async function findDbtStubDir(opts: {
   return null;
 }
 
-/** Resolve a dbt model CSV under candidate stub dirs */
+/** Resolve a dbt model CSV under candidate stub dirs (searches all stubs, not just the first). */
 export async function findDbtModelCsv(
   model: string,
   opts: NormalizeOptions
 ): Promise<string | null> {
-  const stub = await findDbtStubDir(opts);
-  const candidates = [
-    stub ? join(stub, `${model}.csv`) : null,
-    stub ? join(stub, `${model}.parquet`) : null,
-    join(opts.dbtStubDir ?? join(opts.specDir, 'dbt-stub'), `${model}.csv`),
-    join(opts.dbtStubDir ?? join(opts.specDir, 'dbt-stub'), `${model}.parquet`),
-    join(opts.projectRoot ?? opts.specDir, 'examples/sales-board/dbt-stub', `${model}.csv`),
-    join(opts.specDir, '../sales-board/dbt-stub', `${model}.csv`),
-  ].filter((c): c is string => Boolean(c));
-
-  for (const c of candidates) {
+  const candidates: string[] = [];
+  for (const stub of dbtStubCandidates(opts)) {
+    candidates.push(join(stub, `${model}.csv`), join(stub, `${model}.parquet`));
+  }
+  for (const c of [...new Set(candidates)]) {
     if (await fileExists(c)) return c;
   }
   return null;
@@ -119,9 +124,9 @@ function safeId(input: string): string {
 export async function resolveDataRef(
   ref: DataRef,
   idHint: string,
-  opts: NormalizeOptions
+  opts: NormalizeOptions & { relationId?: string }
 ): Promise<ResolvedRelation> {
-  const id = safeId(idHint);
+  const id = opts.relationId ?? safeId(idHint);
   const dbtStub = opts.dbtStubDir ?? join(opts.specDir, 'dbt-stub');
 
   switch (ref.type) {
@@ -133,10 +138,12 @@ export async function resolveDataRef(
           `dbt model CSV not found for '${model}' (looked under ${dbtStub} and example stubs)`
         );
       }
+      const ext = extname(absPath).toLowerCase() || '.csv';
+      const destName = `${id}${ext}`;
       return {
         id,
-        source: { id, type: 'dbt', model },
-        assets: [{ absPath, destName: `${id}.csv` }],
+        source: { id, type: 'dbt', model, path: destName },
+        assets: [{ absPath, destName }],
       };
     }
     case 'data': {
@@ -178,21 +185,22 @@ export async function resolveDataRef(
       const assets: FileAsset[] = [];
       let sql = ref.sql;
       for (const rel of fileRefs) {
-        const absPath = resolvePath(opts.specDir, rel);
+        let absPath = resolvePath(opts.specDir, rel);
         if (!(await fileExists(absPath))) {
-          // try project root
-          const alt = resolvePath(opts.projectRoot ?? opts.specDir, rel);
-          if (!(await fileExists(alt))) {
-            throw new Error(`SQL references missing file: ${rel}`);
-          }
-          const destName = basename(alt);
-          assets.push({ absPath: alt, destName });
-          sql = sql.split(rel).join(destName);
-        } else {
-          const destName = basename(absPath);
-          assets.push({ absPath, destName });
-          sql = sql.split(rel).join(destName);
+          absPath = resolvePath(opts.projectRoot ?? opts.specDir, rel);
         }
+        if (!(await fileExists(absPath)) && !rel.includes('/') && !rel.includes('\\')) {
+          // Bare filename: try dbt stub CSVs (semantic SQL fixtures often quote model CSVs)
+          const model = basename(rel, extname(rel));
+          const stubCsv = await findDbtModelCsv(model, opts);
+          if (stubCsv) absPath = stubCsv;
+        }
+        if (!(await fileExists(absPath))) {
+          throw new Error(`SQL references missing file: ${rel}`);
+        }
+        const destName = basename(absPath);
+        assets.push({ absPath, destName });
+        sql = sql.split(rel).join(destName);
       }
       return {
         id,
@@ -221,6 +229,29 @@ export async function resolveDataRef(
   }
 }
 
+/** Map a dash DataSource onto a DataRef for shared resolution. */
+export function dataSourceToRef(ds: DataSource): DataRef {
+  if (ds.type === 'dbt' && ds.model) {
+    return { type: 'dbt', model: ds.model };
+  }
+  if (ds.type === 'sql' && ds.sql) {
+    return { type: 'sql', sql: ds.sql };
+  }
+  if (ds.path) {
+    return { type: 'data', path: ds.path };
+  }
+  throw new Error(`Data source '${ds.id}' needs model, sql, or path`);
+}
+
+/** Resolve a shared dash.data entry, preserving its declared id. */
+export async function resolveDataSource(
+  ds: DataSource,
+  opts: NormalizeOptions
+): Promise<ResolvedRelation> {
+  const ref = dataSourceToRef(ds);
+  return resolveDataRef(ref, ds.id, { ...opts, relationId: ds.id });
+}
+
 function chartIRToLegacy(chart: ChartIR, dataSourceId: string): ChartSpec {
   return {
     id: chart.id,
@@ -229,14 +260,7 @@ function chartIRToLegacy(chart: ChartIR, dataSourceId: string): ChartSpec {
     title: chart.title,
     encoding: chart.encoding,
     content: chart.content,
-    interaction: chart.interaction
-      ? {
-          brush: chart.interaction.brush,
-          brushAxis: chart.interaction.brushAxis,
-          selection: chart.interaction.publishes ?? chart.interaction.selection,
-          filterBy: chart.interaction.filterBy,
-        }
-      : undefined,
+    interaction: interactionToRuntime(chart.interaction),
     overlays: chart.overlays,
     width: chart.width,
     height: chart.height,
@@ -263,18 +287,37 @@ async function findChartFile(
     }
   }
 
+  const preferred = [
+    join(projectRoot, 'charts', `${chartRef}.chart.yaml`),
+    join(projectRoot, 'charts', `${chartRef}.chart.yml`),
+    join(projectRoot, 'examples/charts', `${chartRef}.chart.yaml`),
+    join(projectRoot, 'examples/charts', `${chartRef}.chart.yml`),
+  ];
+  for (const pref of preferred) {
+    if (await fileExists(pref)) return pref;
+  }
+
   const patterns = [
     `**/${chartRef}.chart.yaml`,
     `**/${chartRef}.chart.yml`,
     `**/charts/${chartRef}.yaml`,
   ];
+  const allHits: string[] = [];
   for (const pattern of patterns) {
     const hits = await glob(pattern, {
       cwd: projectRoot,
       absolute: true,
       ignore: ['**/node_modules/**', '**/dist/**', '**/.git/**'],
     });
-    if (hits[0]) return hits[0];
+    allHits.push(...hits);
+  }
+  const unique = [...new Set(allHits)];
+  if (unique.length === 1) return unique[0];
+  if (unique.length > 1) {
+    const rel = unique.map((h) => h.replace(projectRoot + '/', ''));
+    throw new Error(
+      `Ambiguous chart ref '${chartRef}'. Multiple matches: ${rel.join(', ')}`
+    );
   }
   return null;
 }
@@ -319,7 +362,6 @@ export async function normalizeToDashboard(
   const dataAcc = new Map<string, ResolvedRelation>();
 
   if (parsed.kind === 'chart') {
-    const chartOpts = { ...opts, specDir: opts.path ? dirname(opts.path) : opts.specDir };
     // Fix: for chart file, data paths relative to chart file
     const chartFileDir = opts.path ? dirname(resolvePath(opts.path)) : opts.specDir;
     const localOpts = { ...opts, specDir: chartFileDir, projectRoot };
@@ -344,36 +386,11 @@ export async function normalizeToDashboard(
   const dashDir = opts.path ? dirname(resolvePath(opts.path)) : opts.specDir;
   const charts: ChartSpec[] = [];
 
-  // Keep shared dash.data (legacy style)
+  // Shared dash.data — same resolver as chart connectors
   for (const ds of dash.data ?? []) {
-    if (ds.type === 'dbt' && ds.model) {
-      const found = await findDbtModelCsv(ds.model, {
-        ...opts,
-        specDir: dashDir,
-        projectRoot,
-      });
-      if (!found) {
-        throw new Error(`dbt CSV for model '${ds.model}' not found`);
-      }
-      assets.push({ absPath: found, destName: `${ds.id}.csv` });
-      dataAcc.set(ds.id, {
-        id: ds.id,
-        source: ds,
-        assets: [{ absPath: found, destName: `${ds.id}.csv` }],
-      });
-    } else if (ds.type === 'sql' && ds.sql) {
-      dataAcc.set(ds.id, { id: ds.id, source: ds, assets: [] });
-    } else if (ds.path) {
-      const absPath = resolvePath(dashDir, ds.path);
-      assets.push({ absPath, destName: `${ds.id}${extname(ds.path) || '.csv'}` });
-      dataAcc.set(ds.id, {
-        id: ds.id,
-        source: { ...ds, type: ds.type === 'url' ? 'url' : 'csv' },
-        assets: [{ absPath, destName: `${ds.id}${extname(ds.path) || '.csv'}` }],
-      });
-    } else {
-      dataAcc.set(ds.id, { id: ds.id, source: ds, assets: [] });
-    }
+    const localOpts: NormalizeOptions = { ...opts, specDir: dashDir, projectRoot };
+    const resolved = await resolveDataSource(ds, localOpts);
+    dataAcc.set(resolved.id, resolved);
   }
 
   for (const entry of dash.charts) {
@@ -454,5 +471,33 @@ export async function normalizeFile(
   });
 }
 
-/** Re-export for callers that need dash → Mosaic DashboardSpec */
-export { dashToDashboardSpec as legacyDashToBoard } from './compat.js';
+/** Re-export Mosaic converter for callers that already import from normalize */
+export { dashToDashboardSpec } from './compat.js';
+
+/**
+ * Narrow a normalized dash to a single chart and its data/assets.
+ * Shared by HTML build and Vega static export.
+ */
+export function filterSpecToChart(
+  spec: DashboardSpec,
+  assets: FileAsset[],
+  chartId: string
+): { spec: DashboardSpec; assets: FileAsset[] } {
+  const chart = spec.charts.find((c) => c.id === chartId);
+  if (!chart) throw new Error(`Chart '${chartId}' not found`);
+  const data = spec.data.filter((ds) => !chart.dataSource || ds.id === chart.dataSource);
+  const dataIds = new Set(data.map((d) => d.id));
+  const filteredAssets = assets.filter((a) =>
+    [...dataIds].some(
+      (id) =>
+        a.destName === `${id}.csv` ||
+        a.destName === `${id}.parquet` ||
+        a.destName.startsWith(`${id}.`) ||
+        a.destName.startsWith(id)
+    )
+  );
+  return {
+    spec: { ...spec, charts: [chart], data },
+    assets: filteredAssets,
+  };
+}

@@ -9,9 +9,14 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Protocol, Union, cast
 
 from .ir import Chart
+
+
+class _VlConvert(Protocol):
+    def vegalite_to_svg(self, vl_spec: str) -> str: ...
+    def vegalite_to_png(self, vl_spec: str, scale: float = ...) -> bytes: ...
 
 
 def chart_to_vega_lite(
@@ -81,14 +86,14 @@ def chart_to_vega_lite(
     }
 
 
-def _require_vl_convert():
+def _require_vl_convert() -> _VlConvert:
     try:
         import vl_convert as vlc
     except ImportError as e:
         raise ImportError(
             "In-process SVG/PNG requires vl-convert. Install with: pip install 'dvfc[render]'"
         ) from e
-    return vlc
+    return cast(_VlConvert, vlc)
 
 
 def render_svg(chart: Chart, values: List[Dict[str, Any]]) -> str:

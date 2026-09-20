@@ -1,41 +1,14 @@
 /**
- * JSON Schemas for ChartIR and DashIR
+ * JSON Schemas for ChartIR and DashIR.
+ * Encoding / overlay / theme / layout fragments come from schema-shared.
  */
 
-const channelEncoding = {
-  type: 'object',
-  required: ['field'],
-  properties: {
-    field: { type: 'string' },
-    type: {
-      type: 'string',
-      enum: ['quantitative', 'temporal', 'nominal', 'ordinal'],
-    },
-    aggregate: {
-      type: 'string',
-      enum: ['sum', 'avg', 'count', 'min', 'max', 'median'],
-    },
-    label: { type: 'string' },
-    bins: { type: 'number' },
-    sql: { type: 'string' },
-  },
-  additionalProperties: true,
-} as const;
-
-const analysisOverlay = {
-  type: 'object',
-  required: ['type'],
-  properties: {
-    type: {
-      type: 'string',
-      enum: ['mean', 'median', 'trend', 'moving_average'],
-    },
-    field: { type: 'string' },
-    color: { type: 'string' },
-    label: { type: 'string' },
-    window: { type: 'number', minimum: 2 },
-  },
-} as const;
+import {
+  channelEncodingSchema,
+  analysisOverlaySchema,
+  themeConfigSchema,
+  layoutConfigSchema,
+} from './schema-shared.js';
 
 const dataRef = {
   type: 'object',
@@ -59,11 +32,17 @@ const dataRef = {
 const interaction = {
   type: 'object',
   properties: {
-    brush: { type: 'boolean' },
-    brushAxis: { type: 'string', enum: ['x', 'y', 'xy'] },
-    selection: { type: 'string' },
-    publishes: { type: 'string' },
-    filterBy: { type: 'string' },
+              brush: { type: 'boolean' },
+              brushAxis: { type: 'string', enum: ['x', 'y', 'xy'] },
+              select: {
+                oneOf: [
+                  { type: 'boolean' },
+                  { type: 'string', enum: ['auto', 'x', 'y', 'xy'] },
+                ],
+              },
+              selection: { type: 'string' },
+              publishes: { type: 'string' },
+              filterBy: { type: 'string' },
   },
   additionalProperties: false,
 } as const;
@@ -82,13 +61,13 @@ export const ChartBodySchema = {
     encoding: {
       type: 'object',
       properties: {
-        x: channelEncoding,
-        y: channelEncoding,
+        x: channelEncodingSchema,
+        y: channelEncodingSchema,
         color: {
-          oneOf: [channelEncoding, { type: 'string' }],
+          oneOf: [channelEncodingSchema, { type: 'string' }],
         },
         size: {
-          oneOf: [channelEncoding, { type: 'number' }],
+          oneOf: [channelEncodingSchema, { type: 'number' }],
         },
       },
       additionalProperties: true,
@@ -110,7 +89,7 @@ export const ChartBodySchema = {
     interaction,
     overlays: {
       type: 'array',
-      items: analysisOverlay,
+      items: analysisOverlaySchema,
     },
     width: { type: 'number', minimum: 0 },
     height: { type: 'number', minimum: 0 },
@@ -175,14 +154,7 @@ export const DashIRSchema = {
         oneOf: [dashChartRef, ChartBodySchema],
       },
     },
-    layout: {
-      type: 'object',
-      properties: {
-        type: { type: 'string', enum: ['grid', 'flex', 'stack'] },
-        columns: { type: 'number', minimum: 1 },
-        gap: { type: 'number', minimum: 0 },
-      },
-    },
+    layout: layoutConfigSchema,
     coordination: {
       type: 'object',
       properties: {
@@ -200,15 +172,7 @@ export const DashIRSchema = {
         },
       },
     },
-    theme: {
-      type: 'object',
-      properties: {
-        colors: { type: 'array', items: { type: 'string' } },
-        fontFamily: { type: 'string' },
-        backgroundColor: { type: 'string' },
-        chartBorders: { type: 'boolean' },
-      },
-    },
+    theme: themeConfigSchema,
   },
   additionalProperties: true,
 } as const;

@@ -11,7 +11,7 @@ CHART = ROOT / "examples" / "charts" / "revenue_trend.chart.yaml"
 def main() -> None:
     chart = (
         ChartBuilder("smoke", ChartType.LINE)
-        .data_file(str(ROOT / "examples/sales-board/dbt-stub/sales_daily.csv"))
+        .data_file(str(ROOT / "examples/sales-dash/dbt-stub/sales_daily.csv"))
         .x("date", type="temporal")
         .y("sales", type="quantitative", aggregate="sum")
         .build()

@@ -26,7 +26,7 @@
 ```text
 dbt semantic metrics / models     sql | files | tables
               \                     /
-               →  Chart  →  renderers (mosaic | vega-lite)
+               →  Chart  →  renderers (mosaic | vega-lite | dc.js)
                        ↓
                      Dash  (compose + coordination + layout)
 ```
@@ -189,10 +189,11 @@ Packages:
 | Package | Responsibility |
 |---------|----------------|
 | `@dvfc/core` | Types, JSON Schema, parse helpers |
-| `@dvfc/resolve` *(new)* | Connectors, grain checks, dbt semantic → SQL |
+| `@dvfc/core` | Connectors, grain checks, dbt semantic → SQL |
 | `@dvfc/charts` | Discovery, addressability, extract, compose helpers |
 | `@dvfc/render-mosaic` *(new or split from cli)* | Interactive HTML |
 | `@dvfc/render-vega` *(new)* | SVG / PNG / static HTML fragment |
+| `@dvfc/render-dc` | dc.js HTML: static CDN (`html-dc` / `html-dc-static`) or DuckDB-WASM (`html-dc-wasm`) |
 | `@dvfc/cli` | UX over the above |
 | `@dvfc/mcp` | Agent tools aligned to chart/dash |
 | `python/dvfc` | SDK mirroring IR operations |
@@ -204,11 +205,13 @@ Packages:
 | Target | Engine | Use |
 |--------|--------|-----|
 | `html` (interactive) | Mosaic + DuckDB-WASM | Dashes and single-chart preview with crossfilter |
+| `html-dc` / `html-dc-static` | dc.js + crossfilter2 + d3 (CDN) | Shareable single-file page; CSV inlined; no WASM |
+| `html-dc-wasm` | dc.js + DuckDB-WASM → crossfilter | Vite-bundled; CSV/Parquet via DuckDB, then native dc transitions |
 | `svg` | Vega-Lite | Single chart (and optional small multi-view) |
 | `png` | Vega-Lite → raster | Single chart CI / docs / agents |
-| `html-static` *(optional)* | Vega-Lite embed | Non-WASM shareable chart page |
+| `html-static` | Vega-Lite embed | Non-WASM shareable page; multi-chart dashes link via VL `params` / `filter` |
 
-**Capability matrix:** interaction (`brush` / `filterBy`) is honored in Mosaic; SVG/PNG ignore interaction but keep encodings. `dvfc validate --target svg` warns on unused interaction.
+**Capability matrix:** interaction (`brush` / `filterBy`) is honored in Mosaic HTML, dc.js (`html-dc` / `html-dc-static` / `html-dc-wasm`), and Vega-Lite `html-static`. SVG/PNG ignore interaction but keep encodings.
 
 CLI sketch:
 
@@ -216,6 +219,8 @@ CLI sketch:
 dvfc validate path/to/file.{yaml,toml,json}
 dvfc preview sales.dash.yaml
 dvfc build sales.dash.yaml -o dist --format html
+dvfc build sales.dash.yaml -o dist-dc --format html-dc-static
+dvfc build sales.dash.yaml -o dist-dc-wasm --format html-dc-wasm
 dvfc build revenue_trend.chart.yaml -o out --format svg
 dvfc build revenue_trend.chart.yaml -o out --format png
 dvfc dash compose --charts a,b,c -o sales.dash.yaml

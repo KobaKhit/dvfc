@@ -23,6 +23,8 @@ This document explains how to publish Data Viz Factory (dvfc) packages to npm an
 
 ## Pre-Publish Checklist
 
+**Status (2026-09-20):** Release **0.5.0** is documented in `CHANGELOG.md` and ready to publish once npm/PyPI credentials are available. Do not publish from CI without tokens.
+
 ### ✅ 1. Version Consistency
 
 Ensure all `package.json` and `pyproject.toml` files use the same version:
@@ -46,6 +48,9 @@ pnpm run build
 
 # Verify all packages build
 ls -la packages/*/dist/
+
+# JSON Schemas are dumped by `@dvfc/core` build into `packages/core/schema/`
+# (and mirrored to `python/dvfc/schema/`); keep them committed / present in the package.
 
 # Test CLI
 node packages/cli/dist/cli.js --version
@@ -98,21 +103,19 @@ Publish in dependency order to avoid resolution issues:
 cd packages/core
 npm publish --access public
 
-# 2. Adapters (depend on core)
-cd ../dbt-adapter
+# 2. adapter-dbt (depend on core)
+cd ../adapter-dbt
 npm publish --access public
 
-cd ../adapter-sqlmesh
-npm publish --access public
-
-cd ../adapter-bruin
-npm publish --access public
+# Optional / experimental (not in pnpm-workspace.yaml — publish only if intentionally shipping):
+# cd ../../experiments/adapter-sqlmesh && npm publish --access public
+# cd ../../experiments/adapter-bruin && npm publish --access public
 
 # 3. Charts (depends on core)
 cd ../charts
 npm publish --access public
 
-# 4. CLI (depends on core, dbt-adapter, charts)
+# 4. CLI (depends on core, adapter-dbt, charts)
 cd ../cli
 npm publish --access public
 
@@ -348,7 +351,7 @@ jobs:
       - run: pnpm test
       - run: |
           cd packages/core && npm publish --access public
-          cd ../dbt-adapter && npm publish --access public
+          cd ../adapter-dbt && npm publish --access public
           # ... etc
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

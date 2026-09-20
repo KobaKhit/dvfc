@@ -12,14 +12,15 @@
     },
     "./schema": {
       "import": "./dist/schema.js"
-    }
+    },
+    "./schema/*.json": "./schema/*.json"
   },
   "files": [
     "dist",
     "schema"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node --experimental-strip-types ../../scripts/dump-schemas.ts",
     "dev": "tsc --watch",
     "clean": "rm -rf dist",
     "test": "pnpm build && node --experimental-strip-types --test test/**/*.test.ts"
@@ -27,7 +28,8 @@
   "dependencies": {
     "glob": "^10.3.10",
     "smol-toml": "^1.3.1",
-    "yaml": "^2.7.0"
+    "yaml": "^2.7.0",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@types/node": "^22.10.5",

@@ -1,80 +1,80 @@
-# Dash IR (canonical). Use this file for validate, preview, and build.
+# Dash IR — dbt jaffle shop gallery demo
+# Area, KPI, donut, pie, bar, boxplot, and table over customer_orders.
 
 id: dbt-jaffle
 title: Jaffle Shop Analytics
-description: Customer orders and payment analysis from dbt jaffle_shop
-version: 0.1.0
+description: Customer orders and payments with area, KPI, donut, pie, scatter, histogram, and table charts from dbt jaffle_shop
+version: 0.2.0
 meta:
   title: Jaffle Shop Analytics
-  description: Customer orders and payment analysis from dbt jaffle_shop
-  version: 0.1.0
+  description: Customer orders and payments with area, KPI, donut, pie, scatter, histogram, and table charts from dbt jaffle_shop
+  version: 0.2.0
 data:
   - id: customer_orders
     type: dbt
     model: customer_orders
 charts:
+  - id: revenue_kpi
+    type: number
+    title: Total revenue
+    dataSource: customer_orders
+    encoding:
+      y:
+        field: amount
+        type: quantitative
+        aggregate: sum
+        label: Revenue ($)
+    interaction:
+      filterBy: dateBrush
+    width: 280
+    height: 160
+
   - id: daily_revenue
-    type: line
-    title: Daily Revenue
+    type: area
+    title: Daily revenue (brush to filter)
     dataSource: customer_orders
     encoding:
       x:
         field: order_date
         type: temporal
-        label: Order Date (brush to filter)
+        label: Order date
       y:
         field: amount
         type: quantitative
         aggregate: sum
-        label: Total Revenue ($)
+        label: Revenue ($)
     interaction:
       brush: true
       brushAxis: x
       selection: dateBrush
       publishes: dateBrush
-    width: 700
-    height: 250
-  - id: revenue_by_method
-    type: bar
-    title: Revenue by Payment Method
+    width: 640
+    height: 240
+
+  - id: payment_mix
+    type: donut
+    title: Revenue by payment method
     dataSource: customer_orders
     encoding:
       x:
         field: payment_method
         type: nominal
-        label: Payment Method
+        label: Payment method
       y:
         field: amount
         type: quantitative
         aggregate: sum
-        label: Total Revenue ($)
-      color: steelblue
+        label: Revenue ($)
     interaction:
       filterBy: dateBrush
-    width: 700
+      publishes: dateBrush
+      select: auto
+    width: 360
     height: 300
-  - id: top_customers
-    type: bar
-    title: Revenue by Customer
-    dataSource: customer_orders
-    encoding:
-      x:
-        field: customer_name
-        type: nominal
-        label: Customer
-      y:
-        field: amount
-        type: quantitative
-        aggregate: sum
-        label: Total Spent ($)
-      color: darkorange
-    interaction:
-      filterBy: dateBrush
-    width: 700
-    height: 300
-  - id: status_breakdown
-    type: bar
-    title: Orders by Status
+
+  - id: status_pie
+    type: pie
+    title: Orders by status
     dataSource: customer_orders
     encoding:
       x:
@@ -85,20 +85,97 @@ charts:
         field: order_status
         type: quantitative
         aggregate: count
-        label: Order Count
-      color: mediumseagreen
+        label: Orders
     interaction:
       filterBy: dateBrush
-    width: 700
+      publishes: dateBrush
+      select: auto
+    width: 360
     height: 300
+
+  - id: top_customers
+    type: bar
+    title: Revenue by customer
+    dataSource: customer_orders
+    encoding:
+      x:
+        field: customer_name
+        type: nominal
+        label: Customer
+      y:
+        field: amount
+        type: quantitative
+        aggregate: sum
+        label: Total spent ($)
+    interaction:
+      filterBy: dateBrush
+    width: 520
+    height: 300
+
+  - id: amount_over_time
+    type: scatter
+    title: Order amounts over time
+    dataSource: customer_orders
+    encoding:
+      x:
+        field: order_date
+        type: temporal
+        label: Order date
+      y:
+        field: amount
+        type: quantitative
+        label: Amount ($)
+      color:
+        field: payment_method
+        type: nominal
+    interaction:
+      filterBy: dateBrush
+    width: 420
+    height: 280
+
+  - id: amount_histogram
+    type: histogram
+    title: Order amount distribution
+    dataSource: customer_orders
+    encoding:
+      x:
+        field: amount
+        type: quantitative
+        label: Amount ($)
+    interaction:
+      filterBy: dateBrush
+    width: 420
+    height: 280
+
+  - id: orders_table
+    type: table
+    title: Orders detail
+    dataSource: customer_orders
+    encoding:
+      x:
+        field: customer_name
+        type: nominal
+        label: Customer
+      y:
+        field: amount
+        type: quantitative
+        label: Amount
+    interaction:
+      filterBy: dateBrush
+    width: 640
+    height: 300
+
 layout:
   type: flex
-  gap: 24
+  gap: 20
 theme:
   colors:
-    - steelblue
-    - darkorange
-    - mediumseagreen
-  fontFamily: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif
+    - "#1e3a5f"
+    - "#7ba3c9"
+    - "#a89b8c"
+    - "#4a7c9b"
+  fontFamily: system-ui, -apple-system, "Segoe UI", sans-serif
+  backgroundColor: white
+  chartBorders: true
 coordination:
   auto: true

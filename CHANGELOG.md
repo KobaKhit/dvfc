@@ -7,11 +7,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Mosaic crossfiltering: per-publisher selections + `crossfilter({ include })` composite; no shared-selection Highlight on aggregates (fixes DuckDB GROUP BY binder errors)
+- Pie/donut/number/table filters use `Selection.predicate()` and re-query on selection `value` events (`saveStateToURL` scoped inside `createDashboard`)
+- Bar/heatmap click filters work on first click (omit sticky Plot `tip` which stole `pointerdown` from Mosaic toggle)
+- Pie/donut slice clicks publish via `clausePoint` when `publishes` is set; publishers skip their own clause so the pie does not collapse
+- Disable Mosaic `highlight` entirely (avoids empty `SELECT  FROM …` binder errors under crossfilter)
+- Smoother crossfilter updates: `vg.xDomain/yDomain/colorDomain(vg.Fixed)` + short opacity pulse (vgplot has no dc.js-style geometry tweening)
+- New `@dvfc/render-dc` renderer: `--format html-dc` / `html-dc-static` (CDN + inlined CSV) and `--format html-dc-wasm` (Vite + DuckDB-WASM → crossfilter → dc.js)
+- Documentation site (MkDocs Material) at `/docs/` — overview, quickstart, guides, CLI, renderers; built into GitHub Pages
+- Vega-Lite `html-static` dashes honor `brush` / `filterBy` via linked params (no DuckDB-WASM); multi-chart html-static export supported
+- Renamed `@dvfc/dbt-adapter` → `@dvfc/adapter-dbt` (`packages/adapter-dbt`) for consistent `adapter-*` naming
+- Gallery dashes upgraded beyond line/bar: area, KPI, pie/donut, heatmap, scatter, histogram, density, table (+ overlays on revenue-analysis); site rebuild
+- Fix Mosaic pie/donut/number/table queries: request `{ type: 'json' }` (default Arrow tables are not arrays)
+- Click/region selection on bar, heatmap, and scatter (shared Selection.crossfilter); `interaction.select`
+- Mosaic chart polish: `tip: true` tooltips, navy commercial palette, heatmap left margins (no overlapping yLabel), cleaner dashboard chrome
+
+## [0.5.0] - 2026-09-20
+
 ### Added
-- Initial public release preparation
-- Publishing guide (docs/PUBLISHING.md)
-- Contributing guide (CONTRIBUTING.md)
-- Repository metadata for all packages
+- `validateSpecFileWithResult` — structured validation reports for MCP/build
+- `interactionToRuntime` helper in `@dvfc/core` for publishes→selection mapping
+- Ajv compile cache for ChartIR/DashIR validation
+- `filterSpecToChart`, `resolveDataSource` / `dataSourceToRef` in `@dvfc/core`
+- `chartIRToDashboardSpec` for discovery listing
+- Unit tests: `packages/build/test/dash-mutate.test.ts`; expanded MCP tool smoke tests
+
+### Changed
+- **dbt validate is fail-closed by default** (`strictDbt: true`); unresolved models fail validate
+- Discovery no longer dual-writes deprecated `boardPath` on hits/resources
+- CLI `charts compose` drops unused `--metric`; compose uses a single discovery pass
+- Bruin/SQLMesh adapters moved to `experiments/`; `@dvfc/resolve` package removed
+- `examples/sales-board` renamed to `examples/sales-dash`; legacy Vite app removed
+- Python: `DashboardSpec` removed from public `__all__`; DataSourceType gains url/sql; Dash IR fields expanded
+- Removed unused DashboardSpec Ajv validators (`validateDashboardSpec` / `validateWithReport` / `validateSemantics`)
+- Shared dash.data resolution via `resolveDataSource` (same path as chart connectors)
+- `findChartFile` throws on ambiguous glob matches; prefers `charts/` and `examples/charts/`
+- Mutate/scaffold IR writes prefer `publishes` only (runtime `selection` derived in normalize)
+- STATUS.md stubbed; VERDICT moved under docs/history
+- CI and root `pnpm test` include `@dvfc/mcp`
+- Removed unused CLI `resolveChartRef` import, `composeDashCommand`, and validator re-exports
+- Converted `board-pie-test.yaml` → `examples/dbt-jaffle/pie.dash.yaml`
+- Python mypy `python_version` 3.10; CI runs `mypy dvfc --ignore-missing-imports`
+- MCP `create_chart` type is a registered id string (not a frozen enum)
+- Discovery `loadSpec` reuses `dashToDashboardSpec` (ref stubs only for path charts)
+- SQL file refs fall back to dbt stub CSVs for bare filenames
+- Removed CLI `--board`, MCP `compose_board` / `boardPath` (use `--dash` / `compose_dash` / `dashPath`)
 
 ## [0.4.0] - 2026-09-17
 
@@ -22,7 +62,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Chart discovery**: Search, get, list, compose operations
 - **Chart addressability**: Board-scoped keys with display format
 - **Single chart builds**: Extract individual charts with context
-- **MCP chart discovery**: 5 new tools (search_charts, get_chart, list_charts, compose_board, render_chart)
+- **MCP chart discovery**: 5 new tools (search_charts, get_chart, list_charts, compose_board, render_chart); `compose_board` is an alias of `compose_dash`
 - Comprehensive dbt integration documentation
 - End-to-end agent loop workflows
 - 11 unit tests for chart discovery (all passing)
@@ -84,7 +124,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Static HTML export (self-contained)
 - Grid and flex layouts
 - Basic chart types: line, bar, area, scatter
-- Example dashboards: sales-board, web-analytics
+- Example dashboards: sales-dash, web-analytics
 - VERDICT.md documenting architecture decisions
 
 ---

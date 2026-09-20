@@ -3,4 +3,4 @@ SELECT
   date,
   sales AS revenue,
   region
-FROM 'sales_daily.csv'
+FROM '../sales-dash/dbt-stub/sales_daily.csv'

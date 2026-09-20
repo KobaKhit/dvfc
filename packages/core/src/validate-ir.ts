@@ -31,6 +31,22 @@ type AjvLike = {
   };
 };
 
+const compiledByAjv = new WeakMap<AjvLike, Map<object, ReturnType<AjvLike['compile']>>>();
+
+function getCompiled(ajv: AjvLike, schema: object): ReturnType<AjvLike['compile']> {
+  let map = compiledByAjv.get(ajv);
+  if (!map) {
+    map = new Map();
+    compiledByAjv.set(ajv, map);
+  }
+  let validate = map.get(schema);
+  if (!validate) {
+    validate = ajv.compile(schema);
+    map.set(schema, validate);
+  }
+  return validate;
+}
+
 function formatAjvErrors(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   validate: any
@@ -76,7 +92,7 @@ export function validateChartIR(
   const errors: IrValidationError[] = [];
 
   if (opts.ajv) {
-    const validate = opts.ajv.compile(ChartIRSchema as object);
+    const validate = getCompiled(opts.ajv, ChartIRSchema as object);
     if (!validate(chart)) {
       errors.push(...formatAjvErrors(validate));
     }
@@ -130,7 +146,7 @@ export function validateDashIR(
   const errors: IrValidationError[] = [];
 
   if (opts.ajv) {
-    const validate = opts.ajv.compile(DashIRSchema as object);
+    const validate = getCompiled(opts.ajv, DashIRSchema as object);
     if (!validate(dash)) {
       errors.push(...formatAjvErrors(validate));
     }

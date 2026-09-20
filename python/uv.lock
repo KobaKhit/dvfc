@@ -262,9 +262,11 @@ wheels = [
 
 [[package]]
 name = "dvfc"
-version = "0.2.0"
+version = "0.3.0"
 source = { editable = "." }
 dependencies = [
+    { name = "jsonschema", version = "4.25.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
+    { name = "jsonschema", version = "4.26.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
     { name = "pydantic" },
     { name = "pyyaml" },
 ]
@@ -305,6 +307,7 @@ requires-dist = [
     { name = "black", marker = "extra == 'dev'", specifier = ">=23.0" },
     { name = "dvfc", extras = ["metricflow", "render", "toml"], marker = "extra == 'all'" },
     { name = "dvfc", extras = ["toml", "render"], marker = "extra == 'dev'" },
+    { name = "jsonschema", specifier = ">=4.0" },
     { name = "metricflow", marker = "extra == 'metricflow'", specifier = ">=0.200.0" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.0" },
     { name = "pydantic", specifier = ">=2.0" },

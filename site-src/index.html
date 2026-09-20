@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>dvfc: YAML dashboards with crossfiltering, no backend</title>
   <meta name="description" content="dvfc compiles chart and dash YAML into interactive Mosaic dashboards that run on DuckDB in the browser. Works with dbt models, ships as static HTML, and has CLI and MCP tools for coding agents.">
-  <link rel="stylesheet" href="/dvfc/style.css?v=20260920b">
+  <link rel="stylesheet" href="/dvfc/style.css?v=20260920e">
 </head>
 <body>
   <div class="site">
@@ -16,6 +16,7 @@
           <li><a href="#how">How it works</a></li>
           <li><a href="#gallery">Examples</a></li>
           <li><a href="/dvfc/charts.html">Chart types</a></li>
+          <li><a href="/dvfc/docs/">Docs</a></li>
           <li><a href="https://github.com/KobaKhit/dvfc" target="_blank" rel="noopener">GitHub</a></li>
           <li><a class="btn btn-primary btn-sm" href="#demo">Live demo</a></li>
         </ul>
@@ -32,7 +33,7 @@
           </p>
           <div class="hero-actions">
             <a class="btn btn-primary" href="/dvfc/examples/showcase/">Open the demo fullscreen</a>
-            <a class="btn btn-secondary" href="https://github.com/KobaKhit/dvfc#quick-start" target="_blank" rel="noopener">Quick start</a>
+            <a class="btn btn-secondary" href="/dvfc/docs/">Read the docs</a>
           </div>
           <ul class="hero-facts" aria-label="Key facts">
             <li><strong>13</strong> chart types</li>
@@ -79,7 +80,7 @@
           <article class="step">
             <span class="step-num">3</span>
             <h3>Validate, then build</h3>
-            <p><code>dvfc validate</code> checks schema, wiring, and data refs. <code>dvfc build</code> emits a static site, SVG, PNG, or a single HTML file.</p>
+            <p><code>dvfc validate</code> checks schema, wiring, and data refs. <code>dvfc build</code> emits Mosaic HTML, dc.js (<code>html-dc-static</code> / <code>html-dc-wasm</code>), SVG, PNG, or Vega static HTML.</p>
           </article>
         </div>
 
@@ -96,7 +97,7 @@
 
 <span class="k">charts</span>:
   - <span class="k">id</span>: discovery_timeline
-    <span class="k">type</span>: line
+    <span class="k">type</span>: area
     <span class="k">dataSource</span>: worlds
     <span class="k">encoding</span>:
       <span class="k">x</span>: { <span class="k">field</span>: discovery_year, <span class="k">type</span>: ordinal }
@@ -111,6 +112,15 @@
     <span class="k">encoding</span>:
       <span class="k">x</span>: { <span class="k">field</span>: equilibrium_k }
       <span class="k">y</span>: { <span class="k">field</span>: habitability_score }
+    <span class="k">interaction</span>:
+      <span class="k">filterBy</span>: era
+
+  - <span class="k">id</span>: discovery_methods
+    <span class="k">type</span>: pie
+    <span class="k">dataSource</span>: worlds
+    <span class="k">encoding</span>:
+      <span class="k">x</span>: { <span class="k">field</span>: method }
+      <span class="k">y</span>: { <span class="k">field</span>: planet, <span class="k">aggregate</span>: count }
     <span class="k">interaction</span>:
       <span class="k">filterBy</span>: era</pre>
           </div>
@@ -139,50 +149,60 @@
         <div class="gallery-head">
           <div>
             <p class="section-kicker">Examples</p>
-            <h2>Four working dashboards. Open one and brush.</h2>
-            <p>Each preview is an SVG exported by <code>dvfc build --format svg</code> from the same file that powers the interactive version.</p>
+            <h2>Five working dashboards. Open one and brush.</h2>
+            <p>Each preview is an SVG exported by <code>dvfc build --format svg</code> from the same file that powers the interactive version. Specs mix area, KPI, pie, heatmap, scatter, boxplot, and more — not just line and bar. One example is compiled with the <strong>dc.js</strong> renderer (<code>--format html-dc-static</code>) for native crossfilter transitions without DuckDB-WASM.</p>
           </div>
           <a class="btn btn-secondary" href="https://github.com/KobaKhit/dvfc/tree/main/examples" target="_blank" rel="noopener">Browse the specs</a>
         </div>
 
         <div class="gallery-rail">
-          <a class="gallery-card" href="/dvfc/examples/sales-board/">
+          <a class="gallery-card" href="/dvfc/examples/showcase-dc/">
             <div class="gallery-preview">
-              <img src="/dvfc/assets/previews/gallery-sales-board.svg" alt="Daily sales trend chart exported from sales.dash.yaml" width="640" height="400" loading="lazy">
+              <img src="/dvfc/assets/previews/gallery-showcase-dc.svg" alt="Discovery timeline area chart from showcase.dash.yaml via dc.js" width="640" height="400" loading="lazy">
+            </div>
+            <div class="gallery-meta">
+              <strong>Other Worlds (dc.js)</strong>
+              <span>same showcase spec · html-dc-static · CDN + crossfilter</span>
+            </div>
+          </a>
+
+          <a class="gallery-card" href="/dvfc/examples/sales-dash/">
+            <div class="gallery-preview">
+              <img src="/dvfc/assets/previews/gallery-sales-dash.svg" alt="Daily sales area chart exported from sales.dash.yaml" width="640" height="400" loading="lazy">
             </div>
             <div class="gallery-meta">
               <strong>Sales and Flights</strong>
-              <span>6 charts, time brush</span>
+              <span>area, KPI, pie, heatmap, scatter, histogram</span>
             </div>
           </a>
 
           <a class="gallery-card" href="/dvfc/examples/web-analytics/">
             <div class="gallery-preview">
-              <img src="/dvfc/assets/previews/gallery-web-analytics.svg" alt="Daily page views chart from web-analytics.dash.yaml" width="640" height="400" loading="lazy">
+              <img src="/dvfc/assets/previews/gallery-web-analytics.svg" alt="Daily page views area chart from web-analytics.dash.yaml" width="640" height="400" loading="lazy">
             </div>
             <div class="gallery-meta">
               <strong>Web Analytics</strong>
-              <span>traffic and conversion</span>
+              <span>donut, density, scatter, heatmap</span>
             </div>
           </a>
 
           <a class="gallery-card" href="/dvfc/examples/dbt-jaffle/">
             <div class="gallery-preview">
-              <img src="/dvfc/assets/previews/gallery-dbt-jaffle.svg" alt="Daily revenue line chart from jaffle.dash.yaml" width="640" height="400" loading="lazy">
+              <img src="/dvfc/assets/previews/gallery-dbt-jaffle.svg" alt="Daily revenue area chart from jaffle.dash.yaml" width="640" height="400" loading="lazy">
             </div>
             <div class="gallery-meta">
               <strong>dbt Jaffle Shop</strong>
-              <span>reads a real manifest.json</span>
+              <span>donut, pie, scatter, table + manifest</span>
             </div>
           </a>
 
           <a class="gallery-card" href="/dvfc/examples/revenue-analysis/">
             <div class="gallery-preview">
-              <img src="/dvfc/assets/previews/gallery-revenue-analysis.svg" alt="Revenue trend chart from revenue-analysis.dash.yaml" width="640" height="400" loading="lazy">
+              <img src="/dvfc/assets/previews/gallery-revenue-analysis.svg" alt="Revenue area chart with overlays from revenue-analysis.dash.yaml" width="640" height="400" loading="lazy">
             </div>
             <div class="gallery-meta">
               <strong>Revenue Analysis</strong>
-              <span>trend overlays and notes</span>
+              <span>overlays, KPI, donut, heatmap, scatter</span>
             </div>
           </a>
         </div>
@@ -241,8 +261,8 @@
             <p class="section-lead">
               <code>dvfc validate</code> checks the JSON Schema, confirms every <code>filterBy</code> has a publisher, and verifies that referenced data exists. Run it on every pull request.
             </p>
-            <pre class="code-block"><span class="k">pnpm</span> exec dvfc validate examples/sales-board/sales.dash.yaml
-<span class="k">pnpm</span> exec dvfc preview  examples/sales-board/sales.dash.yaml
+            <pre class="code-block"><span class="k">pnpm</span> exec dvfc validate examples/sales-dash/sales.dash.yaml
+<span class="k">pnpm</span> exec dvfc preview  examples/sales-dash/sales.dash.yaml
 <span class="k">pnpm</span> exec dvfc build    examples/charts/revenue_trend.chart.yaml -f svg</pre>
           </div>
           <div class="ci-card" aria-label="Example CI checks">
@@ -302,9 +322,10 @@ pnpm exec dvfc preview examples/site-gallery/showcase.dash.yaml</pre>
         <div>
           <h4>Docs</h4>
           <ul>
-            <li><a href="https://github.com/KobaKhit/dvfc#readme" target="_blank" rel="noopener">README</a></li>
-            <li><a href="https://github.com/KobaKhit/dvfc/blob/main/docs/ARCHITECTURE.md" target="_blank" rel="noopener">Architecture</a></li>
-            <li><a href="https://github.com/KobaKhit/dvfc/blob/main/docs/mcp-cursor.md" target="_blank" rel="noopener">MCP setup</a></li>
+            <li><a href="/dvfc/docs/">Documentation</a></li>
+            <li><a href="/dvfc/docs/quickstart/">Quickstart</a></li>
+            <li><a href="/dvfc/docs/guide/cli/">CLI</a></li>
+            <li><a href="/dvfc/docs/ARCHITECTURE/">Architecture</a></li>
           </ul>
         </div>
         <div>

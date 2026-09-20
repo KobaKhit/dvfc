@@ -1,9 +1,5 @@
 /**
- * @dvfc/cli
- * CLI tool for Data Viz Factory
+ * @dvfc/cli — command implementations. Prefer the `dvfc` binary.
  */
-
 export * from './commands.js';
-export * from './validator.js';
-export * from './generator.js';
-
+export * from './chart-commands.js';

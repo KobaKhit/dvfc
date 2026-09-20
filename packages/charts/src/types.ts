@@ -8,10 +8,8 @@ import type { DashboardSpec, ChartSpec } from '@dvfc/core';
  * Chart reference with dash context
  */
 export interface ChartRef {
-  /** Path to *.dash.yaml (relative to project root). Prefer over boardPath. */
+  /** Path to *.dash.yaml (relative to project root). */
   dashPath: string;
-  /** @deprecated Use dashPath */
-  boardPath?: string;
   /** Chart ID within the dash */
   chartId: string;
   /** Optional display key: {dashId}__{chartId} */
@@ -24,11 +22,9 @@ export interface ChartRef {
 export interface ChartHit {
   /** Path to dash/chart file (relative to project root) */
   dashPath: string;
-  /** @deprecated Use dashPath */
-  boardPath: string;
   /** Chart ID */
   chartId: string;
-  /** Chart type */
+  /** Chart type (`ref` for unresolved path refs) */
   type: string;
   /** Chart title or label */
   title?: string;
@@ -46,8 +42,6 @@ export interface ChartResource {
   chart: ChartSpec;
   /** Path to dash file */
   dashPath: string;
-  /** @deprecated Use dashPath */
-  boardPath: string;
   /** Display key */
   displayKey: string;
   /** Dash context (for queries, variables, styles) */
@@ -71,8 +65,6 @@ export interface SearchOptions {
   query: string;
   /** Filter by dash path */
   dashPath?: string;
-  /** @deprecated Use dashPath */
-  boardPath?: string;
   /** Return all matches (default: false, returns max 10) */
   all?: boolean;
   /** Case sensitive search */

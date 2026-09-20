@@ -23,26 +23,14 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@dvfc/build": "workspace:*",
     "@dvfc/core": "workspace:*",
-    "@dvfc/dbt-adapter": "workspace:*",
     "@dvfc/charts": "workspace:*",
-    "@dvfc/render-mosaic": "workspace:*",
-    "@dvfc/render-vega": "workspace:*",
-    "@duckdb/duckdb-wasm": "^1.32.0",
-    "@resvg/resvg-js": "^2.6.2",
-    "@uwdata/vgplot": "^0.31.0",
-    "ajv": "^8.20.0",
     "chokidar": "^5.0.0",
     "commander": "^12.1.0",
-    "csv-parse": "^5.6.0",
-    "vega": "^5.30.0",
-    "vega-lite": "^5.23.0",
-    "vite": "^8.3.0",
     "yaml": "^2.7.0"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^16.0.3",
-    "@rollup/plugin-replace": "^6.0.3",
     "@types/node": "^22.10.5",
     "typescript": "^5.7.3"
   },

@@ -1,0 +1,45 @@
+# Dash IR (canonical). Converted from the former board-pie-test.yaml.
+
+id: jaffle-pie
+title: Payment Methods Analysis
+description: Pie chart demo from dbt-jaffle
+version: 0.1.0
+data:
+  - id: customer_orders
+    type: dbt
+    model: customer_orders
+charts:
+  - id: payment_pie
+    type: pie
+    dataSource: customer_orders
+    title: Revenue by Payment Method
+    encoding:
+      x:
+        field: payment_method
+        type: nominal
+        label: Payment Method
+      y:
+        field: amount
+        type: quantitative
+        label: Total Revenue
+    width: 500
+    height: 400
+  - id: status_donut
+    type: donut
+    dataSource: customer_orders
+    title: Orders by Status
+    encoding:
+      x:
+        field: order_status
+        type: nominal
+        label: Status
+      y:
+        field: order_status
+        type: quantitative
+        aggregate: count
+        label: Count
+    width: 500
+    height: 400
+layout:
+  type: flex
+  gap: 24

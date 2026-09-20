@@ -11,6 +11,9 @@ import {
   normalizeFile,
   normalizeToDashboard,
   resolveDataRef,
+  resolveDataSource,
+  dataSourceToRef,
+  filterSpecToChart,
   findDbtStubDir,
   findDbtModelCsv,
   extractSqlFileRefs,
@@ -18,7 +21,7 @@ import {
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../../..');
 const chartsDir = join(root, 'examples/charts');
-const salesStub = join(root, 'examples/sales-board/dbt-stub');
+const salesStub = join(root, 'examples/sales-dash/dbt-stub');
 
 describe('extractSqlFileRefs', () => {
   it('collects csv/parquet/json/tsv literals', () => {
@@ -59,7 +62,7 @@ describe('findDbtStubDir / findDbtModelCsv', () => {
 
   it('finds model CSV under stub', async () => {
     const csv = await findDbtModelCsv('sales_daily', {
-      specDir: join(root, 'examples/sales-board'),
+      specDir: join(root, 'examples/sales-dash'),
       projectRoot: root,
       dbtStubDir: salesStub,
     });
@@ -69,7 +72,7 @@ describe('findDbtStubDir / findDbtModelCsv', () => {
 
   it('returns null for missing model', async () => {
     const csv = await findDbtModelCsv('no_such_model_xyz', {
-      specDir: join(root, 'examples/sales-board'),
+      specDir: join(root, 'examples/sales-dash'),
       projectRoot: root,
       dbtStubDir: salesStub,
     });
@@ -80,7 +83,7 @@ describe('findDbtStubDir / findDbtModelCsv', () => {
 describe('resolveDataRef', () => {
   it('resolves data path', async () => {
     const rel = await resolveDataRef(
-      { type: 'data', path: '../sales-board/dbt-stub/sales_daily.csv' },
+      { type: 'data', path: '../sales-dash/dbt-stub/sales_daily.csv' },
       'sales',
       { specDir: chartsDir, projectRoot: root }
     );
@@ -137,7 +140,7 @@ describe('resolveDataRef', () => {
       { type: 'dbt', model: 'sales_daily' },
       'm',
       {
-        specDir: join(root, 'examples/sales-board'),
+        specDir: join(root, 'examples/sales-dash'),
         projectRoot: root,
         dbtStubDir: salesStub,
       }
@@ -255,6 +258,76 @@ describe('normalizeFile / normalizeToDashboard', () => {
           { specDir: chartsDir, projectRoot: root }
         ),
       /needs data or dataSource/
+    );
+  });
+});
+
+describe('dataSourceToRef / resolveDataSource', () => {
+  it('maps dbt / sql / path sources', () => {
+    assert.deepEqual(dataSourceToRef({ id: 'a', type: 'dbt', model: 'm' }), {
+      type: 'dbt',
+      model: 'm',
+    });
+    assert.deepEqual(dataSourceToRef({ id: 'b', type: 'sql', sql: 'SELECT 1' }), {
+      type: 'sql',
+      sql: 'SELECT 1',
+    });
+    assert.deepEqual(dataSourceToRef({ id: 'c', type: 'csv', path: 'x.csv' }), {
+      type: 'data',
+      path: 'x.csv',
+    });
+  });
+
+  it('preserves declared id when resolving a csv source', async () => {
+    const dir = await mkdtemp(join(tmpdir(), 'dvfc-ds-'));
+    try {
+      await writeFile(join(dir, 'sales.csv'), 'x,y\na,1\n');
+      const resolved = await resolveDataSource(
+        { id: 'sales', type: 'csv', path: 'sales.csv' },
+        { specDir: dir, projectRoot: dir }
+      );
+      assert.equal(resolved.id, 'sales');
+      assert.equal(resolved.source.id, 'sales');
+      assert.equal(resolved.assets.length, 1);
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+});
+
+describe('filterSpecToChart', () => {
+  it('narrows charts, data, and assets', () => {
+    const spec = {
+      meta: { title: 'T', version: '0.1.0' },
+      data: [
+        { id: 'a', type: 'csv' as const, path: 'a.csv' },
+        { id: 'b', type: 'csv' as const, path: 'b.csv' },
+      ],
+      charts: [
+        { id: 'c1', type: 'bar' as const, dataSource: 'a' },
+        { id: 'c2', type: 'line' as const, dataSource: 'b' },
+      ],
+    };
+    const assets = [
+      { absPath: '/tmp/a.csv', destName: 'a.csv' },
+      { absPath: '/tmp/b.csv', destName: 'b.csv' },
+    ];
+    const filtered = filterSpecToChart(spec, assets, 'c1');
+    assert.equal(filtered.spec.charts.length, 1);
+    assert.equal(filtered.spec.charts[0].id, 'c1');
+    assert.deepEqual(filtered.spec.data.map((d) => d.id), ['a']);
+    assert.deepEqual(filtered.assets.map((a) => a.destName), ['a.csv']);
+  });
+
+  it('throws when chart id is missing', () => {
+    assert.throws(
+      () =>
+        filterSpecToChart(
+          { meta: { title: 'T', version: '0.1.0' }, data: [], charts: [] },
+          [],
+          'nope'
+        ),
+      /Chart 'nope' not found/
     );
   });
 });

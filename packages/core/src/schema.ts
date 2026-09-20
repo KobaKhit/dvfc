@@ -1,7 +1,13 @@
 /**
- * JSON Schema for DashboardSpec validation
- * Can be used with ajv or other JSON Schema validators
+ * JSON Schema for DashboardSpec validation.
+ * Theme / layout / encoding fragments come from schema-shared (single source).
  */
+
+import {
+  sharedDefinitions,
+  themeConfigSchema,
+  layoutConfigSchema,
+} from './schema-shared.js';
 
 export const DashboardSpecSchema = {
   $schema: 'http://json-schema.org/draft-07/schema#',
@@ -17,9 +23,9 @@ export const DashboardSpecSchema = {
       properties: {
         title: { type: 'string' },
         description: { type: 'string' },
-        version: { type: 'string', pattern: '^\\d+\\.\\d+\\.\\d+$' }
+        version: { type: 'string', pattern: '^\\d+\\.\\d+\\.\\d+$' },
       },
-      additionalProperties: true
+      additionalProperties: true,
     },
     data: {
       type: 'array',
@@ -28,19 +34,16 @@ export const DashboardSpecSchema = {
         required: ['id', 'type'],
         properties: {
           id: { type: 'string' },
-          type: { 
+          type: {
             type: 'string',
-            enum: ['dbt', 'csv', 'parquet', 'url', 'sql']
+            enum: ['dbt', 'csv', 'parquet', 'url', 'sql'],
           },
           model: { type: 'string' },
           path: { type: 'string' },
-          sql: { type: 'string' }
+          sql: { type: 'string' },
         },
-        oneOf: [
-          { required: ['model'] },
-          { required: ['path'] }
-        ]
-      }
+        oneOf: [{ required: ['model'] }, { required: ['path'] }],
+      },
     },
     charts: {
       type: 'array',
@@ -51,7 +54,21 @@ export const DashboardSpecSchema = {
           id: { type: 'string' },
           type: {
             type: 'string',
-            enum: ['bar', 'line', 'area', 'scatter', 'histogram', 'heatmap', 'pie', 'donut', 'number', 'table', 'text']
+            enum: [
+              'bar',
+              'line',
+              'area',
+              'scatter',
+              'histogram',
+              'boxplot',
+              'density',
+              'heatmap',
+              'pie',
+              'donut',
+              'number',
+              'table',
+              'text',
+            ],
           },
           dataSource: { type: 'string' },
           title: { type: 'string' },
@@ -62,137 +79,79 @@ export const DashboardSpecSchema = {
               x: { $ref: '#/definitions/channelEncoding' },
               y: { $ref: '#/definitions/channelEncoding' },
               color: {
-                oneOf: [
-                  { $ref: '#/definitions/channelEncoding' },
-                  { type: 'string' }
-                ]
+                oneOf: [{ $ref: '#/definitions/channelEncoding' }, { type: 'string' }],
               },
               size: {
-                oneOf: [
-                  { $ref: '#/definitions/channelEncoding' },
-                  { type: 'number' }
-                ]
-              }
-            }
+                oneOf: [{ $ref: '#/definitions/channelEncoding' }, { type: 'number' }],
+              },
+            },
           },
           overlays: {
             type: 'array',
-            items: { $ref: '#/definitions/analysisOverlay' }
+            items: { $ref: '#/definitions/analysisOverlay' },
           },
           interaction: {
             type: 'object',
             properties: {
               brush: { type: 'boolean' },
-              brushAxis: {
-                type: 'string',
-                enum: ['x', 'y', 'xy']
+              brushAxis: { type: 'string', enum: ['x', 'y', 'xy'] },
+              select: {
+                oneOf: [
+                  { type: 'boolean' },
+                  { type: 'string', enum: ['auto', 'x', 'y', 'xy'] },
+                ],
               },
               selection: { type: 'string' },
-              filterBy: { type: 'string' }
-            }
+              publishes: { type: 'string' },
+              filterBy: { type: 'string' },
+            },
           },
           width: { type: 'number', minimum: 0 },
-          height: { type: 'number', minimum: 0 }
+          height: { type: 'number', minimum: 0 },
         },
-        if: {
-          properties: { type: { const: 'text' } }
-        },
-        then: {
-          required: ['id', 'type', 'content']
-        },
-        else: {
-          required: ['id', 'type', 'dataSource', 'encoding']
-        }
-      }
+        if: { properties: { type: { const: 'text' } } },
+        then: { required: ['id', 'type', 'content'] },
+        else: { required: ['id', 'type', 'dataSource', 'encoding'] },
+      },
     },
-    layout: {
-      type: 'object',
-      properties: {
-        type: {
-          type: 'string',
-          enum: ['grid', 'flex', 'stack']
-        },
-        columns: { type: 'number', minimum: 1 },
-        gap: { type: 'number', minimum: 0 }
-      }
-    },
-    theme: {
-      type: 'object',
-      properties: {
-        colors: {
-          type: 'array',
-          items: { type: 'string' }
-        },
-        fontFamily: { type: 'string' },
-        backgroundColor: { type: 'string' },
-        chartBorders: { type: 'boolean' }
-      }
-    }
+    layout: layoutConfigSchema,
+    theme: themeConfigSchema,
   },
   definitions: {
-    channelEncoding: {
-      type: 'object',
-      required: ['field'],
-      properties: {
-        field: { type: 'string' },
-        type: {
-          type: 'string',
-          enum: ['quantitative', 'temporal', 'nominal', 'ordinal']
-        },
-        aggregate: {
-          type: 'string',
-          enum: ['sum', 'avg', 'count', 'min', 'max', 'median']
-        },
-        label: { type: 'string' },
-        sql: { type: 'string' }
-      }
-    },
-    analysisOverlay: {
-      type: 'object',
-      required: ['type'],
-      properties: {
-        type: {
-          type: 'string',
-          enum: ['mean', 'median', 'trend', 'moving_average']
-        },
-        field: { type: 'string' },
-        color: { type: 'string' },
-        label: { type: 'string' },
-        window: { type: 'number', minimum: 2 }
-      }
-    }
-  }
+    channelEncoding: sharedDefinitions.channelEncoding,
+    analysisOverlay: sharedDefinitions.analysisOverlay,
+  },
 } as const;
 
 /**
- * Simple validator function (stub - can integrate ajv for full validation)
+ * Shallow structural check (meta/data/charts present).
+ * For IR authoring validation use `@dvfc/build`'s `validateChartWithReport` /
+ * `validateDashWithReport`.
  */
-export function validateDashboardSpec(spec: unknown): { 
-  valid: boolean; 
-  errors?: string[] 
+export function validateDashboardSpecShape(spec: unknown): {
+  valid: boolean;
+  errors?: string[];
 } {
   const errors: string[] = [];
-  
+
   if (typeof spec !== 'object' || spec === null) {
     return { valid: false, errors: ['Spec must be an object'] };
   }
-  
+
   const s = spec as Record<string, unknown>;
-  
+
   if (!s.meta || typeof s.meta !== 'object') {
     errors.push('Missing or invalid "meta" field');
   }
-  
   if (!Array.isArray(s.data)) {
     errors.push('Missing or invalid "data" array');
   }
-  
   if (!Array.isArray(s.charts)) {
     errors.push('Missing or invalid "charts" array');
   }
-  
+
   return {
     valid: errors.length === 0,
-    errors: errors.length > 0 ? errors : undefined
+    errors: errors.length > 0 ? errors : undefined,
   };
 }

@@ -213,8 +213,8 @@ dbt run
 # 3. Copy new CSVs to dbt-stub/
 cp new-exports/*.csv dbt-stub/
 
-# 4. If schema changed, regenerate board
-dvfc init --from-dbt -o board-new.yaml
+# 4. If schema changed, regenerate dash scaffold
+dvfc init --from-dbt -o dash-new.yaml
 # Merge changes into your existing *.dash.yaml
 ```
 

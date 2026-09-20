@@ -10,12 +10,31 @@ import {
   registerBuiltinChartTypes,
   registerChartType,
 } from '@dvfc/core';
+import { basename } from 'path';
+
+import { generateNumberChart } from './charts/number.js';
+import { generateTableChart } from './charts/table.js';
+import { generateTextChart } from './charts/text.js';
+import { generatePieChart } from './charts/pie.js';
+import { generateHistogramChart } from './charts/histogram.js';
+import { generateBoxplotChart } from './charts/boxplot.js';
+import { generateDensityChart } from './charts/density.js';
+import { generateStandardChart } from './charts/standard.js';
+import { generateHTML as generateHTMLTemplate } from './template.js';
+import { buildSelectionPlan, type SelectionPlan } from './selection-plan.js';
 
 export interface GeneratorContext {
   spec: DashboardSpec;
   dataDir: string;
   outputDir: string;
   base?: string;
+  selectionPlan?: SelectionPlan;
+}
+
+/** Generate index.html from dashboard spec (theme.chartBorders + embed mode preserved). */
+export function generateHTML(ctx: GeneratorContext): string {
+  attachBuiltinMosaicRenderers();
+  return generateHTMLTemplate(ctx);
 }
 
 let mosaicRenderersAttached = false;
@@ -53,44 +72,17 @@ export function _resetMosaicRendererAttachmentForTests(): void {
 export function generateMainScript(ctx: GeneratorContext): string {
   attachBuiltinMosaicRenderers();
   const { spec } = ctx;
-  
-  // Generate unique selection names
-  const selections = new Map<string, string>();
-  spec.charts.forEach(chart => {
-    if (chart.interaction?.selection) {
-      selections.set(chart.interaction.selection, chart.interaction.selection);
-    }
-  });
+  const selectionPlan = buildSelectionPlan(spec);
+  const genCtx: GeneratorContext = { ...ctx, selectionPlan };
 
-  const selectionDeclarations = Array.from(selections.keys())
-    .map(sel => `const ${sel} = vg.Selection.intersect();`)
-    .join('\n  ');
-
-  // Generate chart code
-  const chartCode = spec.charts.map(chart => generateChart(chart, ctx)).join('\n\n  ');
+  const chartCode = spec.charts.map(chart => generateChart(chart, genCtx)).join('\n\n  ');
+  const urlSelections = selectionPlan.urlSelectionNames;
 
   return `import * as vg from '@uwdata/vgplot';
+import { clausePoint } from '@uwdata/mosaic-core';
 
 // Initialize Mosaic coordinator with DuckDB-WASM
 vg.coordinator().databaseConnector(vg.wasmConnector());
-
-// URL state management for shareable filters
-function saveStateToURL() {
-  const selections = {};
-  ${Array.from(selections.keys()).map(sel => 
-    `if (${sel}.value) selections['${sel}'] = ${sel}.value;`
-  ).join('\n  ')}
-  
-  const params = new URLSearchParams();
-  for (const [key, value] of Object.entries(selections)) {
-    if (value) params.set(key, JSON.stringify(value));
-  }
-  
-  const newURL = params.toString() 
-    ? \`\${window.location.pathname}?\${params}\`
-    : window.location.pathname;
-  window.history.replaceState({}, '', newURL);
-}
 
 function restoreStateFromURL() {
   const params = new URLSearchParams(window.location.search);
@@ -138,12 +130,32 @@ ${spec.data.map(ds => {
       // Rewrite bare filenames in SQL to origin+dataPath URLs for DuckDB-WASM
       const rewritten = ds.sql.replace(
         /(['"])([^'"/]+\.(?:csv|parquet|json|tsv))\1/gi,
-        (_m, q, file) => `'\${window.location.origin}\${dataPath}${file}'`
+        (_m, _q, file) => `'\${window.location.origin}\${dataPath}${file}'`
       );
       createSql = `CREATE TABLE IF NOT EXISTS ${ds.id} AS ${rewritten}`;
-    } else {
+    } else if (ds.type === 'url' && ds.path && /^https?:\/\//i.test(ds.path)) {
+      const url = ds.path.replace(/'/g, "''");
+      const reader = /\.parquet(\?|$)/i.test(ds.path)
+        ? `read_parquet('${url}')`
+        : `read_csv_auto('${url}')`;
+      createSql = `CREATE TABLE IF NOT EXISTS ${ds.id} AS SELECT * FROM ${reader}`;
+    } else if (
+      ds.type === 'parquet' ||
+      (typeof ds.path === 'string' && /\.parquet$/i.test(ds.path))
+    ) {
+      const file =
+        ds.path && !ds.path.includes('/') && !/^https?:\/\//i.test(ds.path)
+          ? basename(ds.path)
+          : `${ds.id}.parquet`;
       createSql = `CREATE TABLE IF NOT EXISTS ${ds.id} AS 
-    SELECT * FROM read_csv_auto('\${window.location.origin}\${dataPath}${ds.id}.csv')`;
+    SELECT * FROM read_parquet('\${window.location.origin}\${dataPath}${file}')`;
+    } else {
+      const file =
+        ds.path && !ds.path.includes('/') && !/^https?:\/\//i.test(ds.path)
+          ? basename(ds.path)
+          : `${ds.id}.csv`;
+      createSql = `CREATE TABLE IF NOT EXISTS ${ds.id} AS 
+    SELECT * FROM read_csv_auto('\${window.location.origin}\${dataPath}${file}')`;
     }
 
     let sql = `  await vg.coordinator().exec(\`
@@ -176,25 +188,49 @@ async function createDashboard() {
     await loadData();
     if (statusEl) statusEl.textContent = 'Creating visualizations...';
 
-    // Create selections
-    ${selectionDeclarations}
+    // Create selections (per-publisher crossfilters + include composites when shared)
+    ${selectionPlan.declarations}
+
+    function saveStateToURL() {
+      const selections = {};
+      ${urlSelections.map(sel =>
+        `if (${sel}.value) selections['${sel}'] = ${sel}.value;`
+      ).join('\n      ')}
+      const params = new URLSearchParams();
+      for (const [key, value] of Object.entries(selections)) {
+        if (value) params.set(key, JSON.stringify(value));
+      }
+      const newURL = params.toString()
+        ? \`\${window.location.pathname}?\${params}\`
+        : window.location.pathname;
+      window.history.replaceState({}, '', newURL);
+    }
     
-    // Restore selections from URL
     const savedSelections = restoreStateFromURL();
-    ${Array.from(selections.keys()).map(sel => 
+    ${urlSelections.map(sel =>
       `if (savedSelections['${sel}']) ${sel}.update(savedSelections['${sel}']);`
     ).join('\n    ')}
     
-    // Save state on selection change
-    ${Array.from(selections.keys()).map(sel => 
+    ${urlSelections.map(sel =>
       `${sel}.addEventListener('value', () => setTimeout(saveStateToURL, 100));`
     ).join('\n    ')}
+
+    // Soft opacity pulse while Mosaic marks requery (pairs with vg.Fixed domains)
+    let __filterPulseTimer;
+    const __pulseFilters = () => {
+      document.querySelectorAll('.chart-container').forEach((el) => el.classList.add('dvfc-filtering'));
+      clearTimeout(__filterPulseTimer);
+      __filterPulseTimer = setTimeout(() => {
+        document.querySelectorAll('.chart-container').forEach((el) => el.classList.remove('dvfc-filtering'));
+      }, 280);
+    };
+    ${urlSelections.map(sel => `${sel}.addEventListener('value', __pulseFilters);`).join('\n    ')}
 
     // Create charts
     ${chartCode}
 
     if (statusEl) {
-      statusEl.textContent = '✅ Dashboard ready! Brush line charts to filter other charts. Share URL to preserve filters.';
+      statusEl.textContent = 'Dashboard ready. Brush series, click bars/tiles, or drag on scatter to filter. Share the URL to keep filters.';
       statusEl.style.color = 'green';
     }
   } catch (error) {
@@ -219,10 +255,6 @@ if (document.readyState === 'loading') {
  * Prefer generateChart() which routes through the chart-type registry.
  */
 export function generateChartBuiltin(chart: ChartSpec, ctx: GeneratorContext): string {
-  const containerId = `chart-${chart.id}`;
-  const { encoding, interaction } = chart;
-  
-  // Handle special chart types
   if (chart.type === 'number') {
     return generateNumberChart(chart, ctx);
   }
@@ -239,119 +271,19 @@ export function generateChartBuiltin(chart: ChartSpec, ctx: GeneratorContext): s
     return generatePieChart(chart, ctx);
   }
   
-  // Handle histogram
   if (chart.type === 'histogram') {
     return generateHistogramChart(chart, ctx);
   }
   
-  // Handle boxplot
   if (chart.type === 'boxplot') {
     return generateBoxplotChart(chart, ctx);
   }
   
-  // Handle density
   if (chart.type === 'density') {
     return generateDensityChart(chart, ctx);
   }
   
-  // Encoding is required for standard charts
-  if (!encoding) {
-    throw new Error(`Chart ${chart.id}: encoding is required for ${chart.type} charts`);
-  }
-  
-  // Determine mark type for standard charts
-  const mark = chart.type === 'line' ? 'lineY' : 
-               chart.type === 'bar' ? 'barY' : 
-               chart.type === 'area' ? 'areaY' :
-               chart.type === 'scatter' ? 'dot' :
-               chart.type === 'heatmap' ? 'cell' :
-               'barY';
-
-  // Build encoding
-  const xEncoding = encoding.x ? 
-    encoding.x.aggregate ? 
-      `${encoding.x.aggregate}('${encoding.x.field}')` :
-      `'${encoding.x.field}'` :
-    undefined;
-
-  const yEncoding = encoding.y ?
-    encoding.y.aggregate ?
-      `vg.${encoding.y.aggregate}('${encoding.y.field}')` :
-      `'${encoding.y.field}'` :
-    undefined;
-
-  const colorEncoding = typeof encoding.color === 'string' ? 
-    `'${encoding.color}'` : 
-    encoding.color?.field ? `'${encoding.color.field}'` : undefined;
-
-  // Build mark options
-  const markOptions: string[] = [];
-  if (xEncoding) markOptions.push(`x: ${xEncoding}`);
-  if (yEncoding) markOptions.push(`y: ${yEncoding}`);
-  
-  // Chart-type specific styling
-  if (chart.type === 'line') {
-    const strokeColor = colorEncoding || "'steelblue'";
-    markOptions.push(`stroke: ${strokeColor}`);
-    markOptions.push('strokeWidth: 2');
-  } else {
-    if (colorEncoding) markOptions.push(`fill: ${colorEncoding}`);
-    if (chart.type === 'bar') markOptions.push('fillOpacity: 0.8');
-    if (chart.type === 'area') markOptions.push('fillOpacity: 0.6');
-    if (chart.type === 'heatmap') markOptions.push('fillOpacity: 1');
-  }
-
-  // Build from clause with optional filterBy
-  const dataSource = chart.dataSource || '';
-  const fromClause = interaction?.filterBy ?
-    `vg.from('${dataSource}', { filterBy: ${interaction.filterBy} })` :
-    `vg.from('${dataSource}')`;
-
-  // Build interaction
-  const interactionCode = interaction?.brush ?
-    `vg.interval${interaction.brushAxis?.toUpperCase() === 'Y' ? 'Y' : 'X'}({ as: ${interaction.selection} })` :
-    '';
-
-  // Build plot marks array (main mark + overlays)
-  const marks: string[] = [
-    `vg.${mark}(
-        ${fromClause},
-        {
-          ${markOptions.join(',\n          ')}
-        }
-      )`
-  ];
-  
-  // Add overlay marks if specified
-  if (chart.overlays && chart.overlays.length > 0) {
-    const overlayMarks = generateOverlayMarks(chart, ctx);
-    marks.push(...overlayMarks);
-  }
-
-  // Build plot options
-  const plotOptions: string[] = [];
-  if (interactionCode) plotOptions.push(interactionCode);
-  if (encoding.x?.label) plotOptions.push(`vg.xLabel('${encoding.x.label}')`);
-  if (encoding.y?.label) plotOptions.push(`vg.yLabel('${encoding.y.label}')`);
-  if (chart.width) plotOptions.push(`vg.width(${chart.width})`);
-  if (chart.height) plotOptions.push(`vg.height(${chart.height})`);
-
-  const plotOptionsStr = plotOptions.length > 0 ? 
-    ',\n      ' + plotOptions.join(',\n      ') :
-    '';
-
-  return `const container${chart.id} = document.getElementById('${containerId}');
-  if (container${chart.id}) {
-    try {
-      const chart${chart.id} = vg.plot(
-        ${marks.join(',\n        ')}${plotOptionsStr}
-      );
-      container${chart.id}.appendChild(chart${chart.id});
-    } catch (error) {
-      console.error('Error rendering chart ${chart.id}:', error);
-      container${chart.id}.innerHTML = '<div style="padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;">⚠️ Error rendering chart: ' + (error instanceof Error ? error.message : String(error)) + '</div>';
-    }
-  }`;
+  return generateStandardChart(chart, ctx);
 }
 
 /**
@@ -372,742 +304,4 @@ export function generateChart(chart: ChartSpec, ctx: GeneratorContext): string {
     throw new Error(`Mosaic renderer for '${chart.type}' returned empty output`);
   }
   return out;
-}
-
-/**
- * Generate a number/KPI chart (single metric display)
- */
-function generateNumberChart(chart: ChartSpec, ctx: GeneratorContext): string {
-  const containerId = `chart-${chart.id}`;
-  const { encoding, dataSource, interaction } = chart;
-  
-  if (!dataSource || !encoding) {
-    throw new Error(`Chart ${chart.id}: number charts require dataSource and encoding`);
-  }
-  
-  // Number charts typically show a single aggregated value
-  const field = encoding.y?.field || encoding.x?.field || 'value';
-  const aggregate = encoding.y?.aggregate || encoding.x?.aggregate || 'sum';
-  
-  const filterClause = interaction?.filterBy ? `, { filterBy: ${interaction.filterBy} }` : '';
-  
-  return `const container${chart.id} = document.getElementById('${containerId}');
-  if (container${chart.id}) {
-    // Query the aggregated value
-    const result = await vg.coordinator().query(\`
-      SELECT ${aggregate.toUpperCase()}(${field}) as value
-      FROM ${dataSource}
-      \${${interaction?.filterBy ? interaction.filterBy + '.sql ? "WHERE " + ' + interaction.filterBy + '.sql : ""' : '""'}}
-    \`);
-    
-    const value = result[0]?.value || 0;
-    const formatted = typeof value === 'number' ? 
-      value.toLocaleString(undefined, { maximumFractionDigits: 2 }) : 
-      value;
-    
-    container${chart.id}.innerHTML = \`
-      <div style="text-align: center; padding: 2rem;">
-        <div style="font-size: 3rem; font-weight: bold; color: #2d3748;">\${formatted}</div>
-        <div style="font-size: 1rem; color: #718096; margin-top: 0.5rem;">${chart.title || field}</div>
-      </div>
-    \`;
-  }`;
-}
-
-/**
- * Generate a table chart (data grid)
- */
-function generateTableChart(chart: ChartSpec, ctx: GeneratorContext): string {
-  const containerId = `chart-${chart.id}`;
-  const { dataSource, interaction } = chart;
-  
-  if (!dataSource) {
-    throw new Error(`Chart ${chart.id}: table charts require dataSource`);
-  }
-  
-  const filterClause = interaction?.filterBy ? `, { filterBy: ${interaction.filterBy} }` : '';
-  
-  return `const container${chart.id} = document.getElementById('${containerId}');
-  if (container${chart.id}) {
-    // Query the data
-    const result = await vg.coordinator().query(\`
-      SELECT * FROM ${dataSource}
-      \${${interaction?.filterBy ? interaction.filterBy + '.sql ? "WHERE " + ' + interaction.filterBy + '.sql : ""' : '""'}}
-      LIMIT 100
-    \`);
-    
-    if (result.length > 0) {
-      const columns = Object.keys(result[0]);
-      const tableHTML = \`
-        <div style="overflow-x: auto; max-height: 400px;">
-          <table style="width: 100%; border-collapse: collapse; font-size: 0.875rem;">
-            <thead style="background: #f7fafc; position: sticky; top: 0;">
-              <tr>
-                \${columns.map(col => \`<th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e2e8f0;">\${col}</th>\`).join('')}
-              </tr>
-            </thead>
-            <tbody>
-              \${result.map(row => \`
-                <tr style="border-bottom: 1px solid #e2e8f0;">
-                  \${columns.map(col => \`<td style="padding: 0.75rem;">\${row[col]}</td>\`).join('')}
-                </tr>
-              \`).join('')}
-            </tbody>
-          </table>
-        </div>
-      \`;
-      container${chart.id}.innerHTML = tableHTML;
-    }
-  }`;
-}
-
-/**
- * Generate a pie/donut chart
- * Note: Pie charts in Mosaic are limited; this is a basic implementation
- */
-function generatePieChart(chart: ChartSpec, ctx: GeneratorContext): string {
-  const containerId = `chart-${chart.id}`;
-  const { encoding, dataSource, interaction } = chart;
-  
-  if (!dataSource || !encoding) {
-    throw new Error(`Chart ${chart.id}: pie/donut charts require dataSource and encoding`);
-  }
-  
-  if (!encoding.x || !encoding.y) {
-    return `console.error('Pie chart ${chart.id} requires x (category) and y (value) encodings');`;
-  }
-  
-  const categoryField = encoding.x.field;
-  const valueField = encoding.y.field;
-  const aggregate = encoding.y.aggregate || 'sum';
-  const isDoughnut = chart.type === 'donut';
-  const innerRadius = isDoughnut ? 0.5 : 0;
-  
-  const filterClause = interaction?.filterBy ? `, { filterBy: ${interaction.filterBy} }` : '';
-  
-  return `const container${chart.id} = document.getElementById('${containerId}');
-  if (container${chart.id}) {
-    // Query aggregated data
-    const result = await vg.coordinator().query(\`
-      SELECT ${categoryField}, ${aggregate.toUpperCase()}(${valueField}) as value
-      FROM ${dataSource}
-      \${${interaction?.filterBy ? interaction.filterBy + '.sql ? "WHERE " + ' + interaction.filterBy + '.sql : ""' : '""'}}
-      GROUP BY ${categoryField}
-      ORDER BY value DESC
-    \`);
-    
-    if (result.length === 0) {
-      container${chart.id}.innerHTML = '<p style="text-align: center; color: #999;">No data</p>';
-    } else {
-      // Calculate pie slices
-      const total = result.reduce((sum, d) => sum + d.value, 0);
-      let currentAngle = -Math.PI / 2; // Start at top
-      
-      const slices = result.map((d, i) => {
-        const value = d.value;
-        const angle = (value / total) * 2 * Math.PI;
-        const startAngle = currentAngle;
-        const endAngle = currentAngle + angle;
-        currentAngle = endAngle;
-        
-        const color = \`hsl(\${(i * 360 / result.length)}, 70%, 60%)\`;
-        
-        return { ...d, startAngle, endAngle, color };
-      });
-      
-      // SVG dimensions
-      const width = ${chart.width || 400};
-      const height = ${chart.height || 400};
-      const radius = Math.min(width, height) / 2 - 40;
-      const innerR = radius * ${innerRadius};
-      
-      // Generate SVG paths
-      const paths = slices.map(slice => {
-        const outerX1 = Math.cos(slice.startAngle) * radius;
-        const outerY1 = Math.sin(slice.startAngle) * radius;
-        const outerX2 = Math.cos(slice.endAngle) * radius;
-        const outerY2 = Math.sin(slice.endAngle) * radius;
-        
-        const innerX1 = Math.cos(slice.startAngle) * innerR;
-        const innerY1 = Math.sin(slice.startAngle) * innerR;
-        const innerX2 = Math.cos(slice.endAngle) * innerR;
-        const innerY2 = Math.sin(slice.endAngle) * innerR;
-        
-        const largeArc = (slice.endAngle - slice.startAngle) > Math.PI ? 1 : 0;
-        
-        const path = ${isDoughnut} ?
-          \`M \${innerX1} \${innerY1} L \${outerX1} \${outerY1} A \${radius} \${radius} 0 \${largeArc} 1 \${outerX2} \${outerY2} L \${innerX2} \${innerY2} A \${innerR} \${innerR} 0 \${largeArc} 0 \${innerX1} \${innerY1} Z\` :
-          \`M 0 0 L \${outerX1} \${outerY1} A \${radius} \${radius} 0 \${largeArc} 1 \${outerX2} \${outerY2} Z\`;
-        
-        // Label position
-        const midAngle = (slice.startAngle + slice.endAngle) / 2;
-        const labelR = radius * 0.75;
-        const labelX = Math.cos(midAngle) * labelR;
-        const labelY = Math.sin(midAngle) * labelR;
-        const pct = ((slice.value / total) * 100).toFixed(1);
-        
-        return \`
-          <path d="\${path}" fill="\${slice.color}" stroke="white" stroke-width="2" opacity="0.9">
-            <title>\${slice.${categoryField}}: \${slice.value.toFixed(2)} (\${pct}%)</title>
-          </path>
-          \${pct > 5 ? \`<text x="\${labelX}" y="\${labelY}" text-anchor="middle" font-size="12" fill="white" font-weight="bold">\${pct}%</text>\` : ''}
-        \`;
-      }).join('');
-      
-      // Legend
-      const legend = slices.map((slice, i) => \`
-        <div style="display: flex; align-items: center; gap: 0.5rem; margin: 0.25rem 0;">
-          <div style="width: 12px; height: 12px; background: \${slice.color}; border-radius: 2px;"></div>
-          <span style="font-size: 0.875rem;">\${slice.${categoryField}} (\${((slice.value / total) * 100).toFixed(1)}%)</span>
-        </div>
-      \`).join('');
-      
-      container${chart.id}.innerHTML = \`
-        <div style="display: flex; gap: 2rem; align-items: center; justify-content: center;">
-          <svg width="\${width}" height="\${height}" style="flex-shrink: 0;">
-            <g transform="translate(\${width/2}, \${height/2})">
-              \${paths}
-            </g>
-          </svg>
-          <div style="max-width: 200px;">
-            \${legend}
-          </div>
-        </div>
-      \`;
-    }
-  }`;
-}
-
-/**
- * Generate overlay marks for analysis (mean, median, trend, moving average)
- */
-function generateOverlayMarks(chart: ChartSpec, ctx: GeneratorContext): string[] {
-  if (!chart.overlays || !chart.encoding) return [];
-  
-  const marks: string[] = [];
-  const yField = chart.encoding.y?.field;
-  const xField = chart.encoding.x?.field;
-  
-  if (!yField) return marks;
-  
-  for (const overlay of chart.overlays) {
-    const field = overlay.field || yField;
-    const color = overlay.color || '#e53e3e';
-    const label = overlay.label || overlay.type;
-    
-    switch (overlay.type) {
-      case 'mean':
-        {
-          const meanFromClause = chart.interaction?.filterBy ?
-            `vg.from('${chart.dataSource}', { filterBy: ${chart.interaction.filterBy} })` :
-            `vg.from('${chart.dataSource}')`;
-          
-          marks.push(`vg.ruleY(
-        ${meanFromClause},
-        {
-          y: vg.avg('${field}'),
-          stroke: '${color}',
-          strokeWidth: 2,
-          strokeDasharray: '4 4'
-        }
-      )`);
-        }
-        break;
-        
-      case 'median':
-        {
-          const medianFromClause = chart.interaction?.filterBy ?
-            `vg.from('${chart.dataSource}', { filterBy: ${chart.interaction.filterBy} })` :
-            `vg.from('${chart.dataSource}')`;
-          
-          marks.push(`vg.ruleY(
-        ${medianFromClause},
-        {
-          y: vg.median('${field}'),
-          stroke: '${color}',
-          strokeWidth: 2,
-          strokeDasharray: '4 4'
-        }
-      )`);
-        }
-        break;
-        
-      case 'trend':
-        // NOTE: vg.regressionY is disabled due to rendering issues
-        // Trend overlays should be precomputed in SQL if needed
-        // Skip trend overlay for now to prevent chart from blanking
-        console.warn(`Trend overlay skipped for chart - precompute trend in SQL instead`);
-        break;
-        
-      case 'moving_average':
-        // Use precomputed MA column (added during loadData)
-        const window = overlay.window || 7;
-        const maColumnName = `${field}_ma${window}`;
-        const fromClause = chart.interaction?.filterBy ?
-          `vg.from('${chart.dataSource}', { filterBy: ${chart.interaction.filterBy} })` :
-          `vg.from('${chart.dataSource}')`;
-        
-        marks.push(`vg.lineY(
-        ${fromClause},
-        {
-          x: '${xField}',
-          y: '${maColumnName}',
-          stroke: '${color}',
-          strokeWidth: 2,
-          curve: 'monotone-x'
-        }
-      )`);
-        break;
-    }
-  }
-  
-  return marks;
-}
-
-/**
- * Generate a text chart (narrative Markdown blocks)
- */
-function generateTextChart(chart: ChartSpec, ctx: GeneratorContext): string {
-  const containerId = `chart-${chart.id}`;
-  const content = chart.content || '';
-  
-  // Simple Markdown to HTML conversion (basic subset)
-  const htmlContent = content
-    // Headers
-    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-    // Bold
-    .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
-    // Italic
-    .replace(/\*(.*?)\*/gim, '<em>$1</em>')
-    // Line breaks
-    .replace(/\n\n/g, '</p><p>')
-    .replace(/\n/g, '<br>');
-  
-  return `const container${chart.id} = document.getElementById('${containerId}');
-  if (container${chart.id}) {
-    container${chart.id}.innerHTML = \`
-      <div style="padding: 1.5rem; background: #f7fafc; border-radius: 0.5rem; line-height: 1.6;">
-        <p>${htmlContent}</p>
-      </div>
-    \`;
-  }`;
-}
-
-/**
- * Generate a histogram chart (frequency distribution)
- */
-function generateHistogramChart(chart: ChartSpec, ctx: GeneratorContext): string {
-  const containerId = `chart-${chart.id}`;
-  const { encoding, dataSource, interaction } = chart;
-  
-  if (!dataSource || !encoding || !encoding.x) {
-    throw new Error(`Chart ${chart.id}: histogram charts require dataSource and x encoding`);
-  }
-  
-  const field = encoding.x.field;
-  const bins = encoding.x.bins || 20;
-  
-  // Build from clause with optional filterBy
-  const fromClause = interaction?.filterBy ?
-    `vg.from('${dataSource}', { filterBy: ${interaction.filterBy} })` :
-    `vg.from('${dataSource}')`;
-  
-  // Build interaction
-  const interactionCode = interaction?.brush ?
-    `vg.intervalX({ as: ${interaction.selection} })` :
-    '';
-  
-  // Build plot options
-  const plotOptions: string[] = [];
-  if (interactionCode) plotOptions.push(interactionCode);
-  if (encoding.x?.label) plotOptions.push(`vg.xLabel('${encoding.x.label}')`);
-  plotOptions.push(`vg.yLabel('Frequency')`);
-  if (chart.width) plotOptions.push(`vg.width(${chart.width})`);
-  if (chart.height) plotOptions.push(`vg.height(${chart.height})`);
-  
-  const plotOptionsStr = plotOptions.length > 0 ? 
-    `,\n      ${plotOptions.join(',\n      ')}` : '';
-  
-  return `const container${chart.id} = document.getElementById('${containerId}');
-  if (container${chart.id}) {
-    try {
-      const chart${chart.id} = vg.plot(
-        vg.rectY(
-          ${fromClause},
-          vg.bin('${field}', { thresholds: ${bins} }),
-          { y: vg.count(), fill: 'steelblue', fillOpacity: 0.8 }
-        )${plotOptionsStr}
-      );
-      container${chart.id}.appendChild(chart${chart.id});
-    } catch (error) {
-      console.error('Error rendering chart ${chart.id}:', error);
-      container${chart.id}.innerHTML = '<div style="padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;">⚠️ Error rendering chart: ' + (error instanceof Error ? error.message : String(error)) + '</div>';
-    }
-  }`;
-}
-
-/**
- * Generate a boxplot chart (statistical distribution)
- */
-function generateBoxplotChart(chart: ChartSpec, ctx: GeneratorContext): string {
-  const containerId = `chart-${chart.id}`;
-  const { encoding, dataSource, interaction } = chart;
-  
-  if (!dataSource || !encoding || !encoding.y) {
-    throw new Error(`Chart ${chart.id}: boxplot charts require dataSource and y encoding`);
-  }
-  
-  const valueField = encoding.y.field;
-  const categoryField = encoding.x?.field;
-  
-  // Build from clause with optional filterBy
-  const fromClause = interaction?.filterBy ?
-    `vg.from('${dataSource}', { filterBy: ${interaction.filterBy} })` :
-    `vg.from('${dataSource}')`;
-  
-  // Build plot options
-  const plotOptions: string[] = [];
-  if (encoding.x?.label) plotOptions.push(`vg.xLabel('${encoding.x.label}')`);
-  if (encoding.y?.label) plotOptions.push(`vg.yLabel('${encoding.y.label}')`);
-  if (chart.width) plotOptions.push(`vg.width(${chart.width})`);
-  if (chart.height) plotOptions.push(`vg.height(${chart.height})`);
-  
-  const plotOptionsStr = plotOptions.length > 0 ? 
-    `,\n      ${plotOptions.join(',\n      ')}` : '';
-  
-  // boxY mark requires category and value
-  const boxOptions = categoryField ? 
-    `{ x: '${categoryField}', y: '${valueField}', fill: 'steelblue' }` :
-    `{ y: '${valueField}', fill: 'steelblue' }`;
-  
-  return `const container${chart.id} = document.getElementById('${containerId}');
-  if (container${chart.id}) {
-    try {
-      const chart${chart.id} = vg.plot(
-        vg.boxY(
-          ${fromClause},
-          ${boxOptions}
-        )${plotOptionsStr}
-      );
-      container${chart.id}.appendChild(chart${chart.id});
-    } catch (error) {
-      console.error('Error rendering chart ${chart.id}:', error);
-      container${chart.id}.innerHTML = '<div style="padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;">⚠️ Error rendering chart: ' + (error instanceof Error ? error.message : String(error)) + '</div>';
-    }
-  }`;
-}
-
-/**
- * Generate a density chart (kernel density estimation)
- */
-function generateDensityChart(chart: ChartSpec, ctx: GeneratorContext): string {
-  const containerId = `chart-${chart.id}`;
-  const { encoding, dataSource, interaction } = chart;
-  
-  if (!dataSource || !encoding || !encoding.x) {
-    throw new Error(`Chart ${chart.id}: density charts require dataSource and x encoding`);
-  }
-  
-  const field = encoding.x.field;
-  
-  // Build from clause with optional filterBy
-  const fromClause = interaction?.filterBy ?
-    `vg.from('${dataSource}', { filterBy: ${interaction.filterBy} })` :
-    `vg.from('${dataSource}')`;
-  
-  // Build interaction
-  const interactionCode = interaction?.brush ?
-    `vg.intervalX({ as: ${interaction.selection} })` :
-    '';
-  
-  // Build plot options
-  const plotOptions: string[] = [];
-  if (interactionCode) plotOptions.push(interactionCode);
-  if (encoding.x?.label) plotOptions.push(`vg.xLabel('${encoding.x.label}')`);
-  plotOptions.push(`vg.yLabel('Density')`);
-  if (chart.width) plotOptions.push(`vg.width(${chart.width})`);
-  if (chart.height) plotOptions.push(`vg.height(${chart.height})`);
-  
-  const plotOptionsStr = plotOptions.length > 0 ? 
-    `,\n      ${plotOptions.join(',\n      ')}` : '';
-  
-  return `const container${chart.id} = document.getElementById('${containerId}');
-  if (container${chart.id}) {
-    try {
-      const chart${chart.id} = vg.plot(
-        vg.areaY(
-          ${fromClause},
-          vg.densityX('${field}'),
-          { y: 'density', fill: 'steelblue', fillOpacity: 0.6 }
-        )${plotOptionsStr}
-      );
-      container${chart.id}.appendChild(chart${chart.id});
-    } catch (error) {
-      console.error('Error rendering chart ${chart.id}:', error);
-      container${chart.id}.innerHTML = '<div style="padding: 1rem; color: #e53e3e; background: #fff5f5; border: 1px solid #fc8181; border-radius: 4px;">⚠️ Error rendering chart: ' + (error instanceof Error ? error.message : String(error)) + '</div>';
-    }
-  }`;
-}
-
-/**
- * Generate index.html from dashboard spec
- */
-export function generateHTML(ctx: GeneratorContext): string {
-  attachBuiltinMosaicRenderers();
-  const { spec } = ctx;
-  
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${spec.meta.title}</title>
-  <style>
-    :root {
-      color-scheme: light;
-      --ink: #102129;
-      --muted: #607078;
-      --line: #dfe7ea;
-      --paper: #f4f7f8;
-      --teal: #0b7f6e;
-      --teal-soft: rgba(11, 127, 110, 0.1);
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: ${spec.theme?.fontFamily || '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'};
-      color: var(--ink);
-      background:
-        radial-gradient(900px 460px at 8% -10%, rgba(11, 127, 110, 0.13), transparent 56%),
-        linear-gradient(180deg, #f8fafb 0%, #eef3f4 100%);
-      min-height: 100vh;
-      padding: clamp(0.75rem, 2.5vw, 2rem);
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .container {
-      max-width: 1400px;
-      margin: 0 auto;
-      background: ${spec.theme?.backgroundColor || 'white'};
-      border: 1px solid rgba(16, 33, 41, 0.09);
-      border-radius: 18px;
-      padding: clamp(1rem, 2.5vw, 2rem);
-      box-shadow: 0 24px 70px rgba(16, 33, 41, 0.1);
-    }
-
-    h1 {
-      color: var(--ink);
-      margin-bottom: 0.35rem;
-      font-size: clamp(1.5rem, 3vw, 2.2rem);
-      letter-spacing: -0.04em;
-      line-height: 1.05;
-    }
-
-    .subtitle {
-      color: var(--muted);
-      margin-bottom: 1.2rem;
-      font-size: 0.96rem;
-    }
-
-    #status {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.4rem 0.65rem;
-      background: var(--teal-soft);
-      border: 1px solid rgba(11, 127, 110, 0.16);
-      margin-bottom: 1.2rem;
-      border-radius: 999px;
-      color: #066357;
-      font-size: 0.78rem;
-      font-weight: 650;
-    }
-
-    .chart-container {
-      min-width: 0;
-      overflow: hidden;
-      margin: 0;
-      padding: ${spec.theme?.chartBorders ? '1rem' : '0'};
-      border: ${spec.theme?.chartBorders ? '1px solid var(--line)' : '0'};
-      border-radius: ${spec.theme?.chartBorders ? '13px' : '0'};
-      background: ${spec.theme?.chartBorders ? '#fff' : 'transparent'};
-      box-shadow: ${spec.theme?.chartBorders ? '0 7px 22px rgba(16, 33, 41, 0.045)' : 'none'};
-      ${spec.theme?.chartBorders
-        ? 'transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;'
-        : ''}
-    }
-
-    ${spec.theme?.chartBorders
-      ? `.chart-container:hover {
-      transform: translateY(-2px);
-      border-color: rgba(11, 127, 110, 0.28);
-      box-shadow: 0 13px 30px rgba(16, 33, 41, 0.08);
-    }`
-      : ''}
-
-    .chart-container > h3 {
-      font-size: 0.9rem !important;
-      letter-spacing: -0.01em;
-      color: var(--ink) !important;
-      margin-bottom: 0.6rem !important;
-    }
-
-    ${spec.layout?.type === 'grid' ? `
-    .charts-grid {
-      display: grid;
-      grid-template-columns: repeat(${spec.layout.columns || 2}, minmax(0, 1fr));
-      gap: ${spec.layout.gap || 24}px;
-    }
-    
-    @media (max-width: 768px) {
-      .charts-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-    ` : spec.layout?.type === 'flex' ? `
-    .charts-flex {
-      display: flex;
-      flex-wrap: wrap;
-      gap: ${spec.layout.gap || 24}px;
-    }
-    
-    .charts-flex > * {
-      flex: 1 1 calc(50% - ${(spec.layout.gap || 24) / 2}px);
-      min-width: 300px;
-    }
-    ` : ''}
-
-    .info-box {
-      background: linear-gradient(120deg, var(--teal-soft), rgba(47, 111, 148, 0.07));
-      border: 1px solid rgba(11, 127, 110, 0.15);
-      border-radius: 11px;
-      padding: 0.8rem 1rem;
-      margin-bottom: 1rem;
-    }
-
-    .info-box h3 {
-      color: var(--ink);
-      margin-bottom: 0.2rem;
-      font-size: 0.88rem;
-    }
-
-    .info-box p {
-      color: var(--muted);
-      line-height: 1.45;
-      font-size: 0.82rem;
-    }
-
-    footer {
-      margin-top: 1.5rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      text-align: center;
-      font-size: 0.78rem;
-    }
-
-    footer a {
-      color: var(--teal);
-    }
-
-    body.is-embedded {
-      padding: 0;
-      background: #fff;
-    }
-
-    body.is-embedded .container {
-      border: 0;
-      border-radius: 0;
-      box-shadow: none;
-      padding: 0.85rem;
-    }
-
-    body.is-embedded h1 {
-      font-size: 1.3rem;
-    }
-
-    body.is-embedded .subtitle {
-      margin-bottom: 0.65rem;
-      font-size: 0.8rem;
-    }
-
-    body.is-embedded #status {
-      margin-bottom: 0.65rem;
-      padding: 0.25rem 0.5rem;
-      font-size: 0.68rem;
-    }
-
-    body.is-embedded .info-box,
-    body.is-embedded #status,
-    body.is-embedded footer {
-      display: none;
-    }
-
-    body.is-embedded .chart-container {
-      padding: ${spec.theme?.chartBorders ? '0.65rem' : '0'};
-    }
-
-    body.is-embedded .charts-grid,
-    body.is-embedded .charts-flex {
-      gap: 0.65rem;
-    }
-
-    body.is-embedded .charts-grid {
-      grid-template-columns: repeat(${spec.layout?.columns || 2}, minmax(0, 1fr));
-    }
-
-    @media (max-width: 768px) {
-      body {
-        padding: 1rem;
-      }
-
-      .container {
-        padding: 1rem;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>${spec.meta.title}</h1>
-    ${spec.meta.description ? `<p class="subtitle">${spec.meta.description}</p>` : ''}
-
-    <div id="status">Initializing...</div>
-
-    <div class="info-box">
-      <h3>📊 How to Use Crossfiltering</h3>
-      <p>
-        Click and drag horizontally on the time series charts to select a date range.
-        Other charts will automatically filter to show only data from the selected period.
-        Click outside the selection to reset.
-      </p>
-    </div>
-
-    <div class="${spec.layout?.type === 'grid' ? 'charts-grid' : spec.layout?.type === 'flex' ? 'charts-flex' : ''}">
-${spec.charts.map(chart => `      <div id="chart-${chart.id}" class="chart-container">${chart.title ? `<h3 style="margin-bottom: 1rem; color: #2d3748;">${chart.title}</h3>` : ''}</div>`).join('\n')}
-    </div>
-
-    <footer>
-      <p>Generated by <strong>dvfc</strong> · Powered by <a href="https://idl.uw.edu/mosaic/" target="_blank">UW Mosaic</a></p>
-    </footer>
-  </div>
-
-  <script>
-    if (new URLSearchParams(location.search).get('embed') === '1') {
-      document.body.classList.add('is-embedded');
-      const grid = document.querySelector('.charts-grid');
-      if (grid) {
-        grid.style.gridTemplateColumns = 'repeat(${spec.layout?.columns || 2}, minmax(0, 1fr))';
-      }
-    }
-  </script>
-  <script type="module" src="/main.ts"></script>
-</body>
-</html>`;
 }

@@ -1,7 +1,7 @@
 id: cosmic-showcase
 title: Other Worlds Observatory
-description: Brush the discovery timeline to filter every view.
-version: 0.1.0
+description: Brush the discovery timeline to filter area, scatter, pie, heatmap, and KPI views.
+version: 0.2.0
 coordination:
   auto: true
 data:
@@ -9,64 +9,143 @@ data:
     type: csv
     path: exoplanets.csv
 charts:
-  - id: discovery_timeline
-    type: line
-    title: Discoveries over time
+  - id: world_count
+    type: number
+    title: Worlds in view
     dataSource: worlds
     encoding:
-      x: { field: discovery_year, type: ordinal, label: Discovery year }
-      y: { field: planet, type: quantitative, aggregate: count, label: Worlds }
+      y:
+        field: planet
+        type: quantitative
+        aggregate: count
+        label: Worlds
+    interaction:
+      filterBy: era
+    width: 280
+    height: 150
+
+  - id: discovery_timeline
+    type: area
+    title: Discoveries over time (brush to filter)
+    dataSource: worlds
+    encoding:
+      x:
+        field: discovery_year
+        type: ordinal
+        label: Discovery year
+      y:
+        field: planet
+        type: quantitative
+        aggregate: count
+        label: Worlds
     interaction:
       brush: true
       brushAxis: x
       publishes: era
-      selection: era
-    width: 460
+      filterBy: era
+    width: 520
     height: 230
 
   - id: discovery_methods
-    type: bar
+    type: pie
     title: Discovery methods
     dataSource: worlds
     encoding:
-      x: { field: method, type: nominal, label: Method }
-      y: { field: planet, type: quantitative, aggregate: count, label: Worlds }
-      color: "#0b7f6e"
+      x:
+        field: method
+        type: nominal
+        label: Method
+      y:
+        field: planet
+        type: quantitative
+        aggregate: count
+        label: Worlds
     interaction:
       filterBy: era
-    width: 460
-    height: 230
+      publishes: era
+      select: auto
+    width: 360
+    height: 260
 
   - id: habitability_scatter
     type: scatter
     title: Temperature × habitability
     dataSource: worlds
     encoding:
-      x: { field: equilibrium_k, type: quantitative, label: Temperature (K) }
-      y: { field: habitability_score, type: quantitative, label: Habitability }
-      color: { field: mission, type: nominal }
+      x:
+        field: equilibrium_k
+        type: quantitative
+        label: Temperature (K)
+      y:
+        field: habitability_score
+        type: quantitative
+        label: Habitability
+      color:
+        field: mission
+        type: nominal
     interaction:
+      publishes: era
+      select: auto
       filterBy: era
     width: 460
-    height: 230
+    height: 260
 
   - id: mission_mix
-    type: bar
+    type: donut
     title: Mission contribution
     dataSource: worlds
     encoding:
-      x: { field: mission, type: nominal, label: Mission }
-      y: { field: planet, type: quantitative, aggregate: count, label: Worlds }
-      color: "#2f6f94"
+      x:
+        field: mission
+        type: nominal
+        label: Mission
+      y:
+        field: planet
+        type: quantitative
+        aggregate: count
+        label: Worlds
     interaction:
       filterBy: era
-    width: 460
-    height: 230
+      publishes: era
+      select: auto
+    width: 360
+    height: 260
+
+  - id: method_constellation
+    type: heatmap
+    title: Method × constellation
+    dataSource: worlds
+    encoding:
+      x:
+        field: method
+        type: nominal
+        label: Method
+      y:
+        field: constellation
+        type: nominal
+        label: Constellation
+      color:
+        field: planet
+        type: quantitative
+        aggregate: count
+        label: Worlds
+    interaction:
+      publishes: era
+      select: auto
+      filterBy: era
+    width: 520
+    height: 300
 
 layout:
   type: grid
   columns: 2
   gap: 16
 theme:
-  backgroundColor: "#ffffff"
-  fontFamily: "Inter, system-ui, sans-serif"
+  colors:
+    - "#1e3a5f"
+    - "#7ba3c9"
+    - "#a89b8c"
+    - "#4a7c9b"
+  fontFamily: system-ui, -apple-system, "Segoe UI", sans-serif
+  backgroundColor: white
+  chartBorders: true

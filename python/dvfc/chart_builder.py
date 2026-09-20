@@ -32,7 +32,14 @@ from .spec import (
 class ChartBuilder:
     def __init__(self, chart_id: str, chart_type: Union[ChartType, str]):
         self._id = chart_id
-        self._type = ChartType(chart_type) if isinstance(chart_type, str) else chart_type
+        # Keep known enums as their value; allow arbitrary plugin type strings.
+        if isinstance(chart_type, ChartType):
+            self._type = chart_type.value
+        else:
+            try:
+                self._type = ChartType(chart_type).value
+            except ValueError:
+                self._type = chart_type
         self._title: Optional[str] = None
         self._description: Optional[str] = None
         self._data: Optional[DataRef] = None
@@ -118,6 +125,7 @@ class ChartBuilder:
         self._interaction = InteractionSpec(
             brush=True,
             brushAxis=axis,  # type: ignore[arg-type]
+            publishes=publishes,
             selection=publishes,
         )
         return self

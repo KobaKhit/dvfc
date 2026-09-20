@@ -14,7 +14,7 @@ The Model Context Protocol (MCP) server exposes `dvfc` functionality to AI agent
 - Apply filter plans to wire up interactive brushing
 - Compose dashes, extract charts, normalize IR, list chart types (`compose_dash`, `extract_charts`, `normalize_spec`, `list_chart_types`)
 
-Legacy tool names (`validate_dashboard_spec`, `build_dashboard`, `compose_board`) remain aliases for the same workflows.
+Pass `dashPath` (path to `*.dash.yaml`) where a dash file is required. Chart discovery tools use **`compose_dash`** and **`dashPath`** only. Legacy tool names `validate_dashboard_spec` and `build_dashboard` remain for validate/build flows.
 
 ## Installation
 
@@ -106,7 +106,7 @@ Open the Cursor AI chat and ask:
 List available dvfc MCP tools
 ```
 
-You should see 13 tools:
+You should see tools including:
 1. `validate_dashboard_spec`
 2. `build_dashboard`
 3. `list_models`
@@ -115,11 +115,13 @@ You should see 13 tools:
 6. `search_charts`
 7. `get_chart`
 8. `list_charts`
-9. `compose_board`
+9. `compose_dash`
 10. `render_chart`
-11. `explain_coordination`
-12. `apply_filter_plan`
-13. `compile_dashboard`
+11. `extract_charts`
+12. `list_chart_types`
+13. `normalize_spec`
+14. `explain_coordination`
+15. `apply_filter_plan`
 
 ## Quick Launch (Alternative)
 
@@ -147,31 +149,31 @@ Here's how an AI agent can use dvfc MCP tools to build coordinated dashboards:
 **1. Search for charts**
 ```
 Agent: Use search_charts to find all revenue-related charts
-Result: Multiple hits across different boards (sales, dbt-jaffle, web-analytics)
+Result: Multiple hits across different dashes (sales, dbt-jaffle, web-analytics)
 ```
 
 **2. Get detailed metadata**
 ```
 Agent: Use get_chart for each interesting chart
-Result: Full chart spec + board context (data sources, theme, layout)
+Result: Full chart spec + dash context (data sources, theme, layout)
 ```
 
-**3. Compose new dashboard**
+**3. Compose a new dash**
 ```
-Agent: Use compose_board with selected chart display keys
-Result: New board spec merging charts from multiple sources
+Agent: Use compose_dash with selected chart display keys
+Result: New *.dash.yaml merging charts from multiple sources
 ```
 
 **4. Validate**
 ```
-Agent: Use validate_dashboard_spec on composed board
+Agent: Use validate_dashboard_spec on the composed dash
 Result: Schema + semantic validation passes
 ```
 
 **5. Build or render**
 ```
 Agent: Use build_dashboard to create static HTML
-Or: Use render_chart to build single chart for testing
+Or: Use render_chart (dashPath + chartId) to build a single chart for testing
 Result: Interactive dashboard with native crossfiltering
 ```
 
@@ -179,20 +181,20 @@ Result: Interactive dashboard with native crossfiltering
 
 **1. Explain current coordination**
 ```
-Agent: Use explain_coordination on existing board
+Agent: Use explain_coordination on an existing dash
 Result: Shows which charts brush and which are filtered
 ```
 
 **2. Apply filter plan**
 ```
 Agent: Use apply_filter_plan to wire up new interactions
-Result: Board updated with brush and filterBy connections
+Result: Dash updated with brush and filterBy connections
 ```
 
 **3. Create new charts**
 ```
 Agent: Use create_chart or update_chart to add visualizations
-Result: Charts added to board with proper encodings
+Result: Charts added to the dash with proper encodings
 ```
 
 **4. Validate and build**
@@ -218,7 +220,7 @@ Result: Subset of models suitable for visualization
 **3. Create charts for each model**
 ```
 Agent: Use create_chart for time-series, categoricals, KPIs
-Result: Dashboard spec with auto-generated charts
+Result: Dash spec with auto-generated charts
 ```
 
 **4. Wire coordination**
@@ -236,7 +238,7 @@ Use these prompts in Cursor to verify the MCP server:
 ### ✅ 1. Validate a Dashboard
 
 ```
-Use dvfc MCP to validate examples/sales-board/sales.dash.yaml
+Use dvfc MCP to validate examples/sales-dash/sales.dash.yaml
 ```
 
 Expected: Validation passes with schema and semantic checks.
@@ -252,7 +254,7 @@ Expected: Returns 1 mart model (`customer_orders`) and 3 seeds.
 ### ✅ 3. Explain Coordination
 
 ```
-Use dvfc MCP to explain coordination in examples/sales-board/sales.dash.yaml
+Use dvfc MCP to explain coordination in examples/sales-dash/sales.dash.yaml
 ```
 
 Expected: Shows brush selections and which charts are filtered by each selection.
@@ -260,7 +262,7 @@ Expected: Shows brush selections and which charts are filtered by each selection
 ### ✅ 4. Create a Chart
 
 ```
-Use dvfc MCP to add a new bar chart to examples/sales-board/sales.dash.yaml:
+Use dvfc MCP to add a new bar chart to examples/sales-dash/sales.dash.yaml:
 - id: new_chart
 - dataSource: sales_daily
 - x: product, y: revenue (sum)
@@ -271,7 +273,7 @@ Expected: Chart added to YAML file.
 ### ✅ 5. Build Dashboard
 
 ```
-Use dvfc MCP to build examples/sales-board/sales.dash.yaml to dist/test
+Use dvfc MCP to build examples/sales-dash/sales.dash.yaml to dist/test
 ```
 
 Expected: Static HTML dashboard built successfully.
@@ -279,7 +281,7 @@ Expected: Static HTML dashboard built successfully.
 ### ✅ 6. Search Charts
 
 ```
-Use dvfc MCP to search for all charts with type "line" in examples/sales-board/sales.dash.yaml
+Use dvfc MCP to search for all charts with type "line" in examples/sales-dash/sales.dash.yaml
 ```
 
 Expected: Returns matching chart specs.
@@ -307,7 +309,7 @@ Expected: Chart title updated in YAML.
 Use dvfc MCP to search for charts matching "revenue" across the project
 ```
 
-Expected: Returns multiple hits from different boards (dbt-jaffle, web-analytics) with scores.
+Expected: Returns multiple hits from different dashes (dbt-jaffle, web-analytics) with scores.
 
 ### ✅ 10. Get Chart
 
@@ -315,26 +317,26 @@ Expected: Returns multiple hits from different boards (dbt-jaffle, web-analytics
 Use dvfc MCP to get chart metadata for "daily_revenue" from examples/dbt-jaffle/jaffle.dash.yaml
 ```
 
-Expected: Returns full chart spec with board context (data sources, theme, layout).
+Expected: Returns full chart spec with dash context (data sources, theme, layout).
 
 ### ✅ 11. List Charts
 
 ```
-Use dvfc MCP to list all charts in examples/sales-board/sales.dash.yaml
+Use dvfc MCP to list all charts in examples/sales-dash/sales.dash.yaml
 ```
 
-Expected: Returns all charts in the board with display keys.
+Expected: Returns all charts in the dash with display keys.
 
-### ✅ 12. Compose Board
+### ✅ 12. Compose Dash
 
 ```
-Use dvfc MCP to compose a board from these charts:
+Use dvfc MCP to compose a dash (compose_dash) from these charts:
 - dbt-jaffle__daily_revenue
 - web-analytics__daily_revenue
 Title: "Revenue Comparison"
 ```
 
-Expected: Returns composed board YAML with both charts and merged data sources.
+Expected: Returns composed dash YAML with both charts and merged data sources.
 
 ### ✅ 13. Render Chart
 
@@ -342,7 +344,7 @@ Expected: Returns composed board YAML with both charts and merged data sources.
 Use dvfc MCP to render only the "daily_revenue" chart from examples/dbt-jaffle/jaffle.dash.yaml
 ```
 
-Expected: Builds HTML with single chart while preserving board context.
+Expected: Builds HTML with single chart while preserving dash context.
 
 ## Troubleshooting
 

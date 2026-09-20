@@ -3,297 +3,26 @@
  */
 
 import { readFile, writeFile, mkdir, cp } from 'fs/promises';
-import { dirname, join, resolve as resolvePath } from 'path';
+import { dirname, join, resolve as resolvePath, basename } from 'path';
 import { parse as parseCSV } from 'csv-parse/sync';
 import * as vega from 'vega';
 import * as vegaLite from 'vega-lite';
 import { Resvg } from '@resvg/resvg-js';
-import type { ChartSpec, DashboardSpec, ChannelEncoding } from '@dvfc/core';
-import { normalizeFile, getChartType, registerBuiltinChartTypes, getBuiltinChartTypeIds, registerChartType } from '@dvfc/core';
+import type { ChartSpec, DashboardSpec } from '@dvfc/core';
+import {
+  normalizeFile,
+  filterSpecToChart,
+  getChartType,
+  registerBuiltinChartTypes,
+  getBuiltinChartTypeIds,
+  registerChartType,
+  type NormalizeResult,
+} from '@dvfc/core';
+import { chartToVegaLiteBuiltin } from './marks/index.js';
+import { dashToLinkedVegaLite } from './dash-export.js';
+import { applyVegaInteraction, planVegaPublishParams } from './interaction.js';
 
-function channelType(ch: ChannelEncoding | undefined): string | undefined {
-  if (!ch) return undefined;
-  const t = ch.type;
-  if (t === 'quantitative') return 'quantitative';
-  if (t === 'temporal') return 'temporal';
-  if (t === 'ordinal') return 'ordinal';
-  if (t === 'nominal') return 'nominal';
-  if (ch.aggregate) return 'quantitative';
-  return undefined;
-}
-
-export function chartToVegaLiteBuiltin(
-  chart: ChartSpec,
-  values: Record<string, unknown>[]
-): Record<string, unknown> {
-  const width = chart.width ?? 520;
-  const height = chart.height ?? 300;
-  const base = {
-    $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
-    title: chart.title,
-    data: { values },
-    width,
-    height,
-    background: 'transparent',
-    config: {
-      view: { stroke: null },
-      axis: {
-        labelColor: '#607078',
-        titleColor: '#24343c',
-        gridColor: '#e7edef',
-        domainColor: '#c5d0d4',
-        tickColor: '#c5d0d4',
-        labelFont: 'Inter, system-ui, sans-serif',
-        titleFont: 'Inter, system-ui, sans-serif',
-      },
-      title: {
-        color: '#13242c',
-        font: 'Inter, system-ui, sans-serif',
-        fontSize: 16,
-        anchor: 'start',
-      },
-      range: {
-        category: [
-          '#0b7f6e',
-          '#36a18f',
-          '#2f6f94',
-          '#7a86c2',
-          '#c47a1a',
-          '#e1ad56',
-          '#724f91',
-          '#cc6b72',
-        ],
-      },
-    },
-  };
-
-  const x = chart.encoding?.x;
-  const y = chart.encoding?.y;
-  const color = chart.encoding?.color;
-
-  if ((chart.type === 'pie' || chart.type === 'donut') && x && y) {
-    return {
-      ...base,
-      mark: {
-        type: 'arc',
-        innerRadius: chart.type === 'donut' ? 72 : 0,
-        outerRadius: 124,
-        cornerRadius: 4,
-        padAngle: 0.02,
-      },
-      encoding: {
-        theta: {
-          field: y.field,
-          type: 'quantitative',
-          aggregate: y.aggregate ?? 'sum',
-          stack: true,
-        },
-        color: {
-          field: x.field,
-          type: channelType(x) ?? 'nominal',
-          title: x.label,
-        },
-        tooltip: [
-          { field: x.field, type: channelType(x) ?? 'nominal', title: x.label },
-          {
-            field: y.field,
-            type: 'quantitative',
-            aggregate: y.aggregate ?? 'sum',
-            title: y.label,
-            format: ',.2f',
-          },
-        ],
-      },
-    };
-  }
-
-  if (chart.type === 'histogram' && x) {
-    return {
-      ...base,
-      mark: { type: 'bar', cornerRadiusTopLeft: 3, cornerRadiusTopRight: 3 },
-      encoding: {
-        x: {
-          field: x.field,
-          type: 'quantitative',
-          bin: { maxbins: 18 },
-          title: x.label,
-        },
-        y: {
-          aggregate: 'count',
-          type: 'quantitative',
-          title: y?.label ?? 'Observations',
-        },
-        color: { value: '#0b7f6e' },
-        tooltip: [{ aggregate: 'count', type: 'quantitative', title: 'Observations' }],
-      },
-    };
-  }
-
-  if (chart.type === 'density' && x) {
-    return {
-      ...base,
-      transform: [{ density: x.field, as: [x.field, 'density'] }],
-      mark: {
-        type: 'area',
-        interpolate: 'monotone',
-        line: { color: '#0b7f6e', strokeWidth: 2.5 },
-        color: {
-          x1: 1,
-          y1: 1,
-          x2: 1,
-          y2: 0,
-          gradient: 'linear',
-          stops: [
-            { offset: 0, color: '#0b7f6e22' },
-            { offset: 1, color: '#0b7f6ecc' },
-          ],
-        },
-      },
-      encoding: {
-        x: { field: x.field, type: 'quantitative', title: x.label },
-        y: { field: 'density', type: 'quantitative', title: y?.label ?? 'Density' },
-        tooltip: [
-          { field: x.field, type: 'quantitative', format: ',.2f' },
-          { field: 'density', type: 'quantitative', format: '.4f' },
-        ],
-      },
-    };
-  }
-
-  if (chart.type === 'boxplot' && x && y) {
-    return {
-      ...base,
-      mark: {
-        type: 'boxplot',
-        extent: 'min-max',
-        size: 34,
-        median: { color: '#c47a1a', strokeWidth: 2 },
-        box: { fill: '#36a18f', opacity: 0.75 },
-      },
-      encoding: {
-        x: { field: x.field, type: channelType(x) ?? 'nominal', title: x.label },
-        y: { field: y.field, type: 'quantitative', title: y.label },
-        color:
-          color && typeof color !== 'string'
-            ? { field: color.field, type: channelType(color) ?? 'nominal' }
-            : undefined,
-      },
-    };
-  }
-
-  if (chart.type === 'heatmap' && x && y) {
-    const colorChannel =
-      color && typeof color !== 'string'
-        ? {
-            field: color.field,
-            type: channelType(color) ?? 'quantitative',
-            aggregate: color.aggregate ?? 'mean',
-            title: color.label,
-            scale: { scheme: 'teals' },
-          }
-        : { aggregate: 'count', type: 'quantitative', scale: { scheme: 'teals' } };
-    return {
-      ...base,
-      mark: { type: 'rect', cornerRadius: 3, stroke: '#ffffff', strokeWidth: 2 },
-      encoding: {
-        x: { field: x.field, type: channelType(x) ?? 'nominal', title: x.label },
-        y: { field: y.field, type: channelType(y) ?? 'nominal', title: y.label },
-        color: colorChannel,
-        tooltip: [
-          { field: x.field, type: channelType(x) ?? 'nominal', title: x.label },
-          { field: y.field, type: channelType(y) ?? 'nominal', title: y.label },
-          colorChannel,
-        ],
-      },
-    };
-  }
-
-  const mark =
-    chart.type === 'line'
-      ? {
-          type: 'line',
-          point: { filled: true, size: 52 },
-          strokeWidth: 3,
-          interpolate: 'monotone',
-        }
-      : chart.type === 'area'
-        ? {
-            type: 'area',
-            line: { color: '#0b7f6e', strokeWidth: 2.5 },
-            color: {
-              x1: 1,
-              y1: 1,
-              x2: 1,
-              y2: 0,
-              gradient: 'linear',
-              stops: [
-                { offset: 0, color: '#0b7f6e22' },
-                { offset: 1, color: '#0b7f6eaa' },
-              ],
-            },
-          }
-        : chart.type === 'scatter'
-          ? { type: 'point', filled: true, size: 90, opacity: 0.78 }
-          : chart.type === 'bar'
-            ? { type: 'bar', cornerRadiusEnd: 5 }
-            : chart.type === 'number'
-              ? 'text'
-              : 'point';
-
-  const encoding: Record<string, unknown> = {};
-  if (chart.encoding?.x) {
-    encoding.x = {
-      field: chart.encoding.x.field,
-      type: channelType(chart.encoding.x) ?? 'nominal',
-      title: chart.encoding.x.label,
-      aggregate: chart.encoding.x.aggregate,
-    };
-  }
-  if (chart.encoding?.y) {
-    encoding.y = {
-      field: chart.encoding.y.field,
-      type: channelType(chart.encoding.y) ?? 'quantitative',
-      title: chart.encoding.y.label,
-      aggregate: chart.encoding.y.aggregate,
-    };
-  }
-  if (chart.encoding?.color && typeof chart.encoding.color !== 'string') {
-    encoding.color = {
-      field: chart.encoding.color.field,
-      type: channelType(chart.encoding.color) ?? 'nominal',
-    };
-  } else if (typeof chart.encoding?.color === 'string') {
-    encoding.color = { value: chart.encoding.color };
-  }
-
-  if (chart.type === 'number' && chart.encoding?.y) {
-    return {
-      ...base,
-      mark: {
-        type: 'text',
-        fontSize: 56,
-        fontWeight: 700,
-        color: '#0b7f6e',
-        font: 'Inter, system-ui, sans-serif',
-      },
-      encoding: {
-        text: {
-          field: chart.encoding.y.field,
-          aggregate: chart.encoding.y.aggregate ?? 'sum',
-          type: 'quantitative',
-        },
-      },
-      width: chart.width ?? 320,
-      height: chart.height ?? 120,
-    };
-  }
-
-  return {
-    ...base,
-    mark,
-    encoding,
-  };
-}
+export { chartToVegaLiteBuiltin };
 
 export function chartToVegaLite(
   chart: ChartSpec,
@@ -351,34 +80,56 @@ async function loadValuesForChart(
   const ds = spec.data.find((d) => d.id === chart.dataSource);
   if (!ds) throw new Error(`No data source for chart ${chart.id}`);
 
-  const candidates = [
-    assetMap.get(ds.id),
-    join(stageDir, `${ds.id}.csv`),
-  ];
+  const candidates: string[] = [];
+  const primary = assetMap.get(ds.id);
+  if (primary) candidates.push(primary);
+  candidates.push(join(stageDir, `${ds.id}.csv`), join(stageDir, `${ds.id}.parquet`));
+  if (ds.path) {
+    const staged = join(stageDir, basename(ds.path));
+    candidates.push(staged);
+    const byId = assetMap.get(ds.id);
+    if (byId) candidates.push(byId);
+  }
   if (ds.type === 'sql' && ds.sql) {
     const fileMatch = ds.sql.match(/['"]([^'"]+\.(?:csv|tsv|json))['"]/i);
     if (fileMatch) {
       const base = fileMatch[1].replace(/\.[^.]+$/, '');
-      candidates.push(assetMap.get(base), join(stageDir, fileMatch[1]));
+      const mapped = assetMap.get(base);
+      if (mapped) candidates.push(mapped);
+      candidates.push(join(stageDir, fileMatch[1]));
     }
   }
-  // Last resort: any staged CSV
-  for (const [, path] of assetMap) {
-    if (path.endsWith('.csv')) candidates.push(path);
-  }
 
-  for (const dest of candidates) {
-    if (!dest) continue;
+  const tried: string[] = [];
+  const errors: string[] = [];
+  for (const dest of [...new Set(candidates.filter(Boolean))]) {
+    tried.push(dest);
     try {
+      if (dest.endsWith('.parquet')) {
+        throw new Error(
+          `Parquet staging found at ${dest}, but Vega static export requires CSV. Convert or provide a CSV asset.`
+        );
+      }
       const text = await readFile(dest, 'utf-8');
-      return parseCSV(text, { columns: true, skip_empty_lines: true, cast: true });
-    } catch {
-      /* try next */
+      const rows = parseCSV(text, { columns: true, skip_empty_lines: true, cast: true }) as Record<
+        string,
+        unknown
+      >[];
+      if (!Array.isArray(rows)) {
+        throw new Error(`Parsed data is not an array`);
+      }
+      // Empty file is valid only if the CSV parsed cleanly (header-only); still return it.
+      return rows;
+    } catch (err) {
+      errors.push(`${dest}: ${err instanceof Error ? err.message : String(err)}`);
     }
   }
 
   throw new Error(
-    `Cannot load CSV for Vega export of '${chart.id}' (source ${ds.id}). SQL-only sources need a CSV asset.`
+    `Cannot load CSV for Vega export of '${chart.id}' (source ${ds.id}). ` +
+      `Tried: ${tried.join(', ') || '(none)'}. ` +
+      `SQL/url/parquet-only sources need a CSV asset. ` +
+      `Details: ${errors.slice(0, 3).join('; ')}`
   );
 }
 
@@ -400,6 +151,8 @@ export interface ExportOptions {
   outFile?: string;
   chartId?: string;
   projectRoot?: string;
+  /** When already normalized, skip re-reading/re-normalizing the spec. */
+  normalized?: NormalizeResult;
 }
 
 /**
@@ -438,13 +191,14 @@ export function buildHtmlStaticPage(
       padding: 1.5rem;
       box-shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
       max-width: 100%;
+      overflow: auto;
     }
   </style>
 </head>
 <body>
   <div id="vis"></div>
   <script type="text/javascript">
-    vegaEmbed('#vis', ${specJson}, { actions: true }).catch(console.error);
+    vegaEmbed('#vis', ${specJson}, { actions: true, renderer: 'canvas' }).catch(console.error);
   </script>
 </body>
 </html>
@@ -463,31 +217,37 @@ export async function exportStatic(
   specPath: string,
   options: ExportOptions
 ): Promise<string> {
-  const normalized = await normalizeFile(specPath, options.projectRoot);
+  const normalized =
+    options.normalized ?? (await normalizeFile(specPath, options.projectRoot));
   let { spec, assets } = normalized;
 
   if (options.chartId) {
-    const chart = spec.charts.find((c) => c.id === options.chartId);
-    if (!chart) throw new Error(`Chart '${options.chartId}' not found`);
-    spec = {
-      ...spec,
-      charts: [chart],
-      data: spec.data.filter((d) => d.id === chart.dataSource),
-    };
+    const filtered = filterSpecToChart(spec, assets, options.chartId);
+    spec = filtered.spec;
+    assets = filtered.assets;
   }
 
-  if (spec.charts.length !== 1) {
+  const multiChart = spec.charts.length > 1;
+  if (multiChart && options.format !== 'html-static') {
     throw new Error(
-      `Static export requires a single chart (got ${spec.charts.length}). Use --chart <id> for dashes.`
+      `Static ${options.format} export requires a single chart (got ${spec.charts.length}). Use --chart <id> for dashes.`
     );
   }
-
-  const chart = spec.charts[0];
-  if (chart.type === 'text') {
-    throw new Error('Cannot export text charts to svg/png');
+  if (spec.charts.length === 0) {
+    throw new Error('No charts to export');
   }
 
-  const outFile = options.outFile || `${chart.id}.${options.format === 'html-static' ? 'html' : options.format}`;
+  const primary = spec.charts[0];
+  if (!multiChart && primary.type === 'text') {
+    throw new Error('Cannot export text charts to svg/png/html-static');
+  }
+
+  const outFile =
+    options.outFile ||
+    `${multiChart ? spec.meta?.title || 'dash' : primary.id}.${
+      options.format === 'html-static' ? 'html' : options.format
+    }`.replace(/[^\w.-]+/g, '_');
+
   const stageDir = join(dirname(resolvePath(outFile)), '.dvfc-export-data');
   await mkdir(stageDir, { recursive: true });
   const assetMap = new Map<string, string>();
@@ -508,13 +268,34 @@ export async function exportStatic(
     }
   }
 
-  const values = await loadValuesForChart(spec, chart, stageDir, assetMap);
-  const vl = chartToVegaLite(chart, values);
-
   await mkdir(dirname(resolvePath(outFile)), { recursive: true });
 
+  if (multiChart && options.format === 'html-static') {
+    const valuesBySource = new Map<string, Record<string, unknown>[]>();
+    for (const chart of spec.charts) {
+      if (chart.type === 'text' || chart.type === 'table' || !chart.dataSource) continue;
+      if (valuesBySource.has(chart.dataSource)) continue;
+      valuesBySource.set(
+        chart.dataSource,
+        await loadValuesForChart(spec, chart, stageDir, assetMap)
+      );
+    }
+    const vl = dashToLinkedVegaLite(spec, valuesBySource);
+    const html = buildHtmlStaticPage(vl, spec.meta?.title || 'Dashboard');
+    await writeFile(outFile, html);
+    return outFile;
+  }
+
+  const values = await loadValuesForChart(spec, primary, stageDir, assetMap);
+  let vl = chartToVegaLite(primary, values);
+  // Single-chart html-static: still honor brush params when present
   if (options.format === 'html-static') {
-    const html = buildHtmlStaticPage(vl, chart.title || chart.id);
+    const pubs = planVegaPublishParams([primary]);
+    vl = applyVegaInteraction(vl, primary, pubs);
+  }
+
+  if (options.format === 'html-static') {
+    const html = buildHtmlStaticPage(vl, primary.title || primary.id);
     await writeFile(outFile, html);
     return outFile;
   }

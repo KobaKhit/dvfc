@@ -5,6 +5,7 @@ Load / save Chart and Dash YAML/JSON (and TOML when tomli/tomllib available).
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 from typing import Any, Union
 
@@ -17,11 +18,11 @@ def _parse_content(content: str, fmt: str) -> Any:
     if fmt == "json":
         return json.loads(content)
     if fmt == "toml":
-        try:
-            import tomllib  # py311+
-        except ImportError:
+        if sys.version_info >= (3, 11):
+            import tomllib
+        else:
             try:
-                import tomli as tomllib  # type: ignore
+                import tomli as tomllib
             except ImportError as e:
                 raise ImportError(
                     "TOML support requires Python 3.11+ or `pip install tomli`"

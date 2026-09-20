@@ -5,12 +5,33 @@
 import { readFile } from 'fs/promises';
 import { glob } from 'glob';
 import { basename, dirname, extname } from 'path';
-import type { DashboardSpec } from '@dvfc/core';
+import { parse as parseYAML } from 'yaml';
+import {
+  interpretSpec,
+  listInlineCharts,
+  isDashChartRef,
+  dashToDashboardSpec,
+  chartIRToDashboardSpec,
+  interactionToRuntime,
+  type DashIR,
+  type DashboardSpec,
+} from '@dvfc/core';
 import type { ChartHit, ChartRef, ChartResource, SearchOptions } from './types.js';
 
-/** Resolve dashPath from options that may still pass deprecated boardPath */
-function resolveDashPath(dashPath?: string, boardPath?: string): string | undefined {
-  return dashPath || boardPath;
+/**
+ * Stable chart id for discovery display keys.
+ * Prefer explicit id; for path refs use the chart filename stem (not the path).
+ */
+function chartIdFromRef(ref: { id?: string; chart: string }): string {
+  if (ref.id) return ref.id;
+  const chart = ref.chart;
+  if (chart.includes('/') || chart.includes('\\') || chart.includes('.')) {
+    const base = basename(chart);
+    return base
+      .replace(/\.chart\.(yaml|yml|json|toml)$/i, '')
+      .replace(/\.(yaml|yml|json|toml)$/i, '');
+  }
+  return chart;
 }
 
 /**
@@ -34,72 +55,88 @@ export function makeDisplayKey(dashPath: string, chartId: string): string {
 /**
  * Parse display key into components
  */
-export function parseDisplayKey(displayKey: string): { boardName: string; chartId: string } | null {
+export function parseDisplayKey(displayKey: string): { dashName: string; chartId: string } | null {
   const parts = displayKey.split('__');
   if (parts.length !== 2) return null;
-  return { boardName: parts[0], chartId: parts[1] };
+  return { dashName: parts[0], chartId: parts[1] };
+}
+
+function refChartStubs(dash: DashIR): DashboardSpec['charts'] {
+  return dash.charts
+    .filter((c) => isDashChartRef(c))
+    .map((r) => ({
+      id: chartIdFromRef(r),
+      type: 'ref' as unknown as DashboardSpec['charts'][0]['type'],
+      title: r.title || chartIdFromRef(r),
+    }));
+}
+
+/** Loose inline mapping when dashToDashboardSpec rejects (e.g. missing dataSource). */
+function inlineChartsLoose(dash: DashIR): DashboardSpec['charts'] {
+  return listInlineCharts(dash).map((c) => ({
+    id: c.id,
+    type: c.type as DashboardSpec['charts'][0]['type'],
+    title: c.title,
+    dataSource: c.dataSource,
+    encoding: c.encoding,
+    content: c.content,
+    interaction: interactionToRuntime(c.interaction),
+    overlays: c.overlays,
+    width: c.width,
+    height: c.height,
+  }));
+}
+
+function inlineChartsViaCore(dash: DashIR): DashboardSpec['charts'] {
+  try {
+    return dashToDashboardSpec({ ...dash, charts: listInlineCharts(dash) }).charts;
+  } catch {
+    return inlineChartsLoose(dash);
+  }
 }
 
 /**
- * Load dashboard spec from file
+ * Load dashboard spec from file (normalized Mosaic shape for discovery listing).
  */
 async function loadSpec(filePath: string): Promise<DashboardSpec> {
   const content = await readFile(filePath, 'utf-8');
-  const { interpretSpec, listInlineCharts, isDashChartRef } = await import('@dvfc/core');
-  const { parse: parseYAML } = await import('yaml');
-
-  // YAML is a superset of JSON, so one parser covers *.yaml, *.yml, and *.json.
   const raw: unknown = parseYAML(content);
-
   const parsed = interpretSpec(raw, { path: filePath });
+
   if (parsed.kind === 'chart') {
-    return {
-      meta: { title: parsed.chart.title || parsed.chart.id, version: '0.1.0' },
-      data: [],
-      charts: [
-        {
-          id: parsed.chart.id,
-          type: parsed.chart.type as DashboardSpec['charts'][0]['type'],
-          title: parsed.chart.title,
-          dataSource: parsed.chart.dataSource,
-          encoding: parsed.chart.encoding,
-          content: parsed.chart.content,
-          interaction: parsed.chart.interaction,
-          overlays: parsed.chart.overlays,
-          width: parsed.chart.width,
-          height: parsed.chart.height,
-        },
-      ],
-    };
+    return chartIRToDashboardSpec(parsed.chart);
   }
-  // dash, only inline charts for discovery listing
-  const inline = listInlineCharts(parsed.dash);
-  const refs = parsed.dash.charts.filter((c) => isDashChartRef(c));
+
+  const dash = parsed.dash;
+  const refs = refChartStubs(dash);
+
+  if (refs.length === 0) {
+    try {
+      return dashToDashboardSpec(dash);
+    } catch {
+      return {
+        meta: {
+          title: dash.title || dash.id,
+          version: dash.version || '0.1.0',
+        },
+        data: dash.data || [],
+        charts: inlineChartsLoose(dash),
+        layout: dash.layout,
+        theme: dash.theme,
+      };
+    }
+  }
+
+  const inlineSpec = inlineChartsViaCore(dash);
   return {
     meta: {
-      title: parsed.dash.title || parsed.dash.id,
-      version: parsed.dash.version || '0.1.0',
+      title: dash.title || dash.id,
+      version: dash.version || '0.1.0',
     },
-    data: parsed.dash.data || [],
-    charts: [
-      ...inline.map((c) => ({
-        id: c.id,
-        type: c.type as DashboardSpec['charts'][0]['type'],
-        title: c.title,
-        dataSource: c.dataSource,
-        encoding: c.encoding,
-        content: c.content,
-        interaction: c.interaction,
-        overlays: c.overlays,
-        width: c.width,
-        height: c.height,
-      })),
-      ...refs.map((r) => ({
-        id: r.id || r.chart,
-        type: 'line' as const,
-        title: r.title || r.chart,
-      })),
-    ],
+    data: dash.data || [],
+    charts: [...inlineSpec, ...refs],
+    layout: dash.layout,
+    theme: dash.theme,
   };
 }
 
@@ -113,7 +150,7 @@ export async function searchCharts(options: SearchOptions): Promise<ChartHit[]> 
     all = false,
     caseSensitive = false,
   } = options;
-  const dashPath = resolveDashPath(options.dashPath, options.boardPath);
+  const dashPath = options.dashPath;
 
   const pattern = dashPath ? dashPath : '**/{*.dash,*.chart}.{yaml,yml,json}';
 
@@ -160,7 +197,6 @@ export async function searchCharts(options: SearchOptions): Promise<ChartHit[]> 
 
           hits.push({
             dashPath: file,
-            boardPath: file,
             chartId: chart.id,
             type: chart.type,
             title: chart.title,
@@ -170,7 +206,8 @@ export async function searchCharts(options: SearchOptions): Promise<ChartHit[]> 
         }
       }
     } catch (error) {
-      console.warn(`Failed to parse ${file}:`, error);
+      const msg = error instanceof Error ? error.message : String(error);
+      console.warn(`Failed to parse ${file}: ${msg}`);
     }
   }
 
@@ -192,7 +229,6 @@ export async function getChart(dashPath: string, chartId: string): Promise<Chart
   return {
     chart: { ...chart },
     dashPath,
-    boardPath: dashPath,
     displayKey: makeDisplayKey(dashPath, chartId),
     context: {
       dataSources: spec.data,
@@ -233,13 +269,12 @@ export async function resolveChartRef(
     const match = hits.find((h) => {
       const dir = dirname(h.dashPath);
       const dashName = basename(dir);
-      return dashName === parsed.boardName && h.chartId === parsed.chartId;
+      return dashName === parsed.dashName && h.chartId === parsed.chartId;
     });
 
     if (match) {
       return {
         dashPath: match.dashPath,
-        boardPath: match.dashPath,
         chartId: match.chartId,
         displayKey: match.displayKey,
       };
@@ -269,7 +304,6 @@ export async function resolveChartRef(
   const hit = exactMatches[0];
   return {
     dashPath: hit.dashPath,
-    boardPath: hit.dashPath,
     chartId: hit.chartId,
     displayKey: hit.displayKey,
   };

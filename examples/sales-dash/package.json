@@ -1,0 +1,13 @@
+{
+  "name": "@dvfc/example-sales-dash",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sales & Flights dashboard example — canonical path is sales.dash.yaml via dvfc",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm exec dvfc preview sales.dash.yaml",
+    "build": "pnpm exec dvfc build sales.dash.yaml -o dist --format html",
+    "preview": "pnpm exec dvfc preview sales.dash.yaml"
+  },
+  "license": "Apache-2.0"
+}

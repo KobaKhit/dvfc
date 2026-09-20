@@ -29,7 +29,7 @@ Use the `dvfc-mcp` server for:
 Validate a chart or dash spec (JSON Schema + semantic checks)
 ```json
 {
-  "specPath": "examples/sales-board/sales.dash.yaml"
+  "specPath": "examples/sales-dash/sales.dash.yaml"
 }
 ```
 
@@ -55,7 +55,7 @@ List dbt models from manifest.json
 Add a new chart to dashboard
 ```json
 {
-  "specPath": "examples/sales-board/sales.dash.yaml",
+  "specPath": "examples/sales-dash/sales.dash.yaml",
   "chart": {
     "id": "revenue_trend",
     "type": "line",
@@ -76,7 +76,7 @@ Add a new chart to dashboard
 Update existing chart
 ```json
 {
-  "specPath": "examples/sales-board/sales.dash.yaml",
+  "specPath": "examples/sales-dash/sales.dash.yaml",
   "chartId": "revenue_trend",
   "updates": {
     "title": "Monthly Revenue Trend",
@@ -89,7 +89,7 @@ Update existing chart
 Find charts in dashboard
 ```json
 {
-  "specPath": "examples/sales-board/sales.dash.yaml",
+  "specPath": "examples/sales-dash/sales.dash.yaml",
   "query": {
     "type": "line",
     "dataSource": "sales"
@@ -101,7 +101,7 @@ Find charts in dashboard
 Show how charts are linked
 ```json
 {
-  "specPath": "examples/sales-board/sales.dash.yaml"
+  "specPath": "examples/sales-dash/sales.dash.yaml"
 }
 ```
 
@@ -109,7 +109,7 @@ Show how charts are linked
 Wire up chart coordination
 ```json
 {
-  "specPath": "examples/sales-board/sales.dash.yaml",
+  "specPath": "examples/sales-dash/sales.dash.yaml",
   "plan": {
     "brushChart": "revenue_trend",
     "selectionName": "dateBrush",
@@ -276,7 +276,7 @@ Use `build_dashboard` tool
 
 See working examples:
 - `examples/charts/` and `examples/dashes/` — canonical IR
-- `examples/sales-board/sales.dash.yaml` — full gallery demo
+- `examples/sales-dash/sales.dash.yaml` — full gallery demo
 
 ## Chart Discovery (NEW)
 
@@ -299,7 +299,7 @@ Find charts across the project with scoring:
 {
   "query": "revenue",
   "projectRoot": "/workspace",
-  "boardPath": "examples/sales-board/sales.dash.yaml",  // optional dash path
+  "dashPath": "examples/sales-dash/sales.dash.yaml",  // optional
   "all": false  // default: top 10 results
 }
 ```
@@ -308,60 +308,59 @@ Returns `ChartHit[]` with scores based on ID, title, type, field matches.
 
 #### get_chart
 
-Get chart with full board context:
+Get chart with full dash context:
 
 ```json
 {
-  "boardPath": "examples/dbt-jaffle/jaffle.dash.yaml",
+  "dashPath": "examples/dbt-jaffle/jaffle.dash.yaml",
   "chartId": "daily_revenue"
 }
 ```
 
 Returns:
 - Chart spec
-- Board context (data sources, theme, layout)
+- Dash context (data sources, theme, layout)
 - Display key
 
 #### list_charts
 
-List all charts in project or board:
+List all charts in project or dash:
 
 ```json
 {
   "projectRoot": "/workspace",
-  "boardPath": "examples/sales-board/sales.dash.yaml"  // optional
+  "dashPath": "examples/sales-dash/sales.dash.yaml"  // optional
 }
 ```
 
-#### compose_dash / compose_board
+#### compose_dash
 
 Compose a dash from chart IDs:
 
 ```json
 {
   "projectRoot": "/workspace",
-  "chartIds": ["daily_revenue", "sales-board__top_products"],
-  "title": "Custom Dashboard",
-  "metric": "Revenue"  // stub for now
+  "chartIds": ["daily_revenue", "sales-dash__top_products"],
+  "title": "Custom Dashboard"
 }
 ```
 
 Resolves chart IDs to refs, merges data sources, returns composed spec.
 
-**Ambiguity handling**: If a chart ID exists on multiple boards, returns error with candidates:
+**Ambiguity handling**: If a chart ID exists on multiple dashes, returns error with candidates:
 ```
 Error: Ambiguous chart reference 'daily_revenue'.
 Multiple matches found: dbt-jaffle__daily_revenue, web-analytics__daily_revenue
-Use display key format (boardName__chartId) to disambiguate.
+Use display key format (dashName__chartId) to disambiguate.
 ```
 
 #### render_chart
 
-Build single chart with board context:
+Build single chart with dash context:
 
 ```json
 {
-  "boardPath": "examples/sales-board/sales.dash.yaml",
+  "dashPath": "examples/sales-dash/sales.dash.yaml",
   "chartId": "daily_sales",
   "outDir": "dist"
 }
@@ -378,14 +377,14 @@ Match CLI: extract inline charts to files, list `ChartTypeModule` plugins, dump 
 ```
 1. Search: "Find revenue charts"
    → search_charts({ query: "revenue" })
-   → Returns hits from multiple boards
+   → Returns hits from multiple dashes
 
 2. Inspect: "What fields does the top one use?"
-   → get_chart({ boardPath: "...", chartId: "..." })
+   → get_chart({ dashPath: "...", chartId: "..." })
    → Returns full spec + context
 
 3. Compose: "Combine top 2 into one dashboard"
-   → compose_board({ chartIds: ["board1__chart1", "board2__chart2"] })
+   → compose_dash({ chartIds: ["dash1__chart1", "dash2__chart2"] })
    → Returns YAML spec
 
 4. Build: "Generate the HTML"
@@ -395,11 +394,11 @@ Match CLI: extract inline charts to files, list `ChartTypeModule` plugins, dump 
 
 ### Use Cases
 
-**Multi-board analysis:**
+**Multi-dash analysis:**
 ```
-User: "Compare revenue across all boards"
+User: "Compare revenue across all dashes"
 1. search_charts({ query: "revenue" })
-2. compose_board({ chartIds: [all revenue chart display keys] })
+2. compose_dash({ chartIds: [all revenue chart display keys] })
 3. build_dashboard({ specPath: composed spec })
 ```
 
@@ -407,13 +406,13 @@ User: "Compare revenue across all boards"
 ```
 User: "Show me just the daily sales chart"
 1. search_charts({ query: "daily sales" })
-2. render_chart({ boardPath: ..., chartId: ... })
+2. render_chart({ dashPath: ..., chartId: ... })
 ```
 
-**Cross-board filtering:**
+**Cross-dash composition:**
 ```
-User: "Add dbt revenue chart to the web analytics board"
-1. get_chart({ boardPath: "dbt-jaffle/...", chartId: "daily_revenue" })
+User: "Add dbt revenue chart to the web analytics dash"
+1. get_chart({ dashPath: "dbt-jaffle/...", chartId: "daily_revenue" })
 2. create_chart({ specPath: "web-analytics/...", chart: ... })
 ```
 

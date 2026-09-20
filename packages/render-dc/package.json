@@ -1,0 +1,29 @@
+{
+  "name": "@dvfc/render-dc",
+  "version": "0.1.0",
+  "description": "dc.js + crossfilter HTML dashboards for dvfc (static CDN or DuckDB-WASM)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "test": "pnpm build && node --experimental-strip-types --test test/**/*.test.ts"
+  },
+  "dependencies": {
+    "@dvfc/core": "workspace:*",
+    "csv-parse": "^5.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.3"
+  },
+  "license": "Apache-2.0"
+}

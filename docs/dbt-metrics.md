@@ -43,7 +43,7 @@ mf query --metrics total_revenue --group-by metric_time --explain
 | `DVFC_METRICFLOW_CACHE` | `1` → write compiled SQL to `semantic/<metric>.sql` |
 | `DVFC_METRICFLOW_SKIP` | `1` → fixtures only (no live CLI) |
 
-API: `compileDbtMetricSql` / `invokeMetricFlow` in `@dvfc/resolve` (and `@dvfc/core`).
+API: `compileDbtMetricSql` / `invokeMetricFlow` in `@dvfc/core`.
 
 ## Fixture workflow
 

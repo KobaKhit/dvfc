@@ -3,8 +3,8 @@
  * DashboardSpec remains the normalized Mosaic generator input (not a user-facing "board" file).
  */
 
-import type { DashboardSpec, ChartSpec } from './types.js';
-import type { ChartIR, DashIR } from './ir.js';
+import type { DashboardSpec, ChartSpec, InteractionConfig } from './types.js';
+import type { ChartIR, DashIR, ChartInteraction } from './ir.js';
 import { isDashChartRef } from './ir.js';
 
 function slugify(input: string): string {
@@ -18,10 +18,62 @@ function slugify(input: string): string {
 }
 
 /**
+ * Map ChartIR / InteractionSpec publishes onto Mosaic runtime InteractionConfig.selection.
+ */
+export function interactionToRuntime(
+  interaction: ChartInteraction | InteractionConfig | undefined | null
+): ChartSpec['interaction'] | undefined {
+  if (!interaction) return undefined;
+  const publishes =
+    'publishes' in interaction
+      ? (interaction as ChartInteraction).publishes
+      : undefined;
+  const selection =
+    publishes ??
+    ('selection' in interaction ? interaction.selection : undefined);
+  return {
+    brush: interaction.brush,
+    brushAxis: interaction.brushAxis,
+    select: 'select' in interaction ? interaction.select : undefined,
+    selection,
+    filterBy: interaction.filterBy,
+  };
+}
+
+/**
  * Flatten dash chart entries that are inline ChartIR (refs left unresolved).
  */
 export function listInlineCharts(dash: DashIR): ChartIR[] {
   return dash.charts.filter((c): c is ChartIR => !isDashChartRef(c));
+}
+
+/**
+ * Convert a standalone ChartIR to a minimal DashboardSpec for discovery listing.
+ * Does not resolve data connectors (use normalizeFile for that).
+ */
+export function chartIRToDashboardSpec(chart: ChartIR): DashboardSpec {
+  return {
+    meta: {
+      title: chart.title || chart.id,
+      description: chart.description,
+      version: '0.1.0',
+    },
+    data: [],
+    charts: [
+      {
+        id: chart.id,
+        type: chart.type as ChartSpec['type'],
+        dataSource: chart.dataSource,
+        title: chart.title,
+        encoding: chart.encoding,
+        content: chart.content,
+        interaction: interactionToRuntime(chart.interaction),
+        overlays: chart.overlays,
+        width: chart.width,
+        height: chart.height,
+      },
+    ],
+  };
 }
 
 /**
@@ -63,14 +115,7 @@ export function dashToDashboardSpec(dash: DashIR): DashboardSpec {
       title: c.title,
       encoding: c.encoding,
       content: c.content,
-      interaction: c.interaction
-        ? {
-            brush: c.interaction.brush,
-            brushAxis: c.interaction.brushAxis,
-            selection: c.interaction.publishes ?? c.interaction.selection,
-            filterBy: c.interaction.filterBy,
-          }
-        : undefined,
+      interaction: interactionToRuntime(c.interaction),
       overlays: c.overlays,
       width: c.width,
       height: c.height,
@@ -79,9 +124,6 @@ export function dashToDashboardSpec(dash: DashIR): DashboardSpec {
     theme: dash.theme,
   };
 }
-
-/** @deprecated Use dashToDashboardSpec */
-export const dashToBoard = dashToDashboardSpec;
 
 /** Suggest a dash id from a title */
 export function suggestDashId(title: string): string {

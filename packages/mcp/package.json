@@ -21,12 +21,13 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "clean": "rm -rf dist",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "test": "pnpm build && node --experimental-strip-types --test test/**/*.test.ts"
   },
   "dependencies": {
     "@dvfc/core": "workspace:*",
-    "@dvfc/dbt-adapter": "workspace:*",
-    "@dvfc/cli": "workspace:*",
+    "@dvfc/adapter-dbt": "workspace:*",
+    "@dvfc/build": "workspace:*",
     "@dvfc/charts": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.0.4",
     "yaml": "^2.7.0"

@@ -88,8 +88,8 @@ class DataVizFactoryClient:
 
         spec_path, cleanup = self._materialize(spec)
         try:
-            result = self._run(["validate", str(spec_path)])
-            return result.returncode == 0
+            proc = self._run(["validate", str(spec_path)])
+            return proc.returncode == 0
         finally:
             if cleanup:
                 os.unlink(spec_path)
@@ -132,7 +132,8 @@ class DataVizFactoryClient:
             data = dash_to_dict(spec)
         else:
             data = spec.model_dump(by_alias=True, exclude_none=True, mode="json")
-        return yaml.dump(data, default_flow_style=False, sort_keys=False)
+        dumped = yaml.dump(data, default_flow_style=False, sort_keys=False)
+        return dumped if isinstance(dumped, str) else str(dumped)
 
     def to_json(self, spec: Union[DashboardSpec, Chart, Dash]) -> str:
         if isinstance(spec, (Chart, Dash)):

@@ -1,7 +1,21 @@
 """
-Dashboard builder - fluent API for creating dashboards
+Legacy fluent board builder (deprecated).
+
+``DashboardBuilder`` and the legacy ``ChartBuilder`` in this module are
+deprecated in favor of ``chart_builder.ChartBuilder`` and ``DashBuilder``.
+
+Import path kept for one release for compatibility::
+
+    from dvfc.builder import DashboardBuilder  # emits DeprecationWarning on use
+
+Prefer::
+
+    from dvfc import ChartBuilder, DashBuilder
 """
 
+from __future__ import annotations
+
+import warnings
 from typing import Any, Dict, List, Optional
 
 from .spec import (
@@ -10,9 +24,6 @@ from .spec import (
     DashboardSpec,
     DataSource,
     DataSourceType,
-    Encoding,
-    EncodingChannel,
-    InteractionSpec,
     LayoutSpec,
     MetaSpec,
     ThemeSpec,
@@ -104,9 +115,24 @@ class ChartBuilder:
 
 
 class DashboardBuilder:
-    """Builder for dashboard specifications"""
+    """
+    Builder for legacy dashboard specifications.
+
+    Deprecated: use ``chart_builder.ChartBuilder`` and ``DashBuilder`` instead.
+    Will be removed in a future release.
+    """
+
+    _deprecation_warned = False
 
     def __init__(self, title: str, description: Optional[str] = None):
+        if not DashboardBuilder._deprecation_warned:
+            warnings.warn(
+                "DashboardBuilder is deprecated; use ChartBuilder and DashBuilder "
+                "(from dvfc / dvfc.chart_builder)",
+                DeprecationWarning,
+                stacklevel=2,
+            )
+            DashboardBuilder._deprecation_warned = True
         self._meta = MetaSpec(title=title, description=description)
         self._data_sources: List[DataSource] = []
         self._charts: List[ChartSpec] = []

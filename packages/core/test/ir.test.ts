@@ -104,7 +104,7 @@ charts:
   });
 
   it('parses sales.dash.yaml example', async () => {
-    const dashPath = join(__dirname, '../../../examples/sales-board/sales.dash.yaml');
+    const dashPath = join(__dirname, '../../../examples/sales-dash/sales.dash.yaml');
     const content = await readFile(dashPath, 'utf-8');
     const parsed = parseSpecString(content, { path: dashPath });
     assert.equal(parsed.kind, 'dash');

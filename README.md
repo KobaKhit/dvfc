@@ -17,10 +17,23 @@ Define charts and dashes in YAML, get native crossfiltering and in-browser SQL. 
 **See it in action:** [https://kobakhit.github.io/dvfc/](https://kobakhit.github.io/dvfc/)
 
 Try the interactive examples (click and drag to crossfilter):
-- [Sales & Flights Dashboard](https://kobakhit.github.io/dvfc/examples/sales-board/), Business analytics with time-based brushing
+- [Sales & Flights Dashboard](https://kobakhit.github.io/dvfc/examples/sales-dash/), Business analytics with time-based brushing
 - [Web Analytics](https://kobakhit.github.io/dvfc/examples/web-analytics/), Traffic sources and conversion metrics
 - [dbt Jaffle Shop](https://kobakhit.github.io/dvfc/examples/dbt-jaffle/), E-commerce order analytics
 - [Revenue Analysis](https://kobakhit.github.io/dvfc/examples/revenue-analysis/), Financial performance with analysis overlays
+
+---
+
+## 📚 Documentation
+
+**Docs site:** [kobakhit.github.io/dvfc/docs](https://kobakhit.github.io/dvfc/docs/) (MkDocs Material)
+
+Local:
+
+```bash
+pip install -r requirements-docs.txt
+pnpm docs:serve    # http://127.0.0.1:8000
+```
 
 ---
 
@@ -36,7 +49,7 @@ pnpm install
 pnpm build
 
 # 3. Preview example with hot reload (30 sec)
-pnpm exec dvfc preview examples/sales-board/sales.dash.yaml
+pnpm exec dvfc preview examples/sales-dash/sales.dash.yaml
 # Opens at http://localhost:3000
 
 # 4. Try crossfiltering! (2 min)
@@ -75,7 +88,7 @@ dvfc build examples/charts/revenue_trend.chart.yaml --format svg
 **Dash** (canonical gallery examples):
 
 ```bash
-dvfc preview examples/sales-board/sales.dash.yaml
+dvfc preview examples/sales-dash/sales.dash.yaml
 dvfc preview examples/web-analytics/web-analytics.dash.yaml
 dvfc preview examples/revenue-analysis/revenue-analysis.dash.yaml
 ```
@@ -192,16 +205,15 @@ dvfc/
 ├── packages/
 │   ├── core/              # Types + JSON Schema
 │   ├── cli/               # CLI commands (validate, preview, build)
-│   ├── dbt-adapter/       # dbt manifest resolver
+│   ├── adapter-dbt/       # dbt manifest resolver
 │   ├── charts/            # Chart discovery and addressability
-│   ├── mcp/               # MCP server for AI integration
-│   ├── adapter-sqlmesh/   # SQLMesh context resolver
-│   └── adapter-bruin/     # Bruin pipeline resolver
+│   └── mcp/               # MCP server for AI integration
+├── experiments/           # Out-of-workspace adapter spikes (Bruin, SQLMesh)
 ├── python/                # Python SDK
 ├── examples/
 │   ├── charts/            # Atomic *.chart.yaml (canonical)
 │   ├── dashes/            # Composed *.dash.yaml (canonical)
-│   ├── sales-board/       # Full demo + sales.dash.yaml
+│   ├── sales-dash/       # Full demo + sales.dash.yaml
 │   ├── web-analytics/     # Traffic + conversions
 │   ├── revenue-analysis/  # Overlays + text charts
 │   └── dbt-jaffle/        # dbt stub project
@@ -232,7 +244,7 @@ pnpm build
 # Watch mode
 pnpm dev
 
-# Unit tests (@dvfc/core, charts, resolve, render-vega), TypeScript via Node strip-types
+# Unit tests (@dvfc/core, charts, render-vega), TypeScript via Node strip-types
 pnpm test
 
 # Line coverage
@@ -291,6 +303,7 @@ See **[CONTRIBUTING.md](./CONTRIBUTING.md)** for:
 - Pull request process
 
 Key documentation:
+- **[Docs site](https://kobakhit.github.io/dvfc/docs/)** - Guides, CLI, renderers, dbt
 - **[STATUS.md](./STATUS.md)** - Current features and roadmap
 - **[CHANGELOG.md](./CHANGELOG.md)** - Version history
 - **[docs/PUBLISHING.md](./docs/PUBLISHING.md)** - Package publishing guide
@@ -314,5 +327,5 @@ Apache-2.0
 **Ready to build?** Start with [examples/README.md](./examples/README.md) or run:
 
 ```bash
-pnpm exec dvfc preview examples/sales-board/sales.dash.yaml
+pnpm exec dvfc preview examples/sales-dash/sales.dash.yaml
 ```

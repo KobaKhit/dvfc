@@ -12,7 +12,7 @@ import {
   listInlineCharts,
   dashToDashboardSpec,
   suggestDashId,
-  validateDashboardSpec,
+  validateDashboardSpecShape,
   isDashboardSpec,
   createEmptySpec,
   detectKindFromPath,
@@ -87,13 +87,13 @@ describe('compat helpers', () => {
 });
 
 describe('schema + types stubs', () => {
-  it('validateDashboardSpec', () => {
-    assert.equal(validateDashboardSpec(null).valid, false);
+  it('validateDashboardSpecShape', () => {
+    assert.equal(validateDashboardSpecShape(null).valid, false);
     assert.equal(
-      validateDashboardSpec({ meta: {}, data: [], charts: [] }).valid,
+      validateDashboardSpecShape({ meta: {}, data: [], charts: [] }).valid,
       true
     );
-    assert.ok((validateDashboardSpec({}).errors?.length ?? 0) >= 2);
+    assert.ok((validateDashboardSpecShape({}).errors?.length ?? 0) >= 2);
   });
 
   it('isDashboardSpec / createEmptySpec', () => {
