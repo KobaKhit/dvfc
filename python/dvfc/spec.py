@@ -5,7 +5,7 @@ Dashboard specification models using Pydantic
 from enum import Enum
 from typing import Any, Dict, List, Literal, Optional, Union
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class ChartType(str, Enum):
@@ -79,6 +79,8 @@ class Encoding(BaseModel):
 class ChartSpec(BaseModel):
     """Chart specification"""
 
+    model_config = ConfigDict(populate_by_name=True)
+
     id: str
     type: ChartType
     dataSource: str = Field(alias="dataSource")
@@ -87,9 +89,6 @@ class ChartSpec(BaseModel):
     interaction: Optional[InteractionSpec] = None
     width: Optional[int] = None
     height: Optional[int] = None
-
-    class Config:
-        populate_by_name = True
 
 
 class DataSource(BaseModel):

@@ -70,8 +70,28 @@ data:
 
 Use **`dbt_metric`** for semantic measures; **`dbt`** for table-shaped models / stub CSVs.
 
+## Python SDK
+
+```python
+from pathlib import Path
+from dvfc import load_chart, validate, compile_dbt_metric
+
+chart = load_chart(Path("examples/charts/revenue_metric.chart.yaml"))
+assert validate(chart).valid
+sql, source = compile_dbt_metric("total_revenue", spec_dir=Path("examples/charts"))
+```
+
+```bash
+pip install -e "python/[metricflow,render]"   # optional extras
+dvfc-py validate examples/charts/revenue_metric.chart.yaml
+dvfc-py compile-metric total_revenue --spec-dir examples/charts
+```
+
+Native path: fixture → MetricFlow Python API → `mf` / `dbt sl` CLI. Mosaic `build()` still uses Node.
+
 ## Further reading
 
 - [ADR 001 — No metric language](./adr/001-no-metric-language.md)
 - [dbt MetricFlow commands](https://docs.getdbt.com/docs/build/metricflow-commands)
 - [ARCHITECTURE.md](./ARCHITECTURE.md)
+- [python/README.md](../python/README.md)

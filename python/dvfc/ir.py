@@ -4,7 +4,7 @@ Chart / Dash IR models (Python authoring surface).
 
 from typing import Any, Dict, List, Literal, Optional, Union
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from .spec import ChartType, Encoding, InteractionSpec
 
@@ -45,6 +45,8 @@ class ChartMeasure(BaseModel):
 class Chart(BaseModel):
     """Atomic chart document (*.chart.yaml)."""
 
+    model_config = ConfigDict(populate_by_name=True)
+
     id: str
     type: ChartType
     title: Optional[str] = None
@@ -57,9 +59,6 @@ class Chart(BaseModel):
     interaction: Optional[InteractionSpec] = None
     width: Optional[int] = None
     height: Optional[int] = None
-
-    class Config:
-        populate_by_name = True
 
 
 class DashChartRef(BaseModel):
@@ -84,6 +83,8 @@ class DashCoordination(BaseModel):
 class Dash(BaseModel):
     """Dash composition document (*.dash.yaml)."""
 
+    model_config = ConfigDict(populate_by_name=True)
+
     id: str
     title: Optional[str] = None
     description: Optional[str] = None
@@ -91,10 +92,6 @@ class Dash(BaseModel):
     coordination: Optional[DashCoordination] = None
     data: Optional[List[DashDataSource]] = None
     charts: List[Union[DashChartRef, Chart]] = Field(default_factory=list)
-
-    class Config:
-        populate_by_name = True
-
 
 def chart_to_dict(chart: Chart) -> Dict[str, Any]:
     return chart.model_dump(by_alias=True, exclude_none=True, mode="json")

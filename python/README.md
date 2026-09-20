@@ -1,210 +1,99 @@
 # dvfc Python SDK
 
-Python SDK for building analytics dashboards with Mosaic + dbt.
+Author **Chart** / **Dash** IR in Python. Validate and compile `dbt_metric` SQL **without Node**.  
+Interactive HTML (Mosaic) and the full CLI pipeline still use the Node `dvfc` binary when you call `build()`.
 
-## Installation
+## Install
 
 ```bash
+# From this directory (editable)
 pip install -e .
+
+# Extras
+pip install -e ".[render]"       # in-process SVG/PNG via vl-convert
+pip install -e ".[metricflow]"   # try in-process MetricFlow APIs
+pip install -e ".[all]"
+
+# PyPI (when published)
+pip install dvfc
+# or: uv add dvfc
 ```
 
-Or from repository root:
+Requires Python 3.9+.
 
-```bash
-pip install -e python/
-```
-
-## Quick Start
-
-### Example 1: Simple Dashboard
+## Quick start (pure Python)
 
 ```python
-from dvfc import DashboardBuilder, ChartType
+from dvfc import ChartBuilder, ChartType, DashBuilder, validate, save_spec, compile_dbt_metric
 
-# Create a dashboard
-dashboard = (
-    DashboardBuilder("Sales Dashboard", "Revenue and product analysis")
-    .add_dbt_source("sales", "sales_daily")
-    .add_chart(
-        dashboard.chart("revenue_trend", ChartType.LINE, "sales")
-        .title("Daily Revenue")
-        .x("date", type="temporal", label="Date")
-        .y("revenue", type="quantitative", aggregate="sum", label="Revenue ($)")
-        .brush("x", "dateBrush")
-        .size(700, 250)
-        .build()
-    )
-    .add_chart(
-        dashboard.chart("by_region", ChartType.BAR, "sales")
-        .title("Revenue by Region")
-        .x("region", type="nominal", label="Region")
-        .y("revenue", type="quantitative", aggregate="sum", label="Revenue ($)")
-        .filter_by("dateBrush")
-        .size(700, 300)
-        .build()
-    )
-    .layout("flex", gap=24)
+chart = (
+    ChartBuilder("revenue_trend", ChartType.LINE)
+    .title("Daily revenue")
+    .data_file("../sales-board/dbt-stub/sales_daily.csv")
+    .x("date", type="temporal")
+    .y("sales", type="quantitative", aggregate="sum")
+    .brush("x", "time")
+    .size(600, 250)
     .build()
 )
 
-# Build to HTML
-from dvfc import Data Viz FactoryClient
+assert validate(chart).valid
+save_spec(chart, "revenue_trend.chart.yaml")
 
-client = Data Viz FactoryClient()
-html_path = client.build(dashboard, out_dir="dist")
-print(f"Dashboard built: {html_path}")
+# dbt_metric → SQL (fixture, then MetricFlow Python API, then mf CLI)
+sql, source = compile_dbt_metric("total_revenue", spec_dir=Path("examples/charts"))
+print(source, sql[:80])
 ```
 
-### Example 2: Load and Modify
-
 ```python
-from dvfc import Data Viz FactoryClient
 from pathlib import Path
+from dvfc import load_dash, DataVizFactoryClient
 
-client = Data Viz FactoryClient()
+dash = load_dash(Path("examples/sales-board/sales.dash.yaml"))
+client = DataVizFactoryClient()
+assert client.validate(dash)  # native by default
 
-# Load existing spec
-spec_path = Path("examples/sales-board/sales.dash.yaml")
-
-# Validate
-if client.validate(spec_path):
-    print("✓ Valid spec")
-    
-    # Build
-    html = client.to_html(spec_path, out_path="my-dashboard.html")
-    print(f"Built {len(html)} bytes")
+# Needs Node CLI on PATH (or monorepo packages/cli/dist)
+client.build(dash, out_dir="dist", format="html")
 ```
 
-### Example 3: Programmatic Spec
+## What is native vs CLI
 
-```python
-from dvfc import (
-    DashboardSpec,
-    MetaSpec,
-    DataSource,
-    DataSourceType,
-    ChartSpec,
-    ChartType,
-    Encoding,
-    EncodingChannel,
-)
+| Capability | Pure Python | Needs Node `dvfc` |
+|---|---|---|
+| `validate` / `load_spec` / `save_spec` | ✓ | |
+| `ChartBuilder` / `DashBuilder` | ✓ | |
+| `compile_dbt_metric` | ✓ (fixture → MF Python → `mf`/`dbt sl` CLI) | |
+| `dvfc.render` SVG/PNG | ✓ with `dvfc[render]` | |
+| Mosaic HTML / full `build()` | | ✓ |
 
-spec = DashboardSpec(
-    meta=MetaSpec(title="Analytics", description="My dashboard"),
-    data=[
-        DataSource(id="sales", type=DataSourceType.DBT, model="sales_daily")
-    ],
-    charts=[
-        ChartSpec(
-            id="trend",
-            type=ChartType.LINE,
-            dataSource="sales",
-            title="Sales Trend",
-            encoding=Encoding(
-                x=EncodingChannel(field="date", type="temporal"),
-                y=EncodingChannel(field="revenue", aggregate="sum"),
-            ),
-        )
-    ],
-)
-
-client = Data Viz FactoryClient()
-yaml_str = client.to_yaml(spec)
-print(yaml_str)
-```
-
-## API Reference
-
-### `DashboardBuilder`
-
-Fluent API for building dashboard specifications.
-
-**Methods:**
-- `add_dbt_source(id, model)` - Add dbt data source
-- `add_csv_source(id, path)` - Add CSV data source
-- `chart(id, type, data_source)` - Create chart builder
-- `add_chart(chart_spec)` - Add pre-built chart
-- `layout(type, gap)` - Set layout (flex/grid)
-- `theme(colors, font_family)` - Set theme
-- `build()` - Build final spec
-
-### `ChartBuilder`
-
-Fluent API for building chart specifications.
-
-**Methods:**
-- `title(title)` - Set chart title
-- `x(field, type, aggregate, label)` - Set x encoding
-- `y(field, type, aggregate, label)` - Set y encoding
-- `color(color)` - Set color
-- `size(width, height)` - Set dimensions
-- `brush(axis, selection)` - Add brush interaction
-- `filter_by(selection)` - Add filter interaction
-- `build()` - Build chart spec
-
-### `Data Viz FactoryClient`
-
-Client for building and validating dashboards.
-
-**Methods:**
-- `__init__(cli_path=None)` - Initialize client
-- `build(spec, out_dir, minify)` - Build to static HTML
-- `validate(spec)` - Validate spec
-- `to_yaml(spec)` - Convert to YAML
-- `to_json(spec)` - Convert to JSON
-- `to_html(spec, out_path, minify)` - Build and return HTML
-
-**Spec Types:**
-- Accepts `DashboardSpec` object, YAML path, or JSON path
-- Auto-detects and converts as needed
-
-## Jupyter Example
-
-See [example.ipynb](./example.ipynb) for interactive notebook usage.
-
-```python
-# In Jupyter
-from dvfc import DashboardBuilder, ChartType, Data Viz FactoryClient
-
-dashboard = (
-    DashboardBuilder("My Dashboard")
-    .add_csv_source("data", "data.csv")
-    .chart("viz", ChartType.BAR, "data")
-    .x("category", type="nominal")
-    .y("value", aggregate="sum")
-    .build()
-    .build()
-)
-
-client = Data Viz FactoryClient()
-html = client.to_html(dashboard)
-
-from IPython.display import HTML
-display(HTML(html))
-```
-
-## Requirements
-
-- Python 3.8+
-- Node.js 18+ (for dvfc CLI)
-- dvfc npm package installed and in PATH, or built in parent repo
-
-## Development
+## CLI helper
 
 ```bash
-# Install dev dependencies
-pip install -e ".[dev]"
-
-# Run tests
-pytest
-
-# Format code
-black dvfc/
-
-# Type check
-mypy dvfc/
+dvfc-py validate examples/charts/revenue_trend.chart.yaml
+dvfc-py compile-metric total_revenue --spec-dir examples/charts
 ```
 
-## License
+## MetricFlow
 
-Apache-2.0
+Same resolution order as the Node stack (see `docs/dbt-metrics.md`):
+
+1. `semantic/<metric>.sql` fixtures  
+2. In-process MetricFlow (`pip install dvfc[metricflow]`) when the installed API matches your project  
+3. `mf query --explain` or `dbt sl query --compile`
+
+Env: `DVFC_METRICFLOW_BIN`, `DVFC_METRICFLOW_MODE`, `DVFC_DBT_PROJECT`, `DVFC_METRICFLOW_CACHE`, `DVFC_METRICFLOW_SKIP`.
+
+## Optional in-process charts
+
+```python
+from dvfc.render import render_svg
+from dvfc import ChartBuilder, ChartType
+
+chart = ChartBuilder("c", ChartType.BAR).data_file("x.csv").x("region").y("sales", aggregate="sum").build()
+svg = render_svg(chart, [{"region": "East", "sales": 10}])
+```
+
+## Legacy `DashboardBuilder`
+
+Still available for older fluent board-shaped specs; prefer `ChartBuilder` / `DashBuilder` for new code.

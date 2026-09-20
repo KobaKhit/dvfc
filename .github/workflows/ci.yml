@@ -86,6 +86,7 @@ jobs:
     - name: Python SDK tests
       run: |
         cd python
-        pip install -e .
-        python3 -c "from dvfc import DashboardBuilder, Chart, Dash, DataVizFactoryClient; print('✓ Python SDK imports')"
+        pip install -e ".[dev]"
+        pytest -q
         python3 smoke_test.py
+        dvfc-py validate ../examples/charts/revenue_trend.chart.yaml
