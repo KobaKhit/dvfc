@@ -20,7 +20,7 @@
     "schema"
   ],
   "scripts": {
-    "build": "tsc && node --experimental-strip-types ../../scripts/dump-schemas.ts",
+    "build": "tsc && node ../../scripts/dump-schemas.mjs",
     "dev": "tsc --watch",
     "clean": "rm -rf dist",
     "test": "pnpm build && node --experimental-strip-types --test test/**/*.test.ts"

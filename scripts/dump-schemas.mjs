@@ -1,6 +1,6 @@
 /**
  * Dump published JSON Schema files for Python / external consumers.
- * Invoked from @dvfc/core build after tsc.
+ * Invoked from @dvfc/core build after tsc (plain ESM — no TS strip flag).
  *
  * `dashboard-spec.json` is kept for Python legacy DashboardSpec validation
  * (python/dvfc/validate.py). Chart/dash IR schemas are the primary authoring surface.
@@ -21,7 +21,7 @@ const pyDir = join(root, 'python/dvfc/schema');
 await mkdir(outDir, { recursive: true });
 await mkdir(pyDir, { recursive: true });
 
-const files: Record<string, unknown> = {
+const files = {
   'dashboard-spec.json': DashboardSpecSchema,
   'chart.json': ChartIRSchema,
   'dash.json': DashIRSchema,
