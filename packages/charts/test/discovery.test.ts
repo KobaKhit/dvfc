@@ -20,7 +20,7 @@ test('searchCharts finds revenue charts', async () => {
   
   assert.ok(hits.length >= 2, 'Should find multiple revenue charts');
   assert.ok(hits.some(h => h.chartId === 'daily_revenue'), 'Should find daily_revenue');
-  assert.ok(hits.some(h => h.chartId === 'revenue_by_method'), 'Should find revenue_by_method');
+  assert.ok(hits.some(h => h.chartId === 'revenue_trend'), 'Should find revenue_trend');
 });
 
 test('searchCharts returns top 10 by default', async () => {
@@ -50,7 +50,7 @@ test('getChart returns chart with context', async () => {
   const resource = await getChart(dashPath, 'daily_revenue');
   
   assert.strictEqual(resource.chart.id, 'daily_revenue');
-  assert.strictEqual(resource.chart.type, 'line');
+  assert.strictEqual(resource.chart.type, 'area');
   assert.ok(resource.context.dataSources.length > 0);
   assert.ok(resource.displayKey.includes('__'));
 });
@@ -72,9 +72,9 @@ test('resolveChartRef handles display keys', async () => {
 });
 
 test('resolveChartRef handles unambiguous plain IDs', async () => {
-  const ref = await resolveChartRef(projectRoot, 'status_breakdown');
+  const ref = await resolveChartRef(projectRoot, 'status_pie');
   
-  assert.strictEqual(ref.chartId, 'status_breakdown');
+  assert.strictEqual(ref.chartId, 'status_pie');
 });
 
 test('resolveChartRef throws on ambiguous IDs', async () => {

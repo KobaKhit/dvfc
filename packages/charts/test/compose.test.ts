@@ -17,7 +17,7 @@ test('composeDash writes dash yaml from chart ids', async () => {
   const dir = await mkdtemp(join(tmpdir(), 'dvfc-compose-'));
   const outFile = join(dir, 'out.dash.yaml');
   const { dash, outPath } = await composeDash(projectRoot, {
-    chartIds: ['dbt-jaffle__daily_revenue', 'dbt-jaffle__revenue_by_method'],
+    chartIds: ['dbt-jaffle__daily_revenue', 'dbt-jaffle__payment_mix'],
     title: 'My Compose',
     description: 'test compose',
     outFile,
@@ -27,7 +27,7 @@ test('composeDash writes dash yaml from chart ids', async () => {
   assert.equal(dash.charts.length, 2);
   const text = await readFile(outFile, 'utf-8');
   assert.match(text, /daily_revenue/);
-  assert.match(text, /revenue_by_method/);
+  assert.match(text, /payment_mix/);
   await rm(dir, { recursive: true, force: true });
 });
 
@@ -35,7 +35,7 @@ test('composeDash → normalizeToDashboard succeeds', async () => {
   const dir = await mkdtemp(join(tmpdir(), 'dvfc-compose-norm-'));
   const outFile = join(dir, 'out.dash.yaml');
   await composeDash(projectRoot, {
-    chartIds: ['dbt-jaffle__daily_revenue', 'dbt-jaffle__revenue_by_method'],
+    chartIds: ['dbt-jaffle__daily_revenue', 'dbt-jaffle__payment_mix'],
     title: 'Normalize Me',
     outFile,
   });
