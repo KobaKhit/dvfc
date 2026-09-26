@@ -22,7 +22,7 @@ data:
     model: orders
 ```
 
-Charts reference sources with `dataSource: worlds`.
+Charts bind a dash source with `data: worlds` (`dataSource: worlds` is the same id).
 
 ## Build-time staging
 

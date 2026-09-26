@@ -4,19 +4,16 @@
 
 import { readFile } from 'node:fs/promises';
 import { stringify as stringifyYAML } from 'yaml';
-import type { ChartSpec } from '@dvfc/core';
 import {
   validateSpecFileWithResult,
-  buildHtmlDashboard,
-  buildStaticChart,
-  buildDcDashboard,
-  buildDcWasmDashboard,
+  runBuildPipeline,
   loadNormalized,
   applyDvfcConfig,
   addChartToSpecFile,
   updateChartInSpecFile,
   explainCoordination,
   applyFilterPlan,
+  type ChartMutationInput,
 } from '@dvfc/build';
 import { listDbtModels, type DbtManifest } from '@dvfc/adapter-dbt';
 import {
@@ -117,6 +114,10 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
           type: 'string',
           description: 'Output directory for built HTML (default: dist)',
         },
+        base: {
+          type: 'string',
+          description: 'Public base path for html / html-dc-wasm builds (e.g. /my-app/)',
+        },
         minify: { type: 'boolean', description: 'Minify output (default: false)' },
         chartId: {
           type: 'string',
@@ -142,24 +143,43 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
   {
     name: 'create_chart',
     description:
-      'Add a new chart to a dash spec. Supports coordinated filtering via filterBy or brush interactions.',
+      'Add a new chart to a dash spec (ChartIR). Prefer data + interaction.publishes; dataSource / interaction.selection also accepted.',
     inputSchema: {
       type: 'object',
       properties: {
-        specPath: { type: 'string', description: 'Path to *.dash.yaml' },
+        specPath: { type: 'string', description: 'Path to *.dash.yaml (or .json/.toml)' },
         chart: {
           type: 'object',
-          description: 'Chart specification',
+          description: 'ChartIR (or legacy ChartSpec) to append',
           properties: {
             id: { type: 'string' },
             type: {
               type: 'string',
               description: 'registered chart type id (see list_chart_types)',
             },
-            dataSource: { type: 'string' },
             title: { type: 'string' },
+            description: { type: 'string' },
+            data: {
+              type: 'object',
+              description: 'ChartIR data ref (dbt_metric | dbt | sql | data)',
+            },
+            dataSource: {
+              type: 'string',
+              description: 'Legacy dash.data id (also accepted)',
+            },
             encoding: { type: 'object' },
-            interaction: { type: 'object' },
+            interaction: {
+              type: 'object',
+              description: 'brush / filterBy / publishes (IR) or selection (legacy)',
+              properties: {
+                brush: { type: 'boolean' },
+                brushAxis: { type: 'string' },
+                filterBy: { type: 'string' },
+                publishes: { type: 'string' },
+                selection: { type: 'string' },
+                select: { type: 'string' },
+              },
+            },
             content: { type: 'string' },
             width: { type: 'number' },
             height: { type: 'number' },
@@ -173,7 +193,7 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
   {
     name: 'update_chart',
     description:
-      'Update an existing chart in a dash spec. Can modify encoding, interactions, or styling.',
+      'Update an existing chart in a dash spec. Pass ChartIR fields (data, interaction.publishes) or legacy ChartSpec fields.',
     inputSchema: {
       type: 'object',
       properties: {
@@ -181,7 +201,8 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
         chartId: { type: 'string', description: 'ID of chart to update' },
         updates: {
           type: 'object',
-          description: 'Partial chart spec with fields to update',
+          description:
+            'Partial ChartIR / ChartSpec (id, type, data, dataSource, encoding, interaction, …)',
         },
       },
       required: ['specPath', 'chartId', 'updates'],
@@ -413,7 +434,8 @@ const HANDLERS: Record<string, Handler> = {
 
   async build_dashboard(args) {
     const specPath = requireString(args, 'specPath');
-    const outDir = args.outDir as string | undefined;
+    const outDir = (args.outDir as string | undefined) || 'dist';
+    const base = args.base as string | undefined;
     const minify = args.minify as boolean | undefined;
     const format = args.format as
       | 'html'
@@ -426,40 +448,27 @@ const HANDLERS: Record<string, Handler> = {
       | undefined;
     const chartId = args.chartId as string | undefined;
     const projectRoot = (args.projectRoot as string) || process.cwd();
-    if (format === 'svg' || format === 'png' || format === 'html-static') {
-      const path = await buildStaticChart(specPath, {
-        format,
-        outDir,
-        chartId,
-        projectRoot,
-      });
-      return `Chart exported\nOutput: ${path}`;
-    }
-    if (format === 'html-dc' || format === 'html-dc-static') {
-      const path = await buildDcDashboard(specPath, {
-        outDir,
-        chartId,
-        projectRoot,
-      });
-      return `dc.js static dashboard exported\nOutput: ${path}`;
-    }
-    if (format === 'html-dc-wasm') {
-      const path = await buildDcWasmDashboard(specPath, {
-        outDir,
-        minify,
-        chartId,
-        projectRoot,
-      });
-      return `dc.js + DuckDB-WASM dashboard exported\nOutput: ${path}`;
-    }
-    await buildHtmlDashboard(specPath, {
+
+    const { format: resolved, outputPath } = await runBuildPipeline(specPath, {
+      format,
       outDir,
+      base,
       minify,
       chartId,
       projectRoot,
       quiet: true,
     });
-    return `Dashboard built successfully\nOutput: ${outDir || 'dist'}/index.html`;
+
+    if (resolved === 'svg' || resolved === 'png' || resolved === 'html-static') {
+      return `Chart exported\nOutput: ${outputPath}`;
+    }
+    if (resolved === 'html-dc' || resolved === 'html-dc-static') {
+      return `dc.js static dashboard exported\nOutput: ${outputPath}`;
+    }
+    if (resolved === 'html-dc-wasm') {
+      return `dc.js + DuckDB-WASM dashboard exported\nOutput: ${outputPath}`;
+    }
+    return `Dashboard built successfully\nOutput: ${outputPath}`;
   },
 
   async list_models(args) {
@@ -477,12 +486,12 @@ const HANDLERS: Record<string, Handler> = {
 
   async create_chart(args) {
     const specPath = requireString(args, 'specPath');
-    const chart = args.chart as ChartSpec | undefined;
+    const chart = args.chart as ChartMutationInput | undefined;
     if (!chart || typeof chart !== 'object' || !chart.id || !chart.type) {
       throw new Error(
         JSON.stringify({
           error: 'Invalid chart parameter',
-          hint: 'chart must include at least id and type',
+          hint: 'chart must include at least id and type (ChartIR: data + interaction.publishes preferred)',
           received: chart,
         })
       );
@@ -498,11 +507,11 @@ const HANDLERS: Record<string, Handler> = {
       throw new Error(
         JSON.stringify({
           error: "Missing required parameter 'updates'",
-          hint: 'Pass a partial chart object with fields to change',
+          hint: 'Pass a partial ChartIR object with fields to change (data, encoding, interaction.publishes, …)',
         })
       );
     }
-    await updateChartInSpecFile(specPath, chartId, args.updates as Partial<ChartSpec>);
+    await updateChartInSpecFile(specPath, chartId, args.updates as ChartMutationInput);
     return `Updated chart '${chartId}' in ${specPath}`;
   },
 
@@ -547,13 +556,13 @@ const HANDLERS: Record<string, Handler> = {
     const chartId = requireString(args, 'chartId');
     const outDir = (args.outDir as string) || 'dist';
     const projectRoot = (args.projectRoot as string) || process.cwd();
-    await buildHtmlDashboard(path, {
+    const { outputPath } = await runBuildPipeline(path, {
       outDir,
       chartId,
       projectRoot,
       quiet: true,
     });
-    return `Built chart '${chartId}' to ${outDir}/index.html`;
+    return `Built chart '${chartId}' to ${outputPath}`;
   },
 
   async extract_charts(args) {

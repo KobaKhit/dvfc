@@ -15,10 +15,9 @@ import {
 } from '@dvfc/core';
 import {
   validateSpecFile,
-  buildHtmlDashboard,
-  buildStaticChart,
-  buildDcDashboard,
-  buildDcWasmDashboard,
+  runBuildPipeline,
+  BUILD_FORMATS,
+  type BuildFormat,
   generatePreviewFiles,
   createPreviewViteConfig,
   createViteServer,
@@ -29,9 +28,6 @@ import {
 } from '@dvfc/build';
 
 export interface InitOptions {
-  name?: string;
-  template?: 'blank' | 'sales' | 'analytics';
-  outDir?: string;
   fromDbt?: boolean;
   manifestPath?: string;
   outFile?: string;
@@ -78,19 +74,14 @@ export interface PreviewOptions {
   open?: boolean;
 }
 
+export { BUILD_FORMATS, type BuildFormat };
+
 export interface BuildOptions {
   outDir?: string;
   minify?: boolean;
   chartId?: string;
   base?: string;
-  format?:
-    | 'html'
-    | 'svg'
-    | 'png'
-    | 'html-static'
-    | 'html-dc'
-    | 'html-dc-static'
-    | 'html-dc-wasm';
+  format?: BuildFormat;
 }
 
 export interface ExportPdfOptions {
@@ -217,39 +208,9 @@ export async function preview(specPath: string, options: PreviewOptions = {}): P
 
 /** Build command - Mosaic HTML, dc.js (static/WASM), or Vega SVG/PNG/html-static */
 export async function build(specPath: string, options: BuildOptions = {}): Promise<void> {
-  const format = options.format || 'html';
-  if (format === 'svg' || format === 'png' || format === 'html-static') {
-    await buildStaticChart(specPath, {
-      format,
-      outDir: options.outDir,
-      chartId: options.chartId,
-      projectRoot: process.cwd(),
-    });
-    return;
-  }
-
-  if (format === 'html-dc' || format === 'html-dc-static') {
-    await buildDcDashboard(specPath, {
-      outDir: options.outDir || 'dist',
-      chartId: options.chartId,
-      projectRoot: process.cwd(),
-    });
-    return;
-  }
-
-  if (format === 'html-dc-wasm') {
-    await buildDcWasmDashboard(specPath, {
-      outDir: options.outDir || 'dist',
-      base: options.base,
-      minify: options.minify,
-      chartId: options.chartId,
-      projectRoot: process.cwd(),
-    });
-    return;
-  }
-
   try {
-    await buildHtmlDashboard(specPath, {
+    await runBuildPipeline(specPath, {
+      format: options.format,
       outDir: options.outDir || 'dist',
       base: options.base,
       minify: options.minify,

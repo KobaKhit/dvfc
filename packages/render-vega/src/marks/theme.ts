@@ -6,6 +6,7 @@ export const themeConfig = {
   axis: {
     labelColor: '#607078',
     titleColor: '#24343c',
+    grid: false,
     gridColor: '#e7edef',
     domainColor: '#c5d0d4',
     tickColor: '#c5d0d4',

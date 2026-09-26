@@ -1,5 +1,6 @@
 import type { ChartSpec } from '@dvfc/core';
-import { ACCENT, baseSpec } from './theme.js';
+import { vlAggregate } from './channel.js';
+import { baseSpec } from './theme.js';
 
 export function numberToVegaLite(
   chart: ChartSpec,
@@ -14,23 +15,28 @@ export function numberToVegaLite(
     };
   }
 
+  const agg = vlAggregate(y.aggregate) ?? 'sum';
+  const format = agg === 'mean' ? '.2f' : ',';
   return {
     ...baseSpec(chart, values),
     mark: {
       type: 'text',
-      fontSize: 56,
+      fontSize: 40,
       fontWeight: 700,
-      color: ACCENT,
-      font: 'Inter, system-ui, sans-serif',
+      color: '#1e3a5f',
+      font: 'system-ui, -apple-system, "Segoe UI", sans-serif',
+      align: 'center',
+      baseline: 'middle',
     },
     encoding: {
       text: {
         field: y.field,
-        aggregate: y.aggregate ?? 'sum',
+        aggregate: agg,
         type: 'quantitative',
+        format,
       },
     },
-    width: chart.width ?? 320,
-    height: chart.height ?? 120,
+    width: chart.width ?? 220,
+    height: chart.height ?? 88,
   };
 }

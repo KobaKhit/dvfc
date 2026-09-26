@@ -1,6 +1,6 @@
 # Renderers
 
-`dvfc build -f <format>` selects the output engine.
+`dvfc build -f <format>` selects the output engine. The same `*.dash.yaml` builds every format. Axis gridlines are off by default.
 
 ## Matrix
 

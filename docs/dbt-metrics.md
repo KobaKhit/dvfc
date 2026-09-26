@@ -13,9 +13,8 @@ data:
   metric: total_revenue
   group_by: [metric_time]   # optional; default metric_time
   # where: "..."            # optional MetricFlow where
-encoding:
-  x: { field: date, type: temporal }
-  y: { field: revenue, type: quantitative, aggregate: sum }
+x: date
+y: revenue
 ```
 
 ## Resolution order

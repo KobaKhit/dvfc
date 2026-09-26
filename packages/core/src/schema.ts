@@ -8,6 +8,7 @@ import {
   themeConfigSchema,
   layoutConfigSchema,
 } from './schema-shared.js';
+import { BUILTIN_CHART_TYPE_IDS } from './chart-types.js';
 
 export const DashboardSpecSchema = {
   $schema: 'http://json-schema.org/draft-07/schema#',
@@ -54,21 +55,7 @@ export const DashboardSpecSchema = {
           id: { type: 'string' },
           type: {
             type: 'string',
-            enum: [
-              'bar',
-              'line',
-              'area',
-              'scatter',
-              'histogram',
-              'boxplot',
-              'density',
-              'heatmap',
-              'pie',
-              'donut',
-              'number',
-              'table',
-              'text',
-            ],
+            enum: [...BUILTIN_CHART_TYPE_IDS],
           },
           dataSource: { type: 'string' },
           title: { type: 'string' },

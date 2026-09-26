@@ -19,17 +19,16 @@ data:
 charts:
   - id: trend
     type: area
-    dataSource: sales_daily
-    encoding: { ... }
-    interaction:
-      brush: true
-      publishes: time
+    data: sales_daily
+    x: date
+    y: sum(sales)
+    brush: true
+    publishes: time
   - id: kpi
     type: number
-    dataSource: sales_daily
-    encoding: { ... }
-    interaction:
-      filterBy: time
+    data: sales_daily
+    y: sum(sales)
+    filterBy: time
 layout:
   type: grid
   columns: 2

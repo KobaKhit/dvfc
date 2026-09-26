@@ -25,7 +25,7 @@ export function generateTextChart(chart: ChartSpec, _ctx: GeneratorContext): str
   return wrapChartRender(
     chart.id,
     `      container${chart.id}.innerHTML = \`
-        <div style="padding: 1.5rem; background: #f7fafc; border-radius: 0.5rem; line-height: 1.6;">
+        <div style="padding: 0.35rem 0.15rem 0.25rem; line-height: 1.55; color: #102129; font-size: 0.92rem;">
           <p>${htmlContent}</p>
         </div>
       \`;`

@@ -3,7 +3,7 @@
  * Config may declare extra chart type modules to load.
  */
 
-import { access, readFile } from 'fs/promises';
+import { readFile } from 'fs/promises';
 import { join, resolve as resolvePath } from 'path';
 import { pathToFileURL } from 'url';
 import {
@@ -12,6 +12,7 @@ import {
   type ChartTypeModule,
 } from './registry.js';
 import { registerBuiltinChartTypes } from './builtins.js';
+import { fileExists } from './fs-utils.js';
 
 export interface DvfcConfig {
   /** Module paths (relative to project root, absolute, or package names) for chart type plugins */
@@ -21,15 +22,6 @@ export interface DvfcConfig {
 }
 
 const CONFIG_NAMES = ['dvfc.config.js', 'dvfc.config.mjs', 'dvfc.config.cjs'] as const;
-
-async function fileExists(path: string): Promise<boolean> {
-  try {
-    await access(path);
-    return true;
-  } catch {
-    return false;
-  }
-}
 
 /**
  * Find and load dvfc.config.* from projectRoot. Returns {} if none found.

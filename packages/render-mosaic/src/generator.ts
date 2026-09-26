@@ -5,12 +5,12 @@
 
 import type { DashboardSpec, ChartSpec } from '@dvfc/core';
 import {
+  duckDbCreateTableSql,
   getBuiltinChartTypeIds,
   getChartType,
   registerBuiltinChartTypes,
   registerChartType,
 } from '@dvfc/core';
-import { basename } from 'path';
 
 import { generateNumberChart } from './charts/number.js';
 import { generateTableChart } from './charts/table.js';
@@ -125,38 +125,13 @@ ${spec.data.map(ds => {
       }
     });
     
-    let createSql: string;
-    if (ds.type === 'sql' && ds.sql) {
-      // Rewrite bare filenames in SQL to origin+dataPath URLs for DuckDB-WASM
-      const rewritten = ds.sql.replace(
-        /(['"])([^'"/]+\.(?:csv|parquet|json|tsv))\1/gi,
-        (_m, _q, file) => `'\${window.location.origin}\${dataPath}${file}'`
-      );
-      createSql = `CREATE TABLE IF NOT EXISTS ${ds.id} AS ${rewritten}`;
-    } else if (ds.type === 'url' && ds.path && /^https?:\/\//i.test(ds.path)) {
-      const url = ds.path.replace(/'/g, "''");
-      const reader = /\.parquet(\?|$)/i.test(ds.path)
-        ? `read_parquet('${url}')`
-        : `read_csv_auto('${url}')`;
-      createSql = `CREATE TABLE IF NOT EXISTS ${ds.id} AS SELECT * FROM ${reader}`;
-    } else if (
-      ds.type === 'parquet' ||
-      (typeof ds.path === 'string' && /\.parquet$/i.test(ds.path))
-    ) {
-      const file =
-        ds.path && !ds.path.includes('/') && !/^https?:\/\//i.test(ds.path)
-          ? basename(ds.path)
-          : `${ds.id}.parquet`;
-      createSql = `CREATE TABLE IF NOT EXISTS ${ds.id} AS 
-    SELECT * FROM read_parquet('\${window.location.origin}\${dataPath}${file}')`;
-    } else {
-      const file =
-        ds.path && !ds.path.includes('/') && !/^https?:\/\//i.test(ds.path)
-          ? basename(ds.path)
-          : `${ds.id}.csv`;
-      createSql = `CREATE TABLE IF NOT EXISTS ${ds.id} AS 
-    SELECT * FROM read_csv_auto('\${window.location.origin}\${dataPath}${file}')`;
-    }
+    const isFileLoad =
+      !(ds.type === 'sql' && ds.sql) &&
+      !(ds.type === 'url' && ds.path && /^https?:\/\//i.test(ds.path));
+    const createSql = duckDbCreateTableSql(ds, {
+      pathPrefix: '${window.location.origin}${dataPath}',
+      indentedSelect: isFileLoad,
+    });
 
     let sql = `  await vg.coordinator().exec(\`
     ${createSql}
@@ -254,36 +229,28 @@ if (document.readyState === 'loading') {
  * Generate code for a single chart (built-in implementation).
  * Prefer generateChart() which routes through the chart-type registry.
  */
+const BUILTIN_MOSAIC_GENERATORS: Record<
+  string,
+  (chart: ChartSpec, ctx: GeneratorContext) => string
+> = {
+  number: generateNumberChart,
+  table: generateTableChart,
+  text: generateTextChart,
+  pie: generatePieChart,
+  donut: generatePieChart,
+  histogram: generateHistogramChart,
+  boxplot: generateBoxplotChart,
+  density: generateDensityChart,
+  line: generateStandardChart,
+  bar: generateStandardChart,
+  area: generateStandardChart,
+  scatter: generateStandardChart,
+  heatmap: generateStandardChart,
+};
+
 export function generateChartBuiltin(chart: ChartSpec, ctx: GeneratorContext): string {
-  if (chart.type === 'number') {
-    return generateNumberChart(chart, ctx);
-  }
-  
-  if (chart.type === 'table') {
-    return generateTableChart(chart, ctx);
-  }
-  
-  if (chart.type === 'text') {
-    return generateTextChart(chart, ctx);
-  }
-  
-  if (chart.type === 'pie' || chart.type === 'donut') {
-    return generatePieChart(chart, ctx);
-  }
-  
-  if (chart.type === 'histogram') {
-    return generateHistogramChart(chart, ctx);
-  }
-  
-  if (chart.type === 'boxplot') {
-    return generateBoxplotChart(chart, ctx);
-  }
-  
-  if (chart.type === 'density') {
-    return generateDensityChart(chart, ctx);
-  }
-  
-  return generateStandardChart(chart, ctx);
+  const gen = BUILTIN_MOSAIC_GENERATORS[chart.type] ?? generateStandardChart;
+  return gen(chart, ctx);
 }
 
 /**

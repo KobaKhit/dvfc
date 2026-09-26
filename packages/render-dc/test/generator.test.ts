@@ -72,6 +72,8 @@ test('generateDcHtml embeds data and dc CDN (static mode)', () => {
   assert.match(html, /dc\.config\.defaultColors/);
   assert.match(html, /dc\.js · static/);
   assert.match(html, /CDN \+ inlined CSV/);
+  assert.match(html, /dvfcInstallTips/);
+  assert.match(html, /#dvfc-tip/);
 });
 
 test('generateDcWasmMainScript uses DuckDB-WASM then crossfilter', () => {

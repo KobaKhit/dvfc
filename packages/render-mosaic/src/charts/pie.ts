@@ -119,9 +119,17 @@ export function generatePieChart(chart: ChartSpec, ctx: GeneratorContext): strin
           };
         });
         
-        const width = ${chart.width || 400};
-        const height = ${chart.height || 400};
-        const radius = Math.min(width, height) / 2 - 36;
+        const hostW = container${chart.id}.clientWidth || ${chart.width || 280};
+        const hostH = container${chart.id}.clientHeight > 40
+          ? container${chart.id}.clientHeight
+          : ${chart.height || 220};
+        const stacked = hostW < 280 || hostH > hostW + 40;
+        const pieSize = stacked
+          ? Math.max(100, Math.min(hostW - 16, hostH - 108))
+          : Math.max(132, Math.min(Math.floor(hostW * 0.58), hostH - 8));
+        const width = pieSize;
+        const height = pieSize;
+        const radius = Math.min(width, height) / 2 - 28;
         const innerR = radius * ${innerRadius};
         
         const paths = slices.map((slice, idx) => {
@@ -170,14 +178,14 @@ export function generatePieChart(chart: ChartSpec, ctx: GeneratorContext): strin
         \` : '';
         
         const legend = slices.map((slice, idx) => \`
-          <div class="dvfc-pie-legend" data-idx="\${idx}" style="display: flex; align-items: center; gap: 0.5rem; margin: 0.3rem 0; cursor: pointer;">
-            <div style="width: 10px; height: 10px; background: \${slice.color}; border-radius: 2px; flex-shrink: 0;"></div>
-            <span style="font-size: 0.8rem; color: #102129;">\${slice.label} <span style="color: #607078;">(\${slice.pct.toFixed(1)}%)</span></span>
+          <div class="dvfc-pie-legend" data-idx="\${idx}" style="display: flex; align-items: center; gap: 0.4rem; margin: 0.12rem 0; cursor: pointer;">
+            <div style="width: 8px; height: 8px; background: \${slice.color}; border-radius: 2px; flex-shrink: 0;"></div>
+            <span style="font-size: 0.7rem; color: #102129;">\${slice.label} <span style="color: #607078;">(\${slice.pct.toFixed(1)}%)</span></span>
           </div>
         \`).join('');
         
         container${chart.id}.innerHTML = \`
-          <div class="dvfc-pie-root dvfc-smooth" style="position: relative; display: flex; gap: 1.5rem; align-items: center; justify-content: center; flex-wrap: wrap;">
+          <div class="dvfc-pie-root dvfc-smooth" style="position: relative; display: flex; flex-direction: \${stacked ? 'column' : 'row'}; gap: \${stacked ? '0.4rem' : '1.15rem'}; align-items: center; justify-content: center; min-height: \${Math.max(0, hostH)}px;">
             <div style="position: relative; width: \${width}px; height: \${height}px; flex-shrink: 0;">
               <svg width="\${width}" height="\${height}">
                 <g transform="translate(\${width/2}, \${height/2})">

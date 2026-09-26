@@ -3,6 +3,5 @@
  * MCP server for building coordinated dashboards with AI
  */
 
-// Re-export server for programmatic use if needed
-export * from './server.js';
-
+// server.js starts a stdio server on import — it is the bin entry, not a library export.
+export { TOOL_DEFINITIONS, handleTool } from './tools.js';

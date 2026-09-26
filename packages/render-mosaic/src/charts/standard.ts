@@ -10,14 +10,12 @@ import {
   TIP_OPTION,
   markTipOption,
   interactorsIncludeClickToggle,
+  mosaicPlotSizeOptions,
   plotChromeOptions,
   primaryColor,
   stableFilterScaleOptions,
 } from './theme.js';
-import {
-  buildHighlightInteractor,
-  buildSelectionInteractors,
-} from './interaction.js';
+import { buildSelectionInteractors } from './interaction.js';
 
 /**
  * Generate overlay marks for analysis (mean, median, trend, moving average)
@@ -176,8 +174,6 @@ export function generateStandardChart(chart: ChartSpec, ctx: GeneratorContext): 
   const fromClause = buildFromClause(dataSource, filterBy);
 
   const interactors = buildSelectionInteractors(chart, interaction, publishAs);
-  const highlight = buildHighlightInteractor(interaction, publishAs, chart.type);
-  if (highlight) interactors.push(highlight);
 
   // Sticky Plot tips steal the first pointerdown from Mosaic toggles
   const tip = markTipOption(interactorsIncludeClickToggle(interactors));
@@ -224,8 +220,7 @@ export function generateStandardChart(chart: ChartSpec, ctx: GeneratorContext): 
   if (chart.type === 'heatmap' && colorObj?.label) {
     plotOptions.push(`vg.colorLabel('${colorObj.label}')`);
   }
-  if (chart.width) plotOptions.push(`vg.width(${chart.width})`);
-  if (chart.height) plotOptions.push(`vg.height(${chart.height})`);
+  plotOptions.push(...mosaicPlotSizeOptions(chart));
 
   const plotOptionsStr =
     plotOptions.length > 0 ? ',\n      ' + plotOptions.join(',\n      ') : '';

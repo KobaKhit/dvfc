@@ -12,11 +12,11 @@
     "dogfood": "./scripts/dogfood.sh",
     "docs:build": "./scripts/build-docs.sh",
     "docs:serve": "bash -c 'source .venv-docs/bin/activate 2>/dev/null || ./scripts/build-docs.sh >/dev/null; source .venv-docs/bin/activate; mkdocs serve'",
-    "test": "pnpm -r --filter='@dvfc/charts' --filter='@dvfc/core' --filter='@dvfc/render-vega' --filter='@dvfc/build' --filter='@dvfc/render-mosaic' --filter='@dvfc/render-dc' --filter='@dvfc/mcp' test",
+    "test": "pnpm -r --filter='@dvfc/charts' --filter='@dvfc/core' --filter='@dvfc/render-vega' --filter='@dvfc/build' --filter='@dvfc/render-mosaic' --filter='@dvfc/render-dc' --filter='@dvfc/mcp' --filter='@dvfc/cli' --filter='@dvfc/adapter-dbt' test",
     "example:sales": "pnpm exec dvfc preview examples/sales-dash/sales.dash.yaml",
     "example:build": "pnpm exec dvfc build examples/sales-dash/sales.dash.yaml -o dist/sales --format html",
     "example:preview": "pnpm exec dvfc preview examples/sales-dash/sales.dash.yaml",
-    "test:coverage": "node --experimental-strip-types --experimental-test-coverage --test-coverage-exclude='**/test/**' --test packages/core/test/**/*.test.ts packages/charts/test/**/*.test.ts packages/render-vega/test/**/*.test.ts packages/build/test/**/*.test.ts packages/render-mosaic/test/**/*.test.ts",
+    "test:coverage": "node --experimental-strip-types --experimental-test-coverage --test-coverage-exclude='**/test/**' --test packages/core/test/**/*.test.ts packages/charts/test/**/*.test.ts packages/render-vega/test/**/*.test.ts packages/build/test/**/*.test.ts packages/render-mosaic/test/**/*.test.ts packages/mcp/test/**/*.test.ts packages/render-dc/test/**/*.test.ts packages/cli/test/**/*.test.ts packages/adapter-dbt/test/**/*.test.ts",
     "lint": "biome check packages/*/src scripts --diagnostic-level=error"
   },
   "keywords": [

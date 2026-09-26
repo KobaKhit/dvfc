@@ -6,11 +6,8 @@ import {
   chartPublishVar,
   wrapChartRender,
 } from './helpers.js';
-import {
-  buildHighlightInteractor,
-  buildSelectionInteractors,
-} from './interaction.js';
-import { markTipOption, interactorsIncludeClickToggle, plotChromeOptions, primaryColor, stableFilterScaleOptions } from './theme.js';
+import { buildSelectionInteractors } from './interaction.js';
+import { markTipOption, interactorsIncludeClickToggle, mosaicPlotSizeOptions, plotChromeOptions, primaryColor, stableFilterScaleOptions } from './theme.js';
 
 /**
  * Generate a histogram chart (frequency distribution)
@@ -30,8 +27,6 @@ export function generateHistogramChart(chart: ChartSpec, ctx: GeneratorContext):
 
   const publishAs = chartPublishVar(chart, ctx);
   const interactors = buildSelectionInteractors(chart, interaction, publishAs);
-  const highlight = buildHighlightInteractor(interaction, publishAs, chart.type);
-  if (highlight) interactors.push(highlight);
 
   const tip = markTipOption(interactorsIncludeClickToggle(interactors));
   const tipPart = tip ? `, ${tip}` : '';
@@ -43,8 +38,7 @@ export function generateHistogramChart(chart: ChartSpec, ctx: GeneratorContext):
   ];
   if (encoding.x?.label) plotOptions.push(`vg.xLabel('${encoding.x.label}')`);
   plotOptions.push(`vg.yLabel('Frequency')`);
-  if (chart.width) plotOptions.push(`vg.width(${chart.width})`);
-  if (chart.height) plotOptions.push(`vg.height(${chart.height})`);
+  plotOptions.push(...mosaicPlotSizeOptions(chart));
 
   const plotOptionsStr =
     plotOptions.length > 0 ? `,\n      ${plotOptions.join(',\n      ')}` : '';

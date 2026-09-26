@@ -6,11 +6,8 @@ import {
   chartPublishVar,
   wrapChartRender,
 } from './helpers.js';
-import {
-  buildHighlightInteractor,
-  buildSelectionInteractors,
-} from './interaction.js';
-import { TIP_OPTION, plotChromeOptions, primaryColor, stableFilterScaleOptions } from './theme.js';
+import { buildSelectionInteractors } from './interaction.js';
+import { TIP_OPTION, mosaicPlotSizeOptions, plotChromeOptions, primaryColor, stableFilterScaleOptions } from './theme.js';
 
 /**
  * Generate a density chart (kernel density estimation)
@@ -28,8 +25,6 @@ export function generateDensityChart(chart: ChartSpec, ctx: GeneratorContext): s
 
   const publishAs = chartPublishVar(chart, ctx);
   const interactors = buildSelectionInteractors(chart, interaction, publishAs);
-  const highlight = buildHighlightInteractor(interaction, publishAs, chart.type);
-  if (highlight) interactors.push(highlight);
 
   const plotOptions: string[] = [
     ...plotChromeOptions(chart),
@@ -38,8 +33,7 @@ export function generateDensityChart(chart: ChartSpec, ctx: GeneratorContext): s
   ];
   if (encoding.x?.label) plotOptions.push(`vg.xLabel('${encoding.x.label}')`);
   plotOptions.push(`vg.yLabel('Density')`);
-  if (chart.width) plotOptions.push(`vg.width(${chart.width})`);
-  if (chart.height) plotOptions.push(`vg.height(${chart.height})`);
+  plotOptions.push(...mosaicPlotSizeOptions(chart));
 
   const plotOptionsStr =
     plotOptions.length > 0 ? `,\n      ${plotOptions.join(',\n      ')}` : '';

@@ -16,10 +16,11 @@ import {
   registerBuiltinChartTypes,
   getBuiltinChartTypeIds,
   registerChartType,
+  escapeHtml,
   type NormalizeResult,
 } from '@dvfc/core';
 import { chartToVegaLiteBuiltin } from './marks/index.js';
-import { dashToLinkedVegaLite } from './dash-export.js';
+import { buildVegaGridPage } from './grid-page.js';
 import { applyVegaInteraction, planVegaPublishParams } from './interaction.js';
 
 export { chartToVegaLiteBuiltin };
@@ -160,10 +161,13 @@ export interface ExportOptions {
  */
 export function buildHtmlStaticPage(
   vlSpec: Record<string, unknown>,
-  title?: string
+  title?: string,
+  options?: { actions?: boolean; fill?: boolean }
 ): string {
   const pageTitle = title || (typeof vlSpec.title === 'string' ? vlSpec.title : 'Chart');
   const specJson = JSON.stringify(vlSpec);
+  const actions = options?.actions !== false;
+  const fill = options?.fill === true;
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -193,24 +197,168 @@ export function buildHtmlStaticPage(
       max-width: 100%;
       overflow: auto;
     }
+    html.is-embedded,
+    html.is-embedded body {
+      height: 100%;
+      min-height: 0;
+      background: #fff;
+    }
+    html.is-embedded body {
+      padding: 0.35rem;
+      align-items: flex-start;
+      justify-content: stretch;
+    }
+    html.is-embedded #vis {
+      width: 100%;
+      padding: 0.4rem 0.5rem 0.6rem;
+      box-shadow: none;
+    }
+    html:has(body.is-fill) {
+      height: 100%;
+    }
+    body.is-fill {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      height: 100%;
+      min-height: 0;
+      padding: 0.75rem 0.9rem 1rem;
+      background: #fff;
+    }
+    body.is-fill h1 {
+      font-family: Georgia, "Iowan Old Style", serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      margin: 0 0 0.65rem;
+      color: #102129;
+    }
+    body.is-fill #vis {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      padding: 0;
+      box-shadow: none;
+      overflow: hidden;
+    }
+    html.is-embedded body.is-fill {
+      padding: 0.2rem 0.35rem 0.3rem;
+    }
+    html.is-embedded body.is-fill h1 {
+      display: none;
+    }
   </style>
+  <script>
+    if (new URLSearchParams(location.search).get('embed') === '1') {
+      document.documentElement.classList.add('is-embedded');
+    }
+  </script>
 </head>
-<body>
+<body class="${fill ? 'is-fill' : ''}">
+  ${fill ? `<h1>${escapeHtml(pageTitle)}</h1>` : ''}
   <div id="vis"></div>
   <script type="text/javascript">
-    vegaEmbed('#vis', ${specJson}, { actions: true, renderer: 'canvas' }).catch(console.error);
+    const dvfcSpec = ${specJson};
+    const dvfcOpts = { actions: ${actions}, renderer: 'canvas' };
+    const dvfcFill = ${fill ? 'true' : 'false'};
+
+    function dvfcGrowPlots(spec, spare) {
+      const rows = Array.isArray(spec.vconcat) ? spec.vconcat : [spec];
+      let target = null;
+      let best = 0;
+      for (const row of rows) {
+        const units = Array.isArray(row.hconcat) ? row.hconcat : [row];
+        const h = Math.max(0, ...units.map((u) => (typeof u.height === 'number' ? u.height : 0)));
+        if (h > best) { best = h; target = units; }
+      }
+      if (!target || best < 140 || spare < 24) return false;
+      for (const unit of target) {
+        if (typeof unit.height !== 'number' || unit.height < 140) continue;
+        const nextH = unit.height + spare;
+        if (unit.mark && unit.mark.type === 'arc') {
+          const outer = Math.max(96, Math.round(Math.min(nextH, unit.width || 420) * 0.32));
+          const inner = unit.mark.innerRadius ? Math.round(outer * 0.58) : 0;
+          unit.mark = Object.assign({}, unit.mark, { outerRadius: outer, innerRadius: inner });
+        }
+        unit.height = nextH;
+      }
+      return true;
+    }
+
+    function dvfcFitWidth(spec) {
+      const rows = Array.isArray(spec.vconcat) ? spec.vconcat : [spec];
+      const box = Math.max(320, document.documentElement.clientWidth - 8);
+      for (const row of rows) {
+        const units = Array.isArray(row.hconcat) ? row.hconcat : [row];
+        const gap = typeof row.spacing === 'number' ? row.spacing : 16;
+        const each = Math.max(140, Math.floor((box - 72 - gap * Math.max(0, units.length - 1)) / units.length));
+        for (const unit of units) dvfcSetCellWidth(unit, each);
+      }
+    }
+
+    function dvfcSetCellWidth(node, width) {
+      if (Array.isArray(node.vconcat)) {
+        const [plot, legend] = node.vconcat;
+        if (plot) plot.width = width;
+        if (legend && Array.isArray(legend.hconcat)) {
+          const n = legend.hconcat.length || 1;
+          const gap = legend.spacing || 0;
+          const each = Math.max(48, Math.floor((width - gap * (n - 1)) / n));
+          for (const item of legend.hconcat) item.width = each;
+        }
+        return;
+      }
+      node.width = width;
+    }
+
+    function dvfcScaleWidths(spec, ratio) {
+      const rows = Array.isArray(spec.vconcat) ? spec.vconcat : [spec];
+      for (const row of rows) {
+        const units = Array.isArray(row.hconcat) ? row.hconcat : [row];
+        for (const unit of units) {
+          const current = Array.isArray(unit.vconcat) ? unit.vconcat[0]?.width : unit.width;
+          if (typeof current === 'number') {
+            dvfcSetCellWidth(unit, Math.max(120, Math.floor(current * ratio)));
+          }
+        }
+      }
+    }
+
+    (async () => {
+      const vis = document.getElementById('vis');
+      const layout = JSON.parse(JSON.stringify(dvfcSpec));
+      if (dvfcFill) dvfcFitWidth(layout);
+      const draw = (spec) => vegaEmbed('#vis', JSON.parse(JSON.stringify(spec)), dvfcOpts);
+      await draw(layout);
+      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      if (dvfcFill) {
+        let node = vis.querySelector('canvas, svg');
+        if (node && node.clientWidth > vis.clientWidth + 4) {
+          dvfcScaleWidths(layout, (vis.clientWidth / node.clientWidth) * 0.98);
+          await draw(layout);
+          await new Promise((resolve) => requestAnimationFrame(resolve));
+          node = vis.querySelector('canvas, svg');
+        }
+        const spare = node ? document.documentElement.clientHeight - node.clientHeight : 0;
+        const grown = JSON.parse(JSON.stringify(layout));
+        if (dvfcGrowPlots(grown, Math.floor(spare - 48))) await draw(grown);
+      }
+      const node = vis.querySelector('canvas, svg');
+      if (node) {
+        const availW = vis.clientWidth;
+        const availH = vis.clientHeight;
+        const scale = Math.min(1, availW / node.clientWidth, availH / node.clientHeight);
+        if (scale < 0.995) {
+          node.style.width = Math.floor(node.clientWidth * scale) + 'px';
+          node.style.height = Math.floor(node.clientHeight * scale) + 'px';
+        }
+      }
+    })().catch(console.error);
   </script>
 </body>
 </html>
 `;
-}
-
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
 }
 
 export async function exportStatic(
@@ -280,8 +428,7 @@ export async function exportStatic(
         await loadValuesForChart(spec, chart, stageDir, assetMap)
       );
     }
-    const vl = dashToLinkedVegaLite(spec, valuesBySource);
-    const html = buildHtmlStaticPage(vl, spec.meta?.title || 'Dashboard');
+    const html = buildVegaGridPage(spec, valuesBySource);
     await writeFile(outFile, html);
     return outFile;
   }

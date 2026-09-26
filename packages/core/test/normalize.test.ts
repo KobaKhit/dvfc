@@ -319,6 +319,20 @@ describe('filterSpecToChart', () => {
     assert.deepEqual(filtered.assets.map((a) => a.destName), ['a.csv']);
   });
 
+  it('does not pull in assets that merely share an id prefix', () => {
+    const spec = {
+      meta: { title: 'T', version: '0.1.0' },
+      data: [{ id: 'sales', type: 'csv' as const, path: 'sales.csv' }],
+      charts: [{ id: 'c1', type: 'bar' as const, dataSource: 'sales' }],
+    };
+    const assets = [
+      { absPath: '/tmp/sales.csv', destName: 'sales.csv' },
+      { absPath: '/tmp/sales_daily.csv', destName: 'sales_daily.csv' },
+    ];
+    const filtered = filterSpecToChart(spec, assets, 'c1');
+    assert.deepEqual(filtered.assets.map((a) => a.destName), ['sales.csv']);
+  });
+
   it('throws when chart id is missing', () => {
     assert.throws(
       () =>

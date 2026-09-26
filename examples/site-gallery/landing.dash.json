@@ -1,0 +1,70 @@
+{
+  "id": "cosmic-landing",
+  "title": "Other Worlds",
+  "description": "Brush the discovery timeline to filter linked views.",
+  "version": "0.2.0",
+  "coordination": { "auto": true },
+  "data": [{ "id": "worlds", "type": "csv", "path": "exoplanets.csv" }],
+  "charts": [
+    {
+      "id": "field_note",
+      "type": "text",
+      "content": "**Brush the timeline** to filter every view.\n\nCrossfiltering is declared in the spec — not wired in JavaScript."
+    },
+    {
+      "id": "world_count",
+      "type": "number",
+      "title": "Worlds in view",
+      "dataSource": "worlds",
+      "encoding": { "y": { "field": "planet", "aggregate": "count", "label": "Worlds" } },
+      "interaction": { "filterBy": "era" }
+    },
+    {
+      "id": "avg_habitability",
+      "type": "number",
+      "title": "Avg habitability",
+      "dataSource": "worlds",
+      "encoding": { "y": { "field": "habitability_score", "aggregate": "avg" } },
+      "interaction": { "filterBy": "era" }
+    },
+    {
+      "id": "discovery_timeline",
+      "type": "area",
+      "title": "Discoveries over time",
+      "dataSource": "worlds",
+      "encoding": {
+        "x": { "field": "discovery_year", "type": "ordinal", "label": "Year" },
+        "y": { "field": "planet", "aggregate": "count", "label": "Worlds" }
+      },
+      "interaction": {
+        "brush": true,
+        "brushAxis": "x",
+        "publishes": "era",
+        "filterBy": "era"
+      },
+      "height": 260
+    },
+    {
+      "id": "discovery_methods",
+      "type": "donut",
+      "title": "Discovery methods",
+      "dataSource": "worlds",
+      "encoding": {
+        "x": { "field": "method", "type": "nominal" },
+        "y": { "field": "planet", "aggregate": "count" }
+      },
+      "interaction": {
+        "filterBy": "era",
+        "publishes": "era",
+        "select": "auto"
+      },
+      "height": 260
+    }
+  ],
+  "layout": { "type": "grid", "rows": [3, 2], "gap": 16 },
+  "theme": {
+    "colors": ["#1e3a5f", "#7ba3c9", "#a89b8c", "#4a7c9b"],
+    "fontFamily": "system-ui, -apple-system, \"Segoe UI\", sans-serif",
+    "backgroundColor": "white"
+  }
+}

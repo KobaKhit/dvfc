@@ -57,7 +57,32 @@ for example in "${examples[@]}"; do
   echo "  OK $example"
 done
 
-echo "  Building compact landing showcase → $SITE_DIR/examples/showcase"
+echo "  Building compact landing showcase → $SITE_DIR/examples/landing"
+rm -rf .dvfc-build
+$CLI build examples/site-gallery/landing.dash.yaml \
+  -o "$SITE_DIR/examples/landing" \
+  --base "$BASE_URL/examples/landing/" >/dev/null
+echo "  OK landing"
+
+echo "  Building dc.js landing → $SITE_DIR/examples/landing-dc"
+rm -rf .dvfc-build
+mkdir -p "$SITE_DIR/examples/landing-dc"
+$CLI build examples/site-gallery/landing.dash.yaml \
+  -o "$SITE_DIR/examples/landing-dc/index.html" \
+  --format html-dc-static >/dev/null
+rm -rf "$SITE_DIR/examples/landing-dc/.dvfc-dc-data"
+echo "  OK landing-dc"
+
+echo "  Building Vega-Lite landing → $SITE_DIR/examples/landing-vega"
+rm -rf .dvfc-build
+mkdir -p "$SITE_DIR/examples/landing-vega"
+$CLI build examples/site-gallery/landing.dash.yaml \
+  -o "$SITE_DIR/examples/landing-vega/index.html" \
+  --format html-static >/dev/null
+rm -rf "$SITE_DIR/examples/landing-vega/.dvfc-export-data"
+echo "  OK landing-vega"
+
+echo "  Building full showcase → $SITE_DIR/examples/showcase"
 rm -rf .dvfc-build
 $CLI build examples/site-gallery/showcase.dash.yaml \
   -o "$SITE_DIR/examples/showcase" \

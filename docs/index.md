@@ -36,20 +36,16 @@ data:
 charts:
   - id: by_region
     type: bar
-    dataSource: sales
-    encoding:
-      x: { field: region, type: nominal }
-      y: { field: amount, type: quantitative, aggregate: sum }
-    interaction:
-      brush: true
-      publishes: region
+    data: sales
+    x: region
+    y: sum(amount)
+    brush: true
+    publishes: region
   - id: total
     type: number
-    dataSource: sales
-    encoding:
-      y: { field: amount, aggregate: sum }
-    interaction:
-      filterBy: region
+    data: sales
+    y: sum(amount)
+    filterBy: region
 layout:
   type: grid
   columns: 2

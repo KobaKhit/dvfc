@@ -26,11 +26,13 @@ export function chartErrorHtml(): string {
 
 /**
  * Wrap vg.plot (or similar) body in the standard container lookup + try/catch.
+ * Prefers `.dvfc-plot` so shell titles (`h3`) are not wiped by innerHTML.
  * `body` should be the indented statements inside the try block.
  */
 export function wrapChartRender(chartId: string, body: string): string {
   const containerId = `chart-${chartId}`;
-  return `const container${chartId} = document.getElementById('${containerId}');
+  return `const __root${chartId} = document.getElementById('${containerId}');
+  const container${chartId} = __root${chartId}?.querySelector('.dvfc-plot') || __root${chartId};
   if (container${chartId}) {
     try {
 ${body}
@@ -110,7 +112,8 @@ export function wrapReactiveFilterRender(
     ${filterBy}.addEventListener('value', () => { ${renderFn}(); });`
       : '';
 
-  return `const container${chartId} = document.getElementById('${containerId}');
+  return `const __root${chartId} = document.getElementById('${containerId}');
+  const container${chartId} = __root${chartId}?.querySelector('.dvfc-plot') || __root${chartId};
   if (container${chartId}) {
     let __renderGen${chartId} = 0;
     const ${renderFn} = async () => {

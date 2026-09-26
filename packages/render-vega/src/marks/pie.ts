@@ -1,6 +1,6 @@
 import type { ChartSpec } from '@dvfc/core';
 import { baseSpec } from './theme.js';
-import { channelType } from './channel.js';
+import { channelType, vlAggregate } from './channel.js';
 
 export function pieToVegaLite(
   chart: ChartSpec,
@@ -30,7 +30,7 @@ export function pieToVegaLite(
       theta: {
         field: y.field,
         type: 'quantitative',
-        aggregate: y.aggregate ?? 'sum',
+        aggregate: vlAggregate(y.aggregate) ?? 'sum',
         stack: true,
       },
       color: {
@@ -43,7 +43,7 @@ export function pieToVegaLite(
         {
           field: y.field,
           type: 'quantitative',
-          aggregate: y.aggregate ?? 'sum',
+          aggregate: vlAggregate(y.aggregate) ?? 'sum',
           title: y.label,
           format: ',.2f',
         },

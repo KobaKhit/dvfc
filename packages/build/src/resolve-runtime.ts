@@ -9,7 +9,6 @@
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 import { existsSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 
 const require = createRequire(import.meta.url);
 
@@ -76,9 +75,4 @@ export function dcRuntimeAliases(): Record<string, string> {
     /* optional */
   }
   return aliases;
-}
-
-/** Directory that owns this package's built JS (for debugging). */
-export function buildPackageDir(): string {
-  return dirname(fileURLToPath(import.meta.url));
 }

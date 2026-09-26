@@ -41,9 +41,16 @@ export {
 
 export {
   buildDcWasmDashboard,
-  createDcWasmPreviewViteConfig,
   type BuildDcWasmOptions,
 } from './dc-wasm-build.js';
+
+export {
+  runBuildPipeline,
+  BUILD_FORMATS,
+  type BuildFormat,
+  type RunBuildOptions,
+  type RunBuildResult,
+} from './dispatch.js';
 
 export {
   mosaicRuntimeAliases,
@@ -63,4 +70,5 @@ export {
   updateChartInSpecFile,
   explainCoordination,
   applyFilterPlan,
+  type ChartMutationInput,
 } from './dash-mutate.js';

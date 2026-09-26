@@ -1,5 +1,11 @@
 import type { ChannelEncoding } from '@dvfc/core';
 
+/** Specs say `avg`; Vega-Lite's aggregate op is `mean`. */
+export function vlAggregate(agg: string | undefined): string | undefined {
+  if (!agg) return undefined;
+  return agg === 'avg' ? 'mean' : agg;
+}
+
 export function channelType(ch: ChannelEncoding | undefined): string | undefined {
   if (!ch) return undefined;
   const t = ch.type;
@@ -25,7 +31,7 @@ export function cartesianEncoding(chart: {
       field: chart.encoding.x.field,
       type: channelType(chart.encoding.x) ?? 'nominal',
       title: chart.encoding.x.label,
-      aggregate: chart.encoding.x.aggregate,
+      aggregate: vlAggregate(chart.encoding.x.aggregate),
     };
   }
   if (chart.encoding?.y) {
@@ -33,7 +39,7 @@ export function cartesianEncoding(chart: {
       field: chart.encoding.y.field,
       type: channelType(chart.encoding.y) ?? 'quantitative',
       title: chart.encoding.y.label,
-      aggregate: chart.encoding.y.aggregate,
+      aggregate: vlAggregate(chart.encoding.y.aggregate),
     };
   }
   if (chart.encoding?.color && typeof chart.encoding.color !== 'string') {

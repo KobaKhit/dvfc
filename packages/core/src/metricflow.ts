@@ -13,11 +13,12 @@
  *   DVFC_METRICFLOW_SKIP, if "1", skip live invoke (fixtures only)
  */
 
-import { access, mkdir, readFile, writeFile } from 'fs/promises';
+import { mkdir, readFile, writeFile } from 'fs/promises';
 import { dirname, join, resolve as resolvePath } from 'path';
 import { execFile } from 'child_process';
 import { promisify } from 'util';
 import type { DataRefDbtMetric } from './ir.js';
+import { fileExists } from './fs-utils.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -30,15 +31,6 @@ export interface MetricFlowCompileOptions {
   skipInvoke?: boolean;
   /** Cache compiled SQL under semantic/ */
   cache?: boolean;
-}
-
-async function fileExists(p: string): Promise<boolean> {
-  try {
-    await access(p);
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 /** Locate checked-in compiled SQL for a metric */

@@ -38,9 +38,9 @@ export function generateNumberChart(chart: ChartSpec, ctx: GeneratorContext): st
         String(result[0]?.value ?? 0);
       
       container${chart.id}.innerHTML = \`
-        <div class="dvfc-smooth" style="text-align: center; padding: 1.75rem 1rem;">
-          <div class="dvfc-kpi-value" style="font-size: 2.6rem; font-weight: 700; color: #1e3a5f; letter-spacing: -0.03em;">\${formatted}</div>
-          <div style="font-size: 0.85rem; color: #607078; margin-top: 0.4rem;">${chart.title || field}</div>
+        <div class="dvfc-kpi dvfc-smooth" style="height: 100%; min-height: 8rem; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0.5rem;">
+          <div class="dvfc-kpi-value" style="font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: 700; color: #1e3a5f; letter-spacing: -0.04em; line-height: 1;">\${formatted}</div>
+          <div style="font-size: 0.82rem; color: #607078; margin-top: 0.45rem; font-weight: 500;">${chart.title || field}</div>
         </div>
       \`;`
   );

@@ -82,16 +82,3 @@ export function buildSelectionInteractors(
   // Deduplicate while preserving order
   return [...new Set(out)];
 }
-
-/** Optional highlight feedback for the active selection.
- * Always disabled: mosaic-plot Highlight uses setSelect/select on the mark query
- * and can emit `SELECT  FROM …` (empty selection list) under DuckDB-WASM when
- * combined with crossfilters from other publishers (e.g. pie clausePoint).
- */
-export function buildHighlightInteractor(
-  _interaction?: InteractionConfig,
-  _asSelection?: string,
-  _chartType?: ChartSpec['type']
-): string | undefined {
-  return undefined;
-}

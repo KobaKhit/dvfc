@@ -2,7 +2,7 @@
  * Shared dbt model listing helpers (CLI + MCP).
  */
 
-import type { DbtManifest, DbtNode, ModelInfo } from './types.js';
+import type { DbtManifest, DbtNode } from './types.js';
 
 export interface ListedModel {
   name: string;
@@ -57,17 +57,4 @@ export function listModelsForScaffold(
   const marts = all.filter((m) => isMart(m.node));
   const pool = marts.length > 0 ? marts : all;
   return pool.slice(0, Math.min(limit, pool.length));
-}
-
-/** Map ListedModel → ModelInfo shape used by resolver consumers. */
-export function toModelInfo(m: ListedModel): ModelInfo {
-  return {
-    name: m.name,
-    database: m.database,
-    schema: m.schema,
-    path: m.path,
-    materialized: m.node.config?.materialized ?? 'unknown',
-    uniqueId: m.node.unique_id,
-    relationName: m.relationName,
-  };
 }

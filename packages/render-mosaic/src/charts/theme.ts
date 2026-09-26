@@ -27,23 +27,6 @@ export function primaryColor(ctx: GeneratorContext): string {
   return themeColors(ctx.spec.theme)[0] || DEFAULT_PALETTE.primary;
 }
 
-export function secondaryColor(ctx: GeneratorContext): string {
-  return themeColors(ctx.spec.theme)[1] || DEFAULT_PALETTE.secondary;
-}
-
-/** Resolve a constant fill/stroke from encoding.color string or theme primary. */
-export function resolveConstantColor(
-  encodingColor: ChartSpec['encoding'] extends infer E
-    ? E extends { color?: infer C }
-      ? C
-      : unknown
-    : unknown,
-  ctx: GeneratorContext
-): string | undefined {
-  if (typeof encodingColor === 'string') return encodingColor;
-  return primaryColor(ctx);
-}
-
 /** Pie/donut slice colors from theme (or navy→sky ramp). */
 export function pieColorExpr(ctx: GeneratorContext, indexExpr: string, _lengthExpr: string): string {
   const colors = themeColors(ctx.spec.theme);
@@ -58,9 +41,11 @@ export function pieColorExpr(ctx: GeneratorContext, indexExpr: string, _lengthEx
 export function plotChromeOptions(chart: ChartSpec, opts?: { heatmap?: boolean }): string[] {
   const options: string[] = [];
   const isHeatmap = opts?.heatmap || chart.type === 'heatmap';
-  const left = isHeatmap ? Math.max(148, Math.round((chart.width || 480) * 0.22)) : 56;
-  const bottom = isHeatmap ? 52 : 44;
-  options.push(`vg.margins({ top: 28, right: 28, bottom: ${bottom}, left: ${left} })`);
+  const left = isHeatmap ? Math.max(148, Math.round((chart.width || 480) * 0.22)) : 44;
+  const bottom = isHeatmap ? 52 : 36;
+  options.push(`vg.xGrid(false)`);
+  options.push(`vg.yGrid(false)`);
+  options.push(`vg.margins({ top: 16, right: 16, bottom: ${bottom}, left: ${left} })`);
   options.push(
     `vg.style({ fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif', fontSize: '12px', color: '${DEFAULT_PALETTE.ink}' })`
   );
@@ -108,6 +93,21 @@ export function stableFilterScaleOptions(chart: ChartSpec): string[] {
   }
 
   return out;
+}
+
+/** Shared vg.width / vg.height options — fill the chart cell when larger than spec. */
+export function mosaicPlotSizeOptions(chart: ChartSpec): string[] {
+  const options: string[] = [];
+  options.push(
+    chart.width
+      ? `vg.width(${chart.width})`
+      : `vg.width(Math.max(140, container${chart.id}.clientWidth || 280))`
+  );
+  const specHeight = chart.height || 240;
+  options.push(
+    `vg.height((() => { const cell = container${chart.id}.clientHeight; const spec = ${specHeight}; return cell > spec + 16 ? Math.max(80, cell - 28) : spec; })())`
+  );
+  return options;
 }
 
 /** Mark tip option for Observable Plot / Mosaic. */

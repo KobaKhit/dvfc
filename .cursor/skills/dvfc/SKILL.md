@@ -133,13 +133,11 @@ data:
 charts:
   - id: trend
     type: line
-    dataSource: sales
-    encoding:
-      x: { field: date, type: temporal }
-      y: { field: amount, aggregate: sum }
-    interaction:
-      brush: true
-      publishes: dateBrush
+    data: sales
+    x: date
+    y: sum(amount)
+    brush: true
+    publishes: dateBrush
   - id: breakdown
     type: bar
     dataSource: sales

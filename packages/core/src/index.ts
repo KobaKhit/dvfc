@@ -4,6 +4,7 @@
  */
 
 export * from './types.js';
+export * from './chart-types.js';
 export * from './schema.js';
 export * from './schema-shared.js';
 export * from './zod-schema.js';
@@ -17,3 +18,6 @@ export * from './validate-ir.js';
 export * from './normalize.js';
 export * from './metricflow.js';
 export * from './config.js';
+export * from './escape.js';
+export * from './duckdb-load.js';
+export * from './layout.js';

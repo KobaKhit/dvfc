@@ -3,15 +3,15 @@
  * for the Mosaic HTML generator.
  */
 
-import { readFile, access } from 'fs/promises';
+import { readFile } from 'fs/promises';
 import { dirname, join, resolve as resolvePath, basename, extname } from 'path';
 import { glob } from 'glob';
-import { parse as parseYAML } from 'yaml';
 import type { DashboardSpec, DataSource, ChartSpec } from './types.js';
 import type { ChartIR, DataRef } from './ir.js';
-import { interactionToRuntime } from './compat.js';
+import { chartIRToChartSpec } from './compat.js';
 import { isDashChartRef } from './ir.js';
-import { interpretSpec } from './parse.js';
+import { interpretSpec, parseSpecString } from './parse.js';
+import { fileExists } from './fs-utils.js';
 
 export interface FileAsset {
   /** Absolute source path */
@@ -40,15 +40,6 @@ export interface NormalizeOptions {
   projectRoot?: string;
   /** Optional dbt stub dir (default: specDir/dbt-stub) */
   dbtStubDir?: string;
-}
-
-async function fileExists(p: string): Promise<boolean> {
-  try {
-    await access(p);
-    return true;
-  } catch {
-    return false;
-  }
 }
 
 /**
@@ -253,18 +244,7 @@ export async function resolveDataSource(
 }
 
 function chartIRToLegacy(chart: ChartIR, dataSourceId: string): ChartSpec {
-  return {
-    id: chart.id,
-    type: chart.type as ChartSpec['type'],
-    dataSource: chart.type === 'text' ? undefined : dataSourceId,
-    title: chart.title,
-    encoding: chart.encoding,
-    content: chart.content,
-    interaction: interactionToRuntime(chart.interaction),
-    overlays: chart.overlays,
-    width: chart.width,
-    height: chart.height,
-  };
+  return chartIRToChartSpec(chart, { dataSource: dataSourceId });
 }
 
 async function findChartFile(
@@ -290,8 +270,12 @@ async function findChartFile(
   const preferred = [
     join(projectRoot, 'charts', `${chartRef}.chart.yaml`),
     join(projectRoot, 'charts', `${chartRef}.chart.yml`),
+    join(projectRoot, 'charts', `${chartRef}.chart.json`),
+    join(projectRoot, 'charts', `${chartRef}.chart.toml`),
     join(projectRoot, 'examples/charts', `${chartRef}.chart.yaml`),
     join(projectRoot, 'examples/charts', `${chartRef}.chart.yml`),
+    join(projectRoot, 'examples/charts', `${chartRef}.chart.json`),
+    join(projectRoot, 'examples/charts', `${chartRef}.chart.toml`),
   ];
   for (const pref of preferred) {
     if (await fileExists(pref)) return pref;
@@ -300,6 +284,8 @@ async function findChartFile(
   const patterns = [
     `**/${chartRef}.chart.yaml`,
     `**/${chartRef}.chart.yml`,
+    `**/${chartRef}.chart.json`,
+    `**/${chartRef}.chart.toml`,
     `**/charts/${chartRef}.yaml`,
   ];
   const allHits: string[] = [];
@@ -400,7 +386,7 @@ export async function normalizeToDashboard(
         throw new Error(`Dash '${dash.id}': chart ref '${entry.chart}' not found`);
       }
       const content = await readFile(chartFile, 'utf-8');
-      const chartParsed = interpretSpec(parseYAML(content), {
+      const chartParsed = parseSpecString(content, {
         path: chartFile,
         prefer: 'chart',
       });
@@ -487,14 +473,9 @@ export function filterSpecToChart(
   if (!chart) throw new Error(`Chart '${chartId}' not found`);
   const data = spec.data.filter((ds) => !chart.dataSource || ds.id === chart.dataSource);
   const dataIds = new Set(data.map((d) => d.id));
+  // Match `<id>` or `<id>.<ext>` only — a bare prefix would pull in `sales_daily.csv` for `sales`
   const filteredAssets = assets.filter((a) =>
-    [...dataIds].some(
-      (id) =>
-        a.destName === `${id}.csv` ||
-        a.destName === `${id}.parquet` ||
-        a.destName.startsWith(`${id}.`) ||
-        a.destName.startsWith(id)
-    )
+    [...dataIds].some((id) => a.destName === id || a.destName.startsWith(`${id}.`))
   );
   return {
     spec: { ...spec, charts: [chart], data },

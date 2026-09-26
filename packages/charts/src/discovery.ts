@@ -5,14 +5,13 @@
 import { readFile } from 'fs/promises';
 import { glob } from 'glob';
 import { basename, dirname, extname } from 'path';
-import { parse as parseYAML } from 'yaml';
 import {
-  interpretSpec,
+  parseSpecString,
   listInlineCharts,
   isDashChartRef,
   dashToDashboardSpec,
   chartIRToDashboardSpec,
-  interactionToRuntime,
+  chartIRToChartSpec,
   type DashIR,
   type DashboardSpec,
 } from '@dvfc/core';
@@ -73,18 +72,7 @@ function refChartStubs(dash: DashIR): DashboardSpec['charts'] {
 
 /** Loose inline mapping when dashToDashboardSpec rejects (e.g. missing dataSource). */
 function inlineChartsLoose(dash: DashIR): DashboardSpec['charts'] {
-  return listInlineCharts(dash).map((c) => ({
-    id: c.id,
-    type: c.type as DashboardSpec['charts'][0]['type'],
-    title: c.title,
-    dataSource: c.dataSource,
-    encoding: c.encoding,
-    content: c.content,
-    interaction: interactionToRuntime(c.interaction),
-    overlays: c.overlays,
-    width: c.width,
-    height: c.height,
-  }));
+  return listInlineCharts(dash).map((c) => chartIRToChartSpec(c));
 }
 
 function inlineChartsViaCore(dash: DashIR): DashboardSpec['charts'] {
@@ -100,8 +88,7 @@ function inlineChartsViaCore(dash: DashIR): DashboardSpec['charts'] {
  */
 async function loadSpec(filePath: string): Promise<DashboardSpec> {
   const content = await readFile(filePath, 'utf-8');
-  const raw: unknown = parseYAML(content);
-  const parsed = interpretSpec(raw, { path: filePath });
+  const parsed = parseSpecString(content, { path: filePath });
 
   if (parsed.kind === 'chart') {
     return chartIRToDashboardSpec(parsed.chart);
@@ -152,7 +139,7 @@ export async function searchCharts(options: SearchOptions): Promise<ChartHit[]> 
   } = options;
   const dashPath = options.dashPath;
 
-  const pattern = dashPath ? dashPath : '**/{*.dash,*.chart}.{yaml,yml,json}';
+  const pattern = dashPath ? dashPath : '**/{*.dash,*.chart}.{yaml,yml,json,toml}';
 
   const files = await glob(pattern, {
     cwd: projectRoot,

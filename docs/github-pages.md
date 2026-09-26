@@ -6,6 +6,7 @@ Documentation (MkDocs) is published at **[https://kobakhit.github.io/dvfc/docs/]
 
 ## Live examples
 
+- [Landing demo (compact)](https://kobakhit.github.io/dvfc/examples/landing/)
 - [Showcase (Mosaic)](https://kobakhit.github.io/dvfc/examples/showcase/)
 - [Showcase (dc.js)](https://kobakhit.github.io/dvfc/examples/showcase-dc/)
 - [Sales & Flights](https://kobakhit.github.io/dvfc/examples/sales-dash/)

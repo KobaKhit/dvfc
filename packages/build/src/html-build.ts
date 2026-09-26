@@ -3,15 +3,12 @@
  * Uses workspace-installed vgplot/duckdb via Vite aliases — no per-build install.
  */
 
-import { readFile, writeFile, mkdir, cp, mkdtemp, rm } from 'node:fs/promises';
-import { join, dirname, resolve as resolvePath } from 'node:path';
+import { writeFile, mkdir, cp, mkdtemp, rm } from 'node:fs/promises';
+import { join, resolve as resolvePath } from 'node:path';
 import { tmpdir } from 'node:os';
 import { build as viteBuild, createServer as createViteServer, type InlineConfig } from 'vite';
-import type { DbtManifest } from '@dvfc/adapter-dbt';
-import { createDbtResolver } from '@dvfc/adapter-dbt';
 import {
   normalizeFile,
-  findDbtStubDir,
   applyDvfcConfig,
   filterSpecToChart,
   type NormalizeResult,
@@ -20,6 +17,7 @@ import {
 import { generateMainScript, generateHTML, type GeneratorContext } from '@dvfc/render-mosaic';
 import { mosaicRuntimeAliases } from './resolve-runtime.js';
 import { validateSpecFileWithResult } from './validate-spec.js';
+import { loadDbtStubContext, assertDbtAssetsForBuild } from './dbt-stub.js';
 
 export interface BuildHtmlOptions {
   outDir?: string;
@@ -103,48 +101,9 @@ async function resolveDbtIfNeeded(
   projectRoot: string,
   quiet?: boolean
 ): Promise<string> {
-  const specDir = dirname(resolvePath(specPath));
-  const dbtDataDir =
-    (await findDbtStubDir({ specDir, projectRoot })) ?? join(specDir, 'dbt-stub');
-  const dbtManifestPath = join(dbtDataDir, 'manifest.json');
-
-  if (!spec.data.some((ds) => ds.type === 'dbt')) {
-    return dbtDataDir;
-  }
-
-  try {
-    const manifestData = JSON.parse(await readFile(dbtManifestPath, 'utf-8')) as DbtManifest;
-    const resolver = await createDbtResolver(manifestData, { dataDir: dbtDataDir });
-    for (const dataSource of spec.data) {
-      if (dataSource.type === 'dbt' && dataSource.model) {
-        const path = resolver.ref(dataSource.model);
-        await readFile(path, 'utf-8');
-        log(quiet, `✓ Resolved dbt model: ${dataSource.model} → ${path}`);
-      }
-    }
-  } catch (err) {
-    const missingAssets = spec.data.filter(
-      (ds) =>
-        ds.type === 'dbt' &&
-        !assets.some(
-          (a) =>
-            a.destName === `${ds.id}.csv` ||
-            a.destName === `${ds.id}.parquet` ||
-            a.destName.startsWith(`${ds.id}.`)
-        )
-    );
-    if (missingAssets.length > 0) {
-      if (err instanceof Error && err.message.includes('dbt model')) throw err;
-      throw new Error(
-        `dbt stub/manifest unavailable at ${dbtManifestPath}\n` +
-          `  Missing data for: ${missingAssets.map((d) => d.model || d.id).join(', ')}\n` +
-          `  Tip: Place dbt-stub (manifest.json + CSV/parquet) next to the spec or under examples/*/dbt-stub`
-      );
-    }
-    log(quiet, `⚠️  dbt stub discovery skipped (${dbtManifestPath}); using resolved assets`);
-  }
-
-  return dbtDataDir;
+  const dbtCtx = await loadDbtStubContext(specPath, projectRoot);
+  await assertDbtAssetsForBuild(spec, assets, dbtCtx, (...args) => log(quiet, ...args));
+  return dbtCtx.dbtDataDir;
 }
 
 /**

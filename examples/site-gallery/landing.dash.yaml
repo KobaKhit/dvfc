@@ -1,0 +1,69 @@
+id: cosmic-landing
+title: Other Worlds
+description: Brush the discovery timeline to filter linked views.
+version: 0.2.0
+coordination:
+  auto: true
+data:
+  - id: worlds
+    type: csv
+    path: exoplanets.csv
+charts:
+  - id: field_note
+    type: text
+    content: |
+      **Brush the timeline** to filter every view.
+
+      Crossfiltering is declared in the spec — not wired in JavaScript.
+
+  - id: world_count
+    type: number
+    title: Worlds in view
+    data: worlds
+    y: count(planet)
+    filterBy: era
+
+  - id: avg_habitability
+    type: number
+    title: Avg habitability
+    data: worlds
+    y: avg(habitability_score)
+    filterBy: era
+
+  - id: discovery_timeline
+    type: area
+    title: Discoveries over time
+    data: worlds
+    x: discovery_year
+    y: count(planet)
+    brush: true
+    brushAxis: x
+    publishes: era
+    filterBy: era
+    height: 260
+
+  - id: discovery_methods
+    type: donut
+    title: Discovery methods
+    data: worlds
+    x: method
+    y: count(planet)
+    filterBy: era
+    publishes: era
+    select: auto
+    height: 260
+
+layout:
+  type: grid
+  rows:
+    - 3
+    - 2
+  gap: 16
+theme:
+  colors:
+    - "#1e3a5f"
+    - "#7ba3c9"
+    - "#a89b8c"
+    - "#4a7c9b"
+  fontFamily: system-ui, -apple-system, "Segoe UI", sans-serif
+  backgroundColor: white

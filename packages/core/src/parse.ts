@@ -7,8 +7,76 @@ import { parse as parseYAML } from 'yaml';
 import { parse as parseTOML } from 'smol-toml';
 import { basename, extname } from 'path';
 import type { ChartIR, DashIR, SpecKind } from './ir.js';
-import { isChartIR, isDashIR } from './ir.js';
+import { isChartIR, isDashChartRef, isDashIR } from './ir.js';
+import type { AggregateFunction, ChannelEncoding } from './types.js';
 import { isDashboardSpec } from './types.js';
+
+const FIELD_AGGREGATE = /^(sum|avg|count|min|max|median)\(([^)]+)\)$/;
+
+/** `count(planet)` or `planet` → a channel. Objects with `field` pass through. */
+export function parseChannelShorthand(value: unknown): ChannelEncoding | undefined {
+  if (typeof value === 'string') {
+    const text = value.trim();
+    const match = text.match(FIELD_AGGREGATE);
+    if (match) {
+      return { field: match[2].trim(), aggregate: match[1] as AggregateFunction };
+    }
+    if (text) return { field: text };
+    return undefined;
+  }
+  if (value && typeof value === 'object' && 'field' in value) {
+    return value as ChannelEncoding;
+  }
+  return undefined;
+}
+
+/**
+ * Accept the flat chart shape (`x: year`, `y: count(planet)`, `data: worlds`)
+ * and the verbose encoding object. Existing specs are unchanged.
+ */
+export function expandChartShorthand(chart: ChartIR): ChartIR {
+  const raw = chart as ChartIR & Record<string, unknown>;
+  const encoding = { ...(raw.encoding ?? {}) } as Record<string, unknown>;
+  for (const key of ['x', 'y', 'color', 'size'] as const) {
+    const flat = raw[key];
+    if (flat != null && encoding[key] == null) {
+      const channel = parseChannelShorthand(flat);
+      if (channel) encoding[key] = channel;
+      delete raw[key];
+    } else if (typeof encoding[key] === 'string') {
+      const channel = parseChannelShorthand(encoding[key]);
+      if (channel) encoding[key] = channel;
+    }
+  }
+  if (Object.keys(encoding).length > 0) raw.encoding = encoding as ChartIR['encoding'];
+
+  if (typeof raw.data === 'string') {
+    raw.dataSource = raw.dataSource ?? raw.data;
+    delete raw.data;
+  }
+  if (typeof raw.query === 'string') {
+    raw.dataSource = raw.dataSource ?? raw.query;
+    delete raw.query;
+  }
+
+  const interaction = { ...(raw.interaction ?? {}) } as Record<string, unknown>;
+  for (const key of ['filterBy', 'publishes', 'brush', 'brushAxis', 'select'] as const) {
+    if (raw[key] != null && interaction[key] == null) {
+      interaction[key] = raw[key];
+      delete raw[key];
+    }
+  }
+  if (Object.keys(interaction).length > 0) {
+    raw.interaction = interaction as ChartIR['interaction'];
+  }
+  return raw;
+}
+
+function expandDashCharts(dash: DashIR): void {
+  for (const entry of dash.charts) {
+    if (!isDashChartRef(entry)) expandChartShorthand(entry);
+  }
+}
 
 export type ParsedSpec =
   | { kind: 'chart'; chart: ChartIR; raw: unknown }
@@ -95,6 +163,7 @@ export function interpretSpec(
     if (!isChartIR(raw)) {
       throw new Error('File declared as chart but missing id/type');
     }
+    expandChartShorthand(raw);
     return { kind: 'chart', chart: raw, raw };
   }
 
@@ -102,6 +171,7 @@ export function interpretSpec(
     if (!isDashIR(raw)) {
       throw new Error('File declared as dash but missing id/charts');
     }
+    expandDashCharts(raw);
     return { kind: 'dash', dash: raw, raw };
   }
 
@@ -113,9 +183,11 @@ export function interpretSpec(
   }
 
   if (isDashIR(raw)) {
+    expandDashCharts(raw);
     return { kind: 'dash', dash: raw, raw };
   }
   if (isChartIR(raw)) {
+    expandChartShorthand(raw);
     return { kind: 'chart', chart: raw, raw };
   }
 

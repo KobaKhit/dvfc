@@ -47,10 +47,6 @@ export function registerChartType(module: ChartTypeModule): void {
   globalRegistry.set(module.id, module);
 }
 
-export function unregisterChartType(id: string): boolean {
-  return globalRegistry.delete(id);
-}
-
 export function getChartType(id: string): ChartTypeModule | undefined {
   return globalRegistry.get(id);
 }

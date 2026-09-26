@@ -56,9 +56,8 @@ title: Revenue
 data:
   type: csv
   path: revenue.csv
-encoding:
-  x: { field: date, type: temporal }
-  y: { field: revenue, type: quantitative, aggregate: sum }
+x: date
+y: sum(revenue)
 ```
 
 ```bash

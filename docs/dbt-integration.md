@@ -114,14 +114,12 @@ data:
 charts:
   - id: daily_revenue
     type: line
-    dataSource: revenue_summary
+    data: revenue_summary
     title: "Daily Revenue Trend"
-    encoding:
-      x: { field: date, type: temporal }
-      y: { field: revenue, aggregate: sum }
-    interaction:
-      brush: true
-      selection: dateBrush
+    x: date
+    y: sum(revenue)
+    brush: true
+    publishes: dateBrush
     width: 700
     height: 250
 ```

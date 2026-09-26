@@ -149,9 +149,8 @@ type: line
 data:
   type: sql
   query: SELECT date, revenue FROM ...
-encoding:
-  x: { field: date, type: temporal }
-  y: { field: revenue, aggregate: sum }
+x: date
+y: sum(revenue)
 ```
 
 **Dash** (`sales.dash.yaml`):
@@ -169,12 +168,10 @@ charts:
   - chart: revenue_trend          # library ref
   - id: by_region
     type: bar
-    dataSource: sales_daily
-    encoding:
-      x: { field: region, type: nominal }
-      y: { field: sales, aggregate: sum }
-    interaction:
-      filterBy: time
+    data: sales_daily
+    x: region
+    y: sum(sales)
+    filterBy: time
 ```
 
 ---

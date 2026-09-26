@@ -22,6 +22,11 @@ export const LayoutConfigZ = z
     type: z.enum(['grid', 'flex', 'stack']).optional(),
     columns: z.number().min(1).optional(),
     gap: z.number().min(0).optional(),
+    /**
+     * Row lengths for asymmetric grids, e.g. [2, 3] → first row two cells,
+     * second row three (columns become LCM of the row lengths).
+     */
+    rows: z.array(z.number().int().min(1)).min(1).optional(),
   })
   .strict();
 

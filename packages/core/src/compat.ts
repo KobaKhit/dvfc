@@ -41,6 +41,35 @@ export function interactionToRuntime(
 }
 
 /**
+ * Flatten ChartIR → Mosaic ChartSpec.
+ * Pass `dataSource` when normalize has resolved a connector to a relation id.
+ */
+export function chartIRToChartSpec(
+  chart: ChartIR,
+  overrides?: { dataSource?: string }
+): ChartSpec {
+  const dataSource =
+    chart.type === 'text'
+      ? undefined
+      : overrides && 'dataSource' in overrides
+        ? overrides.dataSource || undefined
+        : chart.dataSource;
+
+  return {
+    id: chart.id,
+    type: chart.type as ChartSpec['type'],
+    dataSource,
+    title: chart.title,
+    encoding: chart.encoding,
+    content: chart.content,
+    interaction: interactionToRuntime(chart.interaction),
+    overlays: chart.overlays,
+    width: chart.width,
+    height: chart.height,
+  };
+}
+
+/**
  * Flatten dash chart entries that are inline ChartIR (refs left unresolved).
  */
 export function listInlineCharts(dash: DashIR): ChartIR[] {
@@ -59,20 +88,7 @@ export function chartIRToDashboardSpec(chart: ChartIR): DashboardSpec {
       version: '0.1.0',
     },
     data: [],
-    charts: [
-      {
-        id: chart.id,
-        type: chart.type as ChartSpec['type'],
-        dataSource: chart.dataSource,
-        title: chart.title,
-        encoding: chart.encoding,
-        content: chart.content,
-        interaction: interactionToRuntime(chart.interaction),
-        overlays: chart.overlays,
-        width: chart.width,
-        height: chart.height,
-      },
-    ],
+    charts: [chartIRToChartSpec(chart)],
   };
 }
 
@@ -108,18 +124,7 @@ export function dashToDashboardSpec(dash: DashIR): DashboardSpec {
       version: dash.version ?? (typeof dash.meta?.version === 'string' ? dash.meta.version : '0.1.0'),
     },
     data: dash.data ?? [],
-    charts: inline.map((c) => ({
-      id: c.id,
-      type: c.type as ChartSpec['type'],
-      dataSource: c.dataSource,
-      title: c.title,
-      encoding: c.encoding,
-      content: c.content,
-      interaction: interactionToRuntime(c.interaction),
-      overlays: c.overlays,
-      width: c.width,
-      height: c.height,
-    })),
+    charts: inline.map((c) => chartIRToChartSpec(c)),
     layout: dash.layout,
     theme: dash.theme,
   };

@@ -3,14 +3,9 @@
  */
 
 import { readFile } from 'node:fs/promises';
-import { join, dirname, resolve as resolvePath } from 'node:path';
-import type { DbtManifest } from '@dvfc/adapter-dbt';
-import { createDbtResolver } from '@dvfc/adapter-dbt';
 import {
   parseSpecString,
   registerBuiltinChartTypes,
-  findDbtStubDir,
-  findDbtModelCsv,
   normalizeFile,
   applyDvfcConfig,
   type NormalizeResult,
@@ -20,6 +15,7 @@ import {
   validateChartWithReport,
   validateDashWithReport,
 } from './validator.js';
+import { loadDbtStubContext, resolveDbtModelPath } from './dbt-stub.js';
 
 export interface ValidateOptions {
   projectRoot?: string;
@@ -85,20 +81,12 @@ export async function validateSpecFileWithResult(
       const dashData = parsed.dash.data ?? [];
       const hasDbtModels = dashData.some((ds) => ds.type === 'dbt');
       if (hasDbtModels) {
-        const specDir = dirname(resolvePath(specPath));
-        const dbtDataDir =
-          (await findDbtStubDir({ specDir, projectRoot })) ?? join(specDir, 'dbt-stub');
-        const dbtManifestPath = join(dbtDataDir, 'manifest.json');
-
-        let resolver: Awaited<ReturnType<typeof createDbtResolver>> | null = null;
-        try {
-          const manifestData = JSON.parse(await readFile(dbtManifestPath, 'utf-8')) as DbtManifest;
-          resolver = await createDbtResolver(manifestData, { dataDir: dbtDataDir });
-          log(quiet, `✓ dbt manifest found (${dbtDataDir})`);
-        } catch {
-          const msg = `dbt manifest not found at ${dbtManifestPath}`;
+        const dbtCtx = await loadDbtStubContext(specPath, projectRoot);
+        if (dbtCtx.resolver) {
+          log(quiet, `✓ dbt manifest found (${dbtCtx.dbtDataDir})`);
+        } else {
+          const msg = `dbt manifest not found at ${dbtCtx.dbtManifestPath}`;
           if (strictDbt) {
-            // Still allow if every model has a resolvable CSV stub
             log(quiet, `⚠️  ${msg} — checking CSV stubs`);
           } else {
             log(quiet, `⚠️  ${msg} (strictDbt=false; continuing)`);
@@ -108,23 +96,10 @@ export async function validateSpecFileWithResult(
         for (const dataSource of dashData) {
           if (dataSource.type !== 'dbt' || !dataSource.model) continue;
           const model = dataSource.model;
-          let resolved: string | null = null;
-          if (resolver) {
-            try {
-              resolved = resolver.ref(model);
-              log(quiet, `✓ dbt model '${model}' → ${resolved}`);
-            } catch {
-              resolved = null;
-            }
-          }
-          if (!resolved) {
-            const csv = await findDbtModelCsv(model, { specDir, projectRoot, dbtStubDir: dbtDataDir });
-            if (csv) {
-              log(quiet, `✓ dbt model '${model}' → stub ${csv}`);
-              resolved = csv;
-            }
-          }
-          if (!resolved) {
+          const resolved = await resolveDbtModelPath(model, dbtCtx);
+          if (resolved) {
+            log(quiet, `✓ dbt model '${model}' → ${resolved}`);
+          } else {
             const msg = `dbt model '${model}' not found in manifest or CSV stubs`;
             if (strictDbt) {
               errors.push(msg);

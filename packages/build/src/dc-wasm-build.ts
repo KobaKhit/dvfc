@@ -158,14 +158,3 @@ export async function buildDcWasmDashboard(
     await rm(tempDir, { recursive: true, force: true }).catch(() => undefined);
   }
 }
-
-/** Vite config for previewing a dc-wasm temp project. */
-export function createDcWasmPreviewViteConfig(
-  tempDir: string,
-  options: { port?: number; open?: boolean } = {}
-): InlineConfig {
-  return viteDcWasmConfig(tempDir, {
-    port: options.port || 3000,
-    open: options.open,
-  });
-}

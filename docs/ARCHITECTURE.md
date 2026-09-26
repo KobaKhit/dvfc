@@ -153,11 +153,9 @@ charts:
     data:
       type: dbt
       model: sales_daily
-    encoding:
-      x: { field: region, type: nominal }
-      y: { field: sales, aggregate: sum }
-    interaction:
-      filterBy: time
+    x: region
+    y: sum(sales)
+    filterBy: time
 
 theme:
   # optional, light theming tokens only in v1

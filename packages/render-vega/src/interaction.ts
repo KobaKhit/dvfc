@@ -3,6 +3,7 @@
  */
 
 import type { ChartSpec, InteractionConfig } from '@dvfc/core';
+import { publishedName } from '@dvfc/core';
 
 export interface VlPublishParam {
   /** Param name used in VL (logical or logical__chartId). */
@@ -11,12 +12,6 @@ export interface VlPublishParam {
   logical: string;
   chartId: string;
   select: Record<string, unknown>;
-}
-
-function publishedName(chart: ChartSpec): string | undefined {
-  const i = chart.interaction;
-  if (!i) return undefined;
-  return i.selection ?? i.publishes;
 }
 
 function xIsCategorical(chart: ChartSpec): boolean {

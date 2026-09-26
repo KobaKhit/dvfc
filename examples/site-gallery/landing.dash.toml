@@ -1,0 +1,101 @@
+id = "cosmic-landing"
+title = "Other Worlds"
+description = "Brush the discovery timeline to filter linked views."
+version = "0.2.0"
+
+[coordination]
+auto = true
+
+[[data]]
+id = "worlds"
+type = "csv"
+path = "exoplanets.csv"
+
+[[charts]]
+id = "field_note"
+type = "text"
+content = """
+**Brush the timeline** to filter every view.
+
+Crossfiltering is declared in the spec — not wired in JavaScript.
+"""
+
+[[charts]]
+id = "world_count"
+type = "number"
+title = "Worlds in view"
+dataSource = "worlds"
+
+[charts.encoding.y]
+field = "planet"
+aggregate = "count"
+label = "Worlds"
+
+[charts.interaction]
+filterBy = "era"
+
+[[charts]]
+id = "avg_habitability"
+type = "number"
+title = "Avg habitability"
+dataSource = "worlds"
+
+[charts.encoding.y]
+field = "habitability_score"
+aggregate = "avg"
+
+[charts.interaction]
+filterBy = "era"
+
+[[charts]]
+id = "discovery_timeline"
+type = "area"
+title = "Discoveries over time"
+dataSource = "worlds"
+height = 260
+
+[charts.encoding.x]
+field = "discovery_year"
+type = "ordinal"
+label = "Year"
+
+[charts.encoding.y]
+field = "planet"
+aggregate = "count"
+label = "Worlds"
+
+[charts.interaction]
+brush = true
+brushAxis = "x"
+publishes = "era"
+filterBy = "era"
+
+[[charts]]
+id = "discovery_methods"
+type = "donut"
+title = "Discovery methods"
+dataSource = "worlds"
+height = 260
+
+[charts.encoding.x]
+field = "method"
+type = "nominal"
+
+[charts.encoding.y]
+field = "planet"
+aggregate = "count"
+
+[charts.interaction]
+filterBy = "era"
+publishes = "era"
+select = "auto"
+
+[layout]
+type = "grid"
+rows = [3, 2]
+gap = 16
+
+[theme]
+colors = ["#1e3a5f", "#7ba3c9", "#a89b8c", "#4a7c9b"]
+fontFamily = "system-ui, -apple-system, \"Segoe UI\", sans-serif"
+backgroundColor = "white"

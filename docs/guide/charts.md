@@ -13,17 +13,17 @@ title: Sales by region
 data:
   type: csv
   path: sales.csv
-encoding:
-  x: { field: region, type: nominal, label: Region }
-  y: { field: sales, type: quantitative, aggregate: sum, label: Sales }
-interaction:
-  brush: true
-  publishes: region
+x: region
+y: sum(sales)
+brush: true
+publishes: region
 width: 420
 height: 260
 ```
 
-When the chart sits inside a dash, use `dataSource: <id>` instead of inline `data` and declare sources on the dash.
+Inside a dash, point `data:` at a source id declared on the dash (`data: worlds`). `dataSource:` is the same binding.
+
+`y: sum(sales)` rolls rows up in the chart. `y: bookings` plots a column that is already aggregated in SQL. The verbose `encoding:` object still works.
 
 ## Built-in types
 
@@ -46,17 +46,25 @@ List plugins at runtime: `dvfc charts types`.
 
 ## Encoding
 
-Common channels: `x`, `y`, `color`, plus type (`quantitative`, `nominal`, `ordinal`, `temporal`) and `aggregate` (`sum`, `count`, `avg`, …).
+Write channels on the chart:
+
+```yaml
+x: discovery_year
+y: count(planet)
+```
+
+`count(planet)`, `sum(sales)`, `avg(score)`, `min`, `max`, and `median` are the rollups. A bare name plots that column as-is. Optional type (`quantitative`, `nominal`, `ordinal`, `temporal`) and `label` still belong on an `encoding` object when you need them.
+
+Axis gridlines are off by default.
 
 ## Interaction (on a chart)
 
+`brush`, `publishes`, `filterBy`, `brushAxis`, and `select` can sit on the chart. The `interaction:` block is the same fields:
+
 ```yaml
-interaction:
-  brush: true          # enable brush / click select
-  brushAxis: x         # optional
-  publishes: era       # selection name others can filterBy
-  filterBy: era        # subscribe to a selection
-  select: auto         # point / interval heuristics
+brush: true
+publishes: era
+filterBy: era
 ```
 
 See [Interaction](interaction.md).

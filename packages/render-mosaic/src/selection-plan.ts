@@ -11,6 +11,7 @@
  */
 
 import type { ChartSpec, DashboardSpec } from '@dvfc/core';
+import { publishedName } from '@dvfc/core';
 import { buildSelectionInteractors } from './charts/interaction.js';
 
 export interface SelectionPlan {
@@ -22,13 +23,6 @@ export interface SelectionPlan {
   publishVar(chart: ChartSpec): string | undefined;
   /** JS variable for vg.from({ filterBy }) / predicate() on this chart. */
   filterVar(chart: ChartSpec): string | undefined;
-}
-
-/** Logical selection name this chart publishes (`selection` or `publishes`). */
-function publishedName(chart: ChartSpec): string | undefined {
-  const i = chart.interaction;
-  if (!i) return undefined;
-  return i.selection ?? i.publishes;
 }
 
 function chartPublishes(chart: ChartSpec): boolean {

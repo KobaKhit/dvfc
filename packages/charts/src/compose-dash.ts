@@ -4,9 +4,9 @@
 
 import { readFile, writeFile, mkdir } from 'fs/promises';
 import { join, dirname, resolve as resolvePath, relative, basename } from 'path';
-import { stringify as stringifyYAML, parse as parseYAML } from 'yaml';
+import { stringify as stringifyYAML } from 'yaml';
 import type { ChartIR, DashIR, DataSource } from '@dvfc/core';
-import { interpretSpec, isDashChartRef } from '@dvfc/core';
+import { parseSpecString, isDashChartRef } from '@dvfc/core';
 import { searchCharts } from './discovery.js';
 
 export interface ComposeDashOptions {
@@ -64,7 +64,7 @@ export async function composeDash(
 
     const absSource = resolvePath(projectRoot, exact.dashPath);
     const content = await readFile(absSource, 'utf-8');
-    const parsed = interpretSpec(parseYAML(content), { path: absSource });
+    const parsed = parseSpecString(content, { path: absSource });
 
     if (parsed.kind === 'chart' || isChartFilePath(exact.dashPath)) {
       // Prefer path ref so normalize can re-resolve data connectors from the chart file dir
@@ -163,7 +163,7 @@ export async function extractChartsFromDash(
 ): Promise<string[]> {
   const abs = resolvePath(dashPath);
   const content = await readFile(abs, 'utf-8');
-  const parsed = interpretSpec(parseYAML(content), { path: abs });
+  const parsed = parseSpecString(content, { path: abs });
   if (parsed.kind !== 'dash') {
     throw new Error('extract requires a *.dash.yaml file');
   }

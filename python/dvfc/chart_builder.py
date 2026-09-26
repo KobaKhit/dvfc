@@ -130,6 +130,15 @@ class ChartBuilder:
         )
         return self
 
+    def publishes(self, selection: str, select: Union[bool, str] = "auto") -> "ChartBuilder":
+        if self._interaction is None:
+            self._interaction = InteractionSpec(publishes=selection, selection=selection, select=select)  # type: ignore[arg-type]
+        else:
+            self._interaction.publishes = selection
+            self._interaction.selection = selection
+            self._interaction.select = select  # type: ignore[assignment]
+        return self
+
     def filter_by(self, selection: str) -> "ChartBuilder":
         if self._interaction is None:
             self._interaction = InteractionSpec(filterBy=selection)
@@ -187,6 +196,10 @@ class DashBuilder:
 
     def add_sql(self, source_id: str, sql: str) -> "DashBuilder":
         self._data.append(DashDataSource(id=source_id, type="sql", sql=sql))
+        return self
+
+    def add_csv(self, source_id: str, path: str) -> "DashBuilder":
+        self._data.append(DashDataSource(id=source_id, type="csv", path=path))
         return self
 
     def add_chart(self, chart: Union[Chart, ChartBuilder]) -> "DashBuilder":

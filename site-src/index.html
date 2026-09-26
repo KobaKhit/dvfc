@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>dvfc: YAML dashboards with crossfiltering, no backend</title>
-  <meta name="description" content="dvfc compiles chart and dash YAML into interactive Mosaic dashboards that run on DuckDB in the browser. Works with dbt models, ships as static HTML, and has CLI and MCP tools for coding agents.">
-  <link rel="stylesheet" href="/dvfc/style.css?v=20260920e">
+  <title>dvfc — dashboards as data, for humans and agents</title>
+  <meta name="description" content="dvfc compiles chart and dash specs into interactive Mosaic dashboards that run on DuckDB in the browser. Works with dbt models, ships as static HTML, and has CLI and MCP tools for coding agents.">
+  <link rel="stylesheet" href="/dvfc/style.css?v=20260926b">
 </head>
 <body>
   <div class="site">
@@ -13,54 +13,82 @@
       <div class="wrap nav-inner">
         <a class="brand" href="/dvfc/">dv<em>fc</em></a>
         <ul class="nav-links">
+          <li><a href="#demo">Live demo</a></li>
           <li><a href="#how">How it works</a></li>
           <li><a href="#gallery">Examples</a></li>
           <li><a href="/dvfc/charts.html">Chart types</a></li>
           <li><a href="/dvfc/docs/">Docs</a></li>
           <li><a href="https://github.com/KobaKhit/dvfc" target="_blank" rel="noopener">GitHub</a></li>
-          <li><a class="btn btn-primary btn-sm" href="#demo">Live demo</a></li>
+          <li><a class="btn btn-primary btn-sm" href="#demo">Try it</a></li>
         </ul>
       </div>
     </nav>
 
-    <header class="hero" id="demo">
-      <div class="wrap-wide hero-grid">
-        <div class="hero-copy">
-          <p class="eyebrow">Open source, Apache-2.0</p>
-          <h1>Write a dashboard as YAML. Get linked, interactive charts.</h1>
-          <p class="hero-lead">
-            dvfc turns small chart and dash spec files into browser dashboards with crossfiltering built in. Queries run on DuckDB inside the page, so there is nothing to deploy and nothing to host but static files.
-          </p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="/dvfc/examples/showcase/">Open the demo fullscreen</a>
-            <a class="btn btn-secondary" href="/dvfc/docs/">Read the docs</a>
+    <header class="hero" id="mission">
+      <div class="wrap hero-mission">
+        <p class="brand-mark">dv<em>fc</em></p>
+        <h1>Dashboards as data. Crossfiltering without a backend.</h1>
+        <p class="hero-lead">
+          Data Viz Factory turns declarative chart and dash specs into linked, interactive analytics that run on DuckDB in the browser — reviewable in git, safe for coding agents, and shippable as static HTML.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#demo">See a live dash</a>
+          <a class="btn btn-secondary" href="/dvfc/docs/">Read the docs</a>
+        </div>
+      </div>
+    </header>
+
+    <section class="section demo-section" id="demo">
+      <div class="wrap-demo">
+        <div class="demo-head">
+          <div>
+            <p class="section-kicker">Live example</p>
+            <h2>One spec. Linked charts. Brush to filter.</h2>
+            <p>Same landing spec, three renderers. Mosaic and dc.js crossfilter in the browser. Vega-Lite is a static linked page. The file on the right is that spec.</p>
           </div>
-          <ul class="hero-facts" aria-label="Key facts">
-            <li><strong>13</strong> chart types</li>
-            <li><strong>dbt</strong> manifest aware</li>
-            <li><strong>CLI + MCP</strong> for agents</li>
-          </ul>
+          <a class="btn btn-secondary" id="demo-open" href="/dvfc/examples/landing-dc/index.html">Open fullscreen</a>
         </div>
 
-        <div class="hero-product">
-          <div class="showcase-board">
+        <div class="demo-stage">
+          <div class="demo-board">
             <div class="pane-chrome">
-              <strong><span class="live-dot"></span> Live: 43 exoplanets, DuckDB in the browser</strong>
-              <span class="hint-pill">Drag across the timeline</span>
+              <div class="engine-tabs" role="tablist" aria-label="Renderer">
+                <button type="button" class="engine-tab is-active" role="tab" aria-selected="true" data-engine="dc">dc.js</button>
+                <button type="button" class="engine-tab" role="tab" aria-selected="false" data-engine="mosaic">Mosaic</button>
+                <button type="button" class="engine-tab" role="tab" aria-selected="false" data-engine="vega">Vega</button>
+              </div>
+              <span class="hint-pill" id="demo-hint">Brush a chart to filter</span>
             </div>
             <iframe
-              title="Interactive exoplanet dashboard built with dvfc"
-              src="/dvfc/examples/showcase/?embed=1"
+              id="demo-frame"
+              title="Other Worlds dashboard, dc.js renderer"
+              src="/dvfc/examples/landing-dc/index.html?embed=1&v=30"
               loading="eager"
               scrolling="no"
             ></iframe>
           </div>
-          <p class="hero-product-note">
-            Built from <a href="https://github.com/KobaKhit/dvfc/blob/main/examples/site-gallery/showcase.dash.yaml" target="_blank" rel="noopener">one 70-line file</a>. Brushing the line chart filters the other three views.
-          </p>
+
+          <div class="demo-spec panel code-panel">
+            <div class="pane-chrome">
+              <div class="format-tabs" role="tablist" aria-label="Spec format">
+                <button type="button" class="format-tab is-active" role="tab" aria-selected="true" data-format="yaml">YAML</button>
+                <button type="button" class="format-tab" role="tab" aria-selected="false" data-format="toml">TOML</button>
+                <button type="button" class="format-tab" role="tab" aria-selected="false" data-format="json">JSON</button>
+                <button type="button" class="format-tab" role="tab" aria-selected="false" data-format="python">Python</button>
+              </div>
+              <div class="spec-actions">
+                <a id="spec-source-link" href="https://github.com/KobaKhit/dvfc/blob/main/examples/site-gallery/landing.dash.yaml" target="_blank" rel="noopener">Source</a>
+                <button type="button" class="copy-btn" id="copy-spec" aria-label="Copy spec">Copy</button>
+              </div>
+            </div>
+            <pre class="yaml-body spec-pane is-active" id="spec-yaml" data-filename="landing.dash.yaml" hidden></pre>
+            <pre class="yaml-body spec-pane" id="spec-toml" data-filename="landing.dash.toml" hidden></pre>
+            <pre class="yaml-body spec-pane" id="spec-json" data-filename="landing.dash.json" hidden></pre>
+            <pre class="yaml-body spec-pane" id="spec-python" data-filename="landing_dash.py" hidden></pre>
+          </div>
         </div>
       </div>
-    </header>
+    </section>
 
     <section class="section" id="how">
       <div class="wrap">
@@ -98,31 +126,25 @@
 <span class="k">charts</span>:
   - <span class="k">id</span>: discovery_timeline
     <span class="k">type</span>: area
-    <span class="k">dataSource</span>: worlds
-    <span class="k">encoding</span>:
-      <span class="k">x</span>: { <span class="k">field</span>: discovery_year, <span class="k">type</span>: ordinal }
-      <span class="k">y</span>: { <span class="k">field</span>: planet, <span class="k">aggregate</span>: count }
-    <span class="k">interaction</span>:
-      <span class="k">brush</span>: true
-      <span class="k">publishes</span>: era
+    <span class="k">data</span>: worlds
+    <span class="k">x</span>: discovery_year
+    <span class="k">y</span>: count(planet)
+    <span class="k">brush</span>: true
+    <span class="k">publishes</span>: era
 
   - <span class="k">id</span>: habitability_scatter
     <span class="k">type</span>: scatter
-    <span class="k">dataSource</span>: worlds
-    <span class="k">encoding</span>:
-      <span class="k">x</span>: { <span class="k">field</span>: equilibrium_k }
-      <span class="k">y</span>: { <span class="k">field</span>: habitability_score }
-    <span class="k">interaction</span>:
-      <span class="k">filterBy</span>: era
+    <span class="k">data</span>: worlds
+    <span class="k">x</span>: equilibrium_k
+    <span class="k">y</span>: habitability_score
+    <span class="k">filterBy</span>: era
 
   - <span class="k">id</span>: discovery_methods
     <span class="k">type</span>: pie
-    <span class="k">dataSource</span>: worlds
-    <span class="k">encoding</span>:
-      <span class="k">x</span>: { <span class="k">field</span>: method }
-      <span class="k">y</span>: { <span class="k">field</span>: planet, <span class="k">aggregate</span>: count }
-    <span class="k">interaction</span>:
-      <span class="k">filterBy</span>: era</pre>
+    <span class="k">data</span>: worlds
+    <span class="k">x</span>: method
+    <span class="k">y</span>: count(planet)
+    <span class="k">filterBy</span>: era</pre>
           </div>
           <div class="panel">
             <h3>Why a text file</h3>
@@ -297,7 +319,7 @@
         <p>Clone the repository, run one build command, and open a dashboard locally in under two minutes.</p>
         <pre class="code-block cta-code">git clone https://github.com/KobaKhit/dvfc.git && cd dvfc
 pnpm install && pnpm build
-pnpm exec dvfc preview examples/site-gallery/showcase.dash.yaml</pre>
+pnpm exec dvfc preview examples/site-gallery/landing.dash.yaml</pre>
         <div class="hero-actions">
           <a class="btn btn-primary" href="https://github.com/KobaKhit/dvfc" target="_blank" rel="noopener">View on GitHub</a>
           <a class="btn btn-secondary" href="/dvfc/charts.html">Browse chart types</a>
@@ -314,6 +336,7 @@ pnpm exec dvfc preview examples/site-gallery/showcase.dash.yaml</pre>
         <div>
           <h4>Product</h4>
           <ul>
+            <li><a href="#demo">Live demo</a></li>
             <li><a href="#how">How it works</a></li>
             <li><a href="#gallery">Examples</a></li>
             <li><a href="/dvfc/charts.html">Chart types</a></li>
@@ -344,20 +367,189 @@ pnpm exec dvfc preview examples/site-gallery/showcase.dash.yaml</pre>
     </footer>
   </div>
 
+  <script type="application/json" id="spec-payloads">
+  {
+    "yaml": "id: cosmic-landing\ntitle: Other Worlds\ndata:\n  - id: worlds\n    type: csv\n    path: exoplanets.csv\ncharts:\n  - id: field_note\n    type: text\n    content: |\n      **Brush the timeline** to filter every view.\n  - id: world_count\n    type: number\n    title: Worlds in view\n    data: worlds\n    y: count(planet)\n    filterBy: era\n  - id: avg_habitability\n    type: number\n    title: Avg habitability\n    data: worlds\n    y: avg(habitability_score)\n    filterBy: era\n  - id: discovery_timeline\n    type: area\n    title: Discoveries over time\n    data: worlds\n    x: discovery_year\n    y: count(planet)\n    brush: true\n    publishes: era\n    filterBy: era\n  - id: discovery_methods\n    type: donut\n    title: Discovery methods\n    data: worlds\n    x: method\n    y: count(planet)\n    filterBy: era\n    publishes: era\nlayout:\n  type: grid\n  rows:\n    - 3\n    - 2\n  gap: 16\n",
+    "toml": "id = \"cosmic-landing\"\ntitle = \"Other Worlds\"\n\n[[data]]\nid = \"worlds\"\ntype = \"csv\"\npath = \"exoplanets.csv\"\n\n[[charts]]\nid = \"field_note\"\ntype = \"text\"\ncontent = \"**Brush the timeline** to filter every view.\"\n\n[[charts]]\nid = \"world_count\"\ntype = \"number\"\ndataSource = \"worlds\"\n\n[charts.encoding.y]\nfield = \"planet\"\naggregate = \"count\"\n\n[charts.interaction]\nfilterBy = \"era\"\n\n[[charts]]\nid = \"avg_habitability\"\ntype = \"number\"\ndataSource = \"worlds\"\n\n[charts.encoding.y]\nfield = \"habitability_score\"\naggregate = \"avg\"\n\n[charts.interaction]\nfilterBy = \"era\"\n\n[[charts]]\nid = \"discovery_timeline\"\ntype = \"area\"\ndataSource = \"worlds\"\n\n[charts.encoding.x]\nfield = \"discovery_year\"\ntype = \"ordinal\"\n\n[charts.encoding.y]\nfield = \"planet\"\naggregate = \"count\"\n\n[charts.interaction]\nbrush = true\npublishes = \"era\"\nfilterBy = \"era\"\n\n[[charts]]\nid = \"discovery_methods\"\ntype = \"donut\"\ndataSource = \"worlds\"\n\n[charts.encoding.x]\nfield = \"method\"\n\n[charts.encoding.y]\nfield = \"planet\"\naggregate = \"count\"\n\n[charts.interaction]\nfilterBy = \"era\"\npublishes = \"era\"\n\n[layout]\ntype = \"grid\"\nrows = [3, 2]\ngap = 16",
+    "json": "{\n  \"id\": \"cosmic-landing\",\n  \"title\": \"Other Worlds\",\n  \"data\": [{ \"id\": \"worlds\", \"type\": \"csv\", \"path\": \"exoplanets.csv\" }],\n  \"charts\": [\n    { \"id\": \"field_note\", \"type\": \"text\",\n      \"content\": \"**Brush the timeline** to filter every view.\" },\n    { \"id\": \"world_count\", \"type\": \"number\", \"dataSource\": \"worlds\",\n      \"encoding\": { \"y\": { \"field\": \"planet\", \"aggregate\": \"count\" } },\n      \"interaction\": { \"filterBy\": \"era\" } },\n    { \"id\": \"avg_habitability\", \"type\": \"number\", \"dataSource\": \"worlds\",\n      \"encoding\": { \"y\": { \"field\": \"habitability_score\", \"aggregate\": \"avg\" } },\n      \"interaction\": { \"filterBy\": \"era\" } },\n    { \"id\": \"discovery_timeline\", \"type\": \"area\", \"dataSource\": \"worlds\",\n      \"encoding\": {\n        \"x\": { \"field\": \"discovery_year\", \"type\": \"ordinal\" },\n        \"y\": { \"field\": \"planet\", \"aggregate\": \"count\" }\n      },\n      \"interaction\": { \"brush\": true, \"publishes\": \"era\", \"filterBy\": \"era\" } },\n    { \"id\": \"discovery_methods\", \"type\": \"donut\", \"dataSource\": \"worlds\",\n      \"encoding\": {\n        \"x\": { \"field\": \"method\", \"type\": \"nominal\" },\n        \"y\": { \"field\": \"planet\", \"aggregate\": \"count\" }\n      },\n      \"interaction\": { \"filterBy\": \"era\", \"publishes\": \"era\" } }\n  ],\n  \"layout\": { \"type\": \"grid\", \"rows\": [3, 2], \"gap\": 16 }\n}",
+    "python": "from dvfc import ChartBuilder, ChartType, DashBuilder\n\nnote = ChartBuilder(\"field_note\", ChartType.TEXT).content(\n    \"**Brush the timeline** to filter every view.\"\n).build()\n\nkpi = (ChartBuilder(\"world_count\", ChartType.NUMBER)\n    .data_source(\"worlds\").y(\"planet\", aggregate=\"count\")\n    .filter_by(\"era\").build())\n\nhab = (ChartBuilder(\"avg_habitability\", ChartType.NUMBER)\n    .data_source(\"worlds\").y(\"habitability_score\", aggregate=\"avg\")\n    .filter_by(\"era\").build())\n\ntimeline = (ChartBuilder(\"discovery_timeline\", ChartType.AREA)\n    .data_source(\"worlds\")\n    .x(\"discovery_year\", type=\"ordinal\")\n    .y(\"planet\", aggregate=\"count\")\n    .brush(\"x\", \"era\").filter_by(\"era\").build())\n\nmethods = (ChartBuilder(\"discovery_methods\", ChartType.DONUT)\n    .data_source(\"worlds\").x(\"method\", type=\"nominal\")\n    .y(\"planet\", aggregate=\"count\")\n    .publishes(\"era\").filter_by(\"era\").build())\n\ndash = (DashBuilder(\"cosmic-landing\", \"Other Worlds\")\n    .add_csv(\"worlds\", \"exoplanets.csv\")\n    .add_chart(note).add_chart(kpi).add_chart(hab)\n    .add_chart(timeline).add_chart(methods)\n    .build())"
+  }
+  </script>
+
   <script>
-    document.querySelectorAll("[data-copy-target]").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        const el = document.getElementById(btn.getAttribute("data-copy-target"));
-        const text = el ? el.innerText.replace(/\s+/g, " ").trim() : "";
+    (function () {
+      const payloads = JSON.parse(document.getElementById("spec-payloads").textContent);
+      const sourcePaths = {
+        yaml: "https://github.com/KobaKhit/dvfc/blob/main/examples/site-gallery/landing.dash.yaml",
+        toml: "https://github.com/KobaKhit/dvfc/blob/main/examples/site-gallery/landing.dash.toml",
+        json: "https://github.com/KobaKhit/dvfc/blob/main/examples/site-gallery/landing.dash.json",
+        python: "https://github.com/KobaKhit/dvfc/blob/main/examples/site-gallery/landing_dash.py",
+      };
+
+      function escapeHtml(s) {
+        return s
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+
+      /** Highlight after escaping; use tok-* classes so string highlighters cannot eat class=\"k\". */
+      function highlight(format, text) {
+        const esc = escapeHtml(text);
+        if (format === "python") {
+          const parts = [];
+          const marked = esc.replace(/("(?:\\.|[^"\\])*")/g, (m) => {
+            parts.push(`<span class="tok-s">${m}</span>`);
+            return `\0${parts.length - 1}\0`;
+          });
+          return marked
+            .replace(/\b(from|import|True|False|None)\b/g, '<span class="tok-k">$1</span>')
+            .replace(/\0(\d+)\0/g, (_, i) => parts[Number(i)]);
+        }
+        if (format === "json") {
+          return esc
+            .replace(/(&quot;.*?&quot;|".*?")(\s*:)/g, (_, key, colon) => {
+              const k = key.startsWith("&quot;") ? key : key;
+              return `<span class="tok-k">${k}</span>${colon}`;
+            })
+            .replace(/:\s*(".*?")/g, ': <span class="tok-s">$1</span>');
+        }
+        if (format === "toml") {
+          const parts = [];
+          const marked = esc.replace(/("(?:\\.|[^"\\])*")/g, (m) => {
+            parts.push(`<span class="tok-s">${m}</span>`);
+            return `\0${parts.length - 1}\0`;
+          });
+          return marked
+            .replace(/^(\[{1,2}[^\]]+\]{1,2})/gm, '<span class="tok-k">$1</span>')
+            .replace(/^([A-Za-z_][\w-]*)(\s*=)/gm, '<span class="tok-k">$1</span>$2')
+            .replace(/\0(\d+)\0/g, (_, i) => parts[Number(i)]);
+        }
+        return esc
+          .replace(/^([A-Za-z_][\w-]*)(:)/gm, '<span class="tok-k">$1</span>$2')
+          .replace(/([-{,\s])([A-Za-z_][\w-]*)(:)/g, '$1<span class="tok-k">$2</span>$3');
+      }
+
+      const panes = {
+        yaml: document.getElementById("spec-yaml"),
+        toml: document.getElementById("spec-toml"),
+        json: document.getElementById("spec-json"),
+        python: document.getElementById("spec-python"),
+      };
+
+      Object.keys(panes).forEach((format) => {
+        panes[format].innerHTML = highlight(format, payloads[format]);
+        panes[format].removeAttribute("hidden");
+        if (format !== "yaml") panes[format].classList.remove("is-active");
+      });
+
+      const engines = {
+        mosaic: {
+          src: "/dvfc/examples/landing/?embed=1&v=30",
+          open: "/dvfc/examples/landing/",
+          hint: "Drag across the timeline",
+          title: "Other Worlds dashboard, Mosaic renderer",
+        },
+        dc: {
+          src: "/dvfc/examples/landing-dc/index.html?embed=1&v=30",
+          open: "/dvfc/examples/landing-dc/index.html",
+          hint: "Brush a chart to filter",
+          title: "Other Worlds dashboard, dc.js renderer",
+        },
+        vega: {
+          src: "/dvfc/examples/landing-vega/index.html?embed=1&v=30",
+          open: "/dvfc/examples/landing-vega/index.html",
+          hint: "Brush a chart in the static page",
+          title: "Other Worlds dashboard, Vega-Lite renderer",
+        },
+      };
+
+      const frame = document.getElementById("demo-frame");
+      const openLink = document.getElementById("demo-open");
+      const hint = document.getElementById("demo-hint");
+      const engineTabs = document.querySelectorAll(".engine-tab");
+
+      function setEngine(engine) {
+        const next = engines[engine] || engines.dc;
+        engineTabs.forEach((tab) => {
+          const on = tab.getAttribute("data-engine") === engine;
+          tab.classList.toggle("is-active", on);
+          tab.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        if (frame.getAttribute("src") !== next.src) frame.src = next.src;
+        frame.title = next.title;
+        openLink.href = next.open;
+        hint.textContent = next.hint;
+      }
+
+      engineTabs.forEach((tab) => {
+        tab.addEventListener("click", () => setEngine(tab.getAttribute("data-engine")));
+      });
+
+      function fitYaml() {
+        const pane = panes.yaml;
+        if (!pane.classList.contains("is-active")) return;
+        pane.style.overflow = "hidden";
+        pane.style.lineHeight = "1.32";
+        let size = 13;
+        pane.style.fontSize = size + "px";
+        while (pane.scrollHeight > pane.clientHeight + 1 && size > 8) {
+          size -= 0.25;
+          pane.style.fontSize = size + "px";
+        }
+        pane.style.overflow = pane.scrollHeight > pane.clientHeight + 1 ? "auto" : "hidden";
+      }
+
+      requestAnimationFrame(() => requestAnimationFrame(fitYaml));
+      window.addEventListener("resize", fitYaml);
+
+      let active = "yaml";
+      const link = document.getElementById("spec-source-link");
+      const tabs = document.querySelectorAll(".format-tab");
+
+      function setFormat(format) {
+        active = format;
+        tabs.forEach((tab) => {
+          const on = tab.getAttribute("data-format") === format;
+          tab.classList.toggle("is-active", on);
+          tab.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        Object.keys(panes).forEach((key) => {
+          panes[key].classList.toggle("is-active", key === format);
+        });
+        link.href = sourcePaths[format];
+        if (format === "yaml") requestAnimationFrame(fitYaml);
+      }
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => setFormat(tab.getAttribute("data-format")));
+      });
+
+      document.getElementById("copy-spec").addEventListener("click", async (ev) => {
+        const btn = ev.currentTarget;
         try {
-          await navigator.clipboard.writeText(text);
+          await navigator.clipboard.writeText(payloads[active]);
           btn.textContent = "Copied";
           setTimeout(() => { btn.textContent = "Copy"; }, 1600);
         } catch (_) {
           btn.textContent = "Failed";
         }
       });
-    });
+
+      document.querySelectorAll("[data-copy-target]").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const el = document.getElementById(btn.getAttribute("data-copy-target"));
+          const text = el ? el.innerText.replace(/\s+/g, " ").trim() : "";
+          try {
+            await navigator.clipboard.writeText(text);
+            btn.textContent = "Copied";
+            setTimeout(() => { btn.textContent = "Copy"; }, 1600);
+          } catch (_) {
+            btn.textContent = "Failed";
+          }
+        });
+      });
+    })();
   </script>
 </body>
 </html>

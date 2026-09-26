@@ -3,6 +3,8 @@
  * DashboardSpec is the normalized Mosaic runtime shape (not a user-facing file format).
  */
 
+import type { ChartType } from './chart-types.js';
+
 export interface DashboardSpec {
   /** Dashboard metadata */
   meta: DashboardMeta;
@@ -51,21 +53,6 @@ export interface DataSource {
   sql?: string;
 }
 
-export type ChartType = 
-  | 'bar'
-  | 'line'
-  | 'area'
-  | 'scatter'
-  | 'histogram'
-  | 'boxplot'
-  | 'density'
-  | 'heatmap'
-  | 'pie'
-  | 'donut'
-  | 'number'
-  | 'table'
-  | 'text';
-
 export type AggregateFunction = 
   | 'sum'
   | 'avg'
@@ -102,6 +89,12 @@ export interface ChartSpec {
   /** Optional dimensions */
   width?: number;
   height?: number;
+}
+
+/** Logical selection name this chart publishes (`selection` or `publishes`). */
+export function publishedName(chart: ChartSpec): string | undefined {
+  const i = chart.interaction;
+  return i?.selection ?? i?.publishes;
 }
 
 export type AnalysisOverlayType = 
@@ -198,6 +191,12 @@ export interface LayoutConfig {
   
   /** Gap between charts */
   gap?: number;
+
+  /**
+   * Asymmetric row lengths, e.g. `[2, 3]` → two cells then three.
+   * Grid column count becomes the LCM of the row lengths.
+   */
+  rows?: number[];
 }
 
 export interface ThemeConfig {
@@ -212,16 +211,9 @@ export interface ThemeConfig {
 
   /**
    * Draw bordered cards around each chart.
-   * Off by default, set `true` for framed tiles.
+   * Off by default; set `true` for framed tiles.
    */
   chartBorders?: boolean;
-}
-
-/**
- * Validator interface for dashboard specs
- */
-export interface SpecValidator {
-  validate(spec: unknown): { valid: boolean; errors?: string[] };
 }
 
 /**

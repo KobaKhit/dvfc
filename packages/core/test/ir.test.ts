@@ -81,6 +81,37 @@ charts:
     assert.equal(parsed.kind, 'dash');
   });
 
+  it('expands flat x/y fields and count() into encodings', () => {
+    const yaml = `
+id: cosmic
+title: Other Worlds
+data:
+  - id: worlds
+    type: csv
+    path: exoplanets.csv
+charts:
+  - id: timeline
+    type: area
+    data: worlds
+    x: discovery_year
+    y: count(planet)
+    brush: true
+    publishes: era
+    filterBy: era
+`;
+    const parsed = parseSpecString(yaml, { format: 'yaml', prefer: 'dash' });
+    if (parsed.kind !== 'dash') throw new Error('expected dash');
+    const chart = parsed.dash.charts[0];
+    if (!chart || !('encoding' in chart)) throw new Error('expected inline chart');
+    assert.equal(chart.dataSource, 'worlds');
+    assert.equal(chart.encoding?.x?.field, 'discovery_year');
+    assert.equal(chart.encoding?.y?.field, 'planet');
+    assert.equal(chart.encoding?.y?.aggregate, 'count');
+    assert.equal(chart.interaction?.publishes, 'era');
+    assert.equal(chart.interaction?.filterBy, 'era');
+    assert.equal(chart.interaction?.brush, true);
+  });
+
   it('rejects legacy board shape', () => {
     assert.throws(
       () =>

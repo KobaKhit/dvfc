@@ -1,17 +1,21 @@
 /**
  * Mutate chart/dash YAML files (shared by MCP create/update/coordination tools).
- * Operates on Chart/Dash IR via interpretSpec.
+ * Operates on Chart/Dash IR via parseSpecString.
  */
 
 import { readFile, writeFile } from 'node:fs/promises';
-import { parse as parseYAML, stringify as stringifyYAML } from 'yaml';
+import { stringify as stringifyYAML } from 'yaml';
 import {
-  interpretSpec,
+  parseSpecString,
   isDashChartRef,
+  chartIRToDashboardSpec,
+  dashToDashboardSpec,
+  normalizeFile,
   type ChartIR,
   type ChartSpec,
   type DashboardSpec,
   type DashIR,
+  type DataRef,
 } from '@dvfc/core';
 
 function chartIdsFromDash(dash: DashIR): string[] {
@@ -24,7 +28,7 @@ function findInlineChartIndex(dash: DashIR, chartId: string): number {
   );
 }
 
-function validateChartEncoding(chart: Pick<ChartSpec, 'type' | 'encoding'>): void {
+function validateChartEncoding(chart: Pick<ChartIR, 'type' | 'encoding'>): void {
   const enc = chart.encoding;
   if (!enc) throw new Error('Chart requires encoding');
   if (['line', 'bar', 'scatter', 'area', 'pie', 'donut'].includes(chart.type)) {
@@ -34,47 +38,81 @@ function validateChartEncoding(chart: Pick<ChartSpec, 'type' | 'encoding'>): voi
   }
 }
 
+/** Accept ChartIR-shaped input (data / publishes) or legacy ChartSpec (dataSource / selection). */
+export type ChartMutationInput = Partial<ChartIR> &
+  Partial<Pick<ChartSpec, 'dataSource' | 'interaction'>> & {
+    id?: string;
+    type?: string;
+    data?: DataRef;
+  };
+
+function toChartIR(input: ChartMutationInput): ChartIR {
+  if (!input.id || !input.type) {
+    throw new Error('Chart must have id and type');
+  }
+  const interaction = input.interaction
+    ? {
+        brush: input.interaction.brush,
+        brushAxis: input.interaction.brushAxis,
+        select: 'select' in input.interaction ? input.interaction.select : undefined,
+        publishes:
+          ('publishes' in input.interaction ? input.interaction.publishes : undefined) ??
+          ('selection' in input.interaction ? input.interaction.selection : undefined),
+        filterBy: input.interaction.filterBy,
+      }
+    : undefined;
+
+  const chart: ChartIR = {
+    id: input.id,
+    type: input.type,
+    title: input.title,
+    description: input.description,
+    data: input.data,
+    dataSource: input.dataSource,
+    encoding: input.encoding,
+    content: input.content,
+    interaction,
+    overlays: input.overlays,
+    width: input.width,
+    height: input.height,
+  };
+
+  if (chart.type !== 'text' && !chart.data && !chart.dataSource) {
+    throw new Error('Chart must have data or dataSource');
+  }
+  if (chart.type !== 'text') {
+    if (!chart.encoding && chart.type !== 'table') {
+      // table may omit encoding in some cases; keep prior strictness for plot types
+    }
+    if (chart.encoding) validateChartEncoding(chart);
+    else if (['line', 'bar', 'scatter', 'area', 'pie', 'donut'].includes(chart.type)) {
+      throw new Error('Chart requires encoding');
+    }
+  }
+  return chart;
+}
+
 export async function addChartToSpecFile(
   specPath: string,
-  chart: ChartSpec
+  chartInput: ChartMutationInput | ChartSpec
 ): Promise<void> {
-  if (!chart.id || !chart.type || !chart.dataSource || !chart.encoding) {
-    throw new Error('Chart must have id, type, dataSource, and encoding');
-  }
-  validateChartEncoding(chart);
+  const chart = toChartIR(chartInput as ChartMutationInput);
 
   const content = await readFile(specPath, 'utf-8');
-  const raw = parseYAML(content) as unknown;
-  const parsed = interpretSpec(raw, { path: specPath });
+  const parsed = parseSpecString(content, { path: specPath });
 
   if (parsed.kind === 'dash') {
     const dash = parsed.dash;
     if (chartIdsFromDash(dash).includes(chart.id)) {
       throw new Error(`Chart with id '${chart.id}' already exists`);
     }
-    const dataIds = new Set((dash.data ?? []).map((d) => d.id));
-    if (dataIds.size > 0 && !dataIds.has(chart.dataSource)) {
-      throw new Error(`Data source '${chart.dataSource}' not found`);
+    if (chart.dataSource) {
+      const dataIds = new Set((dash.data ?? []).map((d) => d.id));
+      if (dataIds.size > 0 && !dataIds.has(chart.dataSource)) {
+        throw new Error(`Data source '${chart.dataSource}' not found`);
+      }
     }
-    const entry: ChartIR = {
-      id: chart.id,
-      type: chart.type,
-      dataSource: chart.dataSource,
-      title: chart.title,
-      encoding: chart.encoding,
-      interaction: chart.interaction
-        ? {
-            brush: chart.interaction.brush,
-            brushAxis: chart.interaction.brushAxis,
-            publishes: chart.interaction.publishes ?? chart.interaction.selection,
-            filterBy: chart.interaction.filterBy,
-          }
-        : undefined,
-      overlays: chart.overlays,
-      width: chart.width,
-      height: chart.height,
-    };
-    dash.charts.push(entry);
+    dash.charts.push(chart);
     await writeFile(specPath, stringifyYAML(dash));
     return;
   }
@@ -89,11 +127,10 @@ export async function addChartToSpecFile(
 export async function updateChartInSpecFile(
   specPath: string,
   chartId: string,
-  updates: Partial<ChartSpec>
+  updates: ChartMutationInput
 ): Promise<void> {
   const content = await readFile(specPath, 'utf-8');
-  const raw = parseYAML(content) as unknown;
-  const parsed = interpretSpec(raw, { path: specPath });
+  const parsed = parseSpecString(content, { path: specPath });
 
   if (parsed.kind === 'dash') {
     const dash = parsed.dash;
@@ -111,18 +148,22 @@ export async function updateChartInSpecFile(
         throw new Error(`Data source '${updates.dataSource}' not found`);
       }
     }
+    const interaction = updates.interaction
+      ? {
+          brush: updates.interaction.brush,
+          brushAxis: updates.interaction.brushAxis,
+          select: 'select' in updates.interaction ? updates.interaction.select : undefined,
+          publishes:
+            ('publishes' in updates.interaction ? updates.interaction.publishes : undefined) ??
+            ('selection' in updates.interaction ? updates.interaction.selection : undefined),
+          filterBy: updates.interaction.filterBy,
+        }
+      : existing.interaction;
     const merged: ChartIR = {
       ...existing,
       ...updates,
       type: (updates.type as string) || existing.type,
-      interaction: updates.interaction
-        ? {
-            brush: updates.interaction.brush,
-            brushAxis: updates.interaction.brushAxis,
-            publishes: updates.interaction.publishes ?? updates.interaction.selection,
-            filterBy: updates.interaction.filterBy,
-          }
-        : existing.interaction,
+      interaction,
     };
     dash.charts[idx] = merged;
     await writeFile(specPath, stringifyYAML(dash));
@@ -134,21 +175,16 @@ export async function updateChartInSpecFile(
 
 export async function explainCoordination(specPath: string): Promise<string> {
   const content = await readFile(specPath, 'utf-8');
-  const raw = parseYAML(content) as unknown;
-  const parsed = interpretSpec(raw, { path: specPath });
+  const parsed = parseSpecString(content, { path: specPath });
 
   let spec: DashboardSpec;
   if (parsed.kind === 'dash') {
     try {
-      const { dashToDashboardSpec } = await import('@dvfc/core');
       spec = dashToDashboardSpec(parsed.dash);
     } catch {
-      // Refs or connectors need full normalize
-      const { normalizeFile } = await import('@dvfc/core');
       spec = (await normalizeFile(specPath)).spec;
     }
   } else if (parsed.kind === 'chart') {
-    const { chartIRToDashboardSpec } = await import('@dvfc/core');
     spec = chartIRToDashboardSpec(parsed.chart);
   } else {
     throw new Error('Unrecognized spec shape');
@@ -196,8 +232,7 @@ export async function applyFilterPlan(
   plan: { brushChart: string; selectionName: string; filteredCharts: string[] }
 ): Promise<void> {
   const content = await readFile(specPath, 'utf-8');
-  const raw = parseYAML(content) as unknown;
-  const parsed = interpretSpec(raw, { path: specPath });
+  const parsed = parseSpecString(content, { path: specPath });
 
   if (parsed.kind === 'dash') {
     const dash = parsed.dash;
