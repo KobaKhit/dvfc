@@ -27,7 +27,8 @@ export { chartToVegaLiteBuiltin };
 
 export function chartToVegaLite(
   chart: ChartSpec,
-  values: Record<string, unknown>[]
+  values: Record<string, unknown>[],
+  palette?: readonly string[]
 ): Record<string, unknown> {
   attachVegaRenderersSync();
 
@@ -40,10 +41,21 @@ export function chartToVegaLite(
   if (plugin?.renderVegaLite) {
     const custom = plugin.renderVegaLite({ chart, values }) as Record<string, unknown> | undefined;
     if (custom && typeof custom === 'object' && custom.$schema) {
-      return { ...custom, data: { values } };
+      return withPalette({ ...custom, data: { values } }, palette);
     }
   }
-  return chartToVegaLiteBuiltin(chart, values);
+  return chartToVegaLiteBuiltin(chart, values, palette);
+}
+
+function withPalette(
+  vl: Record<string, unknown>,
+  palette?: readonly string[]
+): Record<string, unknown> {
+  if (palette?.length) {
+    const prev = (vl.config ?? {}) as Record<string, unknown>;
+    vl.config = { ...prev, range: { category: [...palette] } };
+  }
+  return vl;
 }
 
 let vegaAttached = false;
@@ -434,7 +446,7 @@ export async function exportStatic(
   }
 
   const values = await loadValuesForChart(spec, primary, stageDir, assetMap);
-  let vl = chartToVegaLite(primary, values);
+  let vl = chartToVegaLite(primary, values, spec.theme?.colors);
   // Single-chart html-static: still honor brush params when present
   if (options.format === 'html-static') {
     const pubs = planVegaPublishParams([primary]);

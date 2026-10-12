@@ -183,8 +183,9 @@
       <div class="wrap">
         <div class="gallery-head">
           <div>
-            <p class="section-kicker">Examples</p>
-            <h2>Five working dashboards. Open one and brush.</h2>
+            <p class="section-kicker">The range</p>
+            <h2>Every one of these is a spec file.</h2>
+            <p class="gallery-lede">Five working dashboards below — open one and brush — then the full spread of chart types, all rendered by the same engine from the same syntax. No plugins, no escape hatches.</p>
             <p>Each preview is an SVG exported by <code>dvfc build --format svg</code> from the same file that powers the interactive version. Specs mix area, KPI, pie, heatmap, scatter, boxplot, and more — not just line and bar. One example is compiled with the <strong>dc.js</strong> renderer (<code>--format html-dc-static</code>) for native crossfilter transitions without DuckDB-WASM.</p>
           </div>
           <a class="btn btn-secondary" href="https://github.com/KobaKhit/dvfc/tree/main/examples" target="_blank" rel="noopener">Browse the specs</a>
@@ -242,19 +243,99 @@
           </a>
         </div>
 
-        <div class="types-strip">
-          <div class="types-strip-copy">
-            <h3>Every chart type, rendered from one dataset</h3>
-            <p>Line, bar, area, scatter, pie, donut, histogram, density, heatmap, boxplot, number, table, and text. Each has its own page with the spec beside the output.</p>
-            <a class="text-link" href="/dvfc/charts.html">See all 13 chart types</a>
-          </div>
-          <div class="types-strip-thumbs" aria-hidden="true">
-            <a href="/dvfc/charts/heatmap/"><img src="/dvfc/assets/previews/chart-heatmap.svg" alt="" loading="lazy"></a>
-            <a href="/dvfc/charts/donut/"><img src="/dvfc/assets/previews/chart-donut.svg" alt="" loading="lazy"></a>
-            <a href="/dvfc/charts/boxplot/"><img src="/dvfc/assets/previews/chart-boxplot.svg" alt="" loading="lazy"></a>
-            <a href="/dvfc/charts/density/"><img src="/dvfc/assets/previews/chart-density.svg" alt="" loading="lazy"></a>
-          </div>
+        <div class="wall">
+          <a class="wall-tile" href="/dvfc/examples/showcase-dc/">
+            <img src="/dvfc/assets/previews/gallery-showcase-dc.svg" alt="Other Worlds dashboard rendered with dc.js" loading="lazy">
+            <span class="wall-cap"><strong>Crossfilter flight deck</strong><span>showcase.dash.yaml · dc.js</span></span>
+          </a>
+          <a class="wall-tile" href="/dvfc/charts/scatter/">
+            <img src="/dvfc/assets/previews/chart-scatter.svg" alt="Scatter chart with color grouping" loading="lazy">
+            <span class="wall-cap"><strong>Scatter</strong><span>cosmic-atlas.dash.yaml</span></span>
+          </a>
+          <a class="wall-tile" href="/dvfc/examples/sales-dash/">
+            <img src="/dvfc/assets/previews/gallery-sales-dash.svg" alt="Sales and Flights dashboard example" loading="lazy">
+            <span class="wall-cap"><strong>Sales &amp; Flights</strong><span>sales.dash.yaml · ECharts</span></span>
+          </a>
+          <a class="wall-tile" href="/dvfc/charts/heatmap/">
+            <img src="/dvfc/assets/previews/chart-heatmap.svg" alt="Heatmap chart" loading="lazy">
+            <span class="wall-cap"><strong>Heatmap</strong><span>cosmic-atlas.dash.yaml</span></span>
+          </a>
+          <a class="wall-tile" href="/dvfc/examples/web-analytics/">
+            <img src="/dvfc/assets/previews/gallery-web-analytics.svg" alt="Web analytics dashboard example" loading="lazy">
+            <span class="wall-cap"><strong>Web Analytics</strong><span>web-analytics.dash.yaml · ECharts</span></span>
+          </a>
+          <a class="wall-tile" href="/dvfc/charts/donut/">
+            <img src="/dvfc/assets/previews/chart-donut.svg" alt="Donut chart" loading="lazy">
+            <span class="wall-cap"><strong>Donut</strong><span>cosmic-atlas.dash.yaml</span></span>
+          </a>
+          <a class="wall-tile" href="/dvfc/examples/dbt-jaffle/">
+            <img src="/dvfc/assets/previews/gallery-dbt-jaffle.svg" alt="dbt Jaffle Shop dashboard example" loading="lazy">
+            <span class="wall-cap"><strong>Jaffle Shop</strong><span>jaffle.dash.yaml · ECharts</span></span>
+          </a>
+          <a class="wall-tile" href="/dvfc/charts/boxplot/">
+            <img src="/dvfc/assets/previews/chart-boxplot.svg" alt="Boxplot chart" loading="lazy">
+            <span class="wall-cap"><strong>Box plot</strong><span>cosmic-atlas.dash.yaml</span></span>
+          </a>
+          <a class="wall-tile" href="/dvfc/examples/revenue-analysis/">
+            <img src="/dvfc/assets/previews/gallery-revenue-analysis.svg" alt="Revenue analysis dashboard example" loading="lazy">
+            <span class="wall-cap"><strong>Revenue Analysis</strong><span>revenue-analysis.dash.yaml · Vega</span></span>
+          </a>
+          <a class="wall-tile" href="/dvfc/charts/area/">
+            <img src="/dvfc/assets/previews/chart-area.svg" alt="Area chart" loading="lazy">
+            <span class="wall-cap"><strong>Area</strong><span>cosmic-atlas.dash.yaml</span></span>
+          </a>
+          <a class="wall-tile" href="/dvfc/charts/density/">
+            <img src="/dvfc/assets/previews/chart-density.svg" alt="Density chart" loading="lazy">
+            <span class="wall-cap"><strong>Density</strong><span>cosmic-atlas.dash.yaml</span></span>
+          </a>
+          <a class="wall-tile" href="/dvfc/charts/bar/">
+            <img src="/dvfc/assets/previews/chart-bar.svg" alt="Bar chart" loading="lazy">
+            <span class="wall-cap"><strong>Bar</strong><span>cosmic-atlas.dash.yaml</span></span>
+          </a>
         </div>
+        <div class="type-links">
+          <a class="text-link" href="/dvfc/charts.html">See all 13 chart types</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="themes">
+      <div class="wrap">
+        <p class="section-kicker">One line</p>
+        <h2>One spec, any palette.</h2>
+        <p class="section-sub">A <code>theme.colors</code> list reaches every mark on the board — swap four hex codes and the whole dashboard follows. Same file, same data, three moods.</p>
+        <div class="theme-grid">
+          <figure class="theme-card">
+            <img src="/dvfc/assets/previews/theme-harbor.svg" alt="Discovery methods donut in the Harbor palette" loading="lazy">
+            <figcaption>
+              <span class="theme-name">Harbor <code>default</code></span>
+              <span class="theme-dots"><i style="background:#1e3a5f"></i><i style="background:#7ba3c9"></i><i style="background:#a89b8c"></i><i style="background:#4a7c9b"></i></span>
+              <span class="theme-blurb">The shipped default. Deep navy for the boardroom.</span>
+            </figcaption>
+          </figure>
+          <figure class="theme-card">
+            <img src="/dvfc/assets/previews/theme-ember.svg" alt="Discovery methods donut in the Ember palette" loading="lazy">
+            <figcaption>
+              <span class="theme-name">Ember</span>
+              <span class="theme-dots"><i style="background:#9a3412"></i><i style="background:#ea580c"></i><i style="background:#f59e0b"></i><i style="background:#57534e"></i></span>
+              <span class="theme-blurb">Warm and loud, for a chart that has to carry the room.</span>
+            </figcaption>
+          </figure>
+          <figure class="theme-card">
+            <img src="/dvfc/assets/previews/theme-lagoon.svg" alt="Discovery methods donut in the Lagoon palette" loading="lazy">
+            <figcaption>
+              <span class="theme-name">Lagoon</span>
+              <span class="theme-dots"><i style="background:#0f766e"></i><i style="background:#06b6d4"></i><i style="background:#3b82f6"></i><i style="background:#8b5cf6"></i></span>
+              <span class="theme-blurb">Cool teal-to-violet, for a screen in a dim room.</span>
+            </figcaption>
+          </figure>
+        </div>
+        <div class="theme-code codeblock"><div class="code-head"><span>landing.dash.yaml</span></div><pre><code>theme:
+  colors:
+    - "#1e3a5f"   # ← change these four lines…
+    - "#7ba3c9"
+    - "#a89b8c"
+    - "#4a7c9b"</code></pre></div>
       </div>
     </section>
 

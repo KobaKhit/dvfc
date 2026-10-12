@@ -199,7 +199,10 @@ export function dashToLinkedVegaLite(
     return {
       $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
       background: 'transparent',
-      config: themeConfig,
+      config: {
+        ...themeConfig,
+        range: { category: palette },
+      },
       title: spec.meta?.title,
       ...units[0],
     };

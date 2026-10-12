@@ -694,30 +694,156 @@ code {
   color: var(--ink);
 }
 
-/* Chart type strip under the gallery */
-.types-strip {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  gap: 1.5rem;
-  align-items: center;
+/* Masonry range wall: every tile is a real exported spec output */
+.wall {
+  columns: 2;
+  column-gap: 1.1rem;
   margin-top: 2.5rem;
-  padding: 1.5rem;
+}
+
+.wall-tile {
+  display: block;
+  break-inside: avoid;
+  margin-bottom: 1.1rem;
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: 14px;
   background: var(--white);
+  overflow: hidden;
+  text-decoration: none;
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), border-color 0.2s;
 }
 
-.types-strip h3 {
-  font-family: var(--font-display);
-  font-size: 1.45rem;
-  letter-spacing: -0.03em;
-  margin-bottom: 0.5rem;
+.wall-tile:hover {
+  transform: translateY(-4px);
+  border-color: rgba(11, 127, 110, 0.45);
+  box-shadow: 0 14px 34px rgba(15, 42, 67, 0.14);
 }
 
-.types-strip p {
+.wall-tile img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.wall-cap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.7rem 0.95rem 0.85rem;
+  border-top: 1px solid var(--line);
+}
+
+.wall-cap strong {
+  color: var(--ink);
+  font-size: 0.92rem;
+}
+
+.wall-cap > span {
   color: var(--muted);
-  font-size: 0.94rem;
-  margin-bottom: 0.9rem;
+  font-size: 0.78rem;
+  font-family: var(--font-mono, ui-monospace, monospace);
+}
+
+.type-links {
+  margin-top: 1.4rem;
+}
+
+.gallery-lede {
+  color: var(--muted);
+  max-width: 46rem;
+  margin-top: 0.7rem;
+}
+
+/* Theme section: same donut, three palettes */
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.1rem;
+  margin-top: 2rem;
+}
+
+.theme-card {
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--white);
+  overflow: hidden;
+  transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+
+.theme-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 34px rgba(15, 42, 67, 0.14);
+}
+
+.theme-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.theme-card figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.85rem 1rem 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.theme-name {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.theme-name code {
+  font-size: 0.78em;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.theme-dots {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.theme-dots i {
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 42, 67, 0.18);
+}
+
+.theme-blurb {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.theme-code {
+  max-width: 34rem;
+  margin-top: 1.5rem;
+}
+
+.section-sub code {
+  font-size: 0.85em;
+}
+
+@media (min-width: 760px) {
+  .wall {
+    columns: 3;
+  }
+}
+
+@media (min-width: 1120px) {
+  .wall {
+    columns: 4;
+  }
+}
+
+@media (max-width: 860px) {
+  .theme-grid {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 26rem;
+  }
 }
 
 .text-link {
@@ -732,35 +858,6 @@ code {
 
 .text-link:hover {
   text-decoration: underline;
-}
-
-.types-strip-thumbs {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.6rem;
-}
-
-.types-strip-thumbs a {
-  display: block;
-  aspect-ratio: 1;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--paper);
-  overflow: hidden;
-  transition: transform 0.3s var(--ease), border-color 0.2s;
-}
-
-.types-strip-thumbs a:hover {
-  transform: translateY(-3px);
-  border-color: rgba(11, 127, 110, 0.4);
-}
-
-.types-strip-thumbs img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: left top;
-  padding: 0.35rem;
 }
 
 .cta-code {
@@ -2030,8 +2127,7 @@ code {
 @media (max-width: 960px) {
   .split-2,
   .feature-mosaic,
-  .footer-grid,
-  .types-strip {
+  .footer-grid {
     grid-template-columns: 1fr;
   }
 
@@ -2075,10 +2171,6 @@ code {
 
   .hero-mission h1 {
     max-width: none;
-  }
-
-  .types-strip-thumbs {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .catalog-hero h1 {

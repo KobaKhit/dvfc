@@ -18,39 +18,60 @@ export { channelType, cartesianEncoding } from './channel.js';
 
 /**
  * Builtin ChartSpec → Vega-Lite conversion for supported mark types.
+ *
+ * When a palette is supplied (usually `spec.theme.colors`), it overrides the
+ * default categorical range so single-chart static exports honor the dash theme.
  */
 export function chartToVegaLiteBuiltin(
   chart: ChartSpec,
-  values: Record<string, unknown>[]
+  values: Record<string, unknown>[],
+  palette?: readonly string[]
 ): Record<string, unknown> {
+  let vl: Record<string, unknown>;
   switch (chart.type) {
     case 'line':
-      return lineToVegaLite(chart, values);
+      vl = lineToVegaLite(chart, values);
+      break;
     case 'bar':
-      return barToVegaLite(chart, values);
+      vl = barToVegaLite(chart, values);
+      break;
     case 'area':
-      return areaToVegaLite(chart, values);
+      vl = areaToVegaLite(chart, values);
+      break;
     case 'scatter':
-      return scatterToVegaLite(chart, values);
+      vl = scatterToVegaLite(chart, values);
+      break;
     case 'pie':
-      return pieToVegaLite(chart, values);
+      vl = pieToVegaLite(chart, values);
+      break;
     case 'donut':
-      return donutToVegaLite(chart, values);
+      vl = donutToVegaLite(chart, values);
+      break;
     case 'histogram':
-      return histogramToVegaLite(chart, values);
+      vl = histogramToVegaLite(chart, values);
+      break;
     case 'density':
-      return densityToVegaLite(chart, values);
+      vl = densityToVegaLite(chart, values);
+      break;
     case 'heatmap':
-      return heatmapToVegaLite(chart, values);
+      vl = heatmapToVegaLite(chart, values);
+      break;
     case 'boxplot':
-      return boxplotToVegaLite(chart, values);
+      vl = boxplotToVegaLite(chart, values);
+      break;
     case 'number':
-      return numberToVegaLite(chart, values);
+      vl = numberToVegaLite(chart, values);
+      break;
     default:
-      return {
+      vl = {
         ...baseSpec(chart, values),
         mark: { type: 'point' },
         encoding: cartesianEncoding(chart),
       };
   }
+  if (palette?.length) {
+    const prev = (vl.config ?? {}) as Record<string, unknown>;
+    vl.config = { ...prev, range: { category: [...palette] } };
+  }
+  return vl;
 }
