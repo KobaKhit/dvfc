@@ -41,9 +41,11 @@ ${sizePrelude(el, ch, w, h)}  const ${dim} = ${cf}.dimension((d) => [
   const _cdom_${ch} = [...new Set(${cf}.all().map((d) => String(d['${esc(colorField)}'] ?? 'Unknown')))].sort();
   const _cpal_${ch} = ['#1e3a5f', '#7ba3c9', '#a89b8c', '#4a7c9b', '#c4b5a0', '#5c6b73', '#2f6f94', '#8b7355'];
   const _cscale_${ch} = d3.scaleOrdinal().domain(_cdom_${ch}).range(_cpal_${ch});
+  // Reserve room for the HTML color legend rendered under the plot.
+  const _plotH_${ch} = Math.max(140, _sz_${ch}.h - 40);
   ${ch}
     .width(_sz_${ch}.w)
-    .height(_sz_${ch}.h)
+    .height(_plotH_${ch})
     .margins({ top: 20, right: 24, bottom: 56, left: 56 })
     .dimension(${dim})
     .group(${grp})

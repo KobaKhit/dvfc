@@ -317,6 +317,7 @@ export function buildVegaGridPage(
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
+      white-space: nowrap;
       font: inherit;
       font-size: 0.78rem;
       font-weight: 500;
@@ -343,8 +344,10 @@ export function buildVegaGridPage(
       padding: 0.35rem 0.45rem 0.4rem;
     }
     @media (max-width: 768px) {
-      .charts { grid-template-columns: 1fr !important; }
+      .charts { grid-template-columns: 1fr !important; grid-template-rows: none !important; }
       .charts > * { grid-column: auto !important; }
+      .chart-container { height: auto; overflow: visible; }
+      .vg-plot { min-height: 260px; flex: none; }
     }
   </style>
   <script>

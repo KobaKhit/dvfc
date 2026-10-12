@@ -101,8 +101,9 @@ export function buildDcPageCss(spec: DashboardSpec): string {
     ${spanRules}
     ${isFlex ? `.charts > * { flex: 1 1 calc(50% - ${gap / 2}px); min-width: 280px; }` : ''}
     @media (max-width: 768px) {
-      .charts { grid-template-columns: 1fr !important; }
+      .charts { grid-template-columns: 1fr !important; grid-template-rows: none !important; }
       .charts > * { grid-column: auto !important; }
+      .chart-container { height: auto; overflow: visible; }
     }
     .chart-container {
       border: ${bordered ? '1px solid var(--line)' : '0'};
@@ -135,7 +136,7 @@ export function buildDcPageCss(spec: DashboardSpec): string {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       min-height: 8rem;
     }
     .dc-chart svg {
@@ -148,19 +149,21 @@ export function buildDcPageCss(spec: DashboardSpec): string {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 0.55rem 0.9rem;
-      margin-top: 0.55rem;
-      font-size: 0.78rem;
+      gap: 0.3rem 0.6rem;
+      margin-top: 0.35rem;
+      font-size: 0.72rem;
       color: var(--ink);
-      line-height: 1.3;
+      line-height: 1.25;
+      flex-shrink: 0;
     }
     .dvfc-legend-item {
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       font-weight: 500;
       color: var(--ink);
+      white-space: nowrap;
     }
     .dvfc-legend-item i {
       width: 0.65rem;

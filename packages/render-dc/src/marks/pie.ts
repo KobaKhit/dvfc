@@ -22,7 +22,7 @@ export function generatePieMark(ctx: DcMarkContext): string {
 ${sizePrelude(el, ch, w, h)}  const ${dim} = ${cf}.dimension((d) => d['${esc(x)}'] ?? 'Unknown');
   const ${grp} = ${dim}${reduce};
   const ${ch} = new dc.PieChart('${el}');
-  const _drawH_${ch} = Math.min(280, Math.max(140, _sz_${ch}.h - 56));
+  const _drawH_${ch} = Math.min(280, Math.max(140, _sz_${ch}.h - 68));
   const _side_${ch} = Math.min(_sz_${ch}.w, _drawH_${ch});
   const _r_${ch} = Math.round(_side_${ch} * 0.36);
   const _inner_${ch} = ${chart.type === 'donut' ? `Math.round(_r_${ch} * 0.55)` : '0'};
