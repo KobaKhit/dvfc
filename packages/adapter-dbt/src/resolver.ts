@@ -103,20 +103,6 @@ export class DbtResolver {
 
     return nodeKey ? this.manifest.nodes[nodeKey] : undefined;
   }
-
-  /**
-   * Get all nodes (models, sources, tests, etc.)
-   */
-  getAllNodes(): Record<string, DbtNode> {
-    return this.manifest.nodes;
-  }
-
-  /**
-   * Get manifest metadata
-   */
-  getMetadata() {
-    return this.manifest.metadata;
-  }
 }
 
 /**

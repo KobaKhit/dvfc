@@ -10,10 +10,10 @@ import { densityToVegaLite } from './density.js';
 import { heatmapToVegaLite } from './heatmap.js';
 import { boxplotToVegaLite } from './boxplot.js';
 import { numberToVegaLite } from './number.js';
-import { baseSpec } from './theme.js';
+import { baseSpec, withPalette } from './theme.js';
 import { cartesianEncoding } from './channel.js';
 
-export { themeConfig, ACCENT, baseSpec } from './theme.js';
+export { themeConfig, ACCENT, baseSpec, withPalette } from './theme.js';
 export { channelType, cartesianEncoding } from './channel.js';
 
 /**
@@ -70,8 +70,7 @@ export function chartToVegaLiteBuiltin(
       };
   }
   if (palette?.length) {
-    const prev = (vl.config ?? {}) as Record<string, unknown>;
-    vl.config = { ...prev, range: { category: [...palette] } };
+    withPalette(vl, palette);
   }
   return vl;
 }

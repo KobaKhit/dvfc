@@ -35,6 +35,18 @@ export const themeConfig = {
 
 export const ACCENT = '#0b7f6e';
 
+/** Merge a categorical palette into a Vega-Lite top-level `config`. */
+export function withPalette(
+  vl: Record<string, unknown>,
+  palette?: readonly string[]
+): Record<string, unknown> {
+  if (palette?.length) {
+    const prev = (vl.config ?? {}) as Record<string, unknown>;
+    vl.config = { ...prev, range: { category: [...palette] } };
+  }
+  return vl;
+}
+
 export function baseSpec(
   chart: ChartSpec,
   values: Record<string, unknown>[]

@@ -184,12 +184,13 @@ export function validateDashIR(
       if (pub) published.add(pub);
     });
 
+    // Soft: refs may publish after resolve, only error when all charts are inline.
+    // Hoisted: identical for every chart in this dash.
+    const allInline = d.charts!.every((e) => !isDashChartRef(e));
     d.charts.forEach((entry, i) => {
       if (isDashChartRef(entry)) return;
       const filterBy = entry.interaction?.filterBy;
       if (filterBy && published.size > 0 && !published.has(filterBy)) {
-        // Soft: refs may publish after resolve, only error when all charts are inline
-        const allInline = d.charts!.every((e) => !isDashChartRef(e));
         if (allInline) {
           errors.push({
             path: `/charts/${i}/interaction/filterBy`,

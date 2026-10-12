@@ -171,17 +171,18 @@ export async function invokeMetricFlow(
   const mode = detectMode();
   const { bin, args } = buildArgs(mode, ref);
 
-  let stdout: string;
-  let stderr: string;
-  try {
-    const result = await execFileAsync(bin, args, {
+  const run = (runArgs: string[]): Promise<{ stdout: string; stderr: string }> =>
+    execFileAsync(bin, runArgs, {
       cwd,
       env: process.env,
       maxBuffer: 10 * 1024 * 1024,
       timeout: 120_000,
-    });
-    stdout = result.stdout || '';
-    stderr = result.stderr || '';
+    }).then((result) => ({ stdout: result.stdout || '', stderr: result.stderr || '' }));
+
+  let stdout: string;
+  let stderr: string;
+  try {
+    ({ stdout, stderr } = await run(args));
   } catch (err: unknown) {
     const e = err as { stdout?: string; stderr?: string; message?: string };
     // Some mf versions write SQL to stdout even on non-zero; try parse
@@ -193,14 +194,7 @@ export async function invokeMetricFlow(
       if (args.includes('--quiet')) {
         const retryArgs = args.filter((a) => a !== '--quiet');
         try {
-          const result = await execFileAsync(bin, retryArgs, {
-            cwd,
-            env: process.env,
-            maxBuffer: 10 * 1024 * 1024,
-            timeout: 120_000,
-          });
-          stdout = result.stdout || '';
-          stderr = result.stderr || '';
+          ({ stdout, stderr } = await run(retryArgs));
         } catch (err2: unknown) {
           const e2 = err2 as { stdout?: string; stderr?: string; message?: string };
           throw new Error(

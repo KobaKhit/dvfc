@@ -19,7 +19,7 @@ import {
   escapeHtml,
   type NormalizeResult,
 } from '@dvfc/core';
-import { chartToVegaLiteBuiltin } from './marks/index.js';
+import { chartToVegaLiteBuiltin, withPalette } from './marks/index.js';
 import { buildVegaGridPage } from './grid-page.js';
 import { applyVegaInteraction, planVegaPublishParams } from './interaction.js';
 
@@ -45,17 +45,6 @@ export function chartToVegaLite(
     }
   }
   return chartToVegaLiteBuiltin(chart, values, palette);
-}
-
-function withPalette(
-  vl: Record<string, unknown>,
-  palette?: readonly string[]
-): Record<string, unknown> {
-  if (palette?.length) {
-    const prev = (vl.config ?? {}) as Record<string, unknown>;
-    vl.config = { ...prev, range: { category: [...palette] } };
-  }
-  return vl;
 }
 
 let vegaAttached = false;

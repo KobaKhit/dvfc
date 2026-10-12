@@ -19,7 +19,3 @@ export const BUILTIN_CHART_TYPE_IDS = [
 ] as const;
 
 export type ChartType = (typeof BUILTIN_CHART_TYPE_IDS)[number];
-
-export function isBuiltinChartType(id: string): id is ChartType {
-  return (BUILTIN_CHART_TYPE_IDS as readonly string[]).includes(id);
-}

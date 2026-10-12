@@ -165,21 +165,23 @@ export async function searchCharts(options: SearchOptions): Promise<ChartHit[]> 
         const fields = new Set<string>();
         if (chart.encoding?.x?.field) fields.add(chart.encoding.x.field);
         if (chart.encoding?.y?.field) fields.add(chart.encoding.y.field);
+        const fieldArr = [...fields];
 
         const searchText = caseSensitive
-          ? `${chartId} ${chartTitle} ${chartType} ${Array.from(fields).join(' ')}`
-          : `${chartId} ${chartTitle} ${chartType} ${Array.from(fields).join(' ')}`.toLowerCase();
+          ? `${chartId} ${chartTitle} ${chartType} ${fieldArr.join(' ')}`
+          : `${chartId} ${chartTitle} ${chartType} ${fieldArr.join(' ')}`.toLowerCase();
 
         if (searchText.includes(searchQuery)) {
+          const lowerTitle = chartTitle.toLowerCase();
           if (chartId === query) score = 100;
-          else if (chartTitle.toLowerCase() === searchQuery) score = 90;
+          else if (lowerTitle === searchQuery) score = 90;
           else if (chartId.startsWith(query)) score = 80;
-          else if (chartTitle.toLowerCase().startsWith(searchQuery)) score = 70;
+          else if (lowerTitle.startsWith(searchQuery)) score = 70;
           else if (chartType === searchQuery) score = 60;
-          else if (Array.from(fields).some((f) => f.toLowerCase().includes(searchQuery)))
+          else if (fieldArr.some((f) => f.toLowerCase().includes(searchQuery)))
             score = 50;
           else if (chartId.includes(searchQuery)) score = 40;
-          else if (chartTitle.toLowerCase().includes(searchQuery)) score = 30;
+          else if (lowerTitle.includes(searchQuery)) score = 30;
           else score = 20;
 
           hits.push({

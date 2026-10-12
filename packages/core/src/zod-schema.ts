@@ -40,7 +40,3 @@ export function themeConfigJsonSchema(): Record<string, unknown> {
 export function layoutConfigJsonSchema(): Record<string, unknown> {
   return z.toJSONSchema(LayoutConfigZ) as Record<string, unknown>;
 }
-
-export function parseThemeConfig(input: unknown): ThemeConfigZod {
-  return ThemeConfigZ.parse(input);
-}

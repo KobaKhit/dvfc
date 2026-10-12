@@ -239,11 +239,12 @@ function textPreview(): string {
 }
 
 function sharedHead(title: string, description: string): string {
+  const assetV = process.env.SITE_ASSET_V ?? '20260920e';
   return `<meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${escapeHtml(title)} | dvfc</title>
   <meta name="description" content="${escapeHtml(description)}">
-  <link rel="stylesheet" href="/dvfc/style.css?v=20260920e">`;
+  <link rel="stylesheet" href="/dvfc/style.css?v=${assetV}">`;
 }
 
 function extractChartYaml(source: string, chartId: string): string {

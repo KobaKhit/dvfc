@@ -438,17 +438,22 @@ code {
   gap: 0.25rem;
 }
 
-.engine-tab {
+/* Shared pill-button base: engine tabs + reset button differ only in deltas below. */
+.engine-tab,
+.reset-btn {
   appearance: none;
   border: 1px solid var(--line);
   background: #fff;
-  color: var(--ink);
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  font-weight: 600;
   padding: 0.32rem 0.65rem;
   border-radius: 999px;
   cursor: pointer;
+}
+
+.engine-tab {
+  color: var(--ink);
+  font-weight: 600;
 }
 
 .engine-tab:hover {
@@ -507,16 +512,8 @@ code {
 }
 
 .reset-btn {
-  appearance: none;
-  border: 1px solid var(--line);
-  background: #fff;
   color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
   font-weight: 500;
-  padding: 0.32rem 0.65rem;
-  border-radius: 999px;
-  cursor: pointer;
   transition: color 0.2s, border-color 0.2s;
 }
 
@@ -551,17 +548,6 @@ code {
 
 .demo-spec .spec-pane.is-active {
   display: block;
-}
-
-.live-dot {
-  display: inline-block;
-  width: 0.48rem;
-  height: 0.48rem;
-  margin-right: 0.32rem;
-  border-radius: 50%;
-  background: var(--teal-bright);
-  box-shadow: 0 0 0 4px rgba(18, 168, 146, 0.12);
-  animation: pulse-dot 2s ease-in-out infinite;
 }
 
 /* Agent prompt block */
@@ -883,12 +869,6 @@ code {
   font-size: 0.75rem;
 }
 
-.showcase-board .pane-chrome {
-  background: var(--paper-2);
-  color: var(--muted);
-  border-bottom: 1px solid var(--line);
-}
-
 .demo-board .pane-chrome {
   background: var(--paper-2);
   color: var(--muted);
@@ -906,7 +886,6 @@ code {
   font-weight: 500;
 }
 
-.showcase-board .pane-chrome a,
 .demo-board .pane-chrome a {
   color: var(--teal-deep);
 }
@@ -926,21 +905,6 @@ code {
 .yaml-body .s,
 .yaml-body .tok-s { color: #e8c07a; }
 .yaml-body .c { color: #6b828c; }
-
-.showcase-board {
-  display: flex;
-  flex-direction: column;
-  background: var(--white);
-  min-height: 420px;
-}
-
-.showcase-board iframe {
-  flex: 1;
-  width: 100%;
-  border: 0;
-  min-height: 0;
-  background: #fff;
-}
 
 .hint-pill {
   display: inline-flex;
@@ -1272,92 +1236,6 @@ code {
 .feature-tile p {
   color: var(--muted);
   font-size: 0.93rem;
-}
-
-/* Charts page */
-.page-hero {
-  padding: 3rem 0 1.25rem;
-}
-
-.page-hero h1 {
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 2.75rem);
-  letter-spacing: -0.04em;
-  margin-bottom: 0.55rem;
-}
-
-.page-hero p {
-  color: var(--muted);
-  max-width: 48ch;
-  font-size: 1.05rem;
-}
-
-.chart-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1rem;
-  padding-bottom: 2.5rem;
-}
-
-.chart-tile {
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius);
-  background: var(--white);
-  padding: 1.1rem;
-  transition: transform 0.25s var(--ease), border-color 0.2s;
-}
-
-.chart-tile:hover {
-  transform: translateY(-2px);
-  border-color: var(--teal);
-}
-
-.chart-glyph {
-  height: 140px;
-  border-radius: 8px;
-  margin-bottom: 0.85rem;
-  background: linear-gradient(160deg, #f4f7f8, #e8eef1);
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  border: 1px solid var(--line);
-}
-
-.chart-glyph img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  padding: 0.35rem;
-}
-
-.chart-glyph-note {
-  background: var(--paper-2);
-}
-
-.glyph-caption {
-  margin: 0;
-  padding: 0.75rem;
-  text-align: center;
-  color: var(--muted);
-  font-size: 0.82rem;
-  line-height: 1.4;
-}
-
-.chart-glyph svg {
-  width: 78%;
-  height: 62%;
-}
-
-.chart-tile h3 {
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  margin-bottom: 0.3rem;
-}
-
-.chart-tile p {
-  color: var(--muted);
-  font-size: 0.9rem;
-  margin-bottom: 0.65rem;
 }
 
 /* Generated chart catalog */

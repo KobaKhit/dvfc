@@ -14,6 +14,8 @@ echo
 
 BASE_URL="/dvfc"
 SITE_DIR="site"
+# Single cache-bust token for all built pages (CSS + embed iframes).
+SITE_ASSET_V="20261012a"
 CLI="node packages/cli/dist/cli.js"
 PREVIEWS="$SITE_DIR/assets/previews"
 
@@ -142,12 +144,14 @@ echo "Creating site pages (including catalog SVG exports)..."
 echo
 
 cp site-src/index.html "$SITE_DIR/"
+# Stamp every cache-bust query (?v= / &v=) with the single site asset version.
+sed -i -E "s/([?&])v=[0-9A-Za-z]+/\1v=$SITE_ASSET_V/g" "$SITE_DIR/index.html"
 cp site-src/style.css "$SITE_DIR/"
 if [ -d site-src/assets ]; then
   cp -r site-src/assets/. "$SITE_DIR/assets/" 2>/dev/null || true
 fi
 
-node --experimental-strip-types scripts/build-chart-pages.ts
+SITE_ASSET_V="$SITE_ASSET_V" node --experimental-strip-types scripts/build-chart-pages.ts
 
 touch "$SITE_DIR/.nojekyll"
 

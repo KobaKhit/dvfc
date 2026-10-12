@@ -414,9 +414,12 @@ export async function normalizeToDashboard(
     }
   }
 
+  const seenAssets = new Set(assets.map((x) => `${x.destName}\0${x.absPath}`));
   for (const rel of dataAcc.values()) {
     for (const a of rel.assets) {
-      if (!assets.some((x) => x.destName === a.destName && x.absPath === a.absPath)) {
+      const key = `${a.destName}\0${a.absPath}`;
+      if (!seenAssets.has(key)) {
+        seenAssets.add(key);
         assets.push(a);
       }
     }
