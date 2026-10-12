@@ -3,7 +3,7 @@
  */
 
 import type { ChartSpec } from '@dvfc/core';
-import { publishedName } from '@dvfc/core';
+import { DEFAULT_CATEGORICAL, publishedName } from '@dvfc/core';
 import {
   chartVar,
   dimVar,
@@ -39,8 +39,13 @@ const MARK_GENERATORS: Record<string, MarkGenerator> = {
 /**
  * Generate JS that creates dimension/group + dc chart for one ChartSpec.
  * Assumes `cf_<dataSource>` crossfilter and `dc` / `d3` globals.
+ * `palette` defaults to the shared categorical ramp; pass the dash theme's
+ * resolved colors so dc honors `theme.colors` like the other renderers.
  */
-export function generateDcChartCode(chart: ChartSpec): string {
+export function generateDcChartCode(
+  chart: ChartSpec,
+  palette: readonly string[] = DEFAULT_CATEGORICAL
+): string {
   if (chart.type === 'text') {
     return `  // text chart ${chart.id}: rendered as static HTML`;
   }
@@ -107,6 +112,7 @@ export function generateDcChartCode(chart: ChartSpec): string {
     valueAccessor,
     valueExpr,
     titleValue,
+    palette: [...palette],
   };
 
   if (chart.type === 'density' || chart.type === 'boxplot') {

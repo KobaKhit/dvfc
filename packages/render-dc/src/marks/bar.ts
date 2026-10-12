@@ -18,6 +18,7 @@ export function generateBarMark(ctx: DcMarkContext): string {
     yLabel,
     reduce,
     valueAccessor,
+    palette,
     titleValue,
   } = ctx;
   if (!x) return `  console.warn('bar ${chart.id}: needs x');`;
@@ -38,7 +39,7 @@ ${sizePrelude(el, ch, w, h)}  const ${dim} = ${cf}.dimension((d) => d['${esc(x)}
     .elasticY(true)
     .renderHorizontalGridLines(false)
     .transitionDuration(750)
-    .colors(['#1e3a5f'])
+    .colors(${JSON.stringify([palette[0]])})
     .xAxisLabel('${xLabel}')
     .yAxisLabel('${yLabel}')
     .title((d) => String(d.key) + '\\n${yLabel}: ' + ${titleValue});

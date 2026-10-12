@@ -4,7 +4,7 @@
  */
 
 import type { DashboardSpec, DataSource } from '@dvfc/core';
-import { duckDbCreateTableSql } from '@dvfc/core';
+import { duckDbCreateTableSql, resolvePalette } from '@dvfc/core';
 import { generateDcChartCode } from './charts.js';
 import { DVFC_TIP_JS } from './tips.js';
 import { buildDcPage } from './shell.js';
@@ -50,7 +50,8 @@ export function generateDcWasmMainScript(ctx: DcWasmGeneratorContext): string {
     })
     .join('\n');
 
-  const chartCode = spec.charts.map((c) => generateDcChartCode(c)).join('\n');
+  const palette = resolvePalette(spec.theme);
+  const chartCode = spec.charts.map((c) => generateDcChartCode(c, palette)).join('\n');
 
   return `import * as duckdb from '@duckdb/duckdb-wasm';
 import duckdbWasm from '@duckdb/duckdb-wasm/dist/duckdb-mvp.wasm?url';
@@ -106,7 +107,7 @@ async function main() {
     }
 ${DVFC_TIP_JS}
 
-    dc.config.defaultColors(['#1e3a5f', '#7ba3c9', '#a89b8c', '#4a7c9b', '#c4b5a0', '#5c6b73']);
+    dc.config.defaultColors(${JSON.stringify(palette)});
 
 ${cfSetup}
 

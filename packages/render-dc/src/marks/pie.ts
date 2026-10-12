@@ -16,6 +16,7 @@ export function generatePieMark(ctx: DcMarkContext): string {
     valueAccessor,
     valueExpr,
     yLabel,
+    palette,
   } = ctx;
   if (!x) return `  console.warn('pie ${chart.id}: needs x');`;
   return `
@@ -27,7 +28,7 @@ ${sizePrelude(el, ch, w, h)}  const ${dim} = ${cf}.dimension((d) => d['${esc(x)}
   const _r_${ch} = Math.round(_side_${ch} * 0.36);
   const _inner_${ch} = ${chart.type === 'donut' ? `Math.round(_r_${ch} * 0.55)` : '0'};
   const _cdom_${ch} = ${grp}.all().map((d) => d.key);
-  const _cpal_${ch} = ['#1e3a5f', '#7ba3c9', '#a89b8c', '#4a7c9b', '#c4b5a0', '#5c6b73'];
+  const _cpal_${ch} = ${JSON.stringify(palette)};
   const _cscale_${ch} = d3.scaleOrdinal().domain(_cdom_${ch}).range(_cpal_${ch});
   const _val_${ch} = (d) => (${valueExpr}) || 0;
   ${ch}

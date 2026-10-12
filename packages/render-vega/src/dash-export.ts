@@ -3,6 +3,7 @@
  */
 
 import type { ChartSpec, DashboardSpec } from '@dvfc/core';
+import { DEFAULT_CATEGORICAL, resolvePalette } from '@dvfc/core';
 import { chartToVegaLiteBuiltin } from './marks/index.js';
 import {
   applyVegaInteraction,
@@ -11,8 +12,7 @@ import {
 } from './interaction.js';
 import { themeConfig } from './marks/theme.js';
 
-const NAVY = '#1e3a5f';
-const FALLBACK_PALETTE = ['#1e3a5f', '#7ba3c9', '#a89b8c', '#4a7c9b', '#c4b5a0'];
+const NAVY = DEFAULT_CATEGORICAL[0];
 
 function textUnit(chart: ChartSpec): Record<string, unknown> {
   const plain = (chart.content || '')
@@ -149,7 +149,7 @@ export function dashToLinkedVegaLite(
     throw new Error('No Vega-Lite-capable charts in dash');
   }
 
-  const palette = spec.theme?.colors?.length ? spec.theme.colors : FALLBACK_PALETTE;
+  const palette = resolvePalette(spec.theme);
   const publishParams = planVegaPublishParams(charts.filter((c) => c.type !== 'text'));
   const units: Record<string, unknown>[] = [];
 

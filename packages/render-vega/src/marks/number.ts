@@ -1,6 +1,6 @@
 import type { ChartSpec } from '@dvfc/core';
 import { vlAggregate } from './channel.js';
-import { baseSpec } from './theme.js';
+import { ACCENT, baseSpec } from './theme.js';
 
 export function numberToVegaLite(
   chart: ChartSpec,
@@ -23,7 +23,7 @@ export function numberToVegaLite(
       type: 'text',
       fontSize: 40,
       fontWeight: 700,
-      color: '#1e3a5f',
+      color: ACCENT,
       font: 'system-ui, -apple-system, "Segoe UI", sans-serif',
       align: 'center',
       baseline: 'middle',

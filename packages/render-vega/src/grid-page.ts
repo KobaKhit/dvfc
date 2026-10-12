@@ -6,7 +6,7 @@
  */
 
 import type { ChartSpec, DashboardSpec } from '@dvfc/core';
-import { embedRowTracks, escapeHtml, resolveGridLayout } from '@dvfc/core';
+import { embedRowTracks, escapeHtml, resolveGridLayout, resolvePalette } from '@dvfc/core';
 import { chartToVegaLiteBuiltin } from './marks/index.js';
 import {
   buildPublishSelect,
@@ -14,8 +14,6 @@ import {
   planVegaPublishParams,
   type VlPublishParam,
 } from './interaction.js';
-
-const FALLBACK_PALETTE = ['#1e3a5f', '#7ba3c9', '#a89b8c', '#4a7c9b', '#c4b5a0'];
 
 interface GridPublish {
   name: string;
@@ -179,7 +177,7 @@ export function buildVegaGridPage(
   spec: DashboardSpec,
   valuesBySource: Map<string, Record<string, unknown>[]>
 ): string {
-  const palette = spec.theme?.colors?.length ? spec.theme.colors : FALLBACK_PALETTE;
+  const palette = resolvePalette(spec.theme);
   const charts = spec.charts;
   const publishParams = planVegaPublishParams(charts.filter((c) => c.type !== 'text' && c.type !== 'table'));
   const grid = resolveGridLayout(spec.layout);

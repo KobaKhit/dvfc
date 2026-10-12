@@ -16,6 +16,7 @@ export function generateScatterMark(ctx: DcMarkContext): string {
     color,
     xLabel,
     yLabel,
+    palette,
   } = ctx;
   if (!x || !y) return `  console.warn('scatter ${chart.id}: needs x,y');`;
   const colorField = color;
@@ -39,7 +40,7 @@ ${sizePrelude(el, ch, w, h)}  const ${dim} = ${cf}.dimension((d) => [
   const _sx_${ch} = d3.extent(${cf}.all(), (d) => +d['${esc(x)}'] || 0);
   const _sy_${ch} = d3.extent(${cf}.all(), (d) => +d['${esc(y)}'] || 0);
   const _cdom_${ch} = [...new Set(${cf}.all().map((d) => String(d['${esc(colorField)}'] ?? 'Unknown')))].sort();
-  const _cpal_${ch} = ['#1e3a5f', '#7ba3c9', '#a89b8c', '#4a7c9b', '#c4b5a0', '#5c6b73', '#2f6f94', '#8b7355'];
+  const _cpal_${ch} = ${JSON.stringify(palette)};
   const _cscale_${ch} = d3.scaleOrdinal().domain(_cdom_${ch}).range(_cpal_${ch});
   // Reserve room for the HTML color legend rendered under the plot.
   const _plotH_${ch} = Math.max(140, _sz_${ch}.h - 40);
@@ -110,7 +111,7 @@ ${sizePrelude(el, ch, w, h)}  const ${dim} = ${cf}.dimension((d) => [+d['${esc(x
     .symbolSize(7)
     .clipPadding(10)
     .transitionDuration(750)
-    .colors(['#1e3a5f'])
+    .colors(${JSON.stringify([palette[0]])})
     .xAxisLabel('${xLabel}')
     .yAxisLabel('${yLabel}')
     .title((d) => {

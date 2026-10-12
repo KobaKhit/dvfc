@@ -1,4 +1,5 @@
 import type { ChartSpec } from '@dvfc/core';
+import { DEFAULT_CATEGORICAL } from '@dvfc/core';
 
 /** Shared Vega-Lite theme config used by all builtin marks. */
 export const themeConfig = {
@@ -20,20 +21,12 @@ export const themeConfig = {
     anchor: 'start',
   },
   range: {
-    category: [
-      '#0b7f6e',
-      '#36a18f',
-      '#2f6f94',
-      '#7a86c2',
-      '#c47a1a',
-      '#e1ad56',
-      '#724f91',
-      '#cc6b72',
-    ],
+    category: [...DEFAULT_CATEGORICAL],
   },
 } as const;
 
-export const ACCENT = '#0b7f6e';
+/** Single-series mark color: first entry of the shared categorical palette. */
+export const ACCENT = DEFAULT_CATEGORICAL[0];
 
 /** Merge a categorical palette into a Vega-Lite top-level `config`. */
 export function withPalette(

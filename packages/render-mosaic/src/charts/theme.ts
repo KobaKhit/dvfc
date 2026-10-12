@@ -1,30 +1,20 @@
 import type { ChartSpec, ThemeConfig } from '@dvfc/core';
+import { resolvePalette } from '@dvfc/core';
 import type { GeneratorContext } from '../generator.js';
 
-/** Commercial palette inspired by polished BI dashboards (navy / sky / sand). */
+/** Non-categorical chrome colors (ink, grid, …). The categorical ramp lives in core. */
 export const DEFAULT_PALETTE = {
-  primary: '#1e3a5f',
-  secondary: '#7ba3c9',
-  accent: '#a89b8c',
   ink: '#102129',
   muted: '#607078',
   grid: '#e8eef2',
 } as const;
 
 export function themeColors(theme?: ThemeConfig): string[] {
-  const defaults = [
-    DEFAULT_PALETTE.primary,
-    DEFAULT_PALETTE.secondary,
-    DEFAULT_PALETTE.accent,
-    '#4a7c9b',
-    '#c4b5a0',
-  ];
-  if (theme?.colors?.length) return theme.colors;
-  return defaults;
+  return resolvePalette(theme);
 }
 
 export function primaryColor(ctx: GeneratorContext): string {
-  return themeColors(ctx.spec.theme)[0] || DEFAULT_PALETTE.primary;
+  return themeColors(ctx.spec.theme)[0] ?? DEFAULT_PALETTE.ink;
 }
 
 /** Pie/donut slice colors from theme (or navy→sky ramp). */

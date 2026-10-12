@@ -19,6 +19,7 @@ export function generateLineMark(ctx: DcMarkContext): string {
     yLabel,
     reduce,
     valueAccessor,
+    palette,
     titleValue,
   } = ctx;
   if (!x || !y) return `  console.warn('${chart.type} ${chart.id}: needs x,y');`;
@@ -58,7 +59,7 @@ ${sizePrelude(el, ch, w, h)}  const ${dim} = ${cf}.dimension((d) => {
     .renderDataPoints({ radius: 3, fillOpacity: 0.9, strokeOpacity: 0.9 })
     .renderHorizontalGridLines(false)
     .transitionDuration(750)
-    .colors(['#1e3a5f'])
+    .colors(${JSON.stringify([palette[0]])})
     .xAxisLabel('${xLabel}')
     .yAxisLabel('${yLabel}')
     .title((d) => {
@@ -96,7 +97,7 @@ ${sizePrelude(el, ch, w, h)}  const ${dim} = ${cf}.dimension((d) => {
     .renderDataPoints({ radius: 3, fillOpacity: 0.9, strokeOpacity: 0.9 })
     .renderHorizontalGridLines(false)
     .transitionDuration(750)
-    .colors(['#1e3a5f'])
+    .colors(${JSON.stringify([palette[0]])})
     .xAxisLabel('${xLabel}')
     .yAxisLabel('${yLabel}')
     .title((d) => String(d.key) + '\\n${yLabel}: ' + ${titleValue});

@@ -21,3 +21,4 @@ export * from './config.js';
 export * from './escape.js';
 export * from './duckdb-load.js';
 export * from './layout.js';
+export * from './theme.js';

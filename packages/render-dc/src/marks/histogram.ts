@@ -2,7 +2,7 @@ import type { DcMarkContext } from './shared.js';
 import { esc, sizePrelude } from './shared.js';
 
 export function generateHistogramMark(ctx: DcMarkContext): string {
-  const { chart, cf, el, w, h, dim, grp, ch, x, xLabel } = ctx;
+  const { chart, cf, el, w, h, dim, grp, ch, x, xLabel, palette } = ctx;
   if (!x) return `  console.warn('histogram ${chart.id}: needs x');`;
   const bins = chart.encoding?.x?.bins || 20;
   return `
@@ -29,7 +29,7 @@ ${sizePrelude(el, ch, w, h)}    const vals = ${cf}.all().map((d) => +d['${esc(x)
       .brushOn(true)
       .elasticY(true)
       .transitionDuration(750)
-      .colors(['#1e3a5f'])
+      .colors(${JSON.stringify([palette[0]])})
       .xAxisLabel('${xLabel}')
       .yAxisLabel('Frequency')
       .title((d) => d3.format('~s')(d.key) + '\\nFrequency: ' + d3.format(',')(d.value));

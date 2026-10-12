@@ -18,8 +18,8 @@ export function areaToVegaLite(
         y2: 0,
         gradient: 'linear',
         stops: [
-          { offset: 0, color: '#0b7f6e22' },
-          { offset: 1, color: '#0b7f6eaa' },
+          { offset: 0, color: `${ACCENT}22` },
+          { offset: 1, color: `${ACCENT}aa` },
         ],
       },
     },

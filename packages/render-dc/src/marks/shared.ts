@@ -128,4 +128,6 @@ export interface DcMarkContext {
   valueAccessor: string;
   valueExpr: string;
   titleValue: string;
+  /** Categorical colors resolved from the dash theme (or the shared default). */
+  palette: string[];
 }

@@ -1,5 +1,5 @@
 import type { ChartSpec } from '@dvfc/core';
-import { baseSpec } from './theme.js';
+import { ACCENT, baseSpec } from './theme.js';
 import { channelType } from './channel.js';
 
 export function boxplotToVegaLite(
@@ -24,7 +24,7 @@ export function boxplotToVegaLite(
       extent: 'min-max',
       size: 34,
       median: { color: '#c47a1a', strokeWidth: 2 },
-      box: { fill: '#36a18f', opacity: 0.75 },
+      box: { fill: ACCENT, opacity: 0.75 },
     },
     encoding: {
       x: { field: x.field, type: channelType(x) ?? 'nominal', title: x.label },
