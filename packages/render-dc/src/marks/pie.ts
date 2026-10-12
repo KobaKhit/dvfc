@@ -15,6 +15,7 @@ export function generatePieMark(ctx: DcMarkContext): string {
     reduce,
     valueAccessor,
     valueExpr,
+    yLabel,
   } = ctx;
   if (!x) return `  console.warn('pie ${chart.id}: needs x');`;
   return `
@@ -46,7 +47,7 @@ ${sizePrelude(el, ch, w, h)}  const ${dim} = ${cf}.dimension((d) => d['${esc(x)}
     .title((d) => {
       const total = ${grp}.all().reduce((s, g) => s + _val_${ch}(g), 0) || 1;
       const pct = ((100 * _val_${ch}(d)) / total).toFixed(1);
-      return d.key + ': ' + d3.format(',')(_val_${ch}(d)) + ' (' + pct + '%)';
+      return d.key + '\\n${yLabel}: ' + d3.format(',')(_val_${ch}(d)) + '\\nShare: ' + pct + '%';
     })
     .colors(_cscale_${ch})
     .colorAccessor((d) => d.key)

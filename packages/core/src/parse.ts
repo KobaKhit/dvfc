@@ -13,15 +13,51 @@ import { isDashboardSpec } from './types.js';
 
 const FIELD_AGGREGATE = /^(sum|avg|count|min|max|median)\(([^)]+)\)$/;
 
+/** `discovery_year` → `Discovery year`. */
+export function prettifyField(field: string): string {
+  const words = field
+    .replace(/[_-]+/g, ' ')
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return words.charAt(0).toUpperCase() + words.slice(1);
+}
+
+/** Default axis label for shorthand aggregates: `count(planet)` → `Count`. */
+export function defaultAggregateLabel(aggregate: string, field: string): string {
+  const pretty = prettifyField(field);
+  switch (aggregate) {
+    case 'count':
+      return 'Count';
+    case 'sum':
+      return `Total ${pretty.charAt(0).toLowerCase()}${pretty.slice(1)}`;
+    case 'avg':
+      return `Avg ${pretty.charAt(0).toLowerCase()}${pretty.slice(1)}`;
+    case 'median':
+      return `Median ${pretty.charAt(0).toLowerCase()}${pretty.slice(1)}`;
+    case 'min':
+      return `Min ${pretty.charAt(0).toLowerCase()}${pretty.slice(1)}`;
+    case 'max':
+      return `Max ${pretty.charAt(0).toLowerCase()}${pretty.slice(1)}`;
+    default:
+      return pretty;
+  }
+}
+
 /** `count(planet)` or `planet` → a channel. Objects with `field` pass through. */
 export function parseChannelShorthand(value: unknown): ChannelEncoding | undefined {
   if (typeof value === 'string') {
     const text = value.trim();
     const match = text.match(FIELD_AGGREGATE);
     if (match) {
-      return { field: match[2].trim(), aggregate: match[1] as AggregateFunction };
+      const field = match[2].trim();
+      return {
+        field,
+        aggregate: match[1] as AggregateFunction,
+        label: defaultAggregateLabel(match[1], field),
+      };
     }
-    if (text) return { field: text };
+    if (text) return { field: text, label: prettifyField(text) };
     return undefined;
   }
   if (value && typeof value === 'object' && 'field' in value) {

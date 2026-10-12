@@ -20,7 +20,7 @@ export function generateBoxplotChart(chart: ChartSpec, ctx: GeneratorContext): s
   const fromClause = buildFromClause(dataSource, chartFilterVar(chart, ctx));
 
   const plotOptions: string[] = [
-    ...plotChromeOptions(chart),
+    ...plotChromeOptions(chart, { yLabel: true }),
     ...stableFilterScaleOptions(chart),
   ];
   if (encoding.x?.label) plotOptions.push(`vg.xLabel('${encoding.x.label}')`);

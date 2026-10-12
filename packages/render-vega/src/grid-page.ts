@@ -65,6 +65,15 @@ function paintArea(unit: Record<string, unknown>, color: string): void {
   };
 }
 
+function paintBar(unit: Record<string, unknown>, color: string): void {
+  const mark = unit.mark;
+  if (!mark || typeof mark !== 'object') return;
+  const encoding = unit.encoding as Record<string, unknown> | undefined;
+  // Single-series bars read as one navy series, like the other renderers.
+  if (encoding && 'color' in encoding) return;
+  unit.mark = { ...(mark as Record<string, unknown>), color };
+}
+
 function uniqueLabels(values: Record<string, unknown>[], field: string): string[] {
   const labels: string[] = [];
   for (const row of values) {
@@ -114,9 +123,31 @@ function unitForCell(
   unit.height = chart.type === 'number' ? 64 : 'container';
   unit.background = 'transparent';
   if (chart.type === 'area') paintArea(unit, palette[0] || '#1e3a5f');
+  if (chart.type === 'bar') paintBar(unit, palette[0] || '#1e3a5f');
   if (chart.type === 'pie' || chart.type === 'donut') {
     const encoding = unit.encoding as { color?: Record<string, unknown> } | undefined;
     if (encoding?.color) encoding.color = { ...encoding.color, legend: null };
+  }
+  if (chart.type === 'scatter') {
+    const encoding = unit.encoding as { color?: Record<string, unknown> } | undefined;
+    const colorField =
+      chart.encoding?.color && typeof chart.encoding.color === 'object'
+        ? (chart.encoding.color as { field?: string }).field
+        : undefined;
+    if (encoding?.color && colorField) {
+      // Pin the ordinal domain so point colors match the HTML legend swatches.
+      const domain = uniqueLabels(values, colorField).sort((a, b) => a.localeCompare(b));
+      encoding.color = {
+        ...(encoding.color as Record<string, unknown>),
+        legend: null,
+        scale: {
+          domain,
+          range: domain.map((_, i) => palette[i % palette.length] || '#1e3a5f'),
+        },
+      };
+    } else if (encoding?.color) {
+      encoding.color = { ...encoding.color, legend: null };
+    }
   }
   if (mine) unit.params = [{ name: mine.name, select: mine.select }];
   return unit;
@@ -127,15 +158,21 @@ function legendItems(
   values: Record<string, unknown>[],
   palette: string[]
 ): GridLegendItem[] | null {
-  if (chart.type !== 'pie' && chart.type !== 'donut') return null;
-  const field = chart.encoding?.x?.field;
+  const field =
+    chart.type === 'pie' || chart.type === 'donut'
+      ? chart.encoding?.x?.field
+      : chart.type === 'scatter' &&
+          chart.encoding?.color &&
+          typeof chart.encoding.color === 'object'
+        ? (chart.encoding.color as { field?: string }).field
+        : undefined;
   if (!field) return null;
   return uniqueLabels(values, field)
     .sort((a, b) => a.localeCompare(b))
     .map((label, i) => ({
-    label,
-    color: palette[i % palette.length] || '#1e3a5f',
-  }));
+      label,
+      color: palette[i % palette.length] || '#1e3a5f',
+    }));
 }
 
 export function buildVegaGridPage(

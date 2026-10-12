@@ -6,6 +6,7 @@ Canonical demos live under `examples/`.
 
 | Spec | Live |
 |------|------|
+| `examples/site-gallery/landing.dash.yaml` | Homepage demo: [Mosaic](https://kobakhit.github.io/dvfc/examples/landing/) · [dc.js](https://kobakhit.github.io/dvfc/examples/landing-dc/) · [Vega](https://kobakhit.github.io/dvfc/examples/landing-vega/) — one flat spec, three renderers |
 | `examples/site-gallery/showcase.dash.yaml` | [Mosaic showcase](https://kobakhit.github.io/dvfc/examples/showcase/) · [dc.js](https://kobakhit.github.io/dvfc/examples/showcase-dc/) |
 | `examples/sales-dash/sales.dash.yaml` | [Sales & Flights](https://kobakhit.github.io/dvfc/examples/sales-dash/) |
 | `examples/web-analytics/web-analytics.dash.yaml` | [Web Analytics](https://kobakhit.github.io/dvfc/examples/web-analytics/) |

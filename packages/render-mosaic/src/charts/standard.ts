@@ -208,7 +208,10 @@ export function generateStandardChart(chart: ChartSpec, ctx: GeneratorContext): 
   }
 
   const plotOptions: string[] = [
-    ...plotChromeOptions(chart, { heatmap: chart.type === 'heatmap' }),
+    ...plotChromeOptions(chart, {
+      heatmap: chart.type === 'heatmap',
+      yLabel: Boolean(encoding.y?.label) && chart.type !== 'heatmap',
+    }),
     ...stableFilterScaleOptions(chart),
   ];
   plotOptions.push(...interactors);

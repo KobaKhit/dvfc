@@ -41,7 +41,7 @@ ${sizePrelude(el, ch, w, h)}  const ${dim} = ${cf}.dimension((d) => d['${esc(x)}
     .colors(['#1e3a5f'])
     .xAxisLabel('${xLabel}')
     .yAxisLabel('${yLabel}')
-    .title((d) => String(d.key) + ': ' + ${titleValue});
+    .title((d) => String(d.key) + '\\n${yLabel}: ' + ${titleValue});
   ${ch}.yAxis().ticks(5).tickFormat(d3.format('~s'));
   charts.push(${ch});`;
 }

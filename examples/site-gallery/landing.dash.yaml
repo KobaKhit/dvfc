@@ -1,6 +1,6 @@
 id: cosmic-landing
 title: Other Worlds
-description: Brush the discovery timeline to filter linked views.
+description: Brush the timeline, click a slice, or brush the scatter — every view stays in sync.
 version: 0.2.0
 coordination:
   auto: true
@@ -14,7 +14,7 @@ charts:
     content: |
       **Brush the timeline** to filter every view.
 
-      Crossfiltering is declared in the spec — not wired in JavaScript.
+      Click a donut slice or brush the scatter — linking is declared in the spec, not wired in JavaScript.
 
   - id: world_count
     type: number
@@ -28,6 +28,13 @@ charts:
     title: Avg habitability
     data: worlds
     y: avg(habitability_score)
+    filterBy: era
+
+  - id: avg_distance
+    type: number
+    title: Avg distance (ly)
+    data: worlds
+    y: avg(distance_ly)
     filterBy: era
 
   - id: discovery_timeline
@@ -44,7 +51,7 @@ charts:
 
   - id: discovery_methods
     type: donut
-    title: Discovery methods
+    title: By discovery method
     data: worlds
     x: method
     y: count(planet)
@@ -53,10 +60,30 @@ charts:
     select: auto
     height: 260
 
+  - id: habitability_scatter
+    type: scatter
+    title: Habitability vs temperature
+    data: worlds
+    x: equilibrium_k
+    y: habitability_score
+    color: method
+    filterBy: era
+    height: 280
+
+  - id: missions_bar
+    type: bar
+    title: Worlds by mission
+    data: worlds
+    x: mission
+    y: count(planet)
+    filterBy: era
+    height: 280
+
 layout:
   type: grid
   rows:
-    - 3
+    - 4
+    - 2
     - 2
   gap: 16
 theme:

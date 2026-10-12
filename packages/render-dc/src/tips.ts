@@ -1,6 +1,8 @@
 /**
  * Shared HTML tooltip helpers for dc.js dashboards.
- * Native SVG <title> tips are unreliable and brush overlays steal hover.
+ * Native SVG <title> tips are unreliable and brush overlays steal hover,
+ * so marks write structured `Heading\nKey: value` titles and this module
+ * renders them as a small card (title + key/value rows).
  */
 
 export const DVFC_TIP_CSS = `
@@ -10,24 +12,59 @@ export const DVFC_TIP_CSS = `
       pointer-events: none;
       opacity: 0;
       transform: translate3d(0, 4px, 0);
-      transition: opacity 80ms ease, transform 80ms ease;
-      max-width: min(280px, 70vw);
-      padding: 0.4rem 0.55rem;
-      border-radius: 4px;
-      background: #102129;
-      color: #f7f8fa;
+      transition: opacity 90ms ease, transform 90ms ease;
+      min-width: 120px;
+      max-width: min(300px, 72vw);
+      padding: 0.55rem 0.65rem 0.6rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(16, 33, 41, 0.96);
+      color: #f2f7f8;
       font-size: 0.78rem;
       font-weight: 500;
-      line-height: 1.35;
-      box-shadow: 0 6px 18px rgba(16, 33, 41, 0.22);
-      white-space: pre-line;
+      line-height: 1.4;
+      box-shadow: 0 10px 28px rgba(16, 33, 41, 0.35);
     }
     #dvfc-tip.is-on {
       opacity: 1;
       transform: translate3d(0, 0, 0);
     }
+    .dvfc-tip-title {
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: -0.01em;
+      padding-bottom: 0.3rem;
+      margin-bottom: 0.3rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      overflow-wrap: anywhere;
+    }
+    .dvfc-tip-rows {
+      display: grid;
+      gap: 0.15rem;
+    }
+    .dvfc-tip-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.9rem;
+    }
+    .dvfc-tip-k {
+      color: rgba(226, 236, 240, 0.65);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .dvfc-tip-v {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-weight: 600;
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+    .dvfc-tip-text {
+      margin-top: 0.15rem;
+      color: rgba(226, 236, 240, 0.85);
+      white-space: pre-line;
+    }
 `;
-
 /** Browser IIFE body — defines dvfcInstallTips(). Call after dc.renderAll(). */
 export const DVFC_TIP_JS = `
   function dvfcInstallTips() {
@@ -39,11 +76,48 @@ export const DVFC_TIP_JS = `
       document.body.appendChild(tip);
     }
     const hide = () => tip.classList.remove('is-on');
+    const row = (k, v) => {
+      const line = document.createElement('div');
+      line.className = 'dvfc-tip-row';
+      const key = document.createElement('span');
+      key.className = 'dvfc-tip-k';
+      key.textContent = k;
+      const val = document.createElement('span');
+      val.className = 'dvfc-tip-v';
+      val.textContent = v;
+      line.appendChild(key);
+      line.appendChild(val);
+      return line;
+    };
     const show = (text, x, y) => {
-      if (!text) return hide();
-      tip.textContent = text;
+      if (!text || !String(text).trim()) return hide();
+      const lines = String(text).split('\\n').map((s) => s.trim()).filter(Boolean);
+      if (!lines.length) return hide();
+      tip.innerHTML = '';
+      const heading = document.createElement('div');
+      heading.className = 'dvfc-tip-title';
+      heading.textContent = lines[0];
+      tip.appendChild(heading);
+      const rest = lines.slice(1);
+      const kv = rest.filter((l) => l.indexOf(':') > 0);
+      if (kv.length) {
+        const box = document.createElement('div');
+        box.className = 'dvfc-tip-rows';
+        for (const line of kv) {
+          const i = line.indexOf(':');
+          box.appendChild(row(line.slice(0, i).trim(), line.slice(i + 1).trim()));
+        }
+        tip.appendChild(box);
+      }
+      const extra = rest.filter((l) => l.indexOf(':') <= 0);
+      if (extra.length) {
+        const t = document.createElement('div');
+        t.className = 'dvfc-tip-text';
+        t.textContent = extra.join('\\n');
+        tip.appendChild(t);
+      }
       tip.classList.add('is-on');
-      const pad = 12;
+      const pad = 14;
       const tw = tip.offsetWidth || 0;
       const th = tip.offsetHeight || 0;
       tip.style.left = Math.max(8, Math.min(x + pad, window.innerWidth - tw - 8)) + 'px';

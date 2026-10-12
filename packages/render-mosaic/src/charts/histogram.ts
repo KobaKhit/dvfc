@@ -32,7 +32,7 @@ export function generateHistogramChart(chart: ChartSpec, ctx: GeneratorContext):
   const tipPart = tip ? `, ${tip}` : '';
 
   const plotOptions: string[] = [
-    ...plotChromeOptions(chart),
+    ...plotChromeOptions(chart, { yLabel: true }),
     ...stableFilterScaleOptions(chart),
     ...interactors,
   ];

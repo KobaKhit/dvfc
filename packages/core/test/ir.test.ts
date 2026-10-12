@@ -105,8 +105,10 @@ charts:
     if (!chart || !('encoding' in chart)) throw new Error('expected inline chart');
     assert.equal(chart.dataSource, 'worlds');
     assert.equal(chart.encoding?.x?.field, 'discovery_year');
+    assert.equal(chart.encoding?.x?.label, 'Discovery year');
     assert.equal(chart.encoding?.y?.field, 'planet');
     assert.equal(chart.encoding?.y?.aggregate, 'count');
+    assert.equal(chart.encoding?.y?.label, 'Count');
     assert.equal(chart.interaction?.publishes, 'era');
     assert.equal(chart.interaction?.filterBy, 'era');
     assert.equal(chart.interaction?.brush, true);

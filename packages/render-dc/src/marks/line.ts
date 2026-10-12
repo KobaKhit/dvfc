@@ -63,7 +63,7 @@ ${sizePrelude(el, ch, w, h)}  const ${dim} = ${cf}.dimension((d) => {
     .yAxisLabel('${yLabel}')
     .title((d) => {
       const k = d.key instanceof Date ? d3.timeFormat('%Y-%m-%d')(d.key) : String(d.key);
-      return k + ': ' + ${titleValue};
+      return k + '\\n${yLabel}: ' + ${titleValue};
     });
   ${ch}.xAxis().ticks(6);
   ${ch}.yAxis().ticks(5).tickFormat(d3.format('~s'));
@@ -99,7 +99,7 @@ ${sizePrelude(el, ch, w, h)}  const ${dim} = ${cf}.dimension((d) => {
     .colors(['#1e3a5f'])
     .xAxisLabel('${xLabel}')
     .yAxisLabel('${yLabel}')
-    .title((d) => String(d.key) + ': ' + ${titleValue});
+    .title((d) => String(d.key) + '\\n${yLabel}: ' + ${titleValue});
   ${ch}.xAxis().ticks(6).tickFormat(d3.format('d'));
   ${ch}.yAxis().ticks(5).tickFormat(d3.format('~s'));
 ${tipHits}

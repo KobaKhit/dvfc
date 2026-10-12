@@ -48,7 +48,7 @@ ${sizePrelude(el, ch, w, h)}  const ${dim} = ${cf}.dimension((d) => [String(d['$
     .calculateColorDomain()
     .colsLabel((d) => d)
     .rowsLabel((d) => d)
-    .title((d) => d.key[0] + ' × ' + d.key[1] + ': ' + d3.format(',')(d.value))
+    .title((d) => d.key[0] + ' × ' + d.key[1] + '\\nValue: ' + d3.format(',')(d.value))
     .transitionDuration(0)
     .xBorderRadius(2)
     .yBorderRadius(2);

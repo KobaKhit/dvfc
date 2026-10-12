@@ -259,6 +259,20 @@ export function buildDcPageCss(spec: DashboardSpec): string {
     html.is-embedded .dvfc-kpi {
       min-height: 0;
     }
+    html.is-embedded .dvfc-kpi,
+    html.is-embedded .dvfc-kpi .number-display,
+    html.is-embedded .dvfc-kpi > span {
+      min-height: 2.6rem;
+      font-size: clamp(1.5rem, 2.4vw, 2rem);
+    }
+    html.is-embedded .text-body {
+      font-size: 0.85rem;
+      line-height: 1.5;
+      padding: 0.1rem 0.1rem 0.15rem;
+    }
+    html.is-embedded .chart-container h3 {
+      margin-bottom: 0.3rem;
+    }
     html.is-embedded h1,
     html.is-embedded .subtitle,
     html.is-embedded #status,

@@ -1,7 +1,7 @@
 {
   "id": "cosmic-landing",
   "title": "Other Worlds",
-  "description": "Brush the discovery timeline to filter linked views.",
+  "description": "Brush the timeline, click a slice, or brush the scatter — every view stays in sync.",
   "version": "0.2.0",
   "coordination": { "auto": true },
   "data": [{ "id": "worlds", "type": "csv", "path": "exoplanets.csv" }],
@@ -9,14 +9,14 @@
     {
       "id": "field_note",
       "type": "text",
-      "content": "**Brush the timeline** to filter every view.\n\nCrossfiltering is declared in the spec — not wired in JavaScript."
+      "content": "**Brush the timeline** to filter every view.\n\nClick a donut slice or brush the scatter — linking is declared in the spec, not wired in JavaScript."
     },
     {
       "id": "world_count",
       "type": "number",
       "title": "Worlds in view",
       "dataSource": "worlds",
-      "encoding": { "y": { "field": "planet", "aggregate": "count", "label": "Worlds" } },
+      "encoding": { "y": { "field": "planet", "aggregate": "count", "label": "Count" } },
       "interaction": { "filterBy": "era" }
     },
     {
@@ -24,7 +24,15 @@
       "type": "number",
       "title": "Avg habitability",
       "dataSource": "worlds",
-      "encoding": { "y": { "field": "habitability_score", "aggregate": "avg" } },
+      "encoding": { "y": { "field": "habitability_score", "aggregate": "avg", "label": "Avg habitability score" } },
+      "interaction": { "filterBy": "era" }
+    },
+    {
+      "id": "avg_distance",
+      "type": "number",
+      "title": "Avg distance (ly)",
+      "dataSource": "worlds",
+      "encoding": { "y": { "field": "distance_ly", "aggregate": "avg", "label": "Avg distance ly" } },
       "interaction": { "filterBy": "era" }
     },
     {
@@ -33,8 +41,8 @@
       "title": "Discoveries over time",
       "dataSource": "worlds",
       "encoding": {
-        "x": { "field": "discovery_year", "type": "ordinal", "label": "Year" },
-        "y": { "field": "planet", "aggregate": "count", "label": "Worlds" }
+        "x": { "field": "discovery_year", "type": "ordinal", "label": "Discovery year" },
+        "y": { "field": "planet", "aggregate": "count", "label": "Count" }
       },
       "interaction": {
         "brush": true,
@@ -47,11 +55,11 @@
     {
       "id": "discovery_methods",
       "type": "donut",
-      "title": "Discovery methods",
+      "title": "By discovery method",
       "dataSource": "worlds",
       "encoding": {
-        "x": { "field": "method", "type": "nominal" },
-        "y": { "field": "planet", "aggregate": "count" }
+        "x": { "field": "method", "type": "nominal", "label": "Method" },
+        "y": { "field": "planet", "aggregate": "count", "label": "Count" }
       },
       "interaction": {
         "filterBy": "era",
@@ -59,9 +67,34 @@
         "select": "auto"
       },
       "height": 260
+    },
+    {
+      "id": "habitability_scatter",
+      "type": "scatter",
+      "title": "Habitability vs temperature",
+      "dataSource": "worlds",
+      "encoding": {
+        "x": { "field": "equilibrium_k", "type": "quantitative", "label": "Equilibrium k" },
+        "y": { "field": "habitability_score", "type": "quantitative", "label": "Habitability score" },
+        "color": { "field": "method", "type": "nominal" }
+      },
+      "interaction": { "filterBy": "era" },
+      "height": 280
+    },
+    {
+      "id": "missions_bar",
+      "type": "bar",
+      "title": "Worlds by mission",
+      "dataSource": "worlds",
+      "encoding": {
+        "x": { "field": "mission", "type": "nominal", "label": "Mission" },
+        "y": { "field": "planet", "aggregate": "count", "label": "Count" }
+      },
+      "interaction": { "filterBy": "era" },
+      "height": 280
     }
   ],
-  "layout": { "type": "grid", "rows": [3, 2], "gap": 16 },
+  "layout": { "type": "grid", "rows": [4, 2, 2], "gap": 16 },
   "theme": {
     "colors": ["#1e3a5f", "#7ba3c9", "#a89b8c", "#4a7c9b"],
     "fontFamily": "system-ui, -apple-system, \"Segoe UI\", sans-serif",

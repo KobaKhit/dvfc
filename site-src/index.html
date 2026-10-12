@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>dvfc — dashboards as data, for humans and agents</title>
   <meta name="description" content="dvfc compiles chart and dash specs into interactive Mosaic dashboards that run on DuckDB in the browser. Works with dbt models, ships as static HTML, and has CLI and MCP tools for coding agents.">
-  <link rel="stylesheet" href="/dvfc/style.css?v=20260926b">
+  <link rel="stylesheet" href="/dvfc/style.css?v=20260926d">
 </head>
 <body>
   <div class="site">
@@ -35,6 +35,12 @@
           <a class="btn btn-primary" href="#demo">See a live dash</a>
           <a class="btn btn-secondary" href="/dvfc/docs/">Read the docs</a>
         </div>
+        <ul class="hero-stats" aria-label="At a glance">
+          <li><strong>13</strong> chart types</li>
+          <li><strong>3</strong> renderers</li>
+          <li><strong>1</strong> spec file</li>
+          <li><strong>0</strong> backend</li>
+        </ul>
       </div>
     </header>
 
@@ -43,8 +49,13 @@
         <div class="demo-head">
           <div>
             <p class="section-kicker">Live example</p>
-            <h2>One spec. Linked charts. Brush to filter.</h2>
+            <h2>One spec. Eight charts. Brush to filter.</h2>
             <p>Same landing spec, three renderers. Mosaic and dc.js crossfilter in the browser. Vega-Lite is a static linked page. The file on the right is that spec.</p>
+            <ul class="demo-chips" aria-label="Things to try">
+              <li>Brush the timeline</li>
+              <li>Click a donut slice</li>
+              <li>Brush the scatter</li>
+            </ul>
           </div>
           <a class="btn btn-secondary" id="demo-open" href="/dvfc/examples/landing-dc/index.html">Open fullscreen</a>
         </div>
@@ -58,11 +69,12 @@
                 <button type="button" class="engine-tab" role="tab" aria-selected="false" data-engine="vega">Vega</button>
               </div>
               <span class="hint-pill" id="demo-hint">Brush a chart to filter</span>
+              <button type="button" class="reset-btn" id="demo-reset" title="Reload the dashboard to clear all filters">Reset filters</button>
             </div>
             <iframe
               id="demo-frame"
               title="Other Worlds dashboard, dc.js renderer"
-              src="/dvfc/examples/landing-dc/index.html?embed=1&v=30"
+              src="/dvfc/examples/landing-dc/index.html?embed=1&v=31"
               loading="eager"
               scrolling="no"
             ></iframe>
@@ -77,6 +89,7 @@
                 <button type="button" class="format-tab" role="tab" aria-selected="false" data-format="python">Python</button>
               </div>
               <div class="spec-actions">
+                <span class="spec-meta" id="spec-meta"></span>
                 <a id="spec-source-link" href="https://github.com/KobaKhit/dvfc/blob/main/examples/site-gallery/landing.dash.yaml" target="_blank" rel="noopener">Source</a>
                 <button type="button" class="copy-btn" id="copy-spec" aria-label="Copy spec">Copy</button>
               </div>
@@ -368,12 +381,12 @@ pnpm exec dvfc preview examples/site-gallery/landing.dash.yaml</pre>
   </div>
 
   <script type="application/json" id="spec-payloads">
-  {
-    "yaml": "id: cosmic-landing\ntitle: Other Worlds\ndata:\n  - id: worlds\n    type: csv\n    path: exoplanets.csv\ncharts:\n  - id: field_note\n    type: text\n    content: |\n      **Brush the timeline** to filter every view.\n  - id: world_count\n    type: number\n    title: Worlds in view\n    data: worlds\n    y: count(planet)\n    filterBy: era\n  - id: avg_habitability\n    type: number\n    title: Avg habitability\n    data: worlds\n    y: avg(habitability_score)\n    filterBy: era\n  - id: discovery_timeline\n    type: area\n    title: Discoveries over time\n    data: worlds\n    x: discovery_year\n    y: count(planet)\n    brush: true\n    publishes: era\n    filterBy: era\n  - id: discovery_methods\n    type: donut\n    title: Discovery methods\n    data: worlds\n    x: method\n    y: count(planet)\n    filterBy: era\n    publishes: era\nlayout:\n  type: grid\n  rows:\n    - 3\n    - 2\n  gap: 16\n",
-    "toml": "id = \"cosmic-landing\"\ntitle = \"Other Worlds\"\n\n[[data]]\nid = \"worlds\"\ntype = \"csv\"\npath = \"exoplanets.csv\"\n\n[[charts]]\nid = \"field_note\"\ntype = \"text\"\ncontent = \"**Brush the timeline** to filter every view.\"\n\n[[charts]]\nid = \"world_count\"\ntype = \"number\"\ndataSource = \"worlds\"\n\n[charts.encoding.y]\nfield = \"planet\"\naggregate = \"count\"\n\n[charts.interaction]\nfilterBy = \"era\"\n\n[[charts]]\nid = \"avg_habitability\"\ntype = \"number\"\ndataSource = \"worlds\"\n\n[charts.encoding.y]\nfield = \"habitability_score\"\naggregate = \"avg\"\n\n[charts.interaction]\nfilterBy = \"era\"\n\n[[charts]]\nid = \"discovery_timeline\"\ntype = \"area\"\ndataSource = \"worlds\"\n\n[charts.encoding.x]\nfield = \"discovery_year\"\ntype = \"ordinal\"\n\n[charts.encoding.y]\nfield = \"planet\"\naggregate = \"count\"\n\n[charts.interaction]\nbrush = true\npublishes = \"era\"\nfilterBy = \"era\"\n\n[[charts]]\nid = \"discovery_methods\"\ntype = \"donut\"\ndataSource = \"worlds\"\n\n[charts.encoding.x]\nfield = \"method\"\n\n[charts.encoding.y]\nfield = \"planet\"\naggregate = \"count\"\n\n[charts.interaction]\nfilterBy = \"era\"\npublishes = \"era\"\n\n[layout]\ntype = \"grid\"\nrows = [3, 2]\ngap = 16",
-    "json": "{\n  \"id\": \"cosmic-landing\",\n  \"title\": \"Other Worlds\",\n  \"data\": [{ \"id\": \"worlds\", \"type\": \"csv\", \"path\": \"exoplanets.csv\" }],\n  \"charts\": [\n    { \"id\": \"field_note\", \"type\": \"text\",\n      \"content\": \"**Brush the timeline** to filter every view.\" },\n    { \"id\": \"world_count\", \"type\": \"number\", \"dataSource\": \"worlds\",\n      \"encoding\": { \"y\": { \"field\": \"planet\", \"aggregate\": \"count\" } },\n      \"interaction\": { \"filterBy\": \"era\" } },\n    { \"id\": \"avg_habitability\", \"type\": \"number\", \"dataSource\": \"worlds\",\n      \"encoding\": { \"y\": { \"field\": \"habitability_score\", \"aggregate\": \"avg\" } },\n      \"interaction\": { \"filterBy\": \"era\" } },\n    { \"id\": \"discovery_timeline\", \"type\": \"area\", \"dataSource\": \"worlds\",\n      \"encoding\": {\n        \"x\": { \"field\": \"discovery_year\", \"type\": \"ordinal\" },\n        \"y\": { \"field\": \"planet\", \"aggregate\": \"count\" }\n      },\n      \"interaction\": { \"brush\": true, \"publishes\": \"era\", \"filterBy\": \"era\" } },\n    { \"id\": \"discovery_methods\", \"type\": \"donut\", \"dataSource\": \"worlds\",\n      \"encoding\": {\n        \"x\": { \"field\": \"method\", \"type\": \"nominal\" },\n        \"y\": { \"field\": \"planet\", \"aggregate\": \"count\" }\n      },\n      \"interaction\": { \"filterBy\": \"era\", \"publishes\": \"era\" } }\n  ],\n  \"layout\": { \"type\": \"grid\", \"rows\": [3, 2], \"gap\": 16 }\n}",
-    "python": "from dvfc import ChartBuilder, ChartType, DashBuilder\n\nnote = ChartBuilder(\"field_note\", ChartType.TEXT).content(\n    \"**Brush the timeline** to filter every view.\"\n).build()\n\nkpi = (ChartBuilder(\"world_count\", ChartType.NUMBER)\n    .data_source(\"worlds\").y(\"planet\", aggregate=\"count\")\n    .filter_by(\"era\").build())\n\nhab = (ChartBuilder(\"avg_habitability\", ChartType.NUMBER)\n    .data_source(\"worlds\").y(\"habitability_score\", aggregate=\"avg\")\n    .filter_by(\"era\").build())\n\ntimeline = (ChartBuilder(\"discovery_timeline\", ChartType.AREA)\n    .data_source(\"worlds\")\n    .x(\"discovery_year\", type=\"ordinal\")\n    .y(\"planet\", aggregate=\"count\")\n    .brush(\"x\", \"era\").filter_by(\"era\").build())\n\nmethods = (ChartBuilder(\"discovery_methods\", ChartType.DONUT)\n    .data_source(\"worlds\").x(\"method\", type=\"nominal\")\n    .y(\"planet\", aggregate=\"count\")\n    .publishes(\"era\").filter_by(\"era\").build())\n\ndash = (DashBuilder(\"cosmic-landing\", \"Other Worlds\")\n    .add_csv(\"worlds\", \"exoplanets.csv\")\n    .add_chart(note).add_chart(kpi).add_chart(hab)\n    .add_chart(timeline).add_chart(methods)\n    .build())"
-  }
+{
+  "yaml": "id: cosmic-landing\ntitle: Other Worlds\ndescription: Brush the timeline, click a slice, or brush the scatter — every view stays in sync.\nversion: 0.2.0\ncoordination:\n  auto: true\ndata:\n  - id: worlds\n    type: csv\n    path: exoplanets.csv\ncharts:\n  - id: field_note\n    type: text\n    content: |\n      **Brush the timeline** to filter every view.\n\n      Click a donut slice or brush the scatter — linking is declared in the spec, not wired in JavaScript.\n\n  - id: world_count\n    type: number\n    title: Worlds in view\n    data: worlds\n    y: count(planet)\n    filterBy: era\n\n  - id: avg_habitability\n    type: number\n    title: Avg habitability\n    data: worlds\n    y: avg(habitability_score)\n    filterBy: era\n\n  - id: avg_distance\n    type: number\n    title: Avg distance (ly)\n    data: worlds\n    y: avg(distance_ly)\n    filterBy: era\n\n  - id: discovery_timeline\n    type: area\n    title: Discoveries over time\n    data: worlds\n    x: discovery_year\n    y: count(planet)\n    brush: true\n    brushAxis: x\n    publishes: era\n    filterBy: era\n    height: 260\n\n  - id: discovery_methods\n    type: donut\n    title: By discovery method\n    data: worlds\n    x: method\n    y: count(planet)\n    filterBy: era\n    publishes: era\n    select: auto\n    height: 260\n\n  - id: habitability_scatter\n    type: scatter\n    title: Habitability vs temperature\n    data: worlds\n    x: equilibrium_k\n    y: habitability_score\n    color: method\n    filterBy: era\n    height: 280\n\n  - id: missions_bar\n    type: bar\n    title: Worlds by mission\n    data: worlds\n    x: mission\n    y: count(planet)\n    filterBy: era\n    height: 280\n\nlayout:\n  type: grid\n  rows:\n    - 4\n    - 2\n    - 2\n  gap: 16\ntheme:\n  colors:\n    - \"#1e3a5f\"\n    - \"#7ba3c9\"\n    - \"#a89b8c\"\n    - \"#4a7c9b\"\n  fontFamily: system-ui, -apple-system, \"Segoe UI\", sans-serif\n  backgroundColor: white\n",
+  "toml": "id = \"cosmic-landing\"\ntitle = \"Other Worlds\"\ndescription = \"Brush the timeline, click a slice, or brush the scatter — every view stays in sync.\"\nversion = \"0.2.0\"\n\n[coordination]\nauto = true\n\n[[data]]\nid = \"worlds\"\ntype = \"csv\"\npath = \"exoplanets.csv\"\n\n[[charts]]\nid = \"field_note\"\ntype = \"text\"\ncontent = \"\"\"\n**Brush the timeline** to filter every view.\n\nClick a donut slice or brush the scatter — linking is declared in the spec, not wired in JavaScript.\n\"\"\"\n\n[[charts]]\nid = \"world_count\"\ntype = \"number\"\ntitle = \"Worlds in view\"\ndataSource = \"worlds\"\n\n[charts.encoding.y]\nfield = \"planet\"\naggregate = \"count\"\nlabel = \"Count\"\n\n[charts.interaction]\nfilterBy = \"era\"\n\n[[charts]]\nid = \"avg_habitability\"\ntype = \"number\"\ntitle = \"Avg habitability\"\ndataSource = \"worlds\"\n\n[charts.encoding.y]\nfield = \"habitability_score\"\naggregate = \"avg\"\nlabel = \"Avg habitability score\"\n\n[charts.interaction]\nfilterBy = \"era\"\n\n[[charts]]\nid = \"avg_distance\"\ntype = \"number\"\ntitle = \"Avg distance (ly)\"\ndataSource = \"worlds\"\n\n[charts.encoding.y]\nfield = \"distance_ly\"\naggregate = \"avg\"\nlabel = \"Avg distance ly\"\n\n[charts.interaction]\nfilterBy = \"era\"\n\n[[charts]]\nid = \"discovery_timeline\"\ntype = \"area\"\ntitle = \"Discoveries over time\"\ndataSource = \"worlds\"\nheight = 260\n\n[charts.encoding.x]\nfield = \"discovery_year\"\ntype = \"ordinal\"\nlabel = \"Discovery year\"\n\n[charts.encoding.y]\nfield = \"planet\"\naggregate = \"count\"\nlabel = \"Count\"\n\n[charts.interaction]\nbrush = true\nbrushAxis = \"x\"\npublishes = \"era\"\nfilterBy = \"era\"\n\n[[charts]]\nid = \"discovery_methods\"\ntype = \"donut\"\ntitle = \"By discovery method\"\ndataSource = \"worlds\"\nheight = 260\n\n[charts.encoding.x]\nfield = \"method\"\ntype = \"nominal\"\nlabel = \"Method\"\n\n[charts.encoding.y]\nfield = \"planet\"\naggregate = \"count\"\nlabel = \"Count\"\n\n[charts.interaction]\nfilterBy = \"era\"\npublishes = \"era\"\nselect = \"auto\"\n\n[[charts]]\nid = \"habitability_scatter\"\ntype = \"scatter\"\ntitle = \"Habitability vs temperature\"\ndataSource = \"worlds\"\nheight = 280\n\n[charts.encoding.x]\nfield = \"equilibrium_k\"\ntype = \"quantitative\"\nlabel = \"Equilibrium k\"\n\n[charts.encoding.y]\nfield = \"habitability_score\"\ntype = \"quantitative\"\nlabel = \"Habitability score\"\n\n[charts.encoding.color]\nfield = \"method\"\ntype = \"nominal\"\n\n[charts.interaction]\nfilterBy = \"era\"\n\n[[charts]]\nid = \"missions_bar\"\ntype = \"bar\"\ntitle = \"Worlds by mission\"\ndataSource = \"worlds\"\nheight = 280\n\n[charts.encoding.x]\nfield = \"mission\"\ntype = \"nominal\"\nlabel = \"Mission\"\n\n[charts.encoding.y]\nfield = \"planet\"\naggregate = \"count\"\nlabel = \"Count\"\n\n[charts.interaction]\nfilterBy = \"era\"\n\n[layout]\ntype = \"grid\"\nrows = [4, 2, 2]\ngap = 16\n\n[theme]\ncolors = [\"#1e3a5f\", \"#7ba3c9\", \"#a89b8c\", \"#4a7c9b\"]\nfontFamily = \"system-ui, -apple-system, \\\"Segoe UI\\\", sans-serif\"\nbackgroundColor = \"white\"\n",
+  "json": "{\n  \"id\": \"cosmic-landing\",\n  \"title\": \"Other Worlds\",\n  \"description\": \"Brush the timeline, click a slice, or brush the scatter — every view stays in sync.\",\n  \"version\": \"0.2.0\",\n  \"coordination\": { \"auto\": true },\n  \"data\": [{ \"id\": \"worlds\", \"type\": \"csv\", \"path\": \"exoplanets.csv\" }],\n  \"charts\": [\n    {\n      \"id\": \"field_note\",\n      \"type\": \"text\",\n      \"content\": \"**Brush the timeline** to filter every view.\\n\\nClick a donut slice or brush the scatter — linking is declared in the spec, not wired in JavaScript.\"\n    },\n    {\n      \"id\": \"world_count\",\n      \"type\": \"number\",\n      \"title\": \"Worlds in view\",\n      \"dataSource\": \"worlds\",\n      \"encoding\": { \"y\": { \"field\": \"planet\", \"aggregate\": \"count\", \"label\": \"Count\" } },\n      \"interaction\": { \"filterBy\": \"era\" }\n    },\n    {\n      \"id\": \"avg_habitability\",\n      \"type\": \"number\",\n      \"title\": \"Avg habitability\",\n      \"dataSource\": \"worlds\",\n      \"encoding\": { \"y\": { \"field\": \"habitability_score\", \"aggregate\": \"avg\", \"label\": \"Avg habitability score\" } },\n      \"interaction\": { \"filterBy\": \"era\" }\n    },\n    {\n      \"id\": \"avg_distance\",\n      \"type\": \"number\",\n      \"title\": \"Avg distance (ly)\",\n      \"dataSource\": \"worlds\",\n      \"encoding\": { \"y\": { \"field\": \"distance_ly\", \"aggregate\": \"avg\", \"label\": \"Avg distance ly\" } },\n      \"interaction\": { \"filterBy\": \"era\" }\n    },\n    {\n      \"id\": \"discovery_timeline\",\n      \"type\": \"area\",\n      \"title\": \"Discoveries over time\",\n      \"dataSource\": \"worlds\",\n      \"encoding\": {\n        \"x\": { \"field\": \"discovery_year\", \"type\": \"ordinal\", \"label\": \"Discovery year\" },\n        \"y\": { \"field\": \"planet\", \"aggregate\": \"count\", \"label\": \"Count\" }\n      },\n      \"interaction\": {\n        \"brush\": true,\n        \"brushAxis\": \"x\",\n        \"publishes\": \"era\",\n        \"filterBy\": \"era\"\n      },\n      \"height\": 260\n    },\n    {\n      \"id\": \"discovery_methods\",\n      \"type\": \"donut\",\n      \"title\": \"By discovery method\",\n      \"dataSource\": \"worlds\",\n      \"encoding\": {\n        \"x\": { \"field\": \"method\", \"type\": \"nominal\", \"label\": \"Method\" },\n        \"y\": { \"field\": \"planet\", \"aggregate\": \"count\", \"label\": \"Count\" }\n      },\n      \"interaction\": {\n        \"filterBy\": \"era\",\n        \"publishes\": \"era\",\n        \"select\": \"auto\"\n      },\n      \"height\": 260\n    },\n    {\n      \"id\": \"habitability_scatter\",\n      \"type\": \"scatter\",\n      \"title\": \"Habitability vs temperature\",\n      \"dataSource\": \"worlds\",\n      \"encoding\": {\n        \"x\": { \"field\": \"equilibrium_k\", \"type\": \"quantitative\", \"label\": \"Equilibrium k\" },\n        \"y\": { \"field\": \"habitability_score\", \"type\": \"quantitative\", \"label\": \"Habitability score\" },\n        \"color\": { \"field\": \"method\", \"type\": \"nominal\" }\n      },\n      \"interaction\": { \"filterBy\": \"era\" },\n      \"height\": 280\n    },\n    {\n      \"id\": \"missions_bar\",\n      \"type\": \"bar\",\n      \"title\": \"Worlds by mission\",\n      \"dataSource\": \"worlds\",\n      \"encoding\": {\n        \"x\": { \"field\": \"mission\", \"type\": \"nominal\", \"label\": \"Mission\" },\n        \"y\": { \"field\": \"planet\", \"aggregate\": \"count\", \"label\": \"Count\" }\n      },\n      \"interaction\": { \"filterBy\": \"era\" },\n      \"height\": 280\n    }\n  ],\n  \"layout\": { \"type\": \"grid\", \"rows\": [4, 2, 2], \"gap\": 16 },\n  \"theme\": {\n    \"colors\": [\"#1e3a5f\", \"#7ba3c9\", \"#a89b8c\", \"#4a7c9b\"],\n    \"fontFamily\": \"system-ui, -apple-system, \\\"Segoe UI\\\", sans-serif\",\n    \"backgroundColor\": \"white\"\n  }\n}\n",
+  "python": "from dvfc import ChartBuilder, ChartType, DashBuilder\n\nnote = (\n    ChartBuilder(\"field_note\", ChartType.TEXT)\n    .content(\n        \"**Brush the timeline** to filter every view.\\n\\n\"\n        \"Click a donut slice or brush the scatter — linking is declared in the spec, not wired in JavaScript.\"\n    )\n    .build()\n)\n\nkpi = (\n    ChartBuilder(\"world_count\", ChartType.NUMBER)\n    .title(\"Worlds in view\")\n    .data_source(\"worlds\")\n    .y(\"planet\", aggregate=\"count\")\n    .filter_by(\"era\")\n    .build()\n)\n\nhab = (\n    ChartBuilder(\"avg_habitability\", ChartType.NUMBER)\n    .title(\"Avg habitability\")\n    .data_source(\"worlds\")\n    .y(\"habitability_score\", aggregate=\"avg\")\n    .filter_by(\"era\")\n    .build()\n)\n\ndist = (\n    ChartBuilder(\"avg_distance\", ChartType.NUMBER)\n    .title(\"Avg distance (ly)\")\n    .data_source(\"worlds\")\n    .y(\"distance_ly\", aggregate=\"avg\")\n    .filter_by(\"era\")\n    .build()\n)\n\ntimeline = (\n    ChartBuilder(\"discovery_timeline\", ChartType.AREA)\n    .title(\"Discoveries over time\")\n    .data_source(\"worlds\")\n    .x(\"discovery_year\", type=\"ordinal\")\n    .y(\"planet\", aggregate=\"count\")\n    .brush(\"x\", \"era\")\n    .filter_by(\"era\")\n    .size(640, 260)\n    .build()\n)\n\nmethods = (\n    ChartBuilder(\"discovery_methods\", ChartType.DONUT)\n    .title(\"By discovery method\")\n    .data_source(\"worlds\")\n    .x(\"method\", type=\"nominal\")\n    .y(\"planet\", aggregate=\"count\")\n    .publishes(\"era\")\n    .filter_by(\"era\")\n    .size(360, 260)\n    .build()\n)\n\nscatter = (\n    ChartBuilder(\"habitability_scatter\", ChartType.SCATTER)\n    .title(\"Habitability vs temperature\")\n    .data_source(\"worlds\")\n    .x(\"equilibrium_k\", type=\"quantitative\")\n    .y(\"habitability_score\", type=\"quantitative\")\n    .color(\"method\", type=\"nominal\")\n    .filter_by(\"era\")\n    .size(640, 280)\n    .build()\n)\n\nmissions = (\n    ChartBuilder(\"missions_bar\", ChartType.BAR)\n    .title(\"Worlds by mission\")\n    .data_source(\"worlds\")\n    .x(\"mission\", type=\"nominal\")\n    .y(\"planet\", aggregate=\"count\")\n    .filter_by(\"era\")\n    .size(360, 280)\n    .build()\n)\n\ndash = (\n    DashBuilder(\"cosmic-landing\", \"Other Worlds\")\n    .description(\"Brush the timeline, click a slice, or brush the scatter — every view stays in sync.\")\n    .add_csv(\"worlds\", \"exoplanets.csv\")\n    .add_chart(note)\n    .add_chart(kpi)\n    .add_chart(hab)\n    .add_chart(dist)\n    .add_chart(timeline)\n    .add_chart(methods)\n    .add_chart(scatter)\n    .add_chart(missions)\n    .build()\n)\n"
+}
   </script>
 
   <script>
@@ -445,19 +458,19 @@ pnpm exec dvfc preview examples/site-gallery/landing.dash.yaml</pre>
 
       const engines = {
         mosaic: {
-          src: "/dvfc/examples/landing/?embed=1&v=30",
+          src: "/dvfc/examples/landing/?embed=1&v=31",
           open: "/dvfc/examples/landing/",
           hint: "Drag across the timeline",
           title: "Other Worlds dashboard, Mosaic renderer",
         },
         dc: {
-          src: "/dvfc/examples/landing-dc/index.html?embed=1&v=30",
+          src: "/dvfc/examples/landing-dc/index.html?embed=1&v=31",
           open: "/dvfc/examples/landing-dc/index.html",
           hint: "Brush a chart to filter",
           title: "Other Worlds dashboard, dc.js renderer",
         },
         vega: {
-          src: "/dvfc/examples/landing-vega/index.html?embed=1&v=30",
+          src: "/dvfc/examples/landing-vega/index.html?embed=1&v=31",
           open: "/dvfc/examples/landing-vega/index.html",
           hint: "Brush a chart in the static page",
           title: "Other Worlds dashboard, Vega-Lite renderer",
@@ -505,7 +518,19 @@ pnpm exec dvfc preview examples/site-gallery/landing.dash.yaml</pre>
 
       let active = "yaml";
       const link = document.getElementById("spec-source-link");
+      const meta = document.getElementById("spec-meta");
       const tabs = document.querySelectorAll(".format-tab");
+      const filenames = {
+        yaml: "landing.dash.yaml",
+        toml: "landing.dash.toml",
+        json: "landing.dash.json",
+        python: "landing_dash.py",
+      };
+
+      function setMeta(format) {
+        const lines = payloads[format].split("\n").length;
+        meta.textContent = `${filenames[format]} · ${lines} lines`;
+      }
 
       function setFormat(format) {
         active = format;
@@ -518,11 +543,22 @@ pnpm exec dvfc preview examples/site-gallery/landing.dash.yaml</pre>
           panes[key].classList.toggle("is-active", key === format);
         });
         link.href = sourcePaths[format];
+        setMeta(format);
         if (format === "yaml") requestAnimationFrame(fitYaml);
       }
 
+      setMeta("yaml");
+
       tabs.forEach((tab) => {
         tab.addEventListener("click", () => setFormat(tab.getAttribute("data-format")));
+      });
+
+      document.getElementById("demo-reset").addEventListener("click", (ev) => {
+        const btn = ev.currentTarget;
+        frame.src = frame.src;
+        const label = btn.textContent;
+        btn.textContent = "Reset…";
+        setTimeout(() => { btn.textContent = label; }, 900);
       });
 
       document.getElementById("copy-spec").addEventListener("click", async (ev) => {

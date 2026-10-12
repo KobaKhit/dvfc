@@ -32,7 +32,7 @@ ${sizePrelude(el, ch, w, h)}    const vals = ${cf}.all().map((d) => +d['${esc(x)
       .colors(['#1e3a5f'])
       .xAxisLabel('${xLabel}')
       .yAxisLabel('Frequency')
-      .title((d) => String(d.key) + ': ' + d3.format(',')(d.value));
+      .title((d) => d3.format('~s')(d.key) + '\\nFrequency: ' + d3.format(',')(d.value));
     ${ch}.xAxis().ticks(6).tickFormat(d3.format('~s'));
     ${ch}.yAxis().ticks(5).tickFormat(d3.format('~s'));
     charts.push(${ch});

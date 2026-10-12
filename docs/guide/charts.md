@@ -53,7 +53,7 @@ x: discovery_year
 y: count(planet)
 ```
 
-`count(planet)`, `sum(sales)`, `avg(score)`, `min`, `max`, and `median` are the rollups. A bare name plots that column as-is. Optional type (`quantitative`, `nominal`, `ordinal`, `temporal`) and `label` still belong on an `encoding` object when you need them.
+`count(planet)`, `sum(sales)`, `avg(score)`, `min`, `max`, and `median` are the rollups. A bare name plots that column as-is. Shorthand channels get human axis labels for free (`count(planet)` → `Count`, `discovery_year` → `Discovery year`); set `label` on an `encoding` object when you want your own. Optional type (`quantitative`, `nominal`, `ordinal`, `temporal`) also belongs on an `encoding` object when you need it.
 
 Axis gridlines are off by default.
 

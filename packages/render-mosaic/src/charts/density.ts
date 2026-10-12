@@ -27,7 +27,7 @@ export function generateDensityChart(chart: ChartSpec, ctx: GeneratorContext): s
   const interactors = buildSelectionInteractors(chart, interaction, publishAs);
 
   const plotOptions: string[] = [
-    ...plotChromeOptions(chart),
+    ...plotChromeOptions(chart, { yLabel: true }),
     ...stableFilterScaleOptions(chart),
     ...interactors,
   ];

@@ -38,10 +38,11 @@ export function pieColorExpr(ctx: GeneratorContext, indexExpr: string, _lengthEx
  * Shared plot chrome: margins, axis label padding, font.
  * Heatmaps get a wide left margin so categorical y ticks don't collide with yLabel.
  */
-export function plotChromeOptions(chart: ChartSpec, opts?: { heatmap?: boolean }): string[] {
+export function plotChromeOptions(chart: ChartSpec, opts?: { heatmap?: boolean; yLabel?: boolean }): string[] {
   const options: string[] = [];
   const isHeatmap = opts?.heatmap || chart.type === 'heatmap';
-  const left = isHeatmap ? Math.max(148, Math.round((chart.width || 480) * 0.22)) : 44;
+  // Labeled y axes need a wider gutter so the rotated label clears tick labels.
+  const left = isHeatmap ? Math.max(148, Math.round((chart.width || 480) * 0.22)) : opts?.yLabel ? 58 : 44;
   const bottom = isHeatmap ? 52 : 36;
   options.push(`vg.xGrid(false)`);
   options.push(`vg.yGrid(false)`);
